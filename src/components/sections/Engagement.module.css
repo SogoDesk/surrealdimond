@@ -34,15 +34,6 @@
   isolation: isolate;
 }
 
-.photo {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-.photoImg {
-  object-fit: cover;
-  object-position: 50% 58%;
-}
 
 /* The porcelain layer opens as a circle of light from the ring. */
 .porcelain {
