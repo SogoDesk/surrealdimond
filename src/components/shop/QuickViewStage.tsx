@@ -4,8 +4,9 @@
  * Quick view stage: a 1:1 paper area showing the current render on multiply
  * or, for the turntable item, an inline video that scrubs with the pointer's
  * x across the stage (like the settings tiles) and eases back on leave; the
- * poster shows until the pointer arrives. Beneath it, one thumbnail per stage
- * item (primary or turntable, the angles, one per metal variant).
+ * poster shows until the pointer arrives. When the selection has no render
+ * the placeholder covers the stage instead. Beneath it, one thumbnail per
+ * stage item (primary or turntable, the angles, one per metal variant).
  */
 
 import Image from "next/image";
@@ -13,7 +14,10 @@ import { useRef } from "react";
 import { renderSrc, videoSrc, type Metal } from "@/content/catalog";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
+import type { PieceSelection } from "./filters";
+import Placeholder from "./Placeholder";
 import d from "./drawers.module.css";
+import s from "./shop.module.css";
 
 export interface StageItem {
   id: string;
@@ -34,13 +38,15 @@ export interface QuickViewStageProps {
   onSelect: (index: number) => void;
   /** Slug of the video, when the piece has one. */
   video: string | null;
+  /** The selection to describe in place of a render, when the library has none for it. */
+  placeholder: PieceSelection | null;
 }
 
-export default function QuickViewStage({ items, current, onSelect, video }: QuickViewStageProps) {
+export default function QuickViewStage({ items, current, onSelect, video, placeholder }: QuickViewStageProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const item = items[current] ?? items[0];
-  const showVideo = item?.kind === "video";
+  const showVideo = item?.kind === "video" && !placeholder;
   const src = video ? videoSrc(video) : null;
   const imageSlug = item?.kind === "image" ? item.slug : items.find((i) => i.kind === "image")?.slug ?? null;
 
@@ -103,9 +109,10 @@ export default function QuickViewStage({ items, current, onSelect, video }: Quic
 
   return (
     <div className={d.stageCol}>
-      <div ref={stageRef} className={d.stage} data-show={showVideo ? "video" : "image"} data-cursor={showVideo ? "turn" : undefined}>
+      <div ref={stageRef} className={d.stage} data-show={placeholder ? "placeholder" : showVideo ? "video" : "image"} data-cursor={showVideo ? "turn" : undefined}>
         {imageSlug && <Image src={renderSrc(imageSlug)} alt="" width={1200} height={1200} sizes={STAGE_SIZES} draggable={false} className={d.stageImg} />}
         {src && <video ref={videoRef} className={d.stageVideo} poster={src.poster} muted playsInline loop preload="metadata" aria-hidden tabIndex={-1} />}
+        {placeholder && <Placeholder key={`${placeholder.metal}|${placeholder.carat}`} metal={placeholder.metal} carat={placeholder.carat} size="stage" className={s.layerIn} />}
         {showVideo && (
           <span className={d.stageHint} aria-hidden>
             Move to turn

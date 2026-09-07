@@ -14,10 +14,10 @@
 
 import { useImperativeHandle, useRef, type CSSProperties, type Ref } from "react";
 import Button from "@/components/ui/Button";
-import type { Category, Metal, Product } from "@/content/catalog";
+import type { Category, Product } from "@/content/catalog";
 import { registerGsap, gsap, Flip, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
-import { INTERLUDE_EVERY, PROMO_AFTER, type ShopQuery } from "./filters";
+import { INTERLUDE_EVERY, PROMO_AFTER, type PieceSelection, type ShopQuery } from "./filters";
 import type { Density } from "./Toolbar";
 import ProductCard from "./ProductCard";
 import Interlude, { INTERLUDES } from "./Interlude";
@@ -39,7 +39,7 @@ export interface ProductGridProps {
   shown: number;
   density: Density;
   query: ShopQuery;
-  onOpen: (product: Product) => void;
+  onOpen: (product: Product, selection: PieceSelection) => void;
   onShowMore: () => void;
   onClear: () => void;
 }
@@ -73,7 +73,6 @@ export default function ProductGrid({ ref, pool, matches, shown, density, query,
   const pendingRef = useRef<{ state: Flip.FlipState; at: number } | null>(null);
   const tiles = buildTiles(pool, matches, shown);
   const visibleCount = Math.min(shown, matches.length);
-  const preferredMetal: Metal | null = query.metals.length === 1 ? query.metals[0] : null;
   // The layout key changes whenever the set of visible tiles or the column count changes.
   const layoutKey = `${density}|${tiles.map((t) => (t.kind === "card" ? (t.index === null ? "" : t.product.id) : t.kind)).join(",")}`;
 
@@ -168,7 +167,7 @@ export default function ProductGrid({ ref, pool, matches, shown, density, query,
       <div ref={gridRef} className={s.grid} style={{ "--cols": density } as CSSProperties} data-shop-grid>
         {tiles.map((tile) => {
           if (tile.kind === "card") {
-            return <ProductCard key={tile.product.id} product={tile.product} index={tile.index} preferredMetal={preferredMetal} onOpen={onOpen} />;
+            return <ProductCard key={tile.product.id} product={tile.product} index={tile.index} preferredMetal={query.metal} onOpen={onOpen} />;
           }
           if (tile.kind === "interlude") return <Interlude key={`interlude-${tile.ordinal}`} ordinal={tile.ordinal} spec={tile.spec} />;
           return <PromoTile key="promo" />;

@@ -389,15 +389,20 @@
   .grid { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* Card: a button holding the paper tile and its caption */
+/* Card: the paper tile and its caption in one button, then the card's own selectors */
 .card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.card[data-hidden] { display: none; }
+.cardOpen {
   display: flex;
   flex-direction: column;
   width: 100%;
   text-align: left;
   outline: none;
 }
-.card[data-hidden] { display: none; }
 .tileWell {
   position: relative;
   aspect-ratio: 4 / 5;
@@ -412,7 +417,7 @@
     box-shadow: 0 24px 24px -8px rgba(11, 31, 42, 0.08), 0 0 0 1px var(--hairline);
   }
 }
-.card:focus-visible .tileWell {
+.cardOpen:focus-visible .tileWell {
   outline: 2px solid var(--sky);
   outline-offset: 4px;
 }
@@ -464,6 +469,56 @@
 .card[data-show="angle"] .renderBase { opacity: 0; }
 .card[data-show="video"] .video { opacity: 1; }
 .card[data-show="video"] .renderBase { opacity: 0; }
+
+/* Selection crossfade: the arriving layer fades in, the outgoing one fades out and stays at 0 */
+.layerIn { animation: layerIn 0.35s var(--ease-surreal); }
+.layerOut {
+  opacity: 0;
+  pointer-events: none;
+  animation: layerOut 0.35s var(--ease-surreal);
+}
+@keyframes layerIn { from { opacity: 0; } }
+@keyframes layerOut { from { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .layerIn, .layerOut { animation: none; }
+}
+
+/* Placeholder for a metal and size the library has no render for */
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12% 10%;
+  text-align: center;
+}
+.placeholderMark {
+  width: 26%;
+  max-width: 88px;
+  margin-bottom: 12px;
+  color: var(--ink);
+  opacity: 0.4;
+}
+.placeholderMark svg { display: block; }
+.placeholderLine {
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  color: var(--fg);
+}
+.placeholderNote {
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--stone);
+}
+.placeholderStage .placeholderMark { width: 24%; max-width: 100px; margin-bottom: 16px; }
+.placeholderStage .placeholderLine { font-size: 1.75rem; line-height: 1.1; }
 .meta {
   display: flex;
   flex-direction: column;
@@ -484,17 +539,22 @@
   letter-spacing: 0.04em;
   color: var(--stone);
 }
+.selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+}
 .swatches {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 8px;
-  padding: 2px 0;
+  gap: 12px;
+  padding: 3px 0 3px 3px;
 }
 .swatch {
   position: relative;
-  width: 10px;
-  height: 10px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px rgba(11, 31, 42, 0.14);
 }
@@ -508,7 +568,43 @@
   transform: scale(0.8);
   transition: opacity 0.3s var(--ease-surreal), transform 0.3s var(--ease-surreal);
 }
-.swatch[data-active]::after { opacity: 1; transform: scale(1); }
+.swatch:hover::after { opacity: 0.35; transform: scale(1); }
+.swatch[aria-pressed="true"]::after { opacity: 1; transform: scale(1); }
+.swatch:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 6px;
+}
+.carats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.carat {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  color: var(--graphite);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: background-color 0.4s var(--ease-surreal), color 0.4s var(--ease-surreal), box-shadow 0.4s var(--ease-surreal);
+}
+.carat:hover { background: var(--mist); }
+.carat[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--porcelain);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.carat:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 3px;
+}
 
 /* Editorial interlude: a two column photograph with a caption on a scrim */
 .interlude {

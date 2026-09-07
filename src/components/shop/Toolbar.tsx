@@ -1,14 +1,14 @@
 "use client";
 
 /**
- * 02. Toolbar. Sticky under the header: filter chips on the left (Metal, and
- * Shape where the pieces carry a center stone), a Clear link once anything is
- * active; on the right the Sort select styled as a text link, the density
+ * 02. Toolbar. Sticky under the header: single select filter chips on the
+ * left (Metal, and Shape where the pieces carry a center stone), a Clear link
+ * once anything is active; on the right the Sort select styled as a text link, the density
  * toggle (desktop) and the live count. Below 1024px the chips collapse into a
  * Filter pill that opens the bottom sheet.
  */
 
-import { hasFilters, SORTS, type ShopQuery, type Sort } from "./filters";
+import { clearedQuery, hasFilters, SORTS, type ShopQuery, type Sort } from "./filters";
 import FilterChips from "./FilterChips";
 import s from "./shop.module.css";
 
@@ -40,8 +40,8 @@ function DensityGlyph({ columns }: { columns: Density }) {
 
 export default function Toolbar({ query, showShapes, density, count, onQueryChange, onDensityChange, onOpenSheet }: ToolbarProps) {
   const active = hasFilters(query);
-  const activeCount = query.metals.length + (showShapes ? query.shapes.length : 0);
-  const clear = () => onQueryChange({ ...query, metals: [], shapes: [] });
+  const activeCount = (query.metal ? 1 : 0) + (showShapes && query.shape ? 1 : 0);
+  const clear = () => onQueryChange(clearedQuery(query));
 
   return (
     <div className={s.toolbar} data-shop-toolbar>

@@ -9,7 +9,7 @@
 
 import { useId, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
-import { hasFilters, type ShopQuery } from "./filters";
+import { clearedQuery, hasFilters, type ShopQuery } from "./filters";
 import FilterChips from "./FilterChips";
 import { useDrawer } from "./useDrawer";
 import d from "./drawers.module.css";
@@ -68,7 +68,7 @@ export default function FilterSheet({ open, query, showShapes, onApply, onClose 
             Apply
           </Button>
           {hasFilters(draft) && (
-            <button type="button" className={s.clear} onClick={() => setDraft({ ...draft, metals: [], shapes: [] })} data-cursor="link">
+            <button type="button" className={s.clear} onClick={() => setDraft(clearedQuery(draft))} data-cursor="link">
               Clear
             </button>
           )}

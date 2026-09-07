@@ -22,7 +22,7 @@ import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Section from "@/components/ui/Section";
 import Footer from "@/components/sections/Footer";
 import type { Category, Product } from "@/content/catalog";
-import { matchesQuery, PAGE_SIZE, parseQuery, poolFor, queryKey, serializeQuery, showsShapes, sortProducts, type ShopQuery } from "./filters";
+import { clearedQuery, defaultSelection, matchesQuery, PAGE_SIZE, parseQuery, poolFor, queryKey, serializeQuery, showsShapes, sortProducts, type PieceSelection, type ShopQuery } from "./filters";
 import Masthead from "./Masthead";
 import Toolbar, { type Density } from "./Toolbar";
 import FilterSheet from "./FilterSheet";
@@ -73,7 +73,13 @@ function ShopView({ category, params }: ShopViewProps) {
 
   const [density, setDensity] = useState<Density>(3);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [quick, setQuick] = useState<{ open: boolean; id: string | null }>({ open: false, id: null });
+  // The quick view opens on the card's current selection; "opening" counts openings so the drawer body starts afresh each time.
+  const [quick, setQuick] = useState<{ open: boolean; id: string | null; selection: PieceSelection | null; opening: number }>({
+    open: false,
+    id: null,
+    selection: null,
+    opening: 0,
+  });
 
   // Paging restarts whenever the query changes (adjusted during render, no effect needed).
   const [shown, setShown] = useState(PAGE_SIZE);
@@ -91,7 +97,7 @@ function ShopView({ category, params }: ShopViewProps) {
     },
     [router, pathname],
   );
-  const clearFilters = useCallback(() => setQuery({ ...query, metals: [], shapes: [] }), [query, setQuery]);
+  const clearFilters = useCallback(() => setQuery(clearedQuery(query)), [query, setQuery]);
 
   const changeDensity = (next: Density) => {
     if (next === density) return;
@@ -99,13 +105,13 @@ function ShopView({ category, params }: ShopViewProps) {
     setDensity(next);
   };
 
-  const openQuick = (product: Product) => setQuick({ open: true, id: product.id });
+  const openQuick = (product: Product, selection: PieceSelection) => setQuick((q) => ({ open: true, id: product.id, selection, opening: q.opening + 1 }));
   const closeQuick = useCallback(() => setQuick((q) => ({ ...q, open: false })), []);
   const quickIndex = quick.id ? matches.findIndex((p) => p.id === quick.id) : -1;
   const quickProduct = quickIndex >= 0 ? matches[quickIndex] : null;
   const stepQuick = (delta: 1 | -1) => {
     const next = matches[quickIndex + delta];
-    if (next) setQuick({ open: true, id: next.id });
+    if (next) setQuick((q) => ({ open: true, id: next.id, selection: defaultSelection(next, query.metal), opening: q.opening + 1 }));
   };
   const closeSheet = useCallback(() => setSheetOpen(false), []);
 
@@ -139,7 +145,16 @@ function ShopView({ category, params }: ShopViewProps) {
         />
       </Section>
 
-      <QuickView open={quick.open} product={quickProduct} position={quickIndex} total={matches.length} onClose={closeQuick} onStep={stepQuick} />
+      <QuickView
+        open={quick.open}
+        product={quickProduct}
+        selection={quick.selection}
+        opening={quick.opening}
+        position={quickIndex}
+        total={matches.length}
+        onClose={closeQuick}
+        onStep={stepQuick}
+      />
       <FilterSheet open={sheetOpen} query={query} showShapes={shapesOn} onApply={setQuery} onClose={closeSheet} />
     </>
   );

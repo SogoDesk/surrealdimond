@@ -4,17 +4,20 @@
  * 04. Quick view. A paper drawer from the right (620px, a full sheet below
  * 768px) with the same mechanics as the contact drawer. Left the stage and
  * its thumbnails, right the category eyebrow, the name, the detail, a metal
- * chooser, a hairline, three factual lines, then the doors: Enquire about
- * this piece (contact drawer) and Book a visit. Previous and Next in the head
- * step through the current filtered list. The URL never changes.
+ * chooser with the carat chips beneath it (mirroring the card, and starting
+ * from the card's selection), a hairline, three factual lines, then the
+ * doors: Enquire about this piece (contact drawer) and Book a visit. When
+ * the selection has no render the stage shows the placeholder. Previous and
+ * Next in the head step through the current filtered list. The URL never
+ * changes.
  */
 
 import { useId, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
-import { metals, productMetals, type Metal, type Product } from "@/content/catalog";
-import { categoryFor, pad2 } from "./filters";
+import { caratOptions, formatCarat, metals, productMetals, type Metal, type Product } from "@/content/catalog";
+import { categoryFor, defaultSelection, firstCarat, pad2, renderForSelection, type PieceSelection } from "./filters";
 import QuickViewStage, { type StageItem } from "./QuickViewStage";
 import { useDrawer } from "./useDrawer";
 import d from "./drawers.module.css";
@@ -29,6 +32,9 @@ const FACTS = [
 export interface QuickViewProps {
   open: boolean;
   product: Product | null;
+  /** The selection the drawer opens on (the card's), and a count of openings so the body starts afresh each time. */
+  selection: PieceSelection | null;
+  opening: number;
   /** Position of the product in the filtered list and that list's length. */
   position: number;
   total: number;
@@ -52,7 +58,7 @@ function stageItems(product: Product): StageItem[] {
   return items;
 }
 
-export default function QuickView({ open, product, position, total, onClose, onStep }: QuickViewProps) {
+export default function QuickView({ open, product, selection, opening, position, total, onClose, onStep }: QuickViewProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const backdropRef = useRef<HTMLButtonElement>(null);
@@ -103,28 +109,57 @@ export default function QuickView({ open, product, position, total, onClose, onS
           </div>
         </div>
 
-        {product && <QuickViewBody key={product.id} product={product} titleId={titleId} onEnquire={enquire} onVisit={visit} />}
+        {product && (
+          <QuickViewBody
+            key={`${product.id}-${opening}`}
+            product={product}
+            initial={selection ?? defaultSelection(product, null)}
+            titleId={titleId}
+            onEnquire={enquire}
+            onVisit={visit}
+          />
+        )}
       </aside>
     </div>
   );
 }
 
-function QuickViewBody({ product, titleId, onEnquire, onVisit }: { product: Product; titleId: string; onEnquire: () => void; onVisit: () => void }) {
+interface QuickViewBodyProps {
+  product: Product;
+  initial: PieceSelection;
+  titleId: string;
+  onEnquire: () => void;
+  onVisit: () => void;
+}
+
+function QuickViewBody({ product, initial, titleId, onEnquire, onVisit }: QuickViewBodyProps) {
   const items = stageItems(product);
-  const own = productMetals(product);
-  const [current, setCurrent] = useState(0);
+  const carats = caratOptions[product.category];
   const category = categoryFor(product.category);
-  // Angles carry no metal of their own, so they read as the primary render's metal.
-  const currentMetal: Metal | null = items[current]?.metal ?? items[0]?.metal ?? null;
+  // The stage item showing a metal: its variant, else the primary render (angles read as the primary's metal).
+  const itemFor = (m: Metal) => {
+    const at = items.findIndex((it) => it.metal === m);
+    return at >= 0 ? at : 0;
+  };
+
+  const [selection, setSelection] = useState(initial);
+  const [current, setCurrent] = useState(() => itemFor(initial.metal));
+  const hasRender = renderForSelection(product, selection) !== null;
 
   const chooseMetal = (m: Metal) => {
-    const at = items.findIndex((it) => it.metal === m);
-    setCurrent(at >= 0 ? at : 0);
+    setSelection({ ...selection, metal: m });
+    setCurrent(itemFor(m));
+  };
+  const chooseCarat = (ct: number) => setSelection({ ...selection, carat: ct });
+  // A thumbnail is a render, so choosing one settles the selection on its metal at the rendered size.
+  const chooseView = (i: number) => {
+    setCurrent(i);
+    setSelection({ metal: items[i]?.metal ?? items[0]?.metal ?? selection.metal, carat: firstCarat(product) });
   };
 
   return (
     <div className={d.body}>
-      <QuickViewStage items={items} current={current} onSelect={setCurrent} video={product.video ?? null} />
+      <QuickViewStage items={items} current={current} onSelect={chooseView} video={product.video ?? null} placeholder={hasRender ? null : selection} />
 
       <div className={d.copy}>
         <Eyebrow>{category?.label ?? "The collection"}</Eyebrow>
@@ -133,19 +168,23 @@ function QuickViewBody({ product, titleId, onEnquire, onVisit }: { product: Prod
         </h2>
         <p className={d.detail}>{product.detail}</p>
 
-        {own.length > 0 && (
+        <div className={d.choosers}>
           <div className={d.metals} role="group" aria-label="Metal">
-            {own.map((m) => {
-              const meta = metals.find((x) => x.id === m);
-              return (
-                <button key={m} type="button" className={s.chip} aria-pressed={currentMetal === m} onClick={() => chooseMetal(m)} data-cursor="link">
-                  <span aria-hidden className={s.chipSwatch} style={{ background: meta?.swatch }} />
-                  {meta?.label ?? m}
-                </button>
-              );
-            })}
+            {metals.map((m) => (
+              <button key={m.id} type="button" className={s.chip} aria-pressed={selection.metal === m.id} onClick={() => chooseMetal(m.id)} data-cursor="link">
+                <span aria-hidden className={s.chipSwatch} style={{ background: m.swatch }} />
+                {m.label}
+              </button>
+            ))}
           </div>
-        )}
+          <div className={s.carats} role="group" aria-label="Carat">
+            {carats.map((ct) => (
+              <button key={ct} type="button" className={s.carat} aria-pressed={selection.carat === ct} onClick={() => chooseCarat(ct)} data-cursor="link">
+                {formatCarat(ct)}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <span className={d.rule} aria-hidden />
 

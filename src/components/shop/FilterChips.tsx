@@ -2,12 +2,14 @@
 
 /**
  * Filter chip groups shared by the toolbar (desktop) and the filter sheet
- * (mobile). Each chip is a toggle button with aria-pressed; chips within a
- * group are OR, groups are AND. Metal chips carry the metal's swatch dot.
+ * (mobile). Each group is single select: a chip is a button with aria-pressed
+ * that behaves like a radio, choosing it clears the group's other chip and
+ * choosing the active chip clears the group. Groups are AND. Metal chips
+ * carry the metal's swatch dot.
  */
 
 import { metals, shapes, type Metal, type Shape } from "@/content/catalog";
-import { toggleIn, type ShopQuery } from "./filters";
+import { toggleOne, type ShopQuery } from "./filters";
 import s from "./shop.module.css";
 
 export interface FilterChipsProps {
@@ -21,37 +23,31 @@ export interface FilterChipsProps {
 }
 
 export default function FilterChips({ query, showShapes, onChange, layout = "inline", groupClassName = "", chipsClassName = "" }: FilterChipsProps) {
-  const toggleMetal = (id: Metal) => onChange({ ...query, metals: toggleIn(query.metals, id) });
-  const toggleShape = (id: Shape) => onChange({ ...query, shapes: toggleIn(query.shapes, id) });
+  const chooseMetal = (id: Metal) => onChange({ ...query, metal: toggleOne(query.metal, id) });
+  const chooseShape = (id: Shape) => onChange({ ...query, shape: toggleOne(query.shape, id) });
   const stacked = layout === "stacked";
 
-  const metalChips = metals.map((m) => {
-    const active = query.metals.includes(m.id);
-    return (
-      <button key={m.id} type="button" className={s.chip} aria-pressed={active} onClick={() => toggleMetal(m.id)} data-cursor="link">
-        <span aria-hidden className={s.chipSwatch} style={{ background: m.swatch }} />
-        {m.label}
-      </button>
-    );
-  });
+  const metalChips = metals.map((m) => (
+    <button key={m.id} type="button" className={s.chip} aria-pressed={query.metal === m.id} onClick={() => chooseMetal(m.id)} data-cursor="link">
+      <span aria-hidden className={s.chipSwatch} style={{ background: m.swatch }} />
+      {m.label}
+    </button>
+  ));
 
-  const shapeChips = shapes.map((sh) => {
-    const active = query.shapes.includes(sh.id);
-    return (
-      <button key={sh.id} type="button" className={s.chip} aria-pressed={active} onClick={() => toggleShape(sh.id)} data-cursor="link">
-        {sh.label}
-      </button>
-    );
-  });
+  const shapeChips = shapes.map((sh) => (
+    <button key={sh.id} type="button" className={s.chip} aria-pressed={query.shape === sh.id} onClick={() => chooseShape(sh.id)} data-cursor="link">
+      {sh.label}
+    </button>
+  ));
 
   return (
     <>
-      <div className={`${stacked ? "" : s.group} ${groupClassName}`} role="group" aria-label="Metal">
+      <div className={`${stacked ? "" : s.group} ${groupClassName}`} role="group" aria-label="Metal, choose one">
         <span className={s.groupLabel}>Metal</span>
         {stacked ? <div className={chipsClassName}>{metalChips}</div> : metalChips}
       </div>
       {showShapes && (
-        <div className={`${stacked ? "" : s.group} ${groupClassName}`} role="group" aria-label="Shape">
+        <div className={`${stacked ? "" : s.group} ${groupClassName}`} role="group" aria-label="Shape, choose one">
           <span className={s.groupLabel}>Shape</span>
           {stacked ? <div className={chipsClassName}>{shapeChips}</div> : shapeChips}
         </div>

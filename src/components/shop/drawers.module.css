@@ -99,6 +99,8 @@
 .stageVideo { opacity: 0; }
 .stage[data-show="video"] .stageVideo { opacity: 1; }
 .stage[data-show="video"] .stageImg { opacity: 0; }
+.stage[data-show="placeholder"] .stageImg,
+.stage[data-show="placeholder"] .stageVideo { opacity: 0; }
 .stageHint {
   position: absolute;
   left: 12px;
@@ -171,6 +173,11 @@
   font-size: 0.9375rem;
   line-height: 1.5;
   color: var(--graphite);
+}
+.choosers {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .metals {
   display: flex;
