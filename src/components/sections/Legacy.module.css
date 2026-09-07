@@ -1,0 +1,222 @@
+/*
+  Legacy chapter: the dark studio ground continues. The bud photograph fills
+  the right half with a heavy vignette into studio black, the copy sits left,
+  the seed-line SVG fans up behind it, and the hands card overlaps the seam.
+
+  The closing hold: the section keeps 100vh of padding below its stage and
+  pulls the next section up over it (margin-bottom -100vh). The stage is
+  position sticky with a negative top set from its measured height, so its
+  last 100vh holds at the viewport while the light custom sheet rises over
+  it. The next section needs position relative, a z-index above 2 and an
+  opaque ground.
+*/
+
+.root {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 100vh;
+  margin-bottom: -100vh;
+}
+
+/* Visually hidden skip link past the hold, for keyboard users */
+.skip {
+  position: absolute;
+  top: 1rem;
+  left: var(--gutter);
+  z-index: 5;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip:focus-visible {
+  width: auto;
+  height: auto;
+  clip-path: none;
+  padding: 0.75rem 1rem;
+  background: var(--porcelain);
+  color: var(--ink);
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+.stage {
+  position: sticky;
+  top: -60vh;
+  min-height: 160vh;
+  overflow: clip;
+  isolation: isolate;
+}
+
+/* Right half: the bud photograph */
+.photo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--studio);
+}
+.photoZoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+.photoImg {
+  object-fit: cover;
+  object-position: 0% 50%;
+}
+.vignette {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -12vw;
+  width: calc(100% + 12vw);
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--studio) 0,
+    var(--studio) 12vw,
+    rgba(10, 11, 12, 0.88) calc(12vw + 9%),
+    rgba(10, 11, 12, 0) calc(12vw + 38%)
+  );
+}
+.photoFade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--studio) 0, rgba(10, 11, 12, 0) 14%, rgba(10, 11, 12, 0) 84%, var(--studio) 100%);
+  opacity: 0.85;
+}
+
+/* Left: copy, seed line and the hands card */
+.layout {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  min-height: 160vh;
+  padding-top: 22vh;
+  padding-bottom: 12vh;
+  align-content: start;
+}
+
+.copy {
+  position: relative;
+  z-index: 2;
+  grid-column: 1 / span 5;
+}
+.headline {
+  margin: 16px 0 0;
+  font-size: clamp(3rem, 5.6vw, 5.75rem);
+  color: var(--fg);
+}
+.body {
+  margin-top: 32px;
+}
+.cta {
+  margin-top: 40px;
+}
+
+.seed {
+  position: absolute;
+  z-index: 0;
+  top: 36vh;
+  height: 80vh;
+  aspect-ratio: var(--seed-aspect, 0.65);
+  left: max(var(--gutter), calc(50vw - 80vh * var(--seed-aspect, 0.65) + 3vw));
+}
+.svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.highlight {
+  opacity: 0;
+  pointer-events: none;
+}
+.originLabel {
+  position: absolute;
+  transform: translate(16px, -50%);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  white-space: nowrap;
+}
+
+.hands {
+  position: absolute;
+  z-index: 3;
+  margin: 0;
+  width: 18vw;
+  left: calc(50% - 4vw);
+  bottom: 8vh;
+}
+.handsFrame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--carbon);
+  background: var(--studio);
+}
+.handsImg {
+  object-fit: cover;
+  object-position: 47% 50%;
+}
+.handsCaption {
+  margin-top: 12px;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  color: var(--stone);
+}
+
+@media (max-width: 767px) {
+  .stage {
+    min-height: 0;
+  }
+  .photo {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+  .photoImg {
+    object-position: 50% 50%;
+  }
+  .vignette {
+    display: none;
+  }
+  .photoFade {
+    background: linear-gradient(180deg, var(--studio) 0, rgba(10, 11, 12, 0) 12%, rgba(10, 11, 12, 0) 70%, var(--studio) 100%);
+    opacity: 1;
+  }
+  .layout {
+    display: block;
+    min-height: 0;
+    padding-top: 2.5rem;
+    padding-bottom: 5rem;
+  }
+  .seed {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 60vh;
+    aspect-ratio: auto;
+  }
+  .seed path {
+    opacity: 0.55;
+  }
+  .hands {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: 60vw;
+    margin: 3.5rem 0 0 auto;
+  }
+}

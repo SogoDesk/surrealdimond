@@ -1,0 +1,321 @@
+/*
+  01. The New Forever (hero). Layout only: every animated property (transform,
+  opacity) is set and driven from Hero.tsx so nothing here can strand content
+  invisible. The stage is pinned by ScrollTrigger for 160vh (120vh on mobile).
+*/
+
+.hero {
+  /* Vertical positions are percentages of the stage so they track the photograph's
+     object-position even when the stage is held at its 720px minimum. */
+  --ring-y: 78%;       /* centre of the photographed halo ring on the floor (photo scaled 1.1 from the top) */
+  --stone-y: 46%;      /* centre of the diamond canvas at rest, clear of the ring's own stone */
+  --stone-size: 28vh;  /* canvas box; the stone fills about two thirds of it */
+  --flare-y: 60%;      /* where the stone lands: the photographed ring's crown */
+  --caustic-w: 30vh;
+  --caustic-h: 11vh;
+  position: relative;
+  background: var(--studio);
+  color: var(--porcelain);
+}
+
+.stage {
+  position: relative;
+  height: 100vh;
+  min-height: 720px;
+  overflow: hidden;
+  background: var(--studio);
+}
+
+/* Skip link for keyboard users: visually hidden until focused */
+.skip {
+  position: absolute;
+  top: calc(var(--nav-h) + 8px);
+  left: var(--gutter);
+  z-index: 30;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip:focus-visible {
+  width: auto;
+  height: 52px;
+  clip: auto;
+  clip-path: none;
+  overflow: visible;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 32px;
+  border-radius: 999px;
+  background: var(--porcelain);
+  color: var(--ink);
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+/* Photograph: taller than the stage so the scrubbed parallax never exposes an edge */
+.photo {
+  position: absolute;
+  inset: 0 0 -6% 0;
+  z-index: 0;
+}
+/* Scaled from the top edge so the ring sits lower and the stone has room to hover above it. */
+@media (min-width: 768px) {
+  .photo {
+    transform: scale(1.1);
+    transform-origin: 50% 0%;
+  }
+}
+.flare {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: var(--flare-y);
+  width: 26vh;
+  height: 26vh;
+  margin: -13vh 0 0 -13vh;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(232, 246, 255, 0.85) 14%,
+    rgba(232, 246, 255, 0.3) 36%,
+    rgba(134, 223, 255, 0.12) 56%,
+    rgba(134, 223, 255, 0) 72%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+.rays {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: var(--flare-y);
+  width: 64vh;
+  height: 64vh;
+  margin: -32vh 0 0 -32vh;
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+.rays svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.photo picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.photoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 56%;
+  transform-origin: 50% 62%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--studio);
+  pointer-events: none;
+}
+
+/* Caustic disc on the floor around the real ring */
+.caustic {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: var(--ring-y);
+  width: var(--caustic-w);
+  height: var(--caustic-h);
+  margin-left: calc(var(--caustic-w) / -2);
+  margin-top: calc(var(--caustic-h) / -2);
+  pointer-events: none;
+}
+.causticDisc {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(232, 246, 255, 0.22) 0%,
+    rgba(232, 246, 255, 0.1) 42%,
+    rgba(232, 246, 255, 0) 100%
+  );
+}
+
+/* Diamond canvas box. GSAP owns the transform, so centring uses margins. */
+.stone {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: var(--stone-y);
+  width: var(--stone-size);
+  height: var(--stone-size);
+  margin-left: calc(var(--stone-size) / -2);
+  margin-top: calc(var(--stone-size) / -2);
+  pointer-events: none;
+}
+.stoneIntro {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+.canvas {
+  position: absolute;
+  inset: 0;
+  /* Fade the canvas edges so the floor glow plane never reads as a clipped rectangle. */
+  mask-image: radial-gradient(circle at 50% 50%, #000 52%, rgba(0, 0, 0, 0) 76%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 52%, rgba(0, 0, 0, 0) 76%);
+}
+.halo {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(232, 246, 255, 0.55), rgba(232, 246, 255, 0) 70%);
+  pointer-events: none;
+}
+
+/* Scrim under the bottom-left copy: a 40 percent studio gradient from the left edge */
+.scrim {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+  width: 62%;
+  height: 58%;
+  background: linear-gradient(90deg, rgba(10, 11, 12, 0.4) 0%, rgba(10, 11, 12, 0) 100%);
+  mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Wordmark: one text layer in front, baseline on the 40vh line */
+.wordmark {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  bottom: calc(65% + 0.11em);
+  margin: 0;
+  padding-left: 0.08em; /* balance the trailing letter-space so the word centres */
+  text-align: center;
+  white-space: nowrap;
+  font-size: clamp(76px, 11.5vw, 200px);
+  color: var(--porcelain);
+  pointer-events: none;
+}
+.wordmark :global(.char) {
+  display: inline-block;
+}
+
+.eyebrow {
+  position: absolute;
+  z-index: 6;
+  top: calc(var(--nav-h) + 24px);
+  left: var(--gutter);
+}
+.eyebrow :global(.eyebrow-rule) {
+  transform-origin: 0 50%;
+}
+
+.bottom {
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  right: 0;
+  bottom: 56px;
+}
+.copy {
+  grid-column: 1 / span 6;
+}
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+/* Scroll indicator, column 12 */
+.scrollHint {
+  grid-column: 12;
+  justify-self: end;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  pointer-events: none;
+}
+.scrollLabel {
+  writing-mode: vertical-rl;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.scrollLine {
+  position: relative;
+  width: 1px;
+  height: 48px;
+  overflow: hidden;
+  background: rgba(242, 244, 246, 0.22);
+}
+.scrollBeam {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 12px;
+  background: var(--beam);
+}
+
+@media (max-width: 767px) {
+  .hero {
+    --ring-y: 62%;
+    --stone-y: 45%;
+    --stone-size: 22svh;
+    --caustic-w: 44vw;
+    --caustic-h: 9svh;
+  }
+  .stage {
+    height: 100svh;
+    min-height: 0;
+  }
+  .photoImg {
+    object-position: 50% 52%;
+  }
+  .wordmark {
+    bottom: calc(66% + 0.11em);
+    font-size: 15vw;
+  }
+  .scrim {
+    width: 100%;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(10, 11, 12, 0) 0%, rgba(10, 11, 12, 0.4) 60%);
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .bottom {
+    bottom: 28px;
+  }
+  .copy {
+    grid-column: 1 / -1;
+  }
+  .ctas {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .ctas > * {
+    width: 100%;
+  }
+  .scrollHint {
+    display: none;
+  }
+}

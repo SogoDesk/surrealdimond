@@ -1,0 +1,234 @@
+@import "tailwindcss";
+@import "../components/ui/button.css";
+
+/*
+  Surreal Diamond design tokens. The palette, type scale and motion language are
+  documented in DESIGN.md (Maison in Hard Light). Sections declare their own
+  ground with data-theme so the page can alternate light, dark and sky chapters.
+*/
+:root {
+  --porcelain: #f2f4f6;
+  --paper: #fafbfc;
+  --hairline: #dce1e6;
+  --stone: #8f9aa3;
+  --graphite: #3a3f44;
+  --ink: #0b1f2a;
+  --studio: #0a0b0c;
+  --carbon: #1c2228;
+  --sky: #86dfff;
+  --line: #70c0e0;
+  --mist: #dceff7;
+  --beam: #e8f6ff;
+  --white: #ffffff;
+  --magenta: #b02078;
+
+  /* Current chapter colours (overridden per data-theme) */
+  --bg: var(--porcelain);
+  --fg: var(--ink);
+  --fg-soft: var(--graphite);
+  --fg-muted: var(--stone);
+  --rule: var(--hairline);
+  --surface: var(--paper);
+  --accent: var(--line);
+  --accent-strong: var(--sky);
+  --btn-fill: var(--ink);
+  --btn-fill-fg: var(--porcelain);
+  --btn-hover-fill: var(--porcelain);
+  --btn-hover-fg: var(--ink);
+  --outline-hover: var(--mist);
+  --mark-a: var(--ink);
+  --mark-b: var(--line);
+
+  --ease-surreal: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.76, 0, 0.24, 1);
+  --gutter: clamp(1.5rem, 4.4vw, 4rem);
+  --col-gap: clamp(1rem, 2.8vw, 2.5rem);
+  --nav-h: 72px;
+}
+
+[data-theme="dark"] {
+  --bg: var(--studio);
+  --fg: var(--porcelain);
+  --fg-soft: rgba(242, 244, 246, 0.78);
+  --fg-muted: var(--stone);
+  --rule: var(--carbon);
+  --surface: #111417;
+  --accent: var(--sky);
+  --accent-strong: var(--sky);
+  --btn-fill: var(--porcelain);
+  --btn-fill-fg: var(--ink);
+  --btn-hover-fill: var(--ink);
+  --btn-hover-fg: var(--porcelain);
+  --outline-hover: rgba(242, 244, 246, 0.12);
+  --mark-a: var(--porcelain);
+  --mark-b: var(--sky);
+}
+[data-theme="navy"] {
+  --bg: var(--ink);
+  --fg: var(--porcelain);
+  --fg-soft: rgba(242, 244, 246, 0.78);
+  --fg-muted: rgba(242, 244, 246, 0.5);
+  --rule: rgba(242, 244, 246, 0.14);
+  --surface: #12283a;
+  --accent: var(--sky);
+  --accent-strong: var(--sky);
+  --btn-fill: var(--porcelain);
+  --btn-fill-fg: var(--ink);
+  --btn-hover-fill: var(--sky);
+  --btn-hover-fg: var(--ink);
+  --outline-hover: rgba(242, 244, 246, 0.12);
+  --mark-a: var(--sky);
+  --mark-b: var(--line);
+}
+[data-theme="sky"] {
+  --bg: var(--sky);
+  --fg: var(--ink);
+  --fg-soft: rgba(11, 31, 42, 0.82);
+  --fg-muted: rgba(11, 31, 42, 0.6);
+  --rule: rgba(11, 31, 42, 0.18);
+  --surface: var(--white);
+  --accent: var(--ink);
+  --accent-strong: var(--ink);
+  --btn-fill: var(--ink);
+  --btn-fill-fg: var(--sky);
+  --btn-hover-fill: var(--sky);
+  --btn-hover-fg: var(--ink);
+  --outline-hover: rgba(11, 31, 42, 0.08);
+  --mark-a: var(--ink);
+  --mark-b: var(--line);
+}
+[data-theme="light"] {
+  --bg: var(--porcelain);
+  --fg: var(--ink);
+}
+[data-theme] {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+@theme inline {
+  --color-porcelain: var(--porcelain);
+  --color-paper: var(--paper);
+  --color-hairline: var(--hairline);
+  --color-stone: var(--stone);
+  --color-graphite: var(--graphite);
+  --color-ink: var(--ink);
+  --color-studio: var(--studio);
+  --color-carbon: var(--carbon);
+  --color-sky: var(--sky);
+  --color-line: var(--line);
+  --color-mist: var(--mist);
+  --color-beam: var(--beam);
+  --color-magenta: var(--magenta);
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-fg-soft: var(--fg-soft);
+  --color-fg-muted: var(--fg-muted);
+  --color-rule: var(--rule);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --font-display: var(--font-display), "Italiana", serif;
+  --font-editorial: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  --font-ui: var(--font-ui), "Jost", "Helvetica Neue", Arial, sans-serif;
+  --ease-surreal: var(--ease-surreal);
+  --ease-inout: var(--ease-inout);
+}
+
+html {
+  color-scheme: light;
+  scroll-behavior: auto;
+  background: var(--studio);
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--porcelain);
+  color: var(--ink);
+  font-family: var(--font-ui), "Jost", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+@media (max-width: 767px) { body { font-size: 16px; } }
+
+::selection { background: var(--sky); color: var(--ink); }
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+img, video, canvas, svg { display: block; max-width: 100%; }
+
+/* Type roles */
+.font-display { font-family: var(--font-display), "Italiana", serif; font-weight: 400; }
+.font-editorial { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; }
+.font-ui { font-family: var(--font-ui), "Jost", sans-serif; }
+
+.t-display {
+  font-family: var(--font-display), "Italiana", serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 0.9;
+}
+.t-headline {
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 5.6vw, 5.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+.t-headline-sm {
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 4.6vw, 4.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+}
+.t-headline em, .t-headline-sm em, .t-statement em { font-style: italic; font-weight: 300; }
+.t-statement {
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(2.75rem, 6.5vw, 7rem);
+  line-height: 1;
+}
+.t-body { font-family: var(--font-ui), "Jost", sans-serif; font-weight: 300; font-size: 1.0625rem; line-height: 1.6; max-width: 34ch; color: var(--fg-soft); }
+@media (max-width: 767px) { .t-body { font-size: 1rem; } }
+.t-eyebrow { font-family: var(--font-ui), "Jost", sans-serif; font-weight: 400; font-size: 0.6875rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); }
+.t-caption { font-family: var(--font-ui), "Jost", sans-serif; font-weight: 400; font-size: 0.6875rem; letter-spacing: 0.08em; color: var(--fg-muted); }
+.t-index { font-family: var(--font-ui), "Jost", sans-serif; font-weight: 400; font-size: 0.6875rem; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: var(--fg-muted); }
+.t-nav { font-family: var(--font-ui), "Jost", sans-serif; font-weight: 400; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; }
+.t-card-title { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 400; font-size: 2rem; line-height: 1.1; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Layout */
+.container { padding-left: var(--gutter); padding-right: var(--gutter); }
+.grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
+.hairline { height: 1px; background: var(--rule); }
+
+/* Masked line reveal helpers (used by SplitText based reveals) */
+.mask-line { display: block; overflow: hidden; }
+.mask-line > * { display: block; will-change: transform; }
+
+/* Image reveal frame: the image scales inside a clipped frame */
+.reveal-frame { position: relative; overflow: hidden; }
+.reveal-frame > img, .reveal-frame > picture, .reveal-frame > video { width: 100%; height: 100%; object-fit: cover; }
+
+/* Renders sit directly on paper, no white box */
+.render-multiply { mix-blend-mode: multiply; }
+
+/* Cursor is custom on fine pointers; native cursor stays for text and inputs */
+@media (pointer: fine) {
+  html[data-cursor="custom"] body, html[data-cursor="custom"] a, html[data-cursor="custom"] button { cursor: none; }
+  html[data-cursor="custom"] input, html[data-cursor="custom"] textarea { cursor: text; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}

@@ -1,0 +1,215 @@
+/* Contact drawer: paper panel from the right, full-screen sheet on mobile. Motion lives in ContactDrawer.tsx. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  visibility: hidden;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 31, 42, 0.42);
+  cursor: pointer;
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(480px, 100vw);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 32px 40px 48px;
+  box-shadow: -24px 0 48px rgba(11, 31, 42, 0.12);
+  outline: none;
+  -webkit-overflow-scrolling: touch;
+}
+.panel.panel[data-theme] {
+  background: var(--paper);
+  color: var(--ink);
+}
+@media (max-width: 767px) {
+  .panel {
+    width: 100vw;
+    padding: 20px 24px 40px;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 40px;
+  margin-bottom: 40px;
+}
+.title {
+  margin: 0;
+  padding-top: 6px;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-right: -10px;
+  border-radius: 999px;
+  color: var(--ink);
+  transition: background-color 0.3s var(--ease-surreal);
+}
+.close:hover { background: var(--mist); }
+.close:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Floating label fields: hairline underline, sky on focus, an ink layer that draws once on submit */
+.field {
+  position: relative;
+  padding-top: 20px;
+}
+.field input,
+.field select,
+.field textarea {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 0 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 1.5;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.field select {
+  padding-right: 24px;
+  cursor: pointer;
+}
+.field textarea {
+  resize: vertical;
+  min-height: 112px;
+}
+.field input:-webkit-autofill,
+.field textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--paper) inset;
+  -webkit-text-fill-color: var(--ink);
+}
+
+.label {
+  position: absolute;
+  left: 0;
+  top: 28px;
+  margin: 0;
+  pointer-events: none;
+  color: var(--stone);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  transform-origin: 0% 50%;
+  transition: transform 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal);
+}
+.field:focus-within .label,
+.field input:not(:placeholder-shown) ~ .label,
+.field textarea:not(:placeholder-shown) ~ .label,
+.field[data-floated] .label {
+  transform: translateY(-26px) scale(0.6875);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.field:focus-within .label { color: var(--graphite); }
+
+.chevron {
+  position: absolute;
+  right: 0;
+  top: 36px;
+  pointer-events: none;
+  color: var(--stone);
+}
+
+.line {
+  position: relative;
+  display: block;
+  height: 1px;
+  background: var(--hairline);
+  transition: background-color 0.3s var(--ease-surreal);
+}
+.field:focus-within .line { background: var(--sky); }
+.field[data-error] .line { background: var(--ink); }
+.lineInk {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+}
+
+.error {
+  margin: 8px 0 0;
+  color: var(--ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 24px;
+  margin-top: 12px;
+}
+.pending { opacity: 0.7; pointer-events: none; }
+.note { margin: 0; }
+
+.thanks {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 8px;
+}
+.thanksTitle {
+  margin: 0;
+  outline: none;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 4.6vw, 3.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+}
+.thanksAction { margin-top: 16px; }
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+}
+.field:focus-within { outline: none; }

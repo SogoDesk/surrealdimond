@@ -1,0 +1,134 @@
+/* 05. Grown for you: paper panel, sticky stroke stage, copy column */
+
+.section {
+  background: var(--porcelain);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 1rem;
+  z-index: 20;
+  padding: 0.75rem 1.25rem;
+  background: var(--ink);
+  color: var(--porcelain);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.skip:focus-visible {
+  left: var(--gutter);
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+.panel {
+  background: var(--paper);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.grid {
+  min-height: 120vh;
+  padding-top: clamp(4rem, 8vh, 7rem);
+  padding-bottom: clamp(4rem, 8vh, 7rem);
+}
+
+.stageCol {
+  grid-column: 2 / 7;
+}
+
+.stage {
+  position: sticky;
+  top: max(6rem, calc(50vh - 280px));
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.strokes path {
+  stroke: var(--mark-a);
+}
+.strokes .ink {
+  stroke: var(--mto-ink, var(--mark-a));
+}
+.strokes .sky {
+  stroke: var(--mto-sky, var(--mark-b));
+}
+
+.shimmer {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.textCol {
+  grid-column: 7 / 12;
+  align-self: center;
+  padding-top: 8vh;
+  padding-bottom: 8vh;
+}
+
+.eyebrow {
+  margin-bottom: 16px;
+}
+.headline {
+  margin: 0 0 32px;
+  max-width: 14em;
+}
+.body {
+  margin: 0 0 40px;
+}
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+
+@media (max-width: 1023px) {
+  .stageCol {
+    grid-column: 1 / 7;
+  }
+  .textCol {
+    grid-column: 7 / 13;
+  }
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+    padding-top: 3.5rem;
+    padding-bottom: 4rem;
+  }
+  .stageCol,
+  .textCol {
+    grid-column: 1 / -1;
+  }
+  .stage {
+    position: relative;
+    top: auto;
+    width: 70vw;
+    max-width: 70vw;
+    margin: 0 auto 2.5rem;
+  }
+  .textCol {
+    align-self: start;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cta > * {
+    width: 100%;
+  }
+}

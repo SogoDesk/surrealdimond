@@ -1,0 +1,147 @@
+/*
+  Preloader: porcelain sheet, the line mark drawing in, a progress counter,
+  the wordmark tracking in, then a beam wipe and a Flip hand-off into the
+  header logo. Motion lives in Preloader.tsx; this file is layout and colour.
+*/
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  color: var(--ink);
+  overflow: hidden;
+  contain: layout paint;
+}
+
+/* The porcelain ground. Its clip-path follows the beam during the wipe. */
+.sheet {
+  position: absolute;
+  inset: 0;
+  background: var(--porcelain);
+}
+
+/* The lockup sits above the sheet so the wipe never clips it. */
+.lockup {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--gutter);
+  pointer-events: none;
+}
+
+.mark {
+  display: block;
+  height: clamp(180px, 34vh, 400px);
+  width: auto;
+  /* hidden until GSAP has set every stroke to 0% */
+  visibility: hidden;
+}
+
+.word {
+  display: block;
+  margin-top: clamp(1.25rem, 3.5vh, 2.5rem);
+  font-family: var(--font-display), "Italiana", serif;
+  font-weight: 400;
+  font-size: clamp(44px, 9vw, 96px);
+  line-height: 0.9;
+  letter-spacing: 0.6em;
+  margin-right: -0.6em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  visibility: hidden;
+}
+
+.byline {
+  display: block;
+  margin-top: 0.85rem;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  margin-right: -0.28em;
+  text-transform: uppercase;
+  color: var(--stone);
+  visibility: hidden;
+}
+
+.counter {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(1.5rem, 4vh, 2.5rem);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  font-variant-numeric: tabular-nums;
+  color: var(--stone);
+  visibility: hidden;
+}
+
+/* A 2px beam line with a 120px soft glow, parked off the left edge. */
+.beam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: var(--beam);
+  transform: translateX(-140px);
+  visibility: hidden;
+  pointer-events: none;
+}
+.beam::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -119px;
+  width: 240px;
+  background: radial-gradient(
+    ellipse 50% 60% at 50% 50%,
+    rgba(232, 246, 255, 0.9) 0%,
+    rgba(232, 246, 255, 0.45) 35%,
+    rgba(232, 246, 255, 0) 70%
+  );
+}
+
+/* Visually hidden until focused, so keyboard users can skip the sequence. */
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: 1.5rem;
+  z-index: 2;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+}
+.skip:focus-visible {
+  width: auto;
+  height: auto;
+  clip: auto;
+  clip-path: none;
+  padding: 0.75rem 1.25rem;
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .mark {
+    height: clamp(150px, 44vw, 260px);
+  }
+}

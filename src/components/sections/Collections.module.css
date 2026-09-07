@@ -1,0 +1,437 @@
+/* 04. Nine ways to begin: pinned horizontal gallery (DESIGN.md, section 04). */
+
+.root {
+  --panel-h: max(320px, min(60vh, calc(100vh - 360px)));
+  --panel-gap: 24px;
+  --lead: 64px;
+}
+
+.skip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip:focus-visible {
+  position: fixed;
+  top: calc(var(--nav-h) + 16px);
+  left: var(--gutter);
+  z-index: 60;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 12px 20px;
+  clip: auto;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* Header row, fixed while the track moves */
+.header {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  row-gap: 32px;
+  align-items: end;
+  padding-top: calc(var(--nav-h) + 32px);
+  padding-bottom: 40px;
+}
+.headingCol {
+  grid-column: 1 / span 12;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.headline {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.headline em {
+  font-style: italic;
+  font-weight: 300;
+}
+.bodyCol {
+  grid-column: 1 / span 12;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.body {
+  margin: 0;
+}
+.shopAllLink {
+  display: none;
+  align-self: flex-start;
+}
+.wayfinding {
+  grid-column: 1 / span 12;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.hint {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+.progress {
+  position: relative;
+  display: block;
+  width: 240px;
+  max-width: 40vw;
+  height: 1px;
+  background: var(--rule);
+}
+.progressLine {
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Counter with masked digit swaps */
+.counter {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--fg);
+  line-height: 1;
+  white-space: pre;
+}
+.digitMask {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  line-height: 1;
+  vertical-align: baseline;
+}
+.digitColumn {
+  display: block;
+  will-change: transform;
+}
+.digitColumn > span {
+  display: block;
+  height: 1em;
+  line-height: 1;
+}
+.counterTotal {
+  color: var(--fg-muted);
+}
+
+/* Track */
+.viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+.stage[data-mode="pin"] .viewport {
+  overflow: hidden;
+  scroll-snap-type: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.stage[data-mode="pin"] .viewport[data-dragging] a {
+  pointer-events: none;
+}
+.track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--panel-gap);
+  width: max-content;
+  margin: 0;
+  padding: 0 var(--lead);
+  list-style: none;
+}
+
+.card,
+.interlude,
+.trailing {
+  flex: 0 0 auto;
+  height: var(--panel-h);
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+.card {
+  width: 34vw;
+}
+.interlude {
+  width: 46vw;
+}
+.trailing {
+  width: 40vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Paper card */
+.cardLink {
+  position: relative;
+  display: block;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  color: var(--fg);
+  transition: transform 1s var(--ease-surreal), box-shadow 1s var(--ease-surreal);
+}
+.cardLink:hover,
+.cardLink:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(11, 31, 42, 0.08);
+}
+.cardLink:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+.index {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: var(--fg-muted);
+}
+.renderWell {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.renderMove {
+  display: block;
+  width: 68%;
+}
+.render {
+  width: 100%;
+  height: auto;
+  transform: scale(1);
+  transition: transform 1s var(--ease-surreal);
+}
+.cardLink:hover .render {
+  transform: scale(1.06);
+}
+.title {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  right: 64px;
+  color: var(--fg);
+}
+.arrow {
+  position: absolute;
+  right: 20px;
+  bottom: 24px;
+  color: var(--fg);
+  transition: transform 0.6s var(--ease-surreal);
+}
+.cardLink:hover .arrow {
+  transform: translateX(6px);
+}
+
+/* Loose diamonds: plan view of a round brilliant */
+.brilliantWell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 56%;
+  color: var(--ink);
+}
+.brilliant {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.brilliantSpin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: brilliantSpin 40s linear infinite;
+}
+@keyframes brilliantSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.brilliantLabel {
+  color: var(--fg-muted);
+  text-align: center;
+}
+
+/* Lifestyle interlude */
+.interludeFrame {
+  position: relative;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--studio);
+}
+.photoMove {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -7%;
+  width: 114%;
+}
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 1s var(--ease-surreal);
+}
+.interludeFrame:hover .photo {
+  transform: scale(1.04);
+}
+.scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(10, 11, 12, 0.4), rgba(10, 11, 12, 0));
+  pointer-events: none;
+}
+.caption {
+  position: absolute;
+  left: 24px;
+  bottom: 22px;
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.5rem, 1.9vw, 1.875rem);
+  line-height: 1.1;
+  color: var(--porcelain);
+}
+
+/* Mobile Shop all */
+.mobileCta {
+  padding-top: 32px;
+}
+.shopAllButton {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .stage {
+    height: 100vh;
+    min-height: 0;
+    padding-bottom: 32px;
+  }
+  .header {
+    row-gap: 0;
+    padding-top: calc(var(--nav-h) + 24px);
+    padding-bottom: 32px;
+  }
+  .headingCol {
+    grid-column: 1 / span 5;
+  }
+  .bodyCol {
+    grid-column: 6 / span 4;
+    gap: 40px;
+  }
+  .body {
+    max-width: 34ch;
+  }
+  .shopAllLink {
+    display: inline-flex;
+  }
+  .wayfinding {
+    grid-column: 10 / span 3;
+    justify-content: flex-end;
+  }
+  .mobileCta {
+    display: none;
+  }
+  .viewport {
+    overflow: hidden;
+  }
+  .stage[data-mode="scroll"] .viewport {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .bodyCol {
+    grid-column: 6 / span 7;
+  }
+  .wayfinding {
+    grid-column: 1 / span 12;
+    justify-content: flex-start;
+    padding-top: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .root {
+    --panel-h: 100vw;
+    --panel-gap: 16px;
+    --lead: var(--gutter);
+  }
+  .card,
+  .trailing {
+    width: 78vw;
+  }
+  .interlude {
+    width: 90vw;
+  }
+  .renderMove {
+    width: 72%;
+  }
+  .title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brilliantSpin {
+    animation: none;
+  }
+  .cardLink:hover,
+  .cardLink:focus-visible {
+    transform: none;
+  }
+  .cardLink:hover .render,
+  .cardLink:hover .arrow,
+  .interludeFrame:hover .photo {
+    transform: none;
+  }
+  .digitColumn {
+    will-change: auto;
+  }
+}

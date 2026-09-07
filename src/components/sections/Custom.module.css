@@ -1,0 +1,289 @@
+/*
+  09. From a sketch to a setting (custom)
+  A light sheet that rises over the legacy chapter's sticky hold (z-index 3),
+  a sticky 3:4 frame on the left that draws, fills and wipes as the visitor
+  scrolls 140vh, and the program copy with its three stage labels on the right.
+*/
+
+.section {
+  z-index: 3;
+  background: var(--porcelain);
+}
+
+/* Visually hidden skip link for keyboard users */
+.skip {
+  position: absolute;
+  top: 1rem;
+  left: var(--gutter);
+  z-index: 5;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip:focus-visible {
+  width: auto;
+  height: auto;
+  clip-path: none;
+  padding: 0.75rem 1rem;
+  background: var(--paper);
+  color: var(--ink);
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+/* Inner root; carries data-reduced when the visitor prefers reduced motion */
+.root {
+  position: relative;
+}
+
+.grid {
+  min-height: 140vh;
+  padding-top: clamp(4rem, 10vh, 8rem);
+  padding-bottom: clamp(4rem, 10vh, 8rem);
+}
+.root[data-reduced="true"] .grid {
+  min-height: 0;
+}
+
+/* Left: sticky wrapper holding the grid wash and the frame */
+.frameCol {
+  grid-column: 1 / 6;
+  align-self: start;
+  position: sticky;
+  top: max(calc(var(--nav-h) + 1.5rem), 13vh);
+}
+.root[data-reduced="true"] .frameCol {
+  position: relative;
+  top: auto;
+  grid-column: 1 / 13;
+}
+
+.gridBg {
+  position: absolute;
+  inset: -14% -12%;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(11, 31, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 31, 42, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse at center, #000 45%, transparent 78%);
+}
+
+.frame {
+  --stage-left: var(--stage-left-desktop, -9.333%);
+  position: relative;
+  z-index: 1;
+  width: min(100%, calc(74vh * 0.75));
+  aspect-ratio: 3 / 4;
+  margin: 0 auto;
+}
+
+.shadow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow:
+    0 40px 80px -32px rgba(11, 31, 42, 0.22),
+    0 12px 32px -8px rgba(11, 31, 42, 0.08);
+}
+
+.paper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+}
+
+/* The square artwork, taller than the frame is wide, offset by --stage-left */
+.stage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--stage-left, -9.333%);
+  aspect-ratio: 1 / 1;
+  height: 100%;
+}
+.raster {
+  position: absolute;
+  inset: 0;
+}
+.raster img {
+  object-fit: cover;
+}
+
+/* Blank paper sampled from the drawing, laid over the printed wordmark */
+.patch {
+  position: absolute;
+  overflow: hidden;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+    linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+    linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  mask-composite: intersect;
+}
+.patchInner {
+  position: absolute;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.lines {
+  stroke: var(--ink);
+}
+.shimmer {
+  stroke: var(--line);
+  visibility: hidden;
+}
+
+/* The finished piece on paper, wiped in from the left */
+.render {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+}
+.render img {
+  object-fit: cover;
+  mix-blend-mode: multiply;
+}
+
+/* Static states (reduced motion) */
+.frame[data-state="sketch"] .raster,
+.frame[data-state="sketch"] .render,
+.frame[data-state="sketch"] .shadow,
+.frame[data-state="cad"] .render,
+.frame[data-state="cad"] .shadow,
+.frame[data-state="bench"] .lines {
+  visibility: hidden;
+}
+
+.states {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--col-gap);
+}
+.states .frame {
+  width: 100%;
+}
+.stateLabel {
+  margin-top: 12px;
+  color: var(--stone);
+}
+
+/* Right: copy */
+.textCol {
+  grid-column: 7 / 13;
+  align-self: start;
+  position: sticky;
+  top: 22vh;
+}
+.root[data-reduced="true"] .textCol {
+  position: relative;
+  top: auto;
+  grid-column: 1 / 13;
+  margin-top: 4rem;
+}
+.eyebrow {
+  margin-bottom: 16px;
+}
+.headline {
+  margin: 0 0 32px;
+  max-width: 12em;
+  font-size: clamp(3rem, 5.6vw, 5.75rem);
+}
+.body {
+  margin: 0 0 40px;
+}
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+
+/* Stage rail: Sketch, CAD, Bench on a hairline */
+.rail {
+  position: relative;
+  display: flex;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(3rem, 6vh, 4.5rem);
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+  max-width: 34ch;
+}
+/* Fixed 100px base; the effect moves it with x and fits it with scaleX */
+.marker {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 1px;
+  width: 100px;
+  background: var(--ink);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+.railLabel {
+  color: var(--stone);
+  transition: color 0.4s var(--ease-surreal);
+}
+.railLabel[data-active="true"] {
+  color: var(--ink);
+}
+
+@media (max-width: 1023px) {
+  .frameCol {
+    grid-column: 1 / 7;
+  }
+  .textCol {
+    grid-column: 7 / 13;
+  }
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+  .frameCol,
+  .textCol {
+    grid-column: 1 / -1;
+    position: relative;
+    top: auto;
+  }
+  .frame {
+    --stage-left: var(--stage-left-mobile, -3.75%);
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    max-width: none;
+  }
+  .gridBg {
+    inset: -8% -6%;
+  }
+  .textCol {
+    margin-top: 2.5rem;
+  }
+  .states {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .cta > * {
+    width: 100%;
+  }
+  .rail {
+    max-width: none;
+    justify-content: space-between;
+  }
+}

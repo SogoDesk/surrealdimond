@@ -1,0 +1,62 @@
+/* Button styles: see src/components/ui/Button.tsx and DESIGN.md */
+.btn-primary {
+  background: var(--btn-fill);
+  color: var(--btn-fill-fg);
+}
+.btn-primary .btn-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--btn-hover-fill);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.btn-primary .btn-label {
+  transition: transform 0.45s var(--ease-surreal), color 0.45s var(--ease-surreal);
+}
+.btn-primary .btn-label-dup {
+  transform: translateY(100%);
+  color: var(--btn-hover-fg);
+}
+.btn-primary:hover .btn-fill,
+.btn-primary:focus-visible .btn-fill { transform: scaleY(1); }
+.btn-primary:hover .btn-label:not(.btn-label-dup),
+.btn-primary:focus-visible .btn-label:not(.btn-label-dup) { transform: translateY(-100%); }
+.btn-primary:hover .btn-label-dup,
+.btn-primary:focus-visible .btn-label-dup { transform: translateY(0); }
+.btn-primary .btn-arrow { color: inherit; transition: transform 0.45s var(--ease-surreal); }
+.btn-primary:hover .btn-arrow { transform: translateX(6px); color: var(--btn-hover-fg); }
+
+.btn-secondary {
+  box-shadow: inset 0 0 0 1px currentColor;
+  color: var(--fg);
+  background: transparent;
+  transition: background-color 0.45s var(--ease-surreal);
+}
+.btn-secondary:hover, .btn-secondary:focus-visible { background: var(--outline-hover); }
+.btn-secondary .btn-arrow { transition: transform 0.45s var(--ease-surreal); }
+.btn-secondary:hover .btn-arrow { transform: translateX(6px); }
+
+.btn-tertiary {
+  padding-bottom: 6px;
+  color: var(--fg);
+}
+.btn-tertiary .btn-underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.btn-tertiary:hover .btn-underline, .btn-tertiary:focus-visible .btn-underline { transform: scaleX(1); }
+.btn-tertiary .btn-arrow { transition: transform 0.45s var(--ease-surreal); }
+.btn-tertiary:hover .btn-arrow { transform: translateX(6px); }
+
+.btn-primary:focus-visible, .btn-secondary:focus-visible, .btn-tertiary:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 4px;
+}

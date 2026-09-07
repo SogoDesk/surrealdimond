@@ -1,0 +1,189 @@
+/* Foreveryone chapter: a dark studio block rising over the lookbook's hold, centered copy above a three-column parallax collage. */
+
+.root {
+  position: relative;
+  z-index: 2;
+  overflow: clip;
+}
+
+.inner {
+  box-sizing: border-box;
+  min-height: 180vh;
+  padding-top: clamp(6rem, 16vh, 11rem);
+  padding-bottom: clamp(5rem, 12vh, 9rem);
+}
+
+/* Copy block, columns 3 to 10, centered */
+.copy {
+  grid-column: 3 / span 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.headline {
+  margin: 16px 0 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.headline em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+.body {
+  margin: 32px auto 0;
+}
+.cta {
+  margin-top: 40px;
+}
+
+/* Collage */
+.collage {
+  position: relative;
+  margin-top: clamp(4rem, 14vh, 10rem);
+  align-items: start;
+}
+
+.figure {
+  position: relative;
+  margin: 0;
+}
+.dahlia {
+  grid-column: 1 / span 7;
+}
+.dahlia .frame {
+  height: 90vh;
+}
+.veronica {
+  grid-column: 8 / span 5;
+  justify-self: end;
+  width: min(100%, calc(60vh * 2 / 3));
+  margin-top: 25vh;
+}
+.veronica .frame {
+  height: 60vh;
+}
+.hoops {
+  position: absolute;
+  z-index: 2;
+  top: 58.5vh;
+  left: calc(58.333% - 11vw);
+  width: 22vw;
+}
+.hoops .frame {
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--carbon);
+  background: var(--studio);
+}
+
+.frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--surface);
+}
+/* .zoom is scaled by the reveal tween; the hover scale lives on the image so no CSS transition fights it */
+.zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+.frame:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+.img {
+  object-fit: cover;
+  transform-origin: 50% 50%;
+  transition: transform 1s var(--ease-surreal);
+}
+.frame:hover .img,
+.frame:focus-visible .img {
+  transform: scale(1.04);
+}
+.dahlia .img {
+  object-position: 50% 62%;
+}
+.veronica .img {
+  object-position: 50% 45%;
+}
+.hoops .img {
+  object-position: 40% 50%;
+}
+
+/* Captions, Jost 10px stone, underline draws on hover of the image or the caption */
+.caption {
+  position: relative;
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  color: var(--stone);
+}
+.caption::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: var(--sky);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.figure:hover .caption::after,
+.caption:focus-visible::after {
+  transform: scaleX(1);
+}
+.caption:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .inner {
+    min-height: 0;
+    padding-top: 6rem;
+    padding-bottom: 5rem;
+  }
+  .copy {
+    grid-column: 1 / -1;
+  }
+  .collage {
+    margin-top: 4rem;
+  }
+  .dahlia {
+    grid-column: 1 / -1;
+  }
+  .dahlia .frame {
+    height: 70vh;
+  }
+  .veronica {
+    grid-column: 1 / span 6;
+    justify-self: stretch;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+  .veronica .frame {
+    height: auto;
+    aspect-ratio: 2 / 3;
+  }
+  .hoops {
+    position: relative;
+    grid-column: 7 / span 6;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+}
