@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Environment, Lightformer, MeshRefractionMaterial, Sparkles } from "@react-three/drei";
+import { Environment, Lightformer } from "@react-three/drei";
 import * as THREE from "three";
 import { createBrilliantGeometry } from "@/lib/diamondGeometry";
 import type { DiamondQuality } from "./diamondQuality";
@@ -231,7 +231,6 @@ const StudioLights = memo(function StudioLights({ scene }: { scene: THREE.Scene 
 export default function Diamond({
   progress = 0,
   progressRef,
-  quality = "high",
   scale = 1,
   reducedMotion = false,
   spinSpeed = 0.12,
@@ -311,40 +310,49 @@ export default function Diamond({
     }
   });
 
-  const bounces = quality === "low" ? 2 : 3;
-
   return (
     <group ref={drift}>
       <StudioLights scene={envScene} />
       <group ref={stone}>
         {envMap && (
           <>
+            {/* A lightweight white crystal: back faces first, then front faces, both reflecting the studio rig.
+                No ray marching, so it stays cheap on a large canvas and never shows stray pixels. */}
             <mesh geometry={geometry}>
-              <MeshRefractionMaterial
-                envMap={envMap}
-                bounces={bounces}
-                ior={2.42}
-                fresnel={1}
-                aberrationStrength={0.02}
-                fastChroma
+              <meshPhysicalMaterial
+                side={THREE.BackSide}
                 color="#ffffff"
+                roughness={0.05}
+                metalness={0}
+                envMap={envMap}
+                envMapIntensity={1.05}
+                emissive="#e8f6ff"
+                emissiveIntensity={0.12}
+                transparent
+                opacity={0.55}
+                depthWrite={false}
+              />
+            </mesh>
+            <mesh geometry={geometry}>
+              <meshPhysicalMaterial
+                side={THREE.FrontSide}
+                color="#ffffff"
+                roughness={0.02}
+                metalness={0}
+                envMap={envMap}
+                envMapIntensity={1.55}
+                emissive="#eef8ff"
+                emissiveIntensity={0.16}
+                clearcoat={1}
+                clearcoatRoughness={0}
+                transparent
+                opacity={0.9}
               />
             </mesh>
             <mesh ref={shellMesh} geometry={geometry} material={shell} />
           </>
         )}
       </group>
-      {quality === "high" && !reducedMotion && (
-        <Sparkles
-          count={40}
-          scale={[3.4, 2.6, 3.4]}
-          size={1.8}
-          speed={0.25}
-          opacity={0.35}
-          color="#dcf1ff"
-          noise={0.6}
-        />
-      )}
       <mesh rotation-x={-Math.PI / 2} position-y={-1}>
         <planeGeometry args={[4.6, 4.6]} />
         <meshBasicMaterial

@@ -114,7 +114,7 @@ export default function DiamondScene({
       {supported && (
         <Canvas
           resize={{ offsetSize: true, scroll: false, debounce: { scroll: 50, resize: 0 } }}
-          dpr={quality === "low" ? 1 : [1, 1.75]}
+          dpr={quality === "low" ? 1 : [1, 1.5]}
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
           camera={{ fov: 32, position: [0, view === "profile" ? 0.06 : 0.6, 5.2], near: 0.1, far: 60 }}
           frameloop={frameloop}
