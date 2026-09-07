@@ -88,7 +88,7 @@ export default function Hero() {
       /* Initial states, set here so nothing stays hidden if an effect fails. */
       gsap.set(photoImg, { scale: 1.06 });
       gsap.set(overlay, { opacity: 0 });
-      gsap.set(rule, { scaleX: 0 });
+      if (rule) gsap.set(rule, { scaleX: 0 });
       gsap.set([eyebrowLabel, body, ...ctas, ...scrollParts], { opacity: 0, y: 24 });
       // Hidden only until the display face has loaded and the characters are masked.
       gsap.set(wordmark, { opacity: 0 });
@@ -103,7 +103,7 @@ export default function Hero() {
         const tl = gsap.timeline({ defaults: { ease: "surreal" } });
         tl.to(photoImg, { scale: 1, duration: 2.4, ease: "power2.out" }, 0);
         if (chars.length) tl.to(chars, { yPercent: 0, duration: 1.2, stagger: { each: 0.04, from: "start" } }, 0.2);
-        tl.to(rule, { scaleX: 1, duration: 0.8 }, 0.9);
+        if (rule) tl.to(rule, { scaleX: 1, duration: 0.8 }, 0.9);
         tl.to(eyebrowLabel, { opacity: 1, y: 0, duration: 1 }, 1.0);
         tl.to(body, { opacity: 1, y: 0, duration: 1.2 }, 1.2);
         tl.to(ctas, { opacity: 1, y: 0, duration: 1.2, stagger: 0.08 }, 1.35);
@@ -199,7 +199,7 @@ export default function Hero() {
           <div className={styles.scrim} aria-hidden />
 
           <div className={styles.eyebrow} data-hero="eyebrow">
-            <Eyebrow>Largest lab diamond grower in the world</Eyebrow>
+            <Eyebrow rule={false}>Largest lab diamond grower in the world</Eyebrow>
           </div>
 
           <h1 className={`${styles.wordmark} t-display`} data-hero="wordmark">

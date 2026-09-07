@@ -114,7 +114,7 @@
   position: absolute;
   z-index: 5;
   left: var(--gutter);
-  bottom: calc(46% + 0.11em);
+  bottom: calc(52% + 0.11em);
   margin: 0;
   text-align: left;
   white-space: nowrap;
@@ -141,7 +141,8 @@
   z-index: 6;
   left: 0;
   right: 0;
-  bottom: 56px;
+  /* Anchored beneath the wordmark (baseline at 52 percent) so the copy stays with it at every height. */
+  top: calc(48% + 3vh);
 }
 .copy {
   grid-column: 1 / span 6;
@@ -211,6 +212,7 @@
     -webkit-mask-image: none;
   }
   .bottom {
+    top: auto;
     bottom: 28px;
   }
   .copy {
