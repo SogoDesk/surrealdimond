@@ -226,11 +226,6 @@ body {
 /* Renders sit directly on paper, no white box */
 .render-multiply { mix-blend-mode: multiply; }
 
-/* Cursor is custom on fine pointers; native cursor stays for text and inputs */
-@media (pointer: fine) {
-  html[data-cursor="custom"] body, html[data-cursor="custom"] a, html[data-cursor="custom"] button { cursor: none; }
-  html[data-cursor="custom"] input, html[data-cursor="custom"] textarea { cursor: text; }
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }

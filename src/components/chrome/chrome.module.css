@@ -392,69 +392,18 @@
 }
 
 /* Cursor: hidden until the effect confirms a fine pointer, then shown with autoAlpha */
-.cursor {
+.glow {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 200;
+  z-index: 55;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 246, 255, 0.34) 0%, rgba(134, 223, 255, 0.12) 32%, rgba(134, 223, 255, 0) 68%);
+  mix-blend-mode: screen;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  color: var(--ink);
-  transition: color 0.4s var(--ease-surreal);
-}
-:global(html[data-page-theme="dark"]) .cursor,
-:global(html[data-page-theme="navy"]) .cursor { color: var(--sky); }
-:global(html[data-page-theme="sky"]) .cursor { color: var(--ink); }
-.cursor[data-cursor-theme="light"],
-.cursor[data-cursor-theme="sky"] { color: var(--ink); }
-.cursor[data-cursor-theme="dark"],
-.cursor[data-cursor-theme="navy"] { color: var(--sky); }
-.cursorDot {
-  position: absolute;
-  left: -3px;
-  top: -3px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
   will-change: transform;
-}
-.cursorRing {
-  position: absolute;
-  left: -16px;
-  top: -16px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
-}
-.cursorShape {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  will-change: transform;
-}
-.cursorShape circle {
-  fill: transparent;
-  stroke: currentColor;
-  stroke-width: 1px;
-  transition: fill 0.4s var(--ease-surreal), stroke 0.4s var(--ease-surreal);
-}
-.cursorShape[data-fill="true"] circle { fill: var(--mist); stroke: var(--mist); }
-.cursorLabel {
-  font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 400;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  line-height: 1;
-  white-space: nowrap;
-  color: currentColor;
-  opacity: 0;
-  position: relative;
 }

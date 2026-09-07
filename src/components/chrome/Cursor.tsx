@@ -1,17 +1,11 @@
 "use client";
 
 /**
- * Custom cursor (DESIGN.md, "Cursor and micro"). Fine pointers only: a 6px dot
- * tracking 1:1 and a 32px ring that follows with a quickTo lag. Ink on light,
- * sky on dark, ink on the sky panel: the cursor copies the data-theme of the
- * nearest themed ancestor under the pointer (a chapter, the mega menu, the
- * sheet) and falls back to html[data-page-theme], which ThemeSync writes.
- * The ring is an SVG circle with a non-scaling stroke so it stays 1px while
- * it scales. Over links and buttons the ring grows to 44px and the dot
- * disappears; over [data-cursor] targets (view, drag, turn, play, open) it
- * grows to 72px with a Jost label; over text it steps aside for the native
- * I-beam; over inputs it becomes a filled mist disc. Hidden the moment a touch
- * event fires and never mounted under reduced motion.
+ * Pointer light. The native cursor stays; a soft pool of beam-coloured light
+ * follows the pointer a beat behind it, adding a little glow to whatever it
+ * passes over. It blends with screen, so it lifts the dark chapters and all
+ * but disappears on the light ones. Fine pointers only; never mounted for
+ * touch or reduced motion.
  */
 
 import { useRef } from "react";
@@ -19,132 +13,47 @@ import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
 import styles from "./chrome.module.css";
 
-const LABELS: Record<string, string> = { view: "View", drag: "Drag", turn: "Turn", play: "Play", open: "Open" };
-const TEXT_SELECTOR = "p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, dt, dd, td, th, em, strong, address, time";
-const INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
-const CLICK_SELECTOR = "a, button, [role='button'], label, summary";
-
-type State = "default" | "link" | "label" | "text" | "input";
-
 export default function Cursor() {
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       registerGsap();
-      const root = ref.current;
-      if (!root) return;
+      const glow = ref.current;
+      if (!glow) return;
       if (!window.matchMedia("(pointer: fine)").matches || isTouchDevice() || prefersReducedMotion()) return;
 
-      const html = document.documentElement;
-      const dot = root.querySelector<HTMLElement>("[data-dot]");
-      const ring = root.querySelector<HTMLElement>("[data-ring]");
-      const shape = root.querySelector<HTMLElement>("[data-shape]");
-      const label = root.querySelector<HTMLElement>("[data-label]");
-      if (!dot || !ring || !shape || !label) return;
-
-      html.dataset.cursor = "custom";
-      gsap.set(root, { autoAlpha: 0 });
-      gsap.set([dot, ring], { x: -100, y: -100 });
-
-      const dotX = gsap.quickSetter(dot, "x", "px");
-      const dotY = gsap.quickSetter(dot, "y", "px");
-      const ringX = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3" });
-      const ringY = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power3" });
-
-      let visible = false;
-      let state: State = "default";
-      let alive = true;
-
-      const setVisible = (next: boolean) => {
-        if (visible === next) return;
-        visible = next;
-        gsap.to(root, { autoAlpha: next ? 1 : 0, duration: 0.3, ease: "power2.out", overwrite: true });
-      };
-
-      const apply = (next: State, text = "") => {
-        if (next === "label" && label.textContent !== text) label.textContent = text;
-        if (next === state) return;
-        state = next;
-        document.body.style.cursor = next === "text" ? "text" : "";
-        shape.dataset.fill = next === "input" ? "true" : "false";
-        const ringScale = next === "label" ? 72 / 32 : next === "link" ? 44 / 32 : 1;
-        const dotScale = next === "default" ? 1 : 0;
-        gsap.to(shape, { scale: ringScale, duration: 0.4, ease: "surreal", overwrite: true });
-        gsap.to(dot, { scale: dotScale, duration: 0.4, ease: "surreal", overwrite: "auto" });
-        gsap.to(label, { autoAlpha: next === "label" ? 1 : 0, duration: 0.3, ease: "power2.out", overwrite: true });
-        if (next === "text") setVisible(false);
-        else if (!visible) setVisible(true);
-      };
+      gsap.set(glow, { xPercent: -50, yPercent: -50, autoAlpha: 0 });
+      const x = gsap.quickTo(glow, "x", { duration: 0.55, ease: "power3.out" });
+      const y = gsap.quickTo(glow, "y", { duration: 0.55, ease: "power3.out" });
+      let shown = false;
 
       const move = (e: PointerEvent) => {
         if (e.pointerType === "touch") return;
-        dotX(e.clientX);
-        dotY(e.clientY);
-        ringX(e.clientX);
-        ringY(e.clientY);
-        if (state !== "text") setVisible(true);
-      };
-
-      const over = (e: PointerEvent) => {
-        const target = e.target;
-        if (!(target instanceof Element)) return;
-        const themed = target.closest<HTMLElement>("[data-theme]");
-        root.dataset.cursorTheme = themed?.dataset.theme ?? html.dataset.pageTheme ?? "light";
-        const tagged = target.closest<HTMLElement>("[data-cursor]:not(html)");
-        if (tagged) {
-          const kind = tagged.dataset.cursor ?? "link";
-          if (kind in LABELS) return apply("label", LABELS[kind]);
-          return apply("link");
+        x(e.clientX);
+        y(e.clientY);
+        if (!shown) {
+          shown = true;
+          gsap.to(glow, { autoAlpha: 1, duration: 0.8, ease: "power2.out", overwrite: "auto" });
         }
-        if (target.closest(INPUT_SELECTOR)) return apply("input");
-        if (target.closest(CLICK_SELECTOR)) return apply("link");
-        if (target.closest(TEXT_SELECTOR) && (target.textContent ?? "").trim().length > 0) return apply("text");
-        apply("default");
       };
-
-      const leaveWindow = () => setVisible(false);
-      const enterWindow = () => {
-        if (state !== "text") setVisible(true);
+      const leave = () => {
+        shown = false;
+        gsap.to(glow, { autoAlpha: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" });
       };
-
-      const teardown = () => {
-        if (!alive) return;
-        alive = false;
-        window.removeEventListener("pointermove", move);
-        document.removeEventListener("pointerover", over);
-        document.removeEventListener("mouseleave", leaveWindow);
-        document.removeEventListener("mouseenter", enterWindow);
-        document.body.style.cursor = "";
-        delete html.dataset.cursor;
-        delete root.dataset.cursorTheme;
-        gsap.set(root, { autoAlpha: 0 });
-      };
-      const onTouch = () => teardown();
+      const press = () => gsap.fromTo(glow, { scale: 1 }, { scale: 0.85, duration: 0.5, ease: "power2.out", yoyo: true, repeat: 1 });
 
       window.addEventListener("pointermove", move, { passive: true });
-      document.addEventListener("pointerover", over);
-      document.addEventListener("mouseleave", leaveWindow);
-      document.addEventListener("mouseenter", enterWindow);
-      window.addEventListener("touchstart", onTouch, { passive: true, once: true });
-
+      window.addEventListener("pointerdown", press, { passive: true });
+      document.documentElement.addEventListener("pointerleave", leave);
       return () => {
-        window.removeEventListener("touchstart", onTouch);
-        teardown();
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerdown", press);
+        document.documentElement.removeEventListener("pointerleave", leave);
       };
     },
     { scope: ref },
   );
 
-  return (
-    <div ref={ref} className={styles.cursor} aria-hidden data-site-cursor>
-      <div className={styles.cursorDot} data-dot />
-      <div className={styles.cursorRing} data-ring>
-        <svg className={styles.cursorShape} data-shape data-fill="false" viewBox="0 0 32 32" focusable="false">
-          <circle cx="16" cy="16" r="15.5" vectorEffect="non-scaling-stroke" />
-        </svg>
-        <span className={styles.cursorLabel} data-label />
-      </div>
-    </div>
-  );
+  return <div ref={ref} className={styles.glow} aria-hidden />;
 }
