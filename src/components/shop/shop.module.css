@@ -1,0 +1,679 @@
+/*
+  The Collection (shop pages): masthead, category rail, toolbar, grid, cards,
+  interludes, promo tile and programs band. Motion lives in the components;
+  this file is layout and color. Drawers are in drawers.module.css.
+*/
+
+/* ---------- 01. Masthead ---------- */
+.masthead {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 48px;
+  min-height: 62vh;
+  padding: calc(var(--nav-h) + 64px) var(--gutter) 40px;
+}
+.mark {
+  position: absolute;
+  top: -6vh;
+  right: -4vw;
+  height: 70vh;
+  width: auto;
+  color: var(--ink);
+  opacity: 0.06;
+  pointer-events: none;
+}
+.head {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  row-gap: 32px;
+}
+.headingCol {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.headline {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(56px, 7.5vw, 128px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.headline em {
+  font-style: italic;
+  font-weight: 300;
+}
+.lede {
+  grid-column: 1 / span 5;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.count {
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--stone);
+}
+@media (max-width: 1023px) {
+  .lede { grid-column: 1 / span 8; }
+}
+@media (max-width: 767px) {
+  /* The header is 60px below 768px (chrome.module.css scopes that to the header itself). */
+  .masthead { min-height: 0; padding-top: calc(60px + 40px); gap: 36px; }
+  .mark { height: 52vh; top: -4vh; right: -18vw; }
+  .lede { grid-column: 1 / -1; }
+}
+
+/* ---------- Category rail ---------- */
+.rail {
+  position: relative;
+  display: flex;
+  gap: 28px;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 6px var(--gutter) 8px;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: var(--gutter);
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+.railItem {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 112px;
+  text-align: center;
+  outline: none;
+}
+.circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--hairline);
+  overflow: hidden;
+  transition: transform 0.6s var(--ease-surreal), box-shadow 0.6s var(--ease-surreal);
+}
+.tile[data-active] .circle { box-shadow: 0 0 0 1px var(--ink); }
+.tile:hover .circle { transform: translateY(-4px); }
+.tile:focus-visible .circle {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+.circleRender {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform 1s var(--ease-surreal);
+}
+.tile:hover .circleRender { transform: scale(1.06); }
+.circleBrilliant {
+  width: 56%;
+  color: var(--ink);
+  transition: transform 1s var(--ease-surreal);
+}
+.tile:hover .circleBrilliant { transform: scale(1.06); }
+.tileLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  white-space: nowrap;
+}
+.tileDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--sky);
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 0.4s var(--ease-surreal), opacity 0.4s var(--ease-surreal);
+}
+.tile[data-active] .tileDot { opacity: 1; transform: scale(1); }
+.tile[data-active] .tileLabel { color: var(--ink); }
+
+/* ---------- 02. Toolbar ---------- */
+.toolbar {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 64px;
+  padding: 10px var(--gutter);
+  background: color-mix(in srgb, var(--porcelain) 88%, transparent);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--hairline);
+}
+.groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 28px;
+}
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.groupLabel {
+  margin-right: 4px;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  color: var(--ink);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background-color 0.4s var(--ease-surreal), color 0.4s var(--ease-surreal), box-shadow 0.4s var(--ease-surreal);
+}
+.chip:hover { background: var(--mist); }
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--porcelain);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.chip:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 3px;
+}
+.chipSwatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(11, 31, 42, 0.14);
+}
+.clear {
+  position: relative;
+  padding-bottom: 2px;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.clear::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--line);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.clear:hover::after, .clear:focus-visible::after { transform: scaleX(1); }
+.clear:focus-visible { outline: 2px solid var(--sky); outline-offset: 4px; }
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: 0 0 auto;
+}
+.sort {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.sortLabel {
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.sortSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  padding: 6px 20px 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+}
+.sortSelect:focus-visible { outline: 2px solid var(--sky); outline-offset: 4px; }
+.sortChevron {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+  color: var(--stone);
+}
+.density {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.densityBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  color: var(--stone);
+  transition: color 0.3s var(--ease-surreal), background-color 0.3s var(--ease-surreal);
+}
+.densityBtn:hover { background: var(--mist); color: var(--ink); }
+.densityBtn[aria-pressed="true"] { color: var(--ink); }
+.densityBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+.toolbarCount {
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--stone);
+  white-space: nowrap;
+}
+.filterPill {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--ink);
+  color: var(--ink);
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: background-color 0.4s var(--ease-surreal);
+}
+.filterPill:hover { background: var(--mist); }
+.filterPill:focus-visible { outline: 2px solid var(--sky); outline-offset: 4px; }
+.filterBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--porcelain);
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 1023px) {
+  .groups { display: none; }
+  .filterPill { display: inline-flex; }
+}
+@media (max-width: 767px) {
+  .toolbar { top: 60px; gap: 16px; }
+  .density { display: none; }
+  .right { gap: 18px; }
+  .sortLabel { display: none; }
+}
+
+/* ---------- 03. Grid ---------- */
+.gridSection {
+  padding-bottom: 64px;
+}
+.gridWrap {
+  padding: 40px var(--gutter) 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: 40px 24px;
+}
+@media (max-width: 767px) {
+  .gridWrap { padding-top: 24px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 12px; }
+}
+@media (max-width: 419px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Card: a button holding the paper tile and its caption */
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  outline: none;
+}
+.card[data-hidden] { display: none; }
+.tileWell {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--hairline);
+  transition: transform 0.7s var(--ease-surreal), box-shadow 0.7s var(--ease-surreal);
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .tileWell {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 24px -8px rgba(11, 31, 42, 0.08), 0 0 0 1px var(--hairline);
+  }
+}
+.card:focus-visible .tileWell {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+.index {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  z-index: 2;
+}
+.mark360 {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--stone);
+}
+.mark360 svg { display: block; }
+.stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.render,
+.video {
+  position: absolute;
+  width: 74%;
+  aspect-ratio: 1;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform 1s var(--ease-surreal), opacity 0.6s var(--ease-surreal);
+  will-change: transform;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .render, .card:hover .video { transform: scale(1.05); }
+}
+.renderAlt, .video { opacity: 0; }
+.card[data-show="angle"] .renderAlt { opacity: 1; }
+.card[data-show="angle"] .renderBase { opacity: 0; }
+.card[data-show="video"] .video { opacity: 1; }
+.card[data-show="video"] .renderBase { opacity: 0; }
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 18px;
+}
+.name {
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  color: var(--fg);
+}
+.detail {
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--stone);
+}
+.swatches {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 2px 0;
+}
+.swatch {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(11, 31, 42, 0.14);
+}
+.swatch::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.3s var(--ease-surreal), transform 0.3s var(--ease-surreal);
+}
+.swatch[data-active]::after { opacity: 1; transform: scale(1); }
+
+/* Editorial interlude: a two column photograph with a caption on a scrim */
+.interlude {
+  grid-column: span 2;
+  position: relative;
+  aspect-ratio: 8 / 5;
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--hairline);
+}
+.interludeMedia {
+  position: absolute;
+  inset: 0;
+}
+.interludeImg {
+  object-fit: cover;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 11, 12, 0.5) 0%, rgba(10, 11, 12, 0) 55%);
+  pointer-events: none;
+}
+.interludeCopy {
+  --fg: var(--porcelain);
+  --accent: var(--sky);
+  --accent-strong: var(--sky);
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--porcelain);
+}
+.interludeCaption {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+@media (max-width: 767px) {
+  .interludeCopy { left: 20px; right: 20px; bottom: 18px; gap: 8px; }
+  .interludeCaption { font-size: 1.5rem; }
+}
+@media (max-width: 419px) {
+  .interlude { grid-column: span 1; }
+}
+
+/* Made to order promo on the studio ground */
+.promo {
+  grid-column: span 2;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 32px;
+  overflow: hidden;
+}
+.promo.promo[data-theme] {
+  background: var(--studio);
+  color: var(--porcelain);
+}
+@media (min-width: 768px) {
+  .promo { aspect-ratio: 8 / 5; }
+}
+@media (max-width: 419px) {
+  .promo { grid-column: span 1; }
+}
+.promoTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+.promoMark {
+  height: 72px;
+  width: auto;
+  flex: 0 0 auto;
+}
+.promoCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 34ch;
+}
+.promoHead {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.promoBody {
+  margin: 0;
+  color: rgba(242, 244, 246, 0.78);
+}
+.promoAction { align-self: flex-start; }
+
+/* Paging and the empty state */
+.more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 72px var(--gutter) 0;
+}
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 96px var(--gutter);
+  text-align: center;
+}
+.emptyLine {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+}
+
+/* ---------- 05. Programs band ---------- */
+.programs {
+  padding: 64px var(--gutter) 128px;
+}
+.programGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.program {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 280px;
+  padding: 36px 32px;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--hairline);
+}
+.programCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.programLine {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: var(--fg);
+}
+@media (max-width: 767px) {
+  .programs { padding: 40px var(--gutter) 96px; }
+  .programGrid { grid-template-columns: minmax(0, 1fr); }
+  .program { min-height: 0; padding: 28px 24px; }
+}

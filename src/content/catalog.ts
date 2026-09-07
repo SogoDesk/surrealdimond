@@ -11,7 +11,10 @@ export type Category =
   | "necklaces"
   | "pendants"
   | "rings"
-  | "bracelets";
+  | "bracelets"
+  | "sterling-silver";
+
+export type Shape = "round" | "oval" | "emerald" | "radiant" | "princess" | "pear";
 
 export type Metal = "wg" | "yg" | "rg";
 
@@ -29,6 +32,8 @@ export interface Product {
   /** Turntable video slug in public/media/video (optional) */
   video?: string;
   featured?: boolean;
+  /** Centre stone shape, for engagement pieces */
+  shape?: Shape;
 }
 
 export const renderSrc = (slug: string) => `/media/renders/${slug}.webp`;
@@ -45,24 +50,40 @@ export const categories: { id: Category; label: string; blurb: string; image: st
   { id: "pendants", label: "Pendants", blurb: "Bezels, halos and signature silhouettes on fine chains.", image: "branding-images8025" },
   { id: "rings", label: "Rings", blurb: "Cocktail domes, pave bands and sculptural statements.", image: "ca24ap0006-8905" },
   { id: "bracelets", label: "Bracelets", blurb: "Tennis bracelets and flexible bangles, set stone by stone.", image: "sur17678lgbd70148-14k-wg" },
+  { id: "sterling-silver", label: "Sterling Silver", blurb: "Sterling silver pieces set with the same diamonds we grow.", image: "jbii247sil-2638" },
+];
+
+export const shapes: { id: Shape; label: string }[] = [
+  { id: "round", label: "Round" },
+  { id: "oval", label: "Oval" },
+  { id: "emerald", label: "Emerald" },
+  { id: "radiant", label: "Radiant" },
+  { id: "princess", label: "Princess" },
+  { id: "pear", label: "Pear" },
+];
+
+export const metals: { id: Metal; label: string; swatch: string }[] = [
+  { id: "wg", label: "White gold", swatch: "#e6e8ea" },
+  { id: "yg", label: "Yellow gold", swatch: "#e2c27a" },
+  { id: "rg", label: "Rose gold", swatch: "#e3b8a7" },
 ];
 
 export const products: Product[] = [
   // Engagement
-  { id: "oval-halo", name: "Oval Halo", category: "engagement", detail: "Oval center, pave halo and band", image: "le2004w442-11741", angles: ["le2004w442-11742", "le2004w442-11745", "le2004w442-11746"], video: "le2004w442-11771", featured: true },
-  { id: "round-halo", name: "Round Halo", category: "engagement", detail: "Round brilliant with a fine halo", image: "le2010w440-1-11750", angles: ["le2010w440-1-11751", "le2010w440-1-11756", "le2010w440-1-11757"], video: "le2010w440-1-11772", featured: true },
-  { id: "round-solitaire", name: "Pave Solitaire", category: "engagement", detail: "Round brilliant, pave shoulders", image: "le2001w440-1", angles: ["le2001w440-2"], video: "le2001w440-11770", featured: true },
-  { id: "oval-solitaire", name: "Oval Solitaire", category: "engagement", detail: "Elongated oval on a pave band", image: "le2007w442-11724", angles: ["le2007w442-11725", "le2007w442-11682", "le2007w442-11683"], video: "lw2007w442-11769", featured: true },
-  { id: "radiant-solitaire", name: "Radiant Solitaire", category: "engagement", detail: "Radiant cut, hidden gallery", image: "lrra04w442-11729", angles: ["lrra04w442-11758"], video: "lrra04w442-11773", featured: true },
-  { id: "princess-solitaire", name: "Princess Solitaire", category: "engagement", detail: "Princess cut, cathedral setting", image: "lrra05w442-11731", angles: ["lrra05w442-11732"] },
-  { id: "cathedral-solitaire", name: "Cathedral Solitaire", category: "engagement", detail: "Four prong classic", image: "le2003w440-final-11679", angles: ["le2003w440-final-11681"] },
-  { id: "oval-cathedral", name: "Oval Cathedral", category: "engagement", detail: "Oval center, cathedral shoulders", image: "le2009w442-11727", angles: ["le2009w442-11728"] },
-  { id: "three-stone-round", name: "Three Stone Round", category: "engagement", detail: "Trilogy of round brilliants", image: "lr0001w430wg", variants: { wg: "lr0001w430wg", yg: "lr0001w430yg" }, featured: true },
-  { id: "three-stone-emerald", name: "Three Stone Emerald", category: "engagement", detail: "Step cut trilogy", image: "lr0004w431wg", variants: { wg: "lr0004w431wg", yg: "lr0004w431yg" }, featured: true },
-  { id: "oval-three-stone", name: "Oval Trilogy", category: "engagement", detail: "Three oval brilliants", image: "sur17678-batch8-95015-oval-3-stoneswg", variants: { wg: "sur17678-batch8-95015-oval-3-stoneswg", yg: "sur17678-batch8-95015-oval-3-stonesyg" } },
-  { id: "toi-et-moi-ring", name: "Toi et Moi", category: "engagement", detail: "Pear and emerald cut, side by side", image: "lg-toi-et-moi-ring-wg", variants: { wg: "lg-toi-et-moi-ring-wg", yg: "lg-toi-et-moi-ring-yg" }, featured: true },
-  { id: "bridal-set-halo", name: "Halo Bridal Set", category: "engagement", detail: "Engagement ring with matching band", image: "lgbrdl2665-eng-wg-lgbrdl2665-band-wg" },
-  { id: "bridal-set-pear", name: "Pear Bridal Set", category: "engagement", detail: "Pear halo with contour band", image: "sur17678-batch7-grp2-lgbdrdl2690" },
+  { id: "oval-halo", name: "Oval Halo", category: "engagement", detail: "Oval center, pave halo and band", image: "le2004w442-11741", angles: ["le2004w442-11742", "le2004w442-11745", "le2004w442-11746"], video: "le2004w442-11771", featured: true, shape: "oval" },
+  { id: "round-halo", name: "Round Halo", category: "engagement", detail: "Round brilliant with a fine halo", image: "le2010w440-1-11750", angles: ["le2010w440-1-11751", "le2010w440-1-11756", "le2010w440-1-11757"], video: "le2010w440-1-11772", featured: true, shape: "round" },
+  { id: "round-solitaire", name: "Pave Solitaire", category: "engagement", detail: "Round brilliant, pave shoulders", image: "le2001w440-1", angles: ["le2001w440-2"], video: "le2001w440-11770", featured: true, shape: "round" },
+  { id: "oval-solitaire", name: "Oval Solitaire", category: "engagement", detail: "Elongated oval on a pave band", image: "le2007w442-11724", angles: ["le2007w442-11725", "le2007w442-11682", "le2007w442-11683"], video: "lw2007w442-11769", featured: true, shape: "oval" },
+  { id: "radiant-solitaire", name: "Radiant Solitaire", category: "engagement", detail: "Radiant cut, hidden gallery", image: "lrra04w442-11729", angles: ["lrra04w442-11758"], video: "lrra04w442-11773", featured: true, shape: "radiant" },
+  { id: "princess-solitaire", name: "Princess Solitaire", category: "engagement", detail: "Princess cut, cathedral setting", image: "lrra05w442-11731", angles: ["lrra05w442-11732"], shape: "princess" },
+  { id: "cathedral-solitaire", name: "Cathedral Solitaire", category: "engagement", detail: "Four prong classic", image: "le2003w440-final-11679", angles: ["le2003w440-final-11681"], shape: "round" },
+  { id: "oval-cathedral", name: "Oval Cathedral", category: "engagement", detail: "Oval center, cathedral shoulders", image: "le2009w442-11727", angles: ["le2009w442-11728"], shape: "oval" },
+  { id: "three-stone-round", name: "Three Stone Round", category: "engagement", detail: "Trilogy of round brilliants", image: "lr0001w430wg", variants: { wg: "lr0001w430wg", yg: "lr0001w430yg" }, featured: true, shape: "round" },
+  { id: "three-stone-emerald", name: "Three Stone Emerald", category: "engagement", detail: "Step cut trilogy", image: "lr0004w431wg", variants: { wg: "lr0004w431wg", yg: "lr0004w431yg" }, featured: true, shape: "emerald" },
+  { id: "oval-three-stone", name: "Oval Trilogy", category: "engagement", detail: "Three oval brilliants", image: "sur17678-batch8-95015-oval-3-stoneswg", variants: { wg: "sur17678-batch8-95015-oval-3-stoneswg", yg: "sur17678-batch8-95015-oval-3-stonesyg" }, shape: "oval" },
+  { id: "toi-et-moi-ring", name: "Toi et Moi", category: "engagement", detail: "Pear and emerald cut, side by side", image: "lg-toi-et-moi-ring-wg", variants: { wg: "lg-toi-et-moi-ring-wg", yg: "lg-toi-et-moi-ring-yg" }, featured: true, shape: "pear" },
+  { id: "bridal-set-halo", name: "Halo Bridal Set", category: "engagement", detail: "Engagement ring with matching band", image: "lgbrdl2665-eng-wg-lgbrdl2665-band-wg", shape: "round" },
+  { id: "bridal-set-pear", name: "Pear Bridal Set", category: "engagement", detail: "Pear halo with contour band", image: "sur17678-batch7-grp2-lgbdrdl2690", shape: "pear" },
 
   // Wedding bands
   { id: "eternity-band", name: "Eternity Band", category: "wedding-bands", detail: "Shared prong, full circle", image: "lgldbd3280-14k-wg", featured: true },
@@ -142,6 +163,19 @@ export const products: Product[] = [
   { id: "oval-accent-tennis", name: "Oval Accent Tennis", category: "bracelets", detail: "Round line with an oval center", image: "ca24mr0083-2725" },
   { id: "emerald-accent-tennis", name: "Emerald Accent Tennis", category: "bracelets", detail: "Round line with an emerald center", image: "ca24mr0085-2926" },
 ];
+
+products.push(
+  { id: "pear-bezel-pendant-silver", name: "Pear Bezel Pendant", category: "sterling-silver", detail: "Sterling silver, pear cut diamond", image: "jbii241sil-2645" },
+  { id: "oval-bezel-pendant-silver", name: "Oval Bezel Pendant", category: "sterling-silver", detail: "Sterling silver, oval cut diamond", image: "jbii247sil-2638" },
+);
+
+/** Metals a piece is shown in: its variants, else inferred from the render slug. */
+export function productMetals(p: Product): Metal[] {
+  if (p.variants) return (Object.keys(p.variants) as Metal[]).filter((m) => p.variants?.[m]);
+  if (p.category === "sterling-silver") return ["wg"];
+  if (/yg|yellow|-y$/.test(p.image)) return ["yg"];
+  return ["wg"];
+}
 
 export const featured = products.filter((p) => p.featured);
 export const byCategory = (c: Category) => products.filter((p) => p.category === c);
