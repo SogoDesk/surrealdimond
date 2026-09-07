@@ -46,7 +46,8 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${display.variable} ${editorial.variable} ${ui.variable}`}>
-      <body>
+      {/* Browser extensions add attributes to body before hydration; those are not ours to reconcile. */}
+      <body suppressHydrationWarning>
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

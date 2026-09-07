@@ -62,6 +62,22 @@ export const shapes: { id: Shape; label: string }[] = [
   { id: "pear", label: "Pear" },
 ];
 
+/**
+ * Made to order sizes offered per category, in carats (total weight for multi stone pieces).
+ * Placeholder ranges pending the client's confirmation; the renders show the first size.
+ */
+export const caratOptions: Record<Category, number[]> = {
+  engagement: [1, 1.5, 2, 3],
+  "wedding-bands": [0.5, 1, 1.5],
+  earrings: [0.5, 1, 2],
+  necklaces: [2, 3, 5],
+  pendants: [0.5, 1, 1.5],
+  rings: [1, 1.5, 2],
+  bracelets: [2, 3, 5],
+  "sterling-silver": [0.25, 0.5],
+};
+export const formatCarat = (ct: number) => `${ct % 1 === 0 ? ct.toFixed(0) : ct} ct`;
+
 export const metals: { id: Metal; label: string; swatch: string }[] = [
   { id: "wg", label: "White gold", swatch: "#e6e8ea" },
   { id: "yg", label: "Yellow gold", swatch: "#e2c27a" },

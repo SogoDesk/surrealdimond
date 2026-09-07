@@ -10,7 +10,7 @@
   --ring-y: 78%;       /* centre of the photographed halo ring on the floor (photo scaled 1.1 from the top) */
   position: relative;
   z-index: 0;
-  height: 230vh;
+  height: 200vh;
   margin-bottom: -100vh;
   background: var(--studio);
   color: var(--porcelain);
@@ -189,7 +189,7 @@
 @media (max-width: 767px) {
   .hero {
     --ring-y: 62%;
-    height: 200svh;
+    height: 190svh;
     margin-bottom: -100svh;
   }
   .stage {

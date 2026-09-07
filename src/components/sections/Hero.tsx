@@ -127,7 +127,7 @@ export default function Hero() {
         scrollTrigger: {
           trigger: stage,
           start: "top top",
-          end: () => "+=" + window.innerHeight * 1.3,
+          end: () => "+=" + window.innerHeight,
           scrub: 1,
           invalidateOnRefresh: true,
           onToggle: (self) => {
@@ -136,8 +136,8 @@ export default function Hero() {
         },
       });
       scrub.to(photo, { yPercent: -6, duration: 1 }, 0);
-      scrub.to(overlay, { opacity: 0.55, duration: 0.8 }, 0.2);
-      scrub.to(exitWraps, { opacity: 0, y: -16, duration: 0.35 }, 0.2);
+      scrub.to(overlay, { opacity: 0.55, duration: 0.9 }, 0.1);
+      scrub.to(exitWraps, { opacity: 0, y: -16, duration: 0.35 }, 0.1);
       scrub.to(scrollHint, { opacity: 0, duration: 0.2 }, 0.05);
 
       /* The wordmark splits once the display face has loaded. */
@@ -150,11 +150,11 @@ export default function Hero() {
             gsap.set(chars, { yPercent: 100 });
             // The spread moves the masks, not the chars, so nothing is clipped on the way out.
             const masks = split.masks as HTMLElement[];
-            scrub.to(masks, { x: (i: number) => i * spreadPx(), opacity: 0, duration: 0.6 }, 0.2);
+            scrub.to(masks, { x: (i: number) => i * spreadPx(), opacity: 0, duration: 0.6 }, 0.1);
           } catch {
             // Without a split the wordmark simply shows and fades as one piece.
             chars = [];
-            scrub.to(wordmark, { opacity: 0, duration: 0.6 }, 0.2);
+            scrub.to(wordmark, { opacity: 0, duration: 0.6 }, 0.1);
           }
           gsap.set(wordmark, { opacity: 1 });
           fontsReady = true;

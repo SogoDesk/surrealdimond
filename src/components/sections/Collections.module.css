@@ -40,8 +40,14 @@
 .stage {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   padding-bottom: 40px;
+}
+/* The carousel: cards drift left continuously; the pointer pauses them. */
+.carousel {
+  padding: 8px 0 16px;
+}
+.carousel a {
+  -webkit-user-drag: none;
 }
 
 /* Header row, fixed while the track moves */
@@ -174,7 +180,7 @@
   gap: var(--panel-gap);
   width: max-content;
   margin: 0;
-  padding: 0 var(--lead);
+  padding: 0 0 0 var(--lead);
   list-style: none;
 }
 
@@ -349,8 +355,6 @@
 
 @media (min-width: 768px) {
   .stage {
-    height: 100vh;
-    min-height: 0;
     padding-bottom: 32px;
   }
   .header {
