@@ -32,6 +32,7 @@
   min-height: 640px;
   overflow: hidden;
   isolation: isolate;
+  background: var(--studio); /* the ground the circle of light opens over */
 }
 
 

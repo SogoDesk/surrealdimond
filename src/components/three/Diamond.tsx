@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Environment, Lightformer } from "@react-three/drei";
+import { Environment, Lightformer, MeshRefractionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { createBrilliantGeometry } from "@/lib/diamondGeometry";
 import type { DiamondQuality } from "./diamondQuality";
@@ -231,9 +231,10 @@ const StudioLights = memo(function StudioLights({ scene }: { scene: THREE.Scene 
 export default function Diamond({
   progress = 0,
   progressRef,
+  quality = "high",
   scale = 1,
   reducedMotion = false,
-  spinSpeed = 0.12,
+  spinSpeed = 0.09,
   baseTilt = BASE_TILT,
   drift: driftAmount = 1,
 }: DiamondProps) {
@@ -314,10 +315,15 @@ export default function Diamond({
     <group ref={drift}>
       <StudioLights scene={envScene} />
       <group ref={stone}>
-        {envMap && (
+        {envMap && quality === "high" && (
+          <mesh geometry={geometry}>
+            {/* Two bounces and a faint aberration keep the ray march cheap and stop the grazing-angle speckle. */}
+            <MeshRefractionMaterial envMap={envMap} bounces={2} ior={2.42} fresnel={1} aberrationStrength={0.012} fastChroma color="#ffffff" />
+          </mesh>
+        )}
+        {envMap && quality === "low" && (
           <>
-            {/* A lightweight white crystal: back faces first, then front faces, both reflecting the studio rig.
-                No ray marching, so it stays cheap on a large canvas and never shows stray pixels. */}
+            {/* Low tier: a white crystal from two physically based passes, no ray marching. */}
             <mesh geometry={geometry}>
               <meshPhysicalMaterial
                 side={THREE.BackSide}
@@ -349,6 +355,10 @@ export default function Diamond({
                 opacity={0.9}
               />
             </mesh>
+          </>
+        )}
+        {envMap && (
+          <>
             <mesh ref={shellMesh} geometry={geometry} material={shell} />
           </>
         )}

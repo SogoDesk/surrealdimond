@@ -3,9 +3,10 @@
 /**
  * 03. Say yes (engagement). See DESIGN.md.
  *
- * A light chapter that opens directly on the porcelain stage: the copy, the
- * scroll-scrubbed turntable (pointer nudges the frame), the shop-by-shape strip
- * at the foot of the pinned stage, and the settings row after it.
+ * The chapter arrives dark, then a circle of light opens from the ring's place
+ * and the turntable grows into it; the section flips to light so the header
+ * follows. Then the scroll-scrubbed turntable (pointer nudges the frame), the
+ * shop-by-shape strip at the foot of the pinned stage, and the settings row.
  *
  *   <Engagement />
  */
@@ -16,7 +17,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { useSplitLines } from "@/components/motion/SplitReveal";
-import { registerGsap, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { scrollToTarget } from "@/lib/scroll";
 import { prefersReducedMotion, isTouchDevice } from "@/hooks/useMedia";
 import ShapeStrip, { type ShapeStripHandle } from "./ShapeStrip";
@@ -102,6 +103,20 @@ function frameOrder(stride: number) {
   return order;
 }
 
+
+/**
+ * The header only reads a chapter's data-theme when the chapter crosses the bar,
+ * so the mid-pin flip mirrors itself onto the header and the root while this
+ * chapter is the one under the bar. Local stand-in for attribute observation.
+ */
+function syncChrome(theme: "light" | "dark") {
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  if (!header) return;
+  const active = header.dataset.activeChapter;
+  if (active && active !== CHAPTER) return;
+  header.dataset.theme = theme;
+  document.documentElement.dataset.pageTheme = theme;
+}
 
 export default function Engagement() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -221,18 +236,43 @@ export default function Engagement() {
       const copy = copyRef.current;
       const host = hostRef.current;
       if (!stage || !porcelain || !host || !copy) return;
-      porcelain.setAttribute("data-open", "");
+      const section = stage.closest<HTMLElement>("[data-chapter]");
+      const setTheme = (light: boolean) => {
+        const theme = light ? "light" : "dark";
+        section?.setAttribute("data-theme", theme);
+        syncChrome(theme);
+      };
 
       if (prefersReducedMotion()) {
+        setTheme(true);
         lightRef.current = true;
+        porcelain.setAttribute("data-open", "");
         stripRef.current?.draw();
         paintRef.current(true);
         return;
       }
 
       const mobile = () => window.innerWidth < 768;
+      let center = { x: 0, y: 0 };
+      const clip = { r: 0 };
       const frame = { index: 0 };
       const nudge = { v: 0 };
+      const applyClip = () => {
+        porcelain.style.clipPath = `circle(${clip.r}vmax at ${center.x}px ${center.y}px)`;
+      };
+      /** The circle opens from where the ring will sit: the turntable's centre on the stage. */
+      const hostCentre = () => {
+        if (mobile()) return { x: stage.clientWidth / 2, y: stage.clientHeight / 2 };
+        let left = 0;
+        let top = 0;
+        let el: HTMLElement | null = host;
+        while (el && el !== stage) {
+          left += el.offsetLeft;
+          top += el.offsetTop;
+          el = el.offsetParent as HTMLElement | null;
+        }
+        return { x: left + host.offsetWidth / 2, y: top + host.offsetHeight / 2 };
+      };
 
       // Copy stack (eyebrow rule, label, body, buttons); the headline tween lives in useSplitLines.
       const copyTl = gsap.timeline({ paused: true });
@@ -243,11 +283,12 @@ export default function Engagement() {
         .fromTo(copy.querySelectorAll("[data-ctas] > *"), { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1, ease: "surreal", stagger: 0.1 }, 0.7);
 
       let stripOn = false;
-      const crossings = (p: number, active: boolean) => {
-        const shown = active || p > 0;
-        if (shown !== lightRef.current) {
-          lightRef.current = shown;
-          if (shown) {
+      const crossings = (p: number) => {
+        const light = p >= 0.1;
+        if (light !== lightRef.current) {
+          lightRef.current = light;
+          setTheme(light);
+          if (light) {
             copyTl.play();
             headTweenRef.current?.play();
           } else {
@@ -255,7 +296,7 @@ export default function Engagement() {
             headTweenRef.current?.reverse();
           }
         }
-        const strip = p >= 0.22;
+        const strip = p >= 0.3;
         if (strip !== stripOn) {
           stripOn = strip;
           if (strip) stripRef.current?.draw();
@@ -284,14 +325,6 @@ export default function Engagement() {
         if (canvas) canvas.hidden = true;
       };
 
-      /* The copy reveals as the chapter arrives, before the stage pins. */
-      ScrollTrigger.create({
-        trigger: stage,
-        start: "top 70%",
-        onEnter: () => crossings(0, true),
-        onLeaveBack: () => crossings(0, false),
-      });
-
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
@@ -299,31 +332,39 @@ export default function Engagement() {
           pin: true,
           anticipatePin: 1,
           start: "top top",
-          end: () => `+=${mobile() ? 110 : 150}%`,
+          end: () => `+=${mobile() ? 130 : 170}%`,
           scrub: 0.6,
           invalidateOnRefresh: true,
-          onRefresh: (self) => crossings(self.progress, self.isActive),
+          onRefresh: (self) => {
+            center = hostCentre();
+            applyClip();
+            crossings(self.progress);
+          },
           onToggle: (self) => {
             if (self.isActive) {
-              gsap.set(host, { willChange: "transform" });
+              gsap.set([porcelain, host], { willChange: "transform" });
               gsap.ticker.add(render);
               if (self.direction >= 0) enableVideoFallback();
             } else {
-              gsap.set(host, { clearProps: "willChange" });
+              gsap.set([porcelain, host], { clearProps: "willChange" });
               gsap.ticker.remove(render);
             }
           },
-          onUpdate: (self) => crossings(self.progress, self.isActive),
+          onUpdate: (self) => crossings(self.progress),
         },
       });
-      // One full rotation across the pin, with a short hold at each end.
-      tl.to(frame, { index: FRAMES - 1, duration: 0.86 }, 0.06);
+      // 0 to 20: the circle of light opens from the ring's place and the turntable grows into it.
+      // 22 to 92: one full rotation, with a short hold at the end.
+      tl.to(clip, { r: 150, duration: 0.2, ease: "power2.in", onUpdate: applyClip }, 0);
+      tl.fromTo(host, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.2, ease: "power2.out" }, 0.02);
+      tl.to(frame, { index: FRAMES - 1, duration: 0.7 }, 0.22);
       tl.to({}, { duration: 0.08 }, 0.92);
 
       // The pointer's x nudges the frame by up to 8 either way while the turntable is on screen.
       if (isTouchDevice()) return;
       const nudgeTo = gsap.quickTo(nudge, "v", { duration: 0.6, ease: "power3" });
       const move = (e: PointerEvent) => {
+        if (tl.progress() < 0.2) return;
         nudgeTo((e.clientX / window.innerWidth - 0.5) * 2 * NUDGE);
       };
       const leave = () => nudgeTo(0);
@@ -345,12 +386,12 @@ export default function Engagement() {
   };
 
   return (
-    <Section id={CHAPTER} theme="light" label="Engagement" className={styles.section}>
+    <Section id={CHAPTER} theme="dark" label="Engagement" className={styles.section}>
       <a href={NEXT_SECTION} onClick={skipAhead} className={`${styles.skip} t-nav`}>
         Skip the engagement stage
       </a>
       <div ref={stageRef} className={styles.stage}>
-        <div ref={porcelainRef} className={styles.porcelain} data-open="">
+        <div ref={porcelainRef} className={styles.porcelain}>
           <div className={`container grid-12 ${styles.body}`}>
             <div ref={copyRef} className={styles.copy}>
               <Eyebrow>Engagement</Eyebrow>
