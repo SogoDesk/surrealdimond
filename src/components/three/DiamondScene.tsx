@@ -22,6 +22,8 @@ export interface DiamondSceneProps {
   quality?: DiamondQuality;
   /** Uniform scale of the stone. At 1 the girdle radius is one world unit. */
   scale?: number;
+  /** "table" looks down onto the table (default); "profile" is the classic side view with the crown up. */
+  view?: "table" | "profile";
 }
 
 function supportsWebGL2(): boolean {
@@ -46,6 +48,7 @@ export default function DiamondScene({
   progressRef,
   quality = "high",
   scale = 1,
+  view = "table",
 }: DiamondSceneProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [supported] = useState<boolean | null>(() => (typeof window === "undefined" ? null : supportsWebGL2()));
@@ -89,10 +92,17 @@ export default function DiamondScene({
   const content = useMemo(
     () => (
       <Suspense fallback={null}>
-        <Diamond progressRef={activeProgress} quality={quality} scale={scale} reducedMotion={reduced} />
+        <Diamond
+          progressRef={activeProgress}
+          quality={quality}
+          scale={scale}
+          reducedMotion={reduced}
+          baseTilt={view === "profile" ? 0.07 : undefined}
+          drift={view === "profile" ? 0 : 1}
+        />
       </Suspense>
     ),
-    [activeProgress, quality, scale, reduced],
+    [activeProgress, quality, scale, reduced, view],
   );
 
   if (supported === false) return null;
@@ -106,7 +116,7 @@ export default function DiamondScene({
           resize={{ offsetSize: true, scroll: false, debounce: { scroll: 50, resize: 0 } }}
           dpr={quality === "low" ? 1 : [1, 1.75]}
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-          camera={{ fov: 32, position: [0, 0.6, 5.2], near: 0.1, far: 60 }}
+          camera={{ fov: 32, position: [0, view === "profile" ? 0.06 : 0.6, 5.2], near: 0.1, far: 60 }}
           frameloop={frameloop}
           flat={false}
           onCreated={(state: RootState) => {

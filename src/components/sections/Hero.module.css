@@ -1,25 +1,27 @@
 /*
   01. The New Forever (hero). Layout only: every animated property (transform,
   opacity) is set and driven from Hero.tsx so nothing here can strand content
-  invisible. The stage is pinned by ScrollTrigger for 160vh (120vh on mobile).
+  invisible. The stage is held with position sticky inside a taller section and
+  the next chapter rises over it (the section's negative bottom margin lets the
+  chapter start while the stage is still held).
 */
 
 .hero {
-  /* Vertical positions are percentages of the stage so they track the photograph's
-     object-position even when the stage is held at its 720px minimum. */
   --ring-y: 78%;       /* centre of the photographed halo ring on the floor (photo scaled 1.1 from the top) */
-  --stone-y: 46%;      /* centre of the diamond canvas at rest, clear of the ring's own stone */
-  --stone-size: 28vh;  /* canvas box; the stone fills about two thirds of it */
-  --flare-y: 60%;      /* where the stone lands: the photographed ring's crown */
-  --caustic-w: 30vh;
-  --caustic-h: 11vh;
   position: relative;
+  z-index: 0;
+  height: 230vh;
+  margin-bottom: -100vh;
   background: var(--studio);
   color: var(--porcelain);
 }
-
-.stage {
+.hold {
   position: relative;
+  height: 100%;
+}
+.stage {
+  position: sticky;
+  top: 0;
   height: 100vh;
   min-height: 720px;
   overflow: hidden;
@@ -68,44 +70,6 @@
     transform-origin: 50% 0%;
   }
 }
-.flare {
-  position: absolute;
-  z-index: 4;
-  left: 50%;
-  top: var(--flare-y);
-  width: 26vh;
-  height: 26vh;
-  margin: -13vh 0 0 -13vh;
-  border-radius: 50%;
-  background: radial-gradient(
-    closest-side,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(232, 246, 255, 0.85) 14%,
-    rgba(232, 246, 255, 0.3) 36%,
-    rgba(134, 223, 255, 0.12) 56%,
-    rgba(134, 223, 255, 0) 72%
-  );
-  mix-blend-mode: screen;
-  opacity: 0;
-  pointer-events: none;
-}
-.rays {
-  position: absolute;
-  z-index: 4;
-  left: 50%;
-  top: var(--flare-y);
-  width: 64vh;
-  height: 64vh;
-  margin: -32vh 0 0 -32vh;
-  mix-blend-mode: screen;
-  opacity: 0;
-  pointer-events: none;
-}
-.rays svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
 .photo picture {
   display: block;
   width: 100%;
@@ -128,60 +92,8 @@
 }
 
 /* Caustic disc on the floor around the real ring */
-.caustic {
-  position: absolute;
-  z-index: 3;
-  left: 50%;
-  top: var(--ring-y);
-  width: var(--caustic-w);
-  height: var(--caustic-h);
-  margin-left: calc(var(--caustic-w) / -2);
-  margin-top: calc(var(--caustic-h) / -2);
-  pointer-events: none;
-}
-.causticDisc {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(
-    closest-side,
-    rgba(232, 246, 255, 0.22) 0%,
-    rgba(232, 246, 255, 0.1) 42%,
-    rgba(232, 246, 255, 0) 100%
-  );
-}
 
 /* Diamond canvas box. GSAP owns the transform, so centring uses margins. */
-.stone {
-  position: absolute;
-  z-index: 4;
-  left: 50%;
-  top: var(--stone-y);
-  width: var(--stone-size);
-  height: var(--stone-size);
-  margin-left: calc(var(--stone-size) / -2);
-  margin-top: calc(var(--stone-size) / -2);
-  pointer-events: none;
-}
-.stoneIntro {
-  position: absolute;
-  inset: 0;
-  transform-origin: 50% 50%;
-}
-.canvas {
-  position: absolute;
-  inset: 0;
-  /* Fade the canvas edges so the floor glow plane never reads as a clipped rectangle. */
-  mask-image: radial-gradient(circle at 50% 50%, #000 52%, rgba(0, 0, 0, 0) 76%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 52%, rgba(0, 0, 0, 0) 76%);
-}
-.halo {
-  position: absolute;
-  inset: -20%;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(232, 246, 255, 0.55), rgba(232, 246, 255, 0) 70%);
-  pointer-events: none;
-}
 
 /* Scrim under the bottom-left copy: a 40 percent studio gradient from the left edge */
 .scrim {
@@ -201,14 +113,12 @@
 .wordmark {
   position: absolute;
   z-index: 5;
-  left: 0;
-  right: 0;
-  bottom: calc(65% + 0.11em);
+  left: var(--gutter);
+  bottom: calc(46% + 0.11em);
   margin: 0;
-  padding-left: 0.08em; /* balance the trailing letter-space so the word centres */
-  text-align: center;
+  text-align: left;
   white-space: nowrap;
-  font-size: clamp(76px, 11.5vw, 200px);
+  font-size: clamp(72px, 10.6vw, 190px);
   color: var(--porcelain);
   pointer-events: none;
 }
@@ -245,8 +155,8 @@
 
 /* Scroll indicator, column 12 */
 .scrollHint {
-  grid-column: 12;
-  justify-self: end;
+  grid-column: 6 / span 2;
+  justify-self: center;
   align-self: end;
   display: flex;
   flex-direction: column;
@@ -278,10 +188,8 @@
 @media (max-width: 767px) {
   .hero {
     --ring-y: 62%;
-    --stone-y: 45%;
-    --stone-size: 22svh;
-    --caustic-w: 44vw;
-    --caustic-h: 9svh;
+    height: 200svh;
+    margin-bottom: -100svh;
   }
   .stage {
     height: 100svh;
@@ -291,8 +199,9 @@
     object-position: 50% 52%;
   }
   .wordmark {
-    bottom: calc(66% + 0.11em);
-    font-size: 15vw;
+    left: var(--gutter);
+    bottom: calc(62% + 0.11em);
+    font-size: 11vw;
   }
   .scrim {
     width: 100%;

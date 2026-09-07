@@ -19,6 +19,10 @@ export interface DiamondProps {
   reducedMotion?: boolean;
   /** Idle rotation in radians per second. */
   spinSpeed?: number;
+  /** Base tilt toward the camera in radians. 0.5 shows the table from above; about 0.14 is a side profile. */
+  baseTilt?: number;
+  /** Multiplier for the scroll driven drift and shrink (0 keeps the stone centred while the page moves it). */
+  drift?: number;
 }
 
 // Pose and motion.
@@ -231,6 +235,8 @@ export default function Diamond({
   scale = 1,
   reducedMotion = false,
   spinSpeed = 0.12,
+  baseTilt = BASE_TILT,
+  drift: driftAmount = 1,
 }: DiamondProps) {
   const [envScene] = useState(() => new THREE.Scene());
   const [envMap, setEnvMap] = useState<THREE.Texture | null>(null);
@@ -294,14 +300,14 @@ export default function Diamond({
 
     if (stone.current) {
       stone.current.rotation.set(
-        BASE_TILT + PROGRESS_TILT * p + tilt.current.x,
+        baseTilt + PROGRESS_TILT * p * driftAmount + tilt.current.x,
         spin.current + PROGRESS_SPIN * p + tilt.current.y,
         0,
       );
     }
     if (drift.current) {
-      drift.current.position.copy(PROGRESS_DRIFT).multiplyScalar(p);
-      drift.current.scale.setScalar(scale * (1 - PROGRESS_SHRINK * p));
+      drift.current.position.copy(PROGRESS_DRIFT).multiplyScalar(p * driftAmount);
+      drift.current.scale.setScalar(scale * (1 - PROGRESS_SHRINK * p * driftAmount));
     }
   });
 

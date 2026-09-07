@@ -1,0 +1,46 @@
+/*
+  The opening stone: a fixed layer above the hero and the time chapter holding
+  the one WebGL diamond. Its position is driven from OpeningStone.tsx.
+*/
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1; /* inside the time chapter: above its ground, beneath its pinned stage */
+  pointer-events: none;
+  overflow: hidden;
+}
+.box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--stone-box);
+  height: var(--stone-box);
+  margin: calc(var(--stone-box) / -2) 0 0 calc(var(--stone-box) / -2);
+  will-change: transform, opacity;
+}
+.intro {
+  position: absolute;
+  inset: 0;
+}
+.canvas {
+  position: absolute;
+  inset: 0;
+  /* Fade the canvas edges so the floor glow never reads as a clipped rectangle. */
+  mask-image: radial-gradient(circle at 50% 50%, #000 50%, rgba(0, 0, 0, 0) 74%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 50%, rgba(0, 0, 0, 0) 74%);
+}
+.glow {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(232, 246, 255, 0.28), rgba(134, 223, 255, 0.08) 55%, rgba(134, 223, 255, 0) 75%);
+  pointer-events: none;
+}
+.layer {
+  --stone-box: 104vh;
+}
+@media (max-width: 767px) {
+  .layer {
+    --stone-box: 54svh;
+  }
+}
