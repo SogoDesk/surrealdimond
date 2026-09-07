@@ -55,3 +55,5 @@ Every chapter respects `prefers-reduced-motion`: pinned stages become static, sc
 ## Credits
 
 The diamond model in `public/media/models/diamond.glb` is "Diamond" by RBG_illustrations on Sketchfab (https://sketchfab.com/3d-models/diamond-7acd98d5c8df4e04a73ea5d5a81c8911), licensed CC BY 4.0. That license requires a visible credit wherever the model is used, so either keep a credit line on the site or replace the model with one the client owns before launch.
+
+## End
