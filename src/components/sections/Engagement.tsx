@@ -283,40 +283,8 @@ export default function Engagement() {
         .fromTo(copy.querySelectorAll("[data-ctas] > *"), { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1, ease: "surreal", stagger: 0.1 }, 0.7);
 
       let stripOn = false;
-      /* Arrival: the chapter rises over the counter with the circle of light already opening from the ring's place. */
-      const arrive = gsap.timeline({
-        defaults: { ease: "none" },
-        scrollTrigger: {
-          trigger: stage,
-          start: "top bottom",
-          end: "top top",
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-          onRefresh: () => {
-            center = hostCentre();
-            applyClip();
-          },
-          onUpdate: (self) => arrivalCrossings(self.progress),
-        },
-      });
-      arrive.to(clip, { r: 150, duration: 0.85, ease: "power1.inOut", onUpdate: applyClip }, 0.1);
-      arrive.fromTo(host, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0.25);
-      const arrivalCrossings = (p: number) => {
-        const light = p >= 0.5;
-        if (light !== lightRef.current) {
-          lightRef.current = light;
-          setTheme(light);
-          if (light) {
-            copyTl.play();
-            headTweenRef.current?.play();
-          } else {
-            copyTl.reverse();
-            headTweenRef.current?.reverse();
-          }
-        }
-      };
       const crossings = (p: number) => {
-        const light = true;
+        const light = p >= 0.1;
         if (light !== lightRef.current) {
           lightRef.current = light;
           setTheme(light);
@@ -328,7 +296,7 @@ export default function Engagement() {
             headTweenRef.current?.reverse();
           }
         }
-        const strip = p >= 0.15;
+        const strip = p >= 0.3;
         if (strip !== stripOn) {
           stripOn = strip;
           if (strip) stripRef.current?.draw();
@@ -364,10 +332,14 @@ export default function Engagement() {
           pin: true,
           anticipatePin: 1,
           start: "top top",
-          end: () => `+=${mobile() ? 110 : 150}%`,
+          end: () => `+=${mobile() ? 130 : 170}%`,
           scrub: 0.6,
           invalidateOnRefresh: true,
-          onRefresh: (self) => crossings(self.progress),
+          onRefresh: (self) => {
+            center = hostCentre();
+            applyClip();
+            crossings(self.progress);
+          },
           onToggle: (self) => {
             if (self.isActive) {
               gsap.set([porcelain, host], { willChange: "transform" });
@@ -381,14 +353,18 @@ export default function Engagement() {
           onUpdate: (self) => crossings(self.progress),
         },
       });
-      // 4 to 92: one full rotation across the pin, with a short hold at each end.
-      tl.to(frame, { index: FRAMES - 1, duration: 0.88 }, 0.04);
+      // 0 to 20: the circle of light opens from the ring's place and the turntable grows into it.
+      // 22 to 92: one full rotation, with a short hold at the end.
+      tl.to(clip, { r: 150, duration: 0.2, ease: "power2.in", onUpdate: applyClip }, 0);
+      tl.fromTo(host, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.2, ease: "power2.out" }, 0.02);
+      tl.to(frame, { index: FRAMES - 1, duration: 0.7 }, 0.22);
       tl.to({}, { duration: 0.08 }, 0.92);
 
       // The pointer's x nudges the frame by up to 8 either way while the turntable is on screen.
       if (isTouchDevice()) return;
       const nudgeTo = gsap.quickTo(nudge, "v", { duration: 0.6, ease: "power3" });
       const move = (e: PointerEvent) => {
+        if (tl.progress() < 0.2) return;
         nudgeTo((e.clientX / window.innerWidth - 0.5) * 2 * NUDGE);
       };
       const leave = () => nudgeTo(0);

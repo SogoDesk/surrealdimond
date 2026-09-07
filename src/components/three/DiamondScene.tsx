@@ -26,8 +26,6 @@ export interface DiamondSceneProps {
   view?: "table" | "profile";
   /** Optional glTF model for the stone (see Diamond). */
   modelUrl?: string;
-  /** Idle rotation in radians per second (0 holds the stone still; pointer tilt still applies). */
-  spinSpeed?: number;
 }
 
 function supportsWebGL2(): boolean {
@@ -54,7 +52,6 @@ export default function DiamondScene({
   scale = 1,
   view = "table",
   modelUrl,
-  spinSpeed,
 }: DiamondSceneProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [supported] = useState<boolean | null>(() => (typeof window === "undefined" ? null : supportsWebGL2()));
@@ -104,13 +101,12 @@ export default function DiamondScene({
           scale={scale}
           reducedMotion={reduced}
           modelUrl={modelUrl}
-          spinSpeed={spinSpeed}
           baseTilt={view === "profile" ? 0.07 : undefined}
           drift={view === "profile" ? 0 : 1}
         />
       </Suspense>
     ),
-    [activeProgress, quality, scale, reduced, view, modelUrl, spinSpeed],
+    [activeProgress, quality, scale, reduced, view, modelUrl],
   );
 
   if (supported === false) return null;

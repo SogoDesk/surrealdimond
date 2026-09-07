@@ -119,10 +119,16 @@ export default function OpeningStone() {
       });
       if (!mobile) {
         settle.to(box, { x: () => -vw() * 0.26, y: () => vh() * 0.05, scale: 0.68, duration: 0.45 }, 0);
-        /* 3: once the word weeks and its copy are on screen, the stone fades out before the pin releases. */
-        settle.to(box, { opacity: 0, scale: 0.6, y: () => vh() * 0.12, duration: 0.14, ease: "power1.in" }, 0.86);
       }
+
+      /* 3: the stone leaves as the engagement chapter scrolls up over the chapter's end. */
+      const leave = gsap.timeline({
+        defaults: { ease: "power1.in" },
+        scrollTrigger: { trigger: time, start: "bottom bottom", end: "bottom 35%", scrub: 0.6, invalidateOnRefresh: true, refreshPriority: -2 },
+      });
+      leave.to(box, { opacity: 0, scale: mobile ? 0.3 : 0.5, y: () => vh() * 0.18 }, 0);
       void glide;
+      void leave;
 
       /* Unmount the canvas once the chapters are 100vh behind; remount on the way back. */
       ScrollTrigger.create({
@@ -152,7 +158,7 @@ export default function OpeningStone() {
       <div className={styles.box} data-stone="box">
         <div className={styles.intro} data-stone="intro">
           <div className={styles.glow} />
-          {mounted && <DiamondSceneLazy className={styles.canvas} progressRef={progressRef} quality={quality} view="profile" modelUrl={MODEL} spinSpeed={0} />}
+          {mounted && <DiamondSceneLazy className={styles.canvas} progressRef={progressRef} quality={quality} view="profile" modelUrl={MODEL} />}
         </div>
       </div>
     </div>
