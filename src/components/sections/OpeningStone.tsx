@@ -20,6 +20,7 @@ import styles from "./OpeningStone.module.css";
 const TIME_SECTION = "#time";
 const REVEAL_EVENT = "surreal:reveal";
 const REVEAL_FALLBACK_MS = 6000;
+const MODEL = "/media/models/diamond.glb";
 
 export default function OpeningStone() {
   const layerRef = useRef<HTMLDivElement>(null);
@@ -157,7 +158,7 @@ export default function OpeningStone() {
       <div className={styles.box} data-stone="box">
         <div className={styles.intro} data-stone="intro">
           <div className={styles.glow} />
-          {mounted && <DiamondSceneLazy className={styles.canvas} progressRef={progressRef} quality={quality} view="profile" />}
+          {mounted && <DiamondSceneLazy className={styles.canvas} progressRef={progressRef} quality={quality} view="profile" modelUrl={MODEL} />}
         </div>
       </div>
     </div>

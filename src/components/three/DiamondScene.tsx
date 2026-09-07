@@ -24,6 +24,8 @@ export interface DiamondSceneProps {
   scale?: number;
   /** "table" looks down onto the table (default); "profile" is the classic side view with the crown up. */
   view?: "table" | "profile";
+  /** Optional glTF model for the stone (see Diamond). */
+  modelUrl?: string;
 }
 
 function supportsWebGL2(): boolean {
@@ -49,6 +51,7 @@ export default function DiamondScene({
   quality = "high",
   scale = 1,
   view = "table",
+  modelUrl,
 }: DiamondSceneProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [supported] = useState<boolean | null>(() => (typeof window === "undefined" ? null : supportsWebGL2()));
@@ -97,12 +100,13 @@ export default function DiamondScene({
           quality={quality}
           scale={scale}
           reducedMotion={reduced}
+          modelUrl={modelUrl}
           baseTilt={view === "profile" ? 0.07 : undefined}
           drift={view === "profile" ? 0 : 1}
         />
       </Suspense>
     ),
-    [activeProgress, quality, scale, reduced, view],
+    [activeProgress, quality, scale, reduced, view, modelUrl],
   );
 
   if (supported === false) return null;

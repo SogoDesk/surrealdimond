@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Environment, Lightformer, MeshRefractionMaterial } from "@react-three/drei";
+import { Environment, Lightformer, MeshRefractionMaterial, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { createBrilliantGeometry } from "@/lib/diamondGeometry";
 import type { DiamondQuality } from "./diamondQuality";
@@ -23,6 +23,8 @@ export interface DiamondProps {
   baseTilt?: number;
   /** Multiplier for the scroll driven drift and shrink (0 keeps the stone centred while the page moves it). */
   drift?: number;
+  /** Optional glTF model whose first mesh replaces the procedural brilliant (centred, girdle radius 1). */
+  modelUrl?: string;
 }
 
 // Pose and motion.
@@ -228,7 +230,8 @@ const StudioLights = memo(function StudioLights({ scene }: { scene: THREE.Scene 
   );
 });
 
-export default function Diamond({
+function DiamondBody({
+  geometry,
   progress = 0,
   progressRef,
   quality = "high",
@@ -237,10 +240,9 @@ export default function Diamond({
   spinSpeed = 0.09,
   baseTilt = BASE_TILT,
   drift: driftAmount = 1,
-}: DiamondProps) {
+}: DiamondProps & { geometry: THREE.BufferGeometry }) {
   const [envScene] = useState(() => new THREE.Scene());
   const [envMap, setEnvMap] = useState<THREE.Texture | null>(null);
-  const geometry = useMemo(() => createBrilliantGeometry(1), []);
   const shell = useMemo(() => createShellMaterial(), []);
   const glow = useMemo(() => createGlowTexture(), []);
 
@@ -257,11 +259,10 @@ export default function Diamond({
 
   useEffect(
     () => () => {
-      geometry.dispose();
       shell.dispose();
       glow.dispose();
     },
-    [geometry, shell, glow],
+    [shell, glow],
   );
 
   useEffect(() => {
@@ -376,4 +377,44 @@ export default function Diamond({
       </mesh>
     </group>
   );
+}
+
+
+/** Centres a mesh geometry and scales it so its widest horizontal radius is one unit, with flat facet normals. */
+function normaliseStone(source: THREE.BufferGeometry): THREE.BufferGeometry {
+  const geometry = (source.index ? source.toNonIndexed() : source.clone()) as THREE.BufferGeometry;
+  for (const name of ["uv", "uv1", "tangent", "color"]) if (geometry.hasAttribute(name)) geometry.deleteAttribute(name);
+  geometry.computeBoundingBox();
+  const box = geometry.boundingBox as THREE.Box3;
+  const centre = new THREE.Vector3();
+  box.getCenter(centre);
+  const radius = Math.max(box.max.x - box.min.x, box.max.z - box.min.z) / 2 || 1;
+  geometry.translate(-centre.x, -centre.y, -centre.z);
+  geometry.scale(1 / radius, 1 / radius, 1 / radius);
+  geometry.computeVertexNormals();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
+function ModelDiamond({ modelUrl, ...props }: DiamondProps & { modelUrl: string }) {
+  const gltf = useGLTF(modelUrl);
+  const geometry = useMemo(() => {
+    let found: THREE.BufferGeometry | null = null;
+    gltf.scene.traverse((node) => {
+      if (!found && (node as THREE.Mesh).isMesh) found = (node as THREE.Mesh).geometry;
+    });
+    return normaliseStone(found ?? createBrilliantGeometry(1));
+  }, [gltf]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return <DiamondBody geometry={geometry} {...props} />;
+}
+
+function ProceduralDiamond(props: DiamondProps) {
+  const geometry = useMemo(() => createBrilliantGeometry(1), []);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return <DiamondBody geometry={geometry} {...props} />;
+}
+
+export default function Diamond({ modelUrl, ...props }: DiamondProps) {
+  return modelUrl ? <ModelDiamond modelUrl={modelUrl} {...props} /> : <ProceduralDiamond {...props} />;
 }
