@@ -88,7 +88,15 @@ export default function SettingTiles({ className = "" }: { className?: string })
           if (video.readyState >= 1) video.currentTime = state.t;
         };
         const timeTo = gsap.quickTo(state, "t", { duration: 0.35, ease: "power2.out", onUpdate: apply });
+        // The ease back to the start is its own tween. It is killed on re-entry, while the quickTo
+        // tween is only ever paused, never killed, so the scrub keeps working on every visit.
+        let returnTween: gsap.core.Tween | null = null;
+        const stopReturn = () => {
+          returnTween?.kill();
+          returnTween = null;
+        };
         const move = (e: PointerEvent) => {
+          stopReturn();
           const r = tile.getBoundingClientRect();
           const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
           const length = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : CLIP_SECONDS;
@@ -96,11 +104,12 @@ export default function SettingTiles({ className = "" }: { className?: string })
         };
         const enter = () => {
           video.pause();
-          gsap.killTweensOf(state);
+          stopReturn();
         };
         const leave = () => {
-          gsap.killTweensOf(state);
-          gsap.to(state, { t: 0, duration: 0.8, ease: "power2.inOut", onUpdate: apply });
+          timeTo.tween.pause();
+          stopReturn();
+          returnTween = gsap.to(state, { t: 0, duration: 0.8, ease: "power2.inOut", onUpdate: apply });
         };
         tile.addEventListener("pointerenter", enter);
         tile.addEventListener("pointermove", move);
