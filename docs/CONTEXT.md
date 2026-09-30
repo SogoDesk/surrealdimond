@@ -39,9 +39,9 @@ There is no approval step for orders: what a person can do is set by their role 
 
 ### Where the BRD changes our earlier plans
 
-- **Ordering from Quick View (R-10):** the hover panel on each card carries Add to Cart and Buy Now; a separate product page is not required. The product pages already built stay until Surreal decides whether to keep them as shareable links.
-- **Metals (R-12, B-02, R-13):** show only the metals an article exists in, one default image per article, yellow gold defaults curated by Surreal (C-02). The made to order placeholder for other metals goes.
-- **Payment (B-05):** card, ACH and wire only at checkout; check and Zelle stay offline on the dashboard's Payment Methods page.
+- **Ordering from Quick View (R-10):** set aside for now by decision (30 Sept 2026). Ordering stays on the product page and the card's Add to cart.
+- **Metals (R-12, B-02, R-13):** only the metals an article exists in are offered, one default image per article, and a `defaultMetal` per article for Surreal's yellow gold picks (C-02). Done 30 Sept 2026.
+- **Payment (B-05):** card, ACH and wire only at checkout; check and Zelle stay offline on the dashboard's Payment Methods page. Done 30 Sept 2026.
 - **RightClick is Phase 1:** the provider can supply stock, memo and invoicing data, most likely as an Excel export; the call is being scheduled (C-07).
 - **Homepage:** a "Hot this week" featured area controlled from admin (R-03), one strong image per category (R-04), and a personalized homepage for signed-in dealers with greeting, recent items and quick reorder in the WB Mason style (R-08).
 - **Diamond page:** one line per stone in the Nivoda style dealers already like (R-14), with Quick View, quick filters and columns from Surreal's lists (C-03, C-04).

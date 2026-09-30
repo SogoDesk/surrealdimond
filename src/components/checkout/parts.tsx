@@ -15,6 +15,7 @@ import type { ReactNode } from "react";
 import { formatCarat, metals, productById, productHref, renderSrc, styleRef } from "@/content/catalog";
 import { RING_SIZES, SIZED_CATEGORIES, beforeCutoff, caratTotal, pieceCount, removeLine, setNote, setQty, setSize, type CartLine } from "@/lib/cart";
 import { useWishlist } from "@/components/store/useWishlist";
+import { groundStyle } from "@/content/grounds";
 import s from "./checkout.module.css";
 
 export const STEPS = ["Cart", "Store details", "Payment", "Review", "Confirmation"] as const;
@@ -52,7 +53,7 @@ export function LineItem({ line, editable = true }: { line: CartLine; editable?:
 
   return (
     <article className={s.line} data-compact={editable ? undefined : "true"}>
-      <Link href={href} className={s.lineThumb} aria-label={p.name}>
+      <Link href={href} className={s.lineThumb} aria-label={p.name} style={groundStyle(p.category)}>
         <Image src={renderSrc(image)} alt="" width={300} height={300} sizes="120px" />
       </Link>
       <div className={s.lineBody}>
@@ -137,7 +138,7 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
             if (!p) return null;
             return (
               <li key={l.key}>
-                <span className={s.summaryThumb}>
+                <span className={s.summaryThumb} style={groundStyle(p.category)}>
                   <Image src={renderSrc(p.variants?.[l.metal] ?? p.image)} alt="" width={96} height={96} sizes="44px" />
                   <span className={s.summaryQty}>{l.qty}</span>
                 </span>

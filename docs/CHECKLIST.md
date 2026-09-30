@@ -2,7 +2,7 @@
 
 Every numbered item in the BRD (v1.1 draft for sign-off, 18 September 2026) with where the build stands. Phase 1 only: Phase 2 (Enterprise Level Integration and the invoicing and payment portal) is out of this list. Scope and background are in [CONTEXT.md](CONTEXT.md); the work plan is in [TASKS.md](TASKS.md).
 
-Status: **Done** built and checked in the browser · **Partial** built in part or on preview data · **To do** not started · **Waiting** blocked on a client input (C-) or answer (Q-) · **Conflict** built differently from the BRD, needs a change.
+Status: **Done** built and checked in the browser · **Partial** built in part or on preview data · **To do** not started · **Waiting** blocked on a client input (C-) or answer (Q-) · **Conflict** built differently from the BRD, needs a change · **Set aside** not pursued for now by decision.
 
 Last reviewed: 30 September 2026.
 
@@ -12,22 +12,22 @@ Last reviewed: 30 September 2026.
 |---|---|---|---|
 | R-01 | Keep the story feel, roughly half the old length | Partial | Ten compact sections replace the thirteen-chapter concept; confirm the section list against C-01 |
 | R-02 | Rotating banners at the top | Done | Hero carousel of the client's web banners, square artwork on phones |
-| R-03 | Featured "Hot this week" area, controlled from admin | Partial | Featured rail exists as "Pieces from the catalog"; rename to Hot this week and feed it from the admin featured list (R-33) |
-| R-04 | One strong image per category | Partial | Shop by category uses one render per type; consider one campaign photograph per category instead |
+| R-03 | Featured "Hot this week" area, controlled from admin | Partial | Hot this week on the homepage, fed from one featuring list (`src/content/featuring.ts`); the admin console takes it over with R-33 |
+| R-04 | One strong image per category | Done | Shop by category leads with one campaign photograph per type; the render on its colored ground shows on hover. Stud Earrings borrows a worn-earrings photograph until Surreal supplies a studs image |
 | R-05 | Highlight Surreal's own photography | Done | Campaign photographs across home, store tiles and product galleries |
 | R-06 | Remove the cursor shade / trailing effect | Done | Removed 30 Sept |
 | R-07 | Remove the education section | Done | Removed from home, header, footer |
-| R-08 | Personalized homepage for logged-in dealers: greeting, recent items, quick reorder | To do | Session and orders exist in the preview; build the dealer band under the hero |
+| R-08 | Personalized homepage for logged-in dealers: greeting, recent items, quick reorder | Done (preview data) | Dealer band under the hero replaces the dealer pitch: greeting by store and time of day, quick doors, quick reorder from past orders (per line or the whole last order), recently viewed pieces, account card with the delivery countdown. Runs on the preview session and browser storage until real accounts |
 
 ## 5.2 Jewelry shop pages
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-09 | Five cards a row, rounded corners, colored or story backgrounds instead of grey, occasional large hero images | Partial | Five a row, rounded, campaign photo tiles in the rows are done; card grounds are still white on porcelain, give them colored or story grounds |
-| R-10 | Quick View is the ordering point: hover panel with Add to Cart and Buy Now; no separate product page required | Conflict | A full product page was built and ordering happens there; add the Quick View panel with Add to Cart and Buy Now on every card; keep the product page as the shareable link or retire it (decide with Surreal) |
+| R-09 | Five cards a row, rounded corners, colored or story backgrounds instead of grey, occasional large hero images | Done | Five a row, rounded, campaign photo tiles in the rows, and each category's story ground (`src/content/grounds.ts`) behind the renders on cards, galleries, cart and mini cart |
+| R-10 | Quick View is the ordering point: hover panel with Add to Cart and Buy Now; no separate product page required | Set aside | Not pursued for now by decision (30 Sept 2026): ordering stays on the product page and the card's Add to cart |
 | R-11 | Shop the Set / Complete the Set from matching-piece data | Waiting (C-08) | "Complete the look" shows pairs by category today; switch to Surreal's matching-piece data |
-| R-12 | Only the metal colors an article exists in, as toggles, one default image each, set in admin | Conflict | Cards show all three metals with a made to order placeholder; show only the article's own metals |
-| R-13 | Surreal curates yellow gold defaults and supplies metal and color data per article | Waiting (C-02) | Add a default metal field per article; pages render from it |
+| R-12 | Only the metal colors an article exists in, as toggles, one default image each, set in admin | Done | Cards, product page, details and filters offer only the metals a piece exists in; the made to order placeholder now covers only carat sizes without a render. Admin configuration comes with the console |
+| R-13 | Surreal curates yellow gold defaults and supplies metal and color data per article | Partial (C-02) | `defaultMetal` field per article drives the opening metal everywhere; waiting on Surreal's yellow gold list and metal data |
 
 ## 5.3 Diamond page
 
@@ -69,7 +69,7 @@ Last reviewed: 30 September 2026.
 | R-27 | Payment methods managed by the dealer (invoice payment in Phase 2) | To do | |
 | R-28 | Open memo items report from existing data | To do | Live memo table mapped (memo date, memo number, stock number, price, shape, size, cut, color, clarity) |
 | R-29 | Dashboard search integrates Surreal's existing search | Waiting (C-06) | Build the search screens now |
-| R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer pricing notes, cart and checkout know the store |
+| R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer homepage band, dealer pricing notes, cart and checkout know the store |
 | R-31 | Remaining subpages (about 10) | Waiting (Q5) | Live dashboard has 15 tiles, mapped in CONTEXT.md |
 
 ## 5.8 Admin console
@@ -86,10 +86,10 @@ Last reviewed: 30 September 2026.
 | # | Rule | Status | Where it stands, next action |
 |---|---|---|---|
 | B-01 | Every stone is one of a kind; gone from availability the moment an order completes | To do | With R-18 |
-| B-02 | An article never shows a metal color it does not exist in | Conflict | Same fix as R-12 |
+| B-02 | An article never shows a metal color it does not exist in | Done | With R-12 |
 | B-03 | Each dealer's logged-in experience reflects their own account and history | Partial | Preview session; real accounts with the auth service |
 | B-04 | Access by roles, no approval step | To do | Roles below; page access from C-05 |
-| B-05 | Card, ACH and wire, through Surreal's existing card processor | Conflict / Waiting (Q2, Q3, C-10) | Checkout also offers check and Zelle (from the live Payment Methods page); trim to card, ACH and wire, and wire the processor |
+| B-05 | Card, ACH and wire, through Surreal's existing card processor | Partial / Waiting (Q2, Q3, C-10) | Checkout offers credit or debit card, ACH and wire only; check and Zelle stay offline on the dashboard's Payment Methods page; the processor connects once named |
 | B-06 | Out-of-stock display rule | Waiting (Q1) | |
 
 ## 4. Roles

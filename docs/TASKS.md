@@ -6,30 +6,31 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` waiting on a clien
 
 ## Next up
 
-In order. The first block brings what is already built in line with the BRD; the rest completes the ten key screens for M2 while the client inputs arrive.
+In order. Block A (the BRD fixes to built screens) is done; block B completes the ten key screens for M2 while the client inputs arrive.
 
 ### A. Bring built screens in line with the BRD
 
-- [ ] R-12 / B-02: cards, Quick View and the product page show only the metals an article exists in; drop the made to order placeholder for metals (keep it for carat sizes without a render, or drop carat if Surreal confirms)
-- [ ] R-10: Quick View panel on every store card (hover on desktop, tap on phones) with metal toggles, carat, quantity, Add to Cart and Buy Now (Buy Now adds and opens checkout); decide with Surreal whether the product page stays as the shareable link
-- [ ] B-05: checkout payment trimmed to credit or debit card, ACH and wire; check and Zelle move to the dashboard's Payment Methods page
-- [ ] R-09: colored or story grounds for card wells instead of the white on porcelain
-- [ ] R-03: rename the featured rail to Hot this week, fed from one featured list that the admin console will own (R-33)
-- [ ] R-04: one strong campaign photograph per category in Shop by category (keep the render as the hover)
-- [ ] R-08 / R-30: dealer band on the homepage when signed in: greeting with the store name, recent items, quick reorder from past orders
+- [x] R-12 / B-02: cards, product page, details and filters show only the metals an article exists in; the placeholder covers only carat sizes without a render
+- [x] R-13: `defaultMetal` per article drives the opening metal (Surreal's yellow gold list, C-02, fills it)
+- [x] B-05: checkout payment is credit or debit card, ACH and wire; check and Zelle stay offline on the dashboard's Payment Methods page
+- [x] R-09: category story grounds behind every render (cards, galleries, details, cart, mini cart, Hot this week)
+- [x] R-03: Hot this week, fed from `src/content/featuring.ts`, the list the admin console will own
+- [x] R-04: one campaign photograph per category in Shop by category, render on hover
+- [x] R-08 / R-30: dealer homepage band: greeting, quick doors, quick reorder, recently viewed, account card
+- R-10 (Quick View as the ordering point): set aside by decision, 30 Sept 2026
 
 ### B. Complete the ten key screens (M2, end of build week 4)
 
 | # | Screen | Status |
 |---|---|---|
-| 1 | Homepage, signed out and signed in | [~] signed out done; dealer band in A |
-| 2 | Jewelry listing with Quick View | [~] listing done; Quick View in A |
+| 1 | Homepage, signed out and signed in | [x] |
+| 2 | Jewelry listing and product page | [x] (Quick View set aside) |
 | 3 | Diamond page (Nivoda style list, quick filters, Quick View, M2O entry) | [ ] |
 | 4 | Custom Portal request form, with the live preview demo (R-23) | [ ] |
 | 5 | Inquiries and Contact | [ ] |
 | 6 | Retailer Dashboard home (personalized) | [ ] |
 | 7 | Open memo items report and Reorder | [ ] |
-| 8 | Cart and checkout | [x] (payment methods trimmed in A) |
+| 8 | Cart and checkout | [x] |
 | 9 | Log in and Main Door | [~] log in done; Main Door waits on Q6 |
 | 10 | Admin console: inventory, featuring, banners | [ ] |
 

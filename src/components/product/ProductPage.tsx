@@ -34,10 +34,11 @@ import Footer from "@/components/sections/Footer";
 import Assurance from "@/components/brand/Assurance";
 import { defaultSelection, renderForSelection, type PieceSelection } from "@/components/shop/filters";
 import { useWishlist } from "@/components/store/useWishlist";
-import { caratOptions, categoryLabel, formatCarat, metals, productById, renderSrc, styleRef, type Metal, type Product } from "@/content/catalog";
+import { caratOptions, categoryLabel, formatCarat, metals, productById, productMetals, renderSrc, styleRef, type Metal, type Product } from "@/content/catalog";
 import { account } from "@/content/site";
 import { useDealer } from "@/lib/dealer";
 import { addToCart } from "@/lib/cart";
+import { recordView } from "@/lib/recent";
 import Gallery from "./Gallery";
 import DeliveryCountdown from "./DeliveryCountdown";
 import { CompleteLook, DealerQuestions, Details, Explore, InPerson, ProgramBanners, Similar } from "./ProductSections";
@@ -79,7 +80,7 @@ function initialSelection(product: Product, params: URLSearchParams | null): Pie
   const metal = params?.get("metal");
   const ct = Number(params?.get("ct"));
   return {
-    metal: metals.some((m) => m.id === metal) ? (metal as Metal) : base.metal,
+    metal: productMetals(product).includes(metal as Metal) ? (metal as Metal) : base.metal,
     carat: caratOptions[product.category].includes(ct) ? ct : base.carat,
   };
 }
@@ -101,6 +102,11 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
   const saved = has(product.id);
   const dealer = useDealer();
   const add = () => addToCart({ productId: product.id, metal: selection.metal, carat: selection.carat, size: sized ? size : null, qty, note: notes.trim() });
+
+  /* The piece joins the dealer's recently viewed list (BRD R-08). */
+  useEffect(() => {
+    recordView(product.id);
+  }, [product.id]);
 
   /* The action bar rises once the main doors have scrolled above the viewport (checked on scroll, so a jump to the top hides it too). */
   useEffect(() => {
@@ -209,12 +215,14 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                     Metal <span className={s.labelValue}>{metalLabel}</span>
                   </p>
                   <div className={s.metalRow}>
-                    {metals.map((m) => (
-                      <button key={m.id} type="button" className={s.metalBtn} aria-pressed={selection.metal === m.id} onClick={() => setSelection({ ...selection, metal: m.id })}>
-                        <span className={s.metalDot} style={{ background: m.swatch }} aria-hidden />
-                        {m.label}
-                      </button>
-                    ))}
+                    {metals
+                      .filter((m) => productMetals(product).includes(m.id))
+                      .map((m) => (
+                        <button key={m.id} type="button" className={s.metalBtn} aria-pressed={selection.metal === m.id} onClick={() => setSelection({ ...selection, metal: m.id })}>
+                          <span className={s.metalDot} style={{ background: m.swatch }} aria-hidden />
+                          {m.label}
+                        </button>
+                      ))}
                   </div>
                 </div>
 

@@ -16,6 +16,7 @@ import { formatCarat, metals, productById, renderSrc } from "@/content/catalog";
 import { CART_ADDED, caratTotal, pieceCount, removeLine, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { account } from "@/content/site";
+import { groundStyle } from "@/content/grounds";
 import styles from "./chrome.module.css";
 
 function BagIcon() {
@@ -111,7 +112,7 @@ export default function MiniCart() {
                   const metal = metals.find((m) => m.id === l.metal)?.label;
                   return (
                     <li key={l.key} className={styles.miniLine} data-flash={flash === l.key ? "true" : undefined}>
-                      <span className={styles.miniThumb}>
+                      <span className={styles.miniThumb} style={groundStyle(p.category)}>
                         <Image src={renderSrc(p.variants?.[l.metal] ?? p.image)} alt="" width={120} height={120} sizes="56px" />
                       </span>
                       <span className={styles.miniText}>

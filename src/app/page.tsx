@@ -3,6 +3,7 @@ import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer from "@/components/chrome/ContactDrawer";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import GrowerStrip from "@/components/home/GrowerStrip";
+import DealerHome from "@/components/home/DealerHome";
 import DivisionGrid from "@/components/home/DivisionGrid";
 import CollectionsBento from "@/components/home/CollectionsBento";
 import Programs from "@/components/home/Programs";
@@ -29,6 +30,7 @@ export default function Home() {
       <ContactDrawer />
       <main id="main">
         <HeroCarousel />
+        <DealerHome />
         <GrowerStrip />
         <DivisionGrid />
         <CollectionsBento />

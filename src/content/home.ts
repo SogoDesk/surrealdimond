@@ -93,22 +93,6 @@ export const programs: Program[] = [
   },
 ];
 
-/** Product ids from catalog.ts, following the live homepage's featured earrings and adding the house signatures. */
-export const featuredIds = [
-  "inside-out-hoops",
-  "oval-halo-studs",
-  "emerald-halo-studs",
-  "princess-studs",
-  "arch-drops",
-  "sunburst-studs",
-  "oval-halo",
-  "oval-tennis-necklace",
-  "tennis-bracelet",
-  "flexi-bangle",
-  "teardrop-pave-pendant",
-  "toi-et-moi-ring",
-];
-
 export interface Story {
   id: string;
   productId: string;

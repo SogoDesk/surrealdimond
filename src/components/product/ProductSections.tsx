@@ -30,6 +30,7 @@ import {
   type Shape,
 } from "@/content/catalog";
 import { editorial } from "@/content/editorial";
+import { groundStyle } from "@/content/grounds";
 import { account, brand } from "@/content/site";
 import s from "./product.module.css";
 
@@ -149,8 +150,7 @@ export function Details({ product, selection, ringSize }: { product: Product; se
                 <Accordion title="Metal details" open icon={icon(<><circle cx="10" cy="11" r="5.5" /><path d="M7.5 3.5h5l1.5 2-4 3-4-3Z" /></>)}>
                   <div className={s.specGrid}>
                     <Spec label="Selected metal" value={metalLabel} />
-                    <Spec label="Pictured in" value={pictured} />
-                    <Spec label="Made to order in" value="White, yellow or rose gold" />
+                    <Spec label="Available in" value={pictured} />
                     {ringSize && <Spec label="Ring size" value={`US ${ringSize}`} />}
                   </div>
                 </Accordion>
@@ -203,7 +203,7 @@ export function Details({ product, selection, ringSize }: { product: Product; se
           </div>
           <figure className={s.detailsFigure}>
             {ref && <figcaption className={`${s.figRef} tabular`}>Ref. {ref}</figcaption>}
-            <span className={s.figImage}>
+            <span className={s.figImage} style={groundStyle(product.category)}>
               <Image src={renderSrc(image)} alt={`${product.name} in ${metalLabel.toLowerCase()}`} width={1000} height={1000} sizes="(min-width: 1024px) 34vw, 90vw" />
             </span>
             <p className={s.figNote}>
@@ -366,7 +366,9 @@ export function Explore({ product }: { product: Product }) {
   const list = byShape ? products.filter((p) => p.shape === shape) : products.filter((p) => p.category === product.category && productMetals(p).includes(metal));
   const chips = byShape
     ? shapes.filter((x) => products.some((p) => p.shape === x.id)).map((x) => ({ id: x.id, label: x.label, on: shape === x.id, pick: () => setShape(x.id) }))
-    : metals.map((m) => ({ id: m.id, label: m.label, on: metal === m.id, pick: () => setMetal(m.id), swatch: m.swatch }));
+    : metals
+        .filter((m) => products.some((p) => p.category === product.category && productMetals(p).includes(m.id)))
+        .map((m) => ({ id: m.id, label: m.label, on: metal === m.id, pick: () => setMetal(m.id), swatch: m.swatch }));
   const more = byShape ? `/jewelry/engagement?shape=${shape}` : `/jewelry/${product.category}?metal=${metal}`;
 
   return (
@@ -430,7 +432,7 @@ const QUESTIONS: { q: string; a: ReactNode }[] = [
   },
   { q: "Can jewelry come on memo?", a: "Surreal runs a long-term memo program for diamonds and jewelry. Open memo items are repriced daily, and you reconcile them from your Retailer Dashboard." },
   { q: "When will an order arrive?", a: "Order before 4:00pm EST to receive next day delivery." },
-  { q: "How can we pay?", a: "By check, ACH or wire transfer, credit card, or Zelle." },
+  { q: "How can we pay?", a: "By credit or debit card, ACH or wire transfer at checkout. Check and Zelle are arranged with the office." },
   { q: "Is a certificate included?", a: "Certificates can be provided on request. Made to Order diamonds always come with an IGI grading certificate." },
   {
     q: "Can it be made in another metal, size or design?",

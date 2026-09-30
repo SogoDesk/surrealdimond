@@ -36,7 +36,8 @@ export interface StoreDetails {
   notes: string;
 }
 
-export type PaymentMethod = "card" | "ach" | "wire" | "check" | "zelle";
+/** Payment at checkout (BRD B-05): card, ACH or wire through Surreal's existing card processor. */
+export type PaymentMethod = "card" | "ach" | "wire";
 
 export interface PlacedOrder {
   number: string;

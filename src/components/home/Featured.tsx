@@ -1,13 +1,15 @@
 "use client";
 
 /**
- * 6. Featured pieces, on Tanishq's new arrivals pattern: a photographic band
- * (copy and a count chip on the left, the photograph dissolving in from the
- * right) with a row of product cards riding over its lower edge. The row is a
- * native horizontal scroller with snap, driven by the arrow buttons on
- * desktop and by touch on phones. Each card: a white well with the render
- * (hovering crossfades to the piece's second view or metal), the name and
- * design line, the metals it comes in, and the dealer price door.
+ * 6. Hot this week (BRD R-03), on Tanishq's new arrivals pattern, fed from
+ * the featuring list the admin console will own (content/featuring.ts). A
+ * photographic band (copy and a count chip on the left, the photograph
+ * dissolving in from the right) with a row of product cards riding over its
+ * lower edge. The row is a native horizontal scroller with snap, driven by
+ * the arrow buttons on desktop and by touch on phones. Each card: the render
+ * on its category's story ground (hovering crossfades to the piece's second
+ * view or metal), the name and design line, the metals it comes in, and the
+ * dealer price door.
  */
 
 import Image from "next/image";
@@ -15,13 +17,14 @@ import Link from "next/link";
 import { useRef, useState, useEffect, useCallback } from "react";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { metals, productById, productMetals, renderSrc, type Product } from "@/content/catalog";
-import { featuredIds } from "@/content/home";
+import { hotThisWeek } from "@/content/featuring";
 import { account } from "@/content/site";
+import { groundStyle } from "@/content/grounds";
 import { useRevealIn } from "./useRevealIn";
 import h from "./home.module.css";
 import s from "./Featured.module.css";
 
-const items = featuredIds.map((id) => productById(id)).filter((p): p is Product => Boolean(p));
+const items = hotThisWeek.map((id) => productById(id)).filter((p): p is Product => Boolean(p));
 
 function altView(p: Product) {
   if (p.angles?.[0]) return p.angles[0];
@@ -45,7 +48,7 @@ function Card({ p }: { p: Product }) {
   return (
     <article className={s.card}>
       <Link href={`/jewelry/${p.category}`} className={s.cardLink} aria-label={`${p.name}, ${p.detail}`}>
-        <span className={s.well}>
+        <span className={s.well} style={groundStyle(p.category)}>
           <Image src={renderSrc(p.image)} alt="" width={600} height={600} sizes="300px" className={`${s.render} ${alt ? s.renderBase : ""}`} />
           {alt && <Image src={renderSrc(alt)} alt="" width={600} height={600} sizes="300px" className={`${s.render} ${s.renderAlt}`} loading="lazy" />}
           {p.video && <span className={s.tag}>360</span>}
@@ -110,14 +113,14 @@ export default function Featured() {
           <Image src="/media/photos/sb-3594.webp" alt="" fill sizes="(min-width: 900px) 70vw, 100vw" className={s.bandImage} />
           <div className={s.bandCopy}>
             <span data-rise>
-              <Eyebrow>Featured</Eyebrow>
+              <Eyebrow>Featured by Surreal</Eyebrow>
             </span>
             <h2 id="featured-title" className={s.bandTitle} data-rise>
-              Pieces from <em>the catalog</em>
+              Hot <em>this week</em>
             </h2>
             <p className={s.bandLine} data-rise>
-              <span className={s.count}>375 pieces</span>
-              Dealer pricing and ordering after you log in.
+              <span className={s.count}>{items.length} pieces</span>
+              Picked by the Surreal team. Dealer pricing and ordering after you log in.
             </p>
           </div>
           <div className={s.arrows}>
@@ -134,7 +137,7 @@ export default function Featured() {
           </div>
         </div>
       </div>
-      <ul ref={railRef} className={s.rail} aria-label="Featured pieces" data-lenis-prevent-wheel>
+      <ul ref={railRef} className={s.rail} aria-label="Hot this week" data-lenis-prevent-wheel>
         {items.map((p) => (
           <li key={p.id} className={s.item} data-rise>
             <Card p={p} />

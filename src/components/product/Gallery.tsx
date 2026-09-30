@@ -16,6 +16,7 @@ import Placeholder from "@/components/shop/Placeholder";
 import { renderForSelection, type PieceSelection } from "@/components/shop/filters";
 import { productViews, renderSrc, videoSrc, type Product } from "@/content/catalog";
 import { editorial } from "@/content/editorial";
+import { groundStyle } from "@/content/grounds";
 import { lockScroll } from "@/lib/scroll";
 import s from "./product.module.css";
 
@@ -109,6 +110,7 @@ export default function Gallery({ product, selection }: { product: Product; sele
     return list;
   }, [product, primary, video]);
 
+  const ground = groundStyle(product.category);
   const rowRef = useRef<HTMLUListElement>(null);
   const [at, setAt] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
@@ -128,12 +130,12 @@ export default function Gallery({ product, selection }: { product: Product; sele
     <div className={s.gallery}>
       <ul ref={rowRef} className={s.views} aria-label={`${product.name}, views`}>
         {!primary && (
-          <li className={`${s.view} ${s.viewWide}`}>
+          <li className={`${s.view} ${s.viewWide}`} style={ground}>
             <Placeholder metal={selection.metal} carat={selection.carat} size="stage" className={s.viewPlaceholder} />
           </li>
         )}
         {views.map((v, i) => (
-          <li key={`${v.kind}-${v.src}`} className={`${s.view} ${i === 0 && primary ? s.viewWide : ""}`} data-kind={v.kind}>
+          <li key={`${v.kind}-${v.src}`} className={`${s.view} ${i === 0 && primary ? s.viewWide : ""}`} data-kind={v.kind} style={v.kind === "photo" ? undefined : ground}>
             <button type="button" className={s.viewOpen} onClick={() => setOpen(i)} aria-label={`Open view ${i + 1} of ${views.length} full screen`}>
               <ViewMedia view={v} sizes={i === 0 ? "(min-width: 1024px) 55vw, 100vw" : "(min-width: 1024px) 28vw, 100vw"} priority={i === 0} />
             </button>

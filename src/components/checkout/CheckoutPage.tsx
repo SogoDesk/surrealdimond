@@ -7,12 +7,11 @@
  * 1. Store details: the store, contact, phone and shipping address (the
  *    fields of the live dealer application), a PO number, an in-store
  *    delivery deadline and order notes, prefilled from the session.
- * 2. Payment: the methods on the live Payment Methods page. Card (Visa,
- *    Mastercard, American Express; convenience fees apply) is entered in the
- *    payment provider's secure form once it is connected, so this page never
- *    touches card numbers. ACH and wire details are on the dashboard's
- *    Payment Methods page, Zelle is arranged by phone, and checks are
- *    payable to Surreal Diamond, LLC.
+ * 2. Payment: credit or debit card, ACH or wire, through Surreal's existing
+ *    card processor (BRD B-05). The card is entered in the processor's
+ *    secure form once it is connected, so this page never touches card
+ *    numbers; ACH and wire details are on the dashboard's Payment Methods
+ *    page. Check and Zelle stay offline, on that same page.
  * 3. Review: every line, the details and the method, and agreement to the
  *    Terms and Conditions (made to specification pieces cannot be
  *    cancelled).
@@ -30,7 +29,7 @@ import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
 import GatePage from "@/components/pages/GatePage";
 import { gates } from "@/content/gates";
-import { account, brand } from "@/content/site";
+import { account } from "@/content/site";
 import { beforeCutoff, pieceCount, placeOrder, useCart, type PaymentMethod, type PlacedOrder, type StoreDetails } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { LineItem, Steps, Summary } from "./parts";
@@ -41,8 +40,8 @@ const STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID"
 const METHODS: { id: PaymentMethod; title: string; line: string; detail: ReactNode }[] = [
   {
     id: "card",
-    title: "Credit card",
-    line: "Visa, Mastercard, American Express. Convenience fees apply.",
+    title: "Credit or debit card",
+    line: "Visa, Mastercard, American Express. Convenience fees apply to credit cards.",
     detail: (
       <div className={s.cardFrame}>
         <span className={s.cardLock} aria-hidden>
@@ -53,7 +52,7 @@ const METHODS: { id: PaymentMethod; title: string; line: string; detail: ReactNo
         </span>
         <span>
           <strong>Secure card entry</strong>
-          Card details are entered in the payment provider&apos;s secure form, which connects at launch. Surreal never stores card numbers. Cards are subject to authorization by
+          Card details are entered in the secure form of Surreal&apos;s card processor, which connects at launch. Surreal never stores card numbers. Cards are subject to authorization by
           the issuer.
         </span>
         <span className={s.cardBrands} aria-label="Visa, Mastercard, American Express">
@@ -66,17 +65,6 @@ const METHODS: { id: PaymentMethod; title: string; line: string; detail: ReactNo
   },
   { id: "ach", title: "ACH bank transfer", line: "To the Surreal Diamond LLC account.", detail: <p className={s.methodNote}>The bank details for Surreal Diamond LLC are on the Payment Methods page of your Retailer Dashboard.</p> },
   { id: "wire", title: "Wire transfer", line: "To the Surreal Diamond LLC account.", detail: <p className={s.methodNote}>The wire details for Surreal Diamond LLC are on the Payment Methods page of your Retailer Dashboard.</p> },
-  {
-    id: "check",
-    title: "Check",
-    line: "Payable to Surreal Diamond, LLC.",
-    detail: (
-      <p className={s.methodNote}>
-        Please make the check payable to Surreal Diamond, LLC and send it to 551 Fifth Avenue, 2601, New York, NY 10176.
-      </p>
-    ),
-  },
-  { id: "zelle", title: "Zelle", line: "Arranged with the office.", detail: <p className={s.methodNote}>Call the office at {brand.office.phone} to make the Zelle payment.</p> },
 ];
 
 const REQUIRED: (keyof StoreDetails)[] = ["store", "contact", "email", "phone", "address", "city", "state", "zip"];
@@ -219,7 +207,7 @@ export default function CheckoutPage() {
                     </li>
                     <li>
                       <strong>Payment by {METHODS.find((m) => m.id === placed.payment)?.title.toLowerCase()}</strong>
-                      {placed.payment === "check" ? ", payable to Surreal Diamond, LLC." : placed.payment === "card" ? ", authorized by your card issuer." : placed.payment === "zelle" ? ", arranged with the office." : ", with the details on your Payment Methods page."}
+                      {placed.payment === "card" ? ", authorized by your card issuer." : ", with the details on your Payment Methods page."}
                     </li>
                     <li>
                       <strong>{placed.beforeCutoff ? "Next day delivery" : "Delivery"}</strong>

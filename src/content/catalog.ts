@@ -34,6 +34,8 @@ export interface Product {
   featured?: boolean;
   /** Centre stone shape, for engagement pieces */
   shape?: Shape;
+  /** The metal the piece opens in (BRD R-13: Surreal curates which pieces default to yellow gold, input C-02). Falls back to the first metal it exists in. */
+  defaultMetal?: Metal;
 }
 
 export const renderSrc = (slug: string) => `/media/renders/${slug}.webp`;
@@ -185,7 +187,7 @@ products.push(
   { id: "oval-bezel-pendant-silver", name: "Oval Bezel Pendant", category: "sterling-silver", detail: "Sterling silver, oval cut diamond", image: "jbii247sil-2638" },
 );
 
-/** Metals a piece is shown in: its variants, else inferred from the render slug. */
+/** The metals a piece exists in (BRD R-12, B-02): its variants, else inferred from the render slug. Nothing offers any other metal. */
 export function productMetals(p: Product): Metal[] {
   if (p.variants) return (Object.keys(p.variants) as Metal[]).filter((m) => p.variants?.[m]);
   if (p.category === "sterling-silver") return ["wg"];
@@ -218,3 +220,9 @@ export function productViews(p: Product): string[] {
 }
 
 export const categoryLabel = (c: Category) => categories.find((x) => x.id === c)?.label ?? c;
+
+/** The metal a piece opens in: its curated default when it exists in it, else its first metal. */
+export function defaultMetalOf(p: Product): Metal {
+  const own = productMetals(p);
+  return p.defaultMetal && own.includes(p.defaultMetal) ? p.defaultMetal : own[0];
+}

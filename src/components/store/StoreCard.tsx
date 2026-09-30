@@ -5,19 +5,21 @@
  * A square white well with the render; the 360 badge when the piece has a
  * turntable; a wishlist heart. Hover crossfades to the second view (or plays
  * the turntable) and raises a View details bar. Beneath: name, design line,
- * then the card's own selectors: metal swatches and carat chips. A selection
- * the render library does not cover shows the made to order placeholder.
+ * then the card's own selectors: swatches for only the metals the piece
+ * exists in (BRD R-12, B-02) and carat chips. A carat size without a render
+ * shows the made to order placeholder.
  * The whole well and title lead to the product page.
  */
 
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { caratOptions, formatCarat, metals, productHref, renderSrc, videoSrc, type Metal, type Product } from "@/content/catalog";
+import { caratOptions, formatCarat, metals, productHref, productMetals, renderSrc, videoSrc, type Metal, type Product } from "@/content/catalog";
 import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
 import { defaultSelection, renderForSelection, type PieceSelection } from "@/components/shop/filters";
 import Placeholder from "@/components/shop/Placeholder";
 import { account } from "@/content/site";
+import { groundStyle } from "@/content/grounds";
 import { useWishlist } from "./useWishlist";
 import { useDealer } from "@/lib/dealer";
 import { addToCart } from "@/lib/cart";
@@ -36,9 +38,10 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
   const [seenPreferred, setSeenPreferred] = useState(preferredMetal);
   if (seenPreferred !== preferredMetal) {
     setSeenPreferred(preferredMetal);
-    if (preferredMetal && pick && pick.metal !== preferredMetal) setPick({ ...pick, metal: preferredMetal });
+    if (preferredMetal && pick && pick.metal !== preferredMetal && productMetals(product).includes(preferredMetal)) setPick({ ...pick, metal: preferredMetal });
   }
   const selection = pick ?? defaultSelection(product, preferredMetal);
+  const ownMetals = productMetals(product);
   const slug = renderForSelection(product, selection);
   const alt = product.angles?.[0] ?? null;
   const video = product.video ? videoSrc(product.video) : null;
@@ -70,7 +73,7 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
 
   return (
     <article className={s.card} data-hover={hover ? (video ? "video" : alt ? "angle" : "lift") : undefined} onPointerEnter={enter} onPointerLeave={leave}>
-      <div className={s.well}>
+      <div className={s.well} style={groundStyle(product.category)}>
         <Link href={href} className={s.wellLink} aria-label={`${product.name}, ${product.detail}`}>
           {slug ? (
             <Image key={slug} src={renderSrc(slug)} alt="" width={800} height={800} sizes={SIZES} priority={priority} className={`${s.render} ${s.renderBase}`} />
@@ -120,18 +123,20 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
 
       <div className={s.selectors}>
         <div className={s.swatches} role="group" aria-label={`Metal for ${product.name}`}>
-          {metals.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              className={s.swatch}
-              style={{ background: m.swatch }}
-              aria-pressed={selection.metal === m.id}
-              aria-label={m.label}
-              title={m.label}
-              onClick={() => select({ metal: m.id })}
-            />
-          ))}
+          {metals
+            .filter((m) => ownMetals.includes(m.id))
+            .map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                className={s.swatch}
+                style={{ background: m.swatch }}
+                aria-pressed={selection.metal === m.id}
+                aria-label={m.label}
+                title={m.label}
+                onClick={() => select({ metal: m.id })}
+              />
+            ))}
         </div>
         <div className={s.carats} role="group" aria-label={`Carat for ${product.name}`}>
           {caratOptions[product.category].map((ct) => (

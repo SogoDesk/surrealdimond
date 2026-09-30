@@ -7,7 +7,7 @@
  * state and never reach the URL.
  */
 
-import { caratOptions, categories, metals, products, productMetals, shapes, type Category, type Metal, type Product, type Shape } from "@/content/catalog";
+import { caratOptions, categories, defaultMetalOf, metals, products, productMetals, shapes, type Category, type Metal, type Product, type Shape } from "@/content/catalog";
 
 export type Sort = "featured" | "az" | "za";
 
@@ -105,15 +105,17 @@ export interface PieceSelection {
 /** The first carat offered in the piece's category; the renders show this size. */
 export const firstCarat = (product: Product) => caratOptions[product.category][0];
 
-/** Where a card starts: the filtered metal when there is one, else the piece's first metal, at the first carat. */
+/** Where a card starts: the filtered metal when the piece exists in it, else its default metal, at the first carat. */
 export function defaultSelection(product: Product, preferredMetal: Metal | null): PieceSelection {
-  return { metal: preferredMetal ?? productMetals(product)[0], carat: firstCarat(product) };
+  const metal = preferredMetal && productMetals(product).includes(preferredMetal) ? preferredMetal : defaultMetalOf(product);
+  return { metal, carat: firstCarat(product) };
 }
 
 /**
- * The render slug for a selection, or null when the library has none: a
- * render exists for the piece's own metals (its variant, else its primary
- * image) at the first carat only.
+ * The render slug for a selection, or null when the library has none. A
+ * piece only offers the metals it exists in, so the metal always has a
+ * render (its variant, else the primary image); other carat sizes have no
+ * render yet and show the made to order placeholder.
  */
 export function renderForSelection(product: Product, selection: PieceSelection): string | null {
   if (selection.carat !== firstCarat(product)) return null;

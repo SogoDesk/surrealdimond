@@ -4,7 +4,8 @@
  * 2. Grower strip: the trade pitch under the hero. A two column intro (who
  * this site is for, and the two doors: Become a dealer, Log in) over a row of
  * four proof figures, each a large Italiana figure over a Jost line, split by
- * hairlines. Facts from site.ts and the live Learn More page only.
+ * hairlines. Facts from site.ts and the live Learn More page only. A signed-in
+ * dealer sees their own band (DealerHome) in its place.
  */
 
 import { useRef } from "react";
@@ -13,13 +14,16 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import { growerProof } from "@/content/home";
 import { account } from "@/content/site";
 import { useRevealIn } from "./useRevealIn";
+import { useDealer } from "@/lib/dealer";
 import h from "./home.module.css";
 import s from "./GrowerStrip.module.css";
 
 export default function GrowerStrip() {
   const ref = useRef<HTMLElement>(null);
+  const dealer = useDealer();
   useRevealIn(ref);
 
+  if (dealer) return null;
   return (
     <section ref={ref} className={s.section} aria-labelledby="grower-title" data-chapter="grower">
       <div className={h.wrap}>

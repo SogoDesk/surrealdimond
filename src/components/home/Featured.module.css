@@ -113,7 +113,7 @@
 }
 .cardLink { display: flex; flex-direction: column; flex: 1 1 auto; }
 .cardLink:focus-visible { outline: 2px solid var(--sky); outline-offset: -2px; border-radius: var(--radius-md); }
-.well { position: relative; display: block; aspect-ratio: 1; background: var(--white); }
+.well { position: relative; display: block; aspect-ratio: 1; background: radial-gradient(90% 80% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0.55) 38%, rgba(255, 255, 255, 0) 72%), var(--ground, var(--white)); }
 .render {
   position: absolute;
   inset: 9%;
@@ -133,7 +133,7 @@
   height: 22px;
   padding: 0 9px;
   border-radius: 999px;
-  background: var(--porcelain);
+  background: rgba(255, 255, 255, 0.82);
   font-size: 0.625rem;
   letter-spacing: 0.14em;
   color: var(--graphite);
