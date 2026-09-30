@@ -1,127 +1,108 @@
 # Surreal Diamond, Phase 1 task list
 
-Scope and reference notes live in [CONTEXT.md](CONTEXT.md). The business is B2B only: public pages sell the brand to retailers, everything with a price sits behind the dealer login. Mark items `[x]` when built, verified in the browser at desktop and phone widths, and committed.
+The work plan for Phase 1 of the BRD (v1.1, 18 September 2026), organised by its four milestones. Requirement status lives in [CHECKLIST.md](CHECKLIST.md); scope and background in [CONTEXT.md](CONTEXT.md). Phase 2 (Enterprise Level Integration, the invoicing and payment portal) is not planned here. Mark items `[x]` when built, verified in the browser at desktop and phone widths, and committed.
 
-Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the client.
+Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` waiting on a client input or answer.
 
-## 0. Groundwork
+## Next up
+
+In order. The first block brings what is already built in line with the BRD; the rest completes the ten key screens for M2 while the client inputs arrive.
+
+### A. Bring built screens in line with the BRD
+
+- [ ] R-12 / B-02: cards, Quick View and the product page show only the metals an article exists in; drop the made to order placeholder for metals (keep it for carat sizes without a render, or drop carat if Surreal confirms)
+- [ ] R-10: Quick View panel on every store card (hover on desktop, tap on phones) with metal toggles, carat, quantity, Add to Cart and Buy Now (Buy Now adds and opens checkout); decide with Surreal whether the product page stays as the shareable link
+- [ ] B-05: checkout payment trimmed to credit or debit card, ACH and wire; check and Zelle move to the dashboard's Payment Methods page
+- [ ] R-09: colored or story grounds for card wells instead of the white on porcelain
+- [ ] R-03: rename the featured rail to Hot this week, fed from one featured list that the admin console will own (R-33)
+- [ ] R-04: one strong campaign photograph per category in Shop by category (keep the render as the hover)
+- [ ] R-08 / R-30: dealer band on the homepage when signed in: greeting with the store name, recent items, quick reorder from past orders
+
+### B. Complete the ten key screens (M2, end of build week 4)
+
+| # | Screen | Status |
+|---|---|---|
+| 1 | Homepage, signed out and signed in | [~] signed out done; dealer band in A |
+| 2 | Jewelry listing with Quick View | [~] listing done; Quick View in A |
+| 3 | Diamond page (Nivoda style list, quick filters, Quick View, M2O entry) | [ ] |
+| 4 | Custom Portal request form, with the live preview demo (R-23) | [ ] |
+| 5 | Inquiries and Contact | [ ] |
+| 6 | Retailer Dashboard home (personalized) | [ ] |
+| 7 | Open memo items report and Reorder | [ ] |
+| 8 | Cart and checkout | [x] (payment methods trimmed in A) |
+| 9 | Log in and Main Door | [~] log in done; Main Door waits on Q6 |
+| 10 | Admin console: inventory, featuring, banners | [ ] |
+
+- [ ] Diamond page on a sample feed shaped like the live search: one line per stone with shape, carat, color, clarity, cut, polish, symmetry, fluorescence, measurements, ratio, table, depth, lab and certificate number, stock ID, shipment details, price slot and Add to Cart; quick filters; Quick View; compare
+- [ ] M2O request prefilled from the diamond search (R-19): shape, exact size, ratio, girdle inscription, customer name for the booklet, notes
+- [ ] Custom Portal (R-22): the live custom request fields (account status, company and location, contact, in-store delivery deadline, PO number, style number, CAD requested, item type, metal, gold color or two tone, center stone shape and size, finger size, matching bands, instructions, image uploads)
+- [ ] Live diamond preview demo for the custom form (R-23): shape, size and color update a drawn stone
+- [ ] Contact page (R-24): inquiry type selector, routing per type, acknowledgement to the sender; schedule an appointment
+- [ ] Dashboard home: greeting, open orders, memo count, recent items, tiles for the subpages
+- [ ] Open memo report (R-28) and order history with Reorder (R-25)
+- [ ] Admin console shell: inventory table, featured and hot deal toggles, default sort per page, banner manager
+- [?] Main Door page (Q6)
+- [?] Trade show appointments (Q9)
+
+## M1: scope lock and architecture baseline (end of build week 2)
+
+- [ ] Screen list agreed with Surreal (from the checklist and C-05)
+- [ ] Data model: dealers and organizations, users and roles, articles and variants (metals, default metal, images), divisions, collections, matching sets, diamonds (attribute list C-04), memo items, carts, orders, payments, inquiries, content pages, banners, featured lists
+- [ ] Managed services chosen and set up in Surreal's name (A7, A9): hosting, authentication with roles, database, content management, email delivery, file storage
+- [ ] Environments: development, staging for UAT, production
+- [ ] Repository, continuous integration, preview deployments
+- [ ] Access matrix implemented from C-05 (B-04)
+- [?] RightClick method agreed on the provider call (C-07); import path (likely Excel) designed
+- [?] Existing search connection (C-06)
+- [?] Card processor details (C-10, Q2, Q3)
+
+## M3: feature complete on staging (end of build week 10)
+
+- [ ] Real authentication replaces the preview session; dealer and dealer associate permissions
+- [ ] Catalog from the database: bulk upload in admin (A1), metal and color data per article (C-02)
+- [ ] 15 division pages with Surreal's final names (Q4)
+- [ ] Shop the Set from matching-piece data (C-08)
+- [ ] Diamond inventory from RightClick and supplier feeds (about every 30 minutes), stones removed on order (R-18, B-01)
+- [ ] Out-of-stock rule (Q1, B-06)
+- [ ] Prices: dealer price list and visibility rule (Q8)
+- [ ] Payment through Surreal's existing processor (B-05, Q2, Q3)
+- [ ] Order and inquiry emails from Surreal's sending domain (C-14)
+- [ ] Remaining dashboard subpages (Q5): payment methods (R-27), trade shows (R-26), dashboard search (R-29)
+- [ ] Content pages editable in admin (R-20): Legacy, Main Door, About
+- [ ] Admin: users and roles, banners, featured area, metal color options, content (R-35)
+- [ ] Think Space content and dealer export migrated (C-13)
+- [ ] Accessibility and performance pass before UAT
+- [ ] Monitoring in place
+
+## M4: go-live (end of build week 12)
+
+- [ ] UAT with Surreal's two testers (C-15), fixes only after code freeze
+- [ ] Domain, DNS and email domain cut over (C-14)
+- [ ] SEO for public pages, dealer pages noindex, sitemap, redirects from Think Space URLs
+- [ ] Handover documentation and operations runbook
+
+## Done
+
+Design and groundwork
 
 - [x] Design system (tokens, type, palette, logo, components) exported as a kit
-- [x] Shop pages at `/jewelry` and `/jewelry/[category]` with filters, quick view, card selectors (to be moved behind the login)
-- [x] Project context and task list
-- [x] Header and footer trimmed to the Phase 1 page list
-- [x] Remove the 3D opening diamond (three, R3F and drei dependencies, model file)
-- [x] Remove the pointer light behind the cursor
-- [x] Study the live site: B2B only, 16 jewelry divisions, login gating, checkout steps, forms, verified facts
-- [x] Map the live Retailer Dashboard (15 tiles), dealer Diamond Search, catalog, program forms and the Thinkspace admin
-- [x] Verified facts and team added to `src/content/site.ts`
-- [x] Divisions data for the 16 live entries (`src/content/divisions.ts`); the 8 without a grid yet open a dealer holding page
-- [x] Preview dealer session (`lib/dealer.ts`): log in with any email or as the demo dealer, account menu, ?next= return, session-aware holding pages and mobile menu
-- [x] Cart and orders stores in the browser (`lib/cart.ts`); no prices stored until the dealer price list is connected
-- [x] Holding pages for every Phase 1 route (`GatePage`: dealer login for gated routes, in design for public ones)
+- [x] Live site studied: B2B only, 16 jewelry divisions, login gating, checkout steps, forms, verified facts, the 15-tile Retailer Dashboard, dealer Diamond Search, program forms, the Think Space admin
+- [x] Verified facts, team, dealer benefits (`src/content/site.ts`); divisions (`src/content/divisions.ts`); campaign photo sets (`src/content/editorial.ts`)
+- [x] Holding pages for every Phase 1 route (`GatePage`), session aware
+- [x] 3D stone, cursor effect and education section removed (R-06, R-07)
 
-## 1. Homepage revamp
+Homepage
 
-- [x] Confirm the section list in CONTEXT.md, "Homepage plan"
-- [x] Two-tier header: search with rotating prompts, appointments, Log in, Become a dealer, cart, link row that folds on scroll
-- [ ] Signed-in header utilities (store name menu) once mock auth exists
-- [x] Mega menu on the Tanishq pattern: group rail (Types, Collections, Programs), link grid with thumbnails, promo strip, editorial card
-- [x] Hero banner carousel
-- [x] Grower proof strip
-- [x] Collections bento
-- [x] Shop by division grid
-- [x] Programs: Made to Order, Legacy, Custom
-- [x] Featured items
-- [x] Turntable stories carousel
-- [x] Why Surreal for your store (dealer benefits) with Apply
-- [x] Experience grid
-- [ ] Signed-in dealer bar (needs mock auth)
-- [ ] Footer rebuilt with the new columns
-- [x] Retire old chapters no longer used once replaced
-- [ ] Mobile, reduced motion and Lighthouse passes
+- [x] Two-row header with search, mega menu (group rail, thumbnails, promo strip, editorial card), account menu and mini cart when signed in
+- [x] Hero banner carousel, grower strip, shop by category, collections bento, programs, featured rail, turntable stories, dealer benefits, experience grid, the Surreal Assurance, footer
 
-## 2. Main Door and accounts
+Store and product
 
-- [x] `/login`: log in, show password, forgot password, Apply panel, preview note
-- [ ] `/apply`: dealer application (live fields), pending approval state
-- [?] Main Door form confirmed with the client (open question 1)
+- [x] Store listing: five a row with a 4/5/6 switch, division rail, sticky toolbar, filter drawer, chips, find your match panel, Made to Order tile, campaign photo tiles, Load more
+- [x] Product page for every piece: gallery with turntable, campaign views and viewer, dealer price box, selectors, delivery countdown, program banners, details tabs, see it in New York, you may also like, complete the look, explore by center stone, dealer questions
+- [x] Wishlist saved in the browser
 
-## 3. Cart and checkout (dealer)
+Dealer preview
 
-- [x] Mini cart popover from the cart icon, opening on add
-- [x] Add to cart from store cards and the product page when signed in
-- [x] `/cart`: step bar, ship to card with the delivery countdown, line items (metal, carat, ring size, quantity, note, wishlist, remove), trust row, order summary, memo card, wishlist or featured pieces, mobile checkout bar
-- [x] Empty cart state
-- [x] `/checkout`: Store details (validated), Payment (card via provider form at launch, ACH, wire, check, Zelle), Review with Terms agreement, Confirmation with order number and next steps
-- [?] Online payment provider for card and ACH (open question 3): the card step shows where the provider's secure form mounts
-- [ ] Order totals once the dealer price list is connected (open question 4)
-- [ ] Memo request path where the program allows
-
-## 4. Jewelry (dealer)
-
-- [x] Store listing (`components/store`): breadcrumb, title with count, dealer pricing note, round division rail, sticky toolbar (Filters, Metal, Center stone, 4/5/6 per row, Sort), filter chips, compact cards with metal and carat selectors and wishlist, find your match panel, Made to Order tile, Load more, filter drawer
-- [ ] 16 division pages
-- [ ] Listing filters from the live catalog once the full 375 piece catalog is imported: type and subtype, style, collection, material; sort Newest
-- [x] Product page `/jewelry/[category]/[product]` for every piece: two-up gallery with the turntable, reference from the render file name, dealer price box, metal, total carat weight, ring size, quantity, special instructions, Log in to add to cart, Ask a question, share, wishlist, service notes, details cards, similar designs, sticky action bar
-- [~] Wishlist: saved in this browser for now (`useWishlist`); moves to the dealer account with auth
-- [x] Campaign photographs through the store grid in a six row rhythm (`content/editorial.ts`), fewer on phones
-- [x] Product page, second pass: gallery with campaign views and a full screen viewer, next day delivery countdown (4:00pm EST cutoff), program banners, details tabs (Product details, Dealer pricing) with accordions beside the image, See it in New York band, You may also like (All and Similar designs), Complete the look, Explore by center stone or metal, Dealer questions from the live site
-- [x] The Surreal Assurance before the footer on home, store and product pages
-- [ ] Jewelry order form (bulk by style number)
-
-## 5. Diamond Search (dealer)
-
-- [ ] Search: 10 shapes, price, carat, color, cut, clarity, polish, symmetry, fluorescence, lab (GCAL, IGI); results with Memo and Asset PPC and price, measurements, table and depth; compare; sort off Rap
-- [ ] Stone detail `/diamonds/[id]`
-- [ ] Made to Order request flow `/diamonds/made-to-order` (live M2O fields)
-- [ ] Legacy list and order form `/legacy/order`
-- [ ] Mock feed with the RightClick record shape
-- [?] RightClick and supplier feeds (parked until the meeting)
-
-## 6. Public content pages
-
-- [ ] Diamond Legacy `/legacy` (story public, ordering gated)
-- [ ] Custom Portal `/custom` (story public, portal gated)
-- [ ] Contact `/contact`: contact, schedule an appointment, feedback, become a dealer, testimonial
-- [ ] About `/about` and Team `/about/team`
-- [ ] Terms and Privacy
-
-## 7. Retailer Dashboard (dealer)
-
-- [ ] Dashboard overview: greeting, open orders, memo count, saved searches, tiles
-- [ ] Memo reconciliation `/dashboard/memo` (table, report sales, confirm, notes)
-- [ ] Orders and invoices `/dashboard/orders`, reorder
-- [ ] SPIF program `/dashboard/spif`
-- [ ] Marketing programs and resources `/dashboard/marketing`
-- [ ] Catalog and flyer programs `/dashboard/catalogs`
-- [ ] Social media resource center `/dashboard/social`
-- [ ] Surreal University `/dashboard/university`
-- [ ] Website solutions `/dashboard/website` (feed and embed request)
-- [ ] Trade show appointments `/dashboard/trade-shows`
-- [ ] Payment methods `/dashboard/payments`
-- [ ] Authorized users `/dashboard/team` (store roles and permissions)
-- [ ] Policies and processes `/dashboard/policies`
-- [ ] Account settings `/dashboard/account`
-- [ ] Saved searches
-
-## 8. Admin console (staff)
-
-- [ ] Dealers: applications and approval, stores, authorized users, pricing groups, territories
-- [ ] Orders, payments and shipping
-- [ ] Memo records
-- [ ] Catalog and product imports
-- [ ] Diamonds and markups (feed status later)
-- [ ] Program requests: M2O, Legacy, Custom
-- [ ] Inbox: forms and appointments
-- [ ] Content: banners, pages, dashboard resources
-- [ ] Staff users and roles
-- [?] Migration from Thinkspace (open question 2)
-
-## 9. Integrations and launch
-
-- [?] RightClick inventory API and supplier stone feeds
-- [?] Payment provider
-- [?] Email or CRM for inquiries and applications
-- [ ] SEO for public pages only (dealer pages noindex), sitemap
-- [ ] Analytics
-- [ ] Final QA and handover
+- [x] Log in page with the Apply panel; preview session (any email or the demo dealer)
+- [x] Cart, mini cart, checkout (store details, payment, review, confirmation), orders kept in the browser; no prices until the price list is connected

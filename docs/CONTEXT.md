@@ -1,6 +1,61 @@
 # Surreal Diamond, project context
 
-The working brief for the Phase 1 build. Read this before any task in [TASKS.md](TASKS.md). The visual language (palette, type, motion, components) is defined in [DESIGN.md](../DESIGN.md) and the exported design system kit; this file covers the business, scope, structure and the UX reference.
+The working brief for the Phase 1 build. Read this before any task in [TASKS.md](TASKS.md); requirement by requirement status is in [CHECKLIST.md](CHECKLIST.md). The visual language (palette, type, motion, components) is defined in [DESIGN.md](../DESIGN.md) and the exported design system kit; this file covers the business, scope, structure and the UX reference.
+
+## The BRD is the source of truth
+
+The Business Requirements Document v1.1 (draft for sign-off, 18 September 2026) sets the agreed scope. **We are building Phase 1 only.** Where anything below disagrees with the BRD, the BRD wins; the checklist records each numbered requirement (R-01 to R-35, rules B-01 to B-06) and its status.
+
+- **Phase 1:** the complete website and dealer web application replacing the current Think Space site: shop, diamond page, content pages, custom portal, retailer dashboard, admin console, and the RightClick inventory connection with supplier stone feeds, so live inventory is on the site at launch.
+- **Phase 2 (not ours now):** Enterprise Level Integration (accounting, payment settlement, further supplier or marketplace feeds) and the invoicing and payment portal modelled on the WB Mason customer portal (total and current due, aging colors, current invoices, pay one or pay all, invoice history).
+- **Out of scope by agreement:** the education section, a separate order approval workflow (roles replace it), and everything on the old platform not listed, including blog, gift cards, gift registry, promotions and white-label embeds. **Deferred:** credit lines (Q12).
+- **Timeline:** build starts one to two weeks after the inputs C-01 to C-05 arrive and runs twelve weeks. Milestones: M1 scope lock and architecture baseline (week 2), M2 design approval of the design system and ten key screens (week 4), M3 feature complete on staging for UAT, code freeze (week 10), M4 go-live with handover documentation and runbook (week 12). Each milestone is signed off within three working days. Design includes two revision rounds; each testing cycle includes one.
+- **Cadence:** weekly meetings until the build starts, then every two weeks, each a working demo.
+- **Assumptions that shape the build:** products load and are managed in the admin console with bulk upload, before and alongside RightClick (A1); English and USD only (A2); Surreal supplies photography and copy (A3); supporting services (login and security, content management, email delivery, hosting) are established managed services, not custom built (A7); platform subscriptions are held in Surreal's own name (A9).
+
+### Roles (BRD section 4)
+
+| Role | Who | In one line |
+|---|---|---|
+| Administrator | Surreal staff managing the site | Full control of products, content, featuring, users |
+| Accounts / Finance | Surreal finance staff | Orders, invoices, payment records |
+| HR | Surreal staff | Access per the matrix |
+| Sales | Surreal sales staff | Dealer accounts and their activity |
+| Manager | Per the matrix | Access per the matrix |
+| Dealer | Dealer account owner or manager | Orders, memo, payment methods, their team |
+| Dealer Associate | Dealer staff | Browse, search, order per their permissions |
+| Public visitor | Anyone | Marketing pages, no ordering |
+
+There is no approval step for orders: what a person can do is set by their role (B-04). The page access for each role comes from Surreal (C-05). The BRD recommends a named login per administrator rather than a shared one (Q10).
+
+### Rules across the site (BRD section 6)
+
+- B-01: every stone is one of a kind and leaves availability the moment an order completes.
+- B-02: an article never shows a metal color it does not exist in.
+- B-03: each dealer's logged-in experience reflects their own account and history.
+- B-04: access by roles, not an approval step.
+- B-05: dealers pay by credit or debit card, ACH or wire, through Surreal's existing card processor.
+- B-06: the out-of-stock display rule is pending (Q1).
+
+### Where the BRD changes our earlier plans
+
+- **Ordering from Quick View (R-10):** the hover panel on each card carries Add to Cart and Buy Now; a separate product page is not required. The product pages already built stay until Surreal decides whether to keep them as shareable links.
+- **Metals (R-12, B-02, R-13):** show only the metals an article exists in, one default image per article, yellow gold defaults curated by Surreal (C-02). The made to order placeholder for other metals goes.
+- **Payment (B-05):** card, ACH and wire only at checkout; check and Zelle stay offline on the dashboard's Payment Methods page.
+- **RightClick is Phase 1:** the provider can supply stock, memo and invoicing data, most likely as an Excel export; the call is being scheduled (C-07).
+- **Homepage:** a "Hot this week" featured area controlled from admin (R-03), one strong image per category (R-04), and a personalized homepage for signed-in dealers with greeting, recent items and quick reorder in the WB Mason style (R-08).
+- **Diamond page:** one line per stone in the Nivoda style dealers already like (R-14), with Quick View, quick filters and columns from Surreal's lists (C-03, C-04).
+- **Custom Portal:** the custom diamond request form (R-22), plus a proposed live diamond preview that is included only if its demo is approved (R-23, A5).
+
+### Integrations (BRD section 7)
+
+| System | Purpose | Status |
+|---|---|---|
+| RightClick | Stock, memo and invoicing data | Provider confirmed; call being scheduled (C-07) |
+| Surreal's existing search | Search in the dashboard and site | Nia to advise; screens proceed now (C-06) |
+| Card processor (existing) | Card payments, ACH and wire alongside | Name and contact needed (C-10, Q2, Q3) |
+| Supplier stone feeds | Supplier stones, refreshed about every 30 minutes | Details per supplier |
+| Think Space (current site) | Content and data during changeover | Extract as needed (C-13) |
 
 ## The business: B2B only
 
@@ -42,7 +97,7 @@ The eight-page structure Surreal provided, plus the systems behind it. "Public" 
 | 6 | Inquiries and Contact | `/contact` | Public | Contact, schedule an appointment, feedback, become a dealer, testimonial |
 | 7 | About Us, Company History | `/about`, `/about/team` | Public | Our story, mission, team |
 | 7a | Main Door | `/` for signed-out visitors, plus `/login` | Public | The front door for the trade: the dealer pitch with Log in and Apply. Working interpretation, since the business is B2B only; confirm the exact form with the client |
-| 8 | Retailer Dashboard | `/dashboard/*` | Dealer | 15 tiles on the live dashboard, mapped below |
+| 8 | Retailer Dashboard | `/dashboard/*` | Dealer | Confirmed in the BRD: reorder in a couple of clicks (R-25), trade show appointments (R-26), payment methods managed by the dealer (R-27), open memo items report (R-28), search on Surreal's existing search (R-29), personalized throughout (R-30). The rest of the roughly 10 subpages come from Q5; the live dashboard's 15 tiles are mapped below |
 
 Account and commerce pages:
 
@@ -58,8 +113,8 @@ Account and commerce pages:
 
 Systems (no page of their own):
 
-- Payments for dealer orders on our site. Provider and methods to confirm (card, ACH, net terms, memo).
-- RightClick inventory connection and supplier stone feeds: **parked** until the team meets RightClick. Diamond Search runs on a mock feed with the same shape until then.
+- Payments for dealer orders: card, ACH and wire through Surreal's existing processor (B-05); whether Buy Now takes payment in Phase 1 or orders go on invoice until Phase 2 is Q2.
+- RightClick inventory connection and supplier stone feeds: Phase 1. The provider call is being scheduled (C-07); until the feed is connected the diamond page runs on a sample feed with the same shape.
 - Admin console for Surreal staff at `/admin/*`: dealer applications and approval, users, roles and logins, dealer accounts and pricing tiers, territories, inventory and feed status, orders and payments, memo, custom orders, inquiries, content.
 - Personalized dealer experience: dealer pricing tier, greeting, saved searches, memo, order history, reorder, recommended items.
 
@@ -128,6 +183,8 @@ Phase 1 console, proposed: Dealers (applications and approval, stores, authorize
 
 ## Jewelry divisions
 
+The BRD counts about 15 division pages; the final names are Q4. The live menu below has 16 entries.
+
 The live site's jewelry menu, 16 entries:
 
 | Group | Divisions |
@@ -140,11 +197,13 @@ Live URLs use type and sub_type filters (`/jewelry/?type=earrings&sub_type=studs
 
 ## Removed from the site
 
-- Education pages (why CVD, history, CVD explained, FAQ, diamond guide) and the blog: live today, not in the Phase 1 list
+- Education pages and section (why CVD, history, CVD explained, FAQ, diamond guide): out by agreement (R-07)
+- Blog, gift cards, gift registry, promotions, white-label embeds: out by agreement
+- A separate order approval workflow: roles replace it
+- Credit lines: deferred (Q12)
 - Engagement as a top-level nav item (it is a jewelry division)
-- Made to Order as a standalone top-level page (it lives inside Diamond Search)
 - Consumer language: "Shop", consumer prices, "Book a visit" as a shopper appointment
-- The 3D opening diamond and the pointer light behind the cursor
+- The 3D opening diamond and the pointer light behind the cursor (R-06)
 
 ## Navigation
 
@@ -218,15 +277,26 @@ Signed in, a dealer bar sits under the hero: greeting with the store name, open 
 
 ## Open questions for the client
 
-1. Main Door: confirm it is the public trade entrance (pitch, Log in, Apply) and whether it replaces the homepage for signed-out visitors or is its own page.
-2. Migration: does the new site replace Thinkspace entirely (catalog of 375 items, diamonds, dealer accounts, orders, memo records), and can we export from it.
-3. Online payment: which provider for card and ACH at checkout; whether wire, check and Zelle stay offline; whether memo orders skip payment.
-4. Dealer pricing: Thinkspace uses price rules and markups; one price list or groups per dealer.
-5. Memo data source for reconciliation (today it updates daily).
-6. RightClick: parked until the meeting. Supplier feeds: which suppliers, format and frequency.
-7. Email provider or CRM for inquiries and applications.
-8. The real Instagram handle.
-9. Whether the education pages, blog and Surreal University content move over as they are.
+From the BRD (section 10), to be answered with the sign-off or at the next meeting:
+
+1. Q1: should out-of-stock items automatically show a 5 to 6 week order lead time?
+2. Q2: in Phase 1, does Buy Now take payment at checkout, or place the order with payment on invoice until the Phase 2 portal?
+3. Q3: which card processor, and does it also handle ACH?
+4. Q4: the final names of the 15 jewelry divisions.
+5. Q5: the final list of the roughly 10 Retailer Dashboard subpages, beyond the four confirmed features.
+6. Q6: what the Diamond Legacy and Main Door pages should each contain.
+7. Q7: does the made-to-order request live on the diamond page or as its own page?
+8. Q8: can visitors see prices before logging in, or are prices for dealers only?
+9. Q9: trade show appointments: a request form, or real time-slot booking?
+10. Q10: a named login per administrator instead of one shared login?
+11. Q11: resale or exemption paperwork stored per dealer for tax purposes?
+12. Q12: when to revisit credit lines, before or after Phase 2?
+
+Ours, not in the BRD:
+
+- The real Instagram handle (the live footer links to a placeholder account).
+- Whether the reference numbers shown on product pages (taken from the render file names, e.g. LE2004W442) are Surreal's style numbers.
+- Whether the product page stays alongside Quick View (R-10).
 
 ## Working rules
 
