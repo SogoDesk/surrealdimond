@@ -13,7 +13,7 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 - [x] Remove the 3D opening diamond (three, R3F and drei dependencies, model file)
 - [x] Remove the pointer light behind the cursor
 - [x] Study the live site: B2B only, 16 jewelry divisions, login gating, checkout steps, forms, verified facts
-- [~] Map the live Retailer Dashboard subpages (Ajay signs in, we read)
+- [x] Map the live Retailer Dashboard (15 tiles), dealer Diamond Search, catalog, program forms and the Thinkspace admin
 - [ ] Verified facts and team added to `src/content/site.ts`
 - [ ] Catalog divisions extended to the 16 live entries
 - [ ] Mock auth: signed-out and signed-in dealer states, route gating with return to the requested page
@@ -51,22 +51,24 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 - [ ] Add to cart from product cards, quick view and product detail
 - [ ] `/cart`: line items (image, style number, metal, carat, size, quantity, remove, note), order summary at dealer price, trust badges, sticky total bar
 - [ ] Empty cart state
-- [ ] `/checkout`: Store details, Payment, Review, Confirmation
-- [?] Payment provider and methods (open question 3)
+- [ ] `/checkout`: Store details, Payment, Review, Confirmation; next day delivery cutoff note (order before 4:00pm EST)
+- [?] Online payment provider for card and ACH (open question 3); check, wire and Zelle shown as offline options
 - [ ] Memo request path where the program allows
 
 ## 4. Jewelry (dealer)
 
 - [ ] Jewelry landing on the Tanishq listing pattern (breadcrumb, count, filter and sort bar, inline "find your match" panel)
 - [ ] 16 division pages
-- [ ] Product detail `/jewelry/[division]/[product]`: gallery with turntable, sticky action bar, details accordions, similar designs
+- [ ] Listing filters from the live catalog: type and subtype, style, collection, material; sort Featured, Newest, Name
+- [ ] Product detail `/jewelry/[division]/[product]`: gallery with turntable, style number, quality line, dealer price, metal and total carat weight, quantity, special instructions, add to cart, ask a question, sticky action bar, similar designs
 - [ ] Jewelry order form (bulk by style number)
 
 ## 5. Diamond Search (dealer)
 
-- [ ] Search: shape, carat, color, clarity, cut filters, list and grid, compare, call stones
+- [ ] Search: 10 shapes, price, carat, color, cut, clarity, polish, symmetry, fluorescence, lab (GCAL, IGI); results with Memo and Asset PPC and price, measurements, table and depth; compare; sort off Rap
 - [ ] Stone detail `/diamonds/[id]`
-- [ ] Made to Order request flow `/diamonds/made-to-order`
+- [ ] Made to Order request flow `/diamonds/made-to-order` (live M2O fields)
+- [ ] Legacy list and order form `/legacy/order`
 - [ ] Mock feed with the RightClick record shape
 - [?] RightClick and supplier feeds (parked until the meeting)
 
@@ -80,12 +82,34 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 
 ## 7. Retailer Dashboard (dealer)
 
-- [ ] Subpages as mapped from the live dashboard
-- [ ] Personalized dealer experience: pricing tier, greeting, saved searches, memo, orders, reorder
+- [ ] Dashboard overview: greeting, open orders, memo count, saved searches, tiles
+- [ ] Memo reconciliation `/dashboard/memo` (table, report sales, confirm, notes)
+- [ ] Orders and invoices `/dashboard/orders`, reorder
+- [ ] SPIF program `/dashboard/spif`
+- [ ] Marketing programs and resources `/dashboard/marketing`
+- [ ] Catalog and flyer programs `/dashboard/catalogs`
+- [ ] Social media resource center `/dashboard/social`
+- [ ] Surreal University `/dashboard/university`
+- [ ] Website solutions `/dashboard/website` (feed and embed request)
+- [ ] Trade show appointments `/dashboard/trade-shows`
+- [ ] Payment methods `/dashboard/payments`
+- [ ] Authorized users `/dashboard/team` (store roles and permissions)
+- [ ] Policies and processes `/dashboard/policies`
+- [ ] Account settings `/dashboard/account`
+- [ ] Saved searches
 
 ## 8. Admin console (staff)
 
-- [ ] `/admin`: dealer applications and approval, users, roles and logins, pricing tiers, territories, orders and payments, memo, custom orders, inquiries, content, feed status
+- [ ] Dealers: applications and approval, stores, authorized users, pricing groups, territories
+- [ ] Orders, payments and shipping
+- [ ] Memo records
+- [ ] Catalog and product imports
+- [ ] Diamonds and markups (feed status later)
+- [ ] Program requests: M2O, Legacy, Custom
+- [ ] Inbox: forms and appointments
+- [ ] Content: banners, pages, dashboard resources
+- [ ] Staff users and roles
+- [?] Migration from Thinkspace (open question 2)
 
 ## 9. Integrations and launch
 

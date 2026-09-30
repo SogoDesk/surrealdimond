@@ -42,7 +42,7 @@ The eight-page structure Surreal provided, plus the systems behind it. "Public" 
 | 6 | Inquiries and Contact | `/contact` | Public | Contact, schedule an appointment, feedback, become a dealer, testimonial |
 | 7 | About Us, Company History | `/about`, `/about/team` | Public | Our story, mission, team |
 | 7a | Main Door | `/` for signed-out visitors, plus `/login` | Public | The front door for the trade: the dealer pitch with Log in and Apply. Working interpretation, since the business is B2B only; confirm the exact form with the client |
-| 8 | Retailer Dashboard | `/dashboard/*` | Dealer | About 10 subpages, mapped from the live dashboard (pending) |
+| 8 | Retailer Dashboard | `/dashboard/*` | Dealer | 15 tiles on the live dashboard, mapped below |
 
 Account and commerce pages:
 
@@ -62,6 +62,69 @@ Systems (no page of their own):
 - RightClick inventory connection and supplier stone feeds: **parked** until the team meets RightClick. Diamond Search runs on a mock feed with the same shape until then.
 - Admin console for Surreal staff at `/admin/*`: dealer applications and approval, users, roles and logins, dealer accounts and pricing tiers, territories, inventory and feed status, orders and payments, memo, custom orders, inquiries, content.
 - Personalized dealer experience: dealer pricing tier, greeting, saved searches, memo, order history, reorder, recommended items.
+
+## The live dealer side (read 30 Sept 2026, signed in)
+
+The current site runs on the Thinkspace jewelry platform. Signed-in dealers see the same header plus Account, Cart and Log out, a banner "Order before 4:00pm EST to receive next day delivery", and "Customer Service: Mon to Fri, 9:30am to 6pm EST".
+
+### Retailer Dashboard (`/dashboard/`)
+
+Intro: resources to help the dealer promote the Surreal brand in their market. Fifteen tiles, each with an icon, title and one line:
+
+| # | Tile | Live route | What it holds | New route |
+|---|---|---|---|---|
+| 1 | My Open Memo Items | `/diamonds/memo/` | Memo reconciliation: table of on-hand long-term memo (LTM) diamonds and jewelry (Sold?, memo date, memo number, stock number, price, shape, size, cut, color, clarity), prices updated daily; form to report sales, confirm the list is accurate or note discrepancies | `/dashboard/memo` |
+| 2 | Start Your Diamond Search | `/diamonds/` | Diamond Search | `/diamonds` |
+| 3 | M2O Order Form | `/form/custom-diamond-order-form/` | Your name, company, customer name for the booklet, phone, email, exact size, shape, length to width ratio, girdle inscription, notes | `/diamonds/made-to-order` |
+| 4 | Legacy Program and Order Form | `/diamonds/diamond-legacy/` | Link to the list of Legacy diamonds, then call or complete the order form | `/legacy/order` |
+| 5 | SPIF Program | `/dashboard/spif-program/` | Sales incentives for store associates on a Jewelry Rewards cash debit card; associates register, store managers approve, monthly loads on qualifying sales | `/dashboard/spif` |
+| 6 | Marketing Programs and Resources | `/dashboard/social-media-program/` | "We're a Grower" campaign video, digital brand assets (logo, product images), television and video content | `/dashboard/marketing` |
+| 7 | Surreal Catalog and Flyer Programs | `/dashboard/surreal-catalog-flyer-programs/` | Turn-key catalog and flyer mailings by year (holiday flyer, Christmas catalog, postcards) | `/dashboard/catalogs` |
+| 8 | Social Media Resource Center | `/dashboard/social-media-resources/` | Weekly auto-published social content through the JewelPost Network, free sign-up | `/dashboard/social` |
+| 9 | Training Videos | `/surreal-university/` | Surreal University: "Seven Steps to Making the Proactive Sale" and training videos | `/dashboard/university` |
+| 10 | Website Solutions | `/dashboard/website-solutions/` | Getting the Surreal diamond feed and catalog onto the dealer's own site (direct feeds for Thinkspace and Punchmark sites, embeds), data and embed request form | `/dashboard/website` |
+| 11 | Trade Show Appointments | `/dashboard/trade-show-schedule/` | Show dates and attendance (empty today) | `/dashboard/trade-shows` |
+| 12 | Payment Methods | `/dashboard/payment-methods/` | Check, ACH or wire, credit card, Zelle, to keep the account current | `/dashboard/payments` |
+| 13 | Authorized Users | `/team/` | Store team table: name, email, role, permissions; add and remove members | `/dashboard/team` |
+| 14 | Policies and Processes | `/terms-and-conditions/` | The small print | `/dashboard/policies` |
+| 15 | Account Settings | `/account/settings/` | Full name, email, phone, password | `/dashboard/account` |
+
+Plus a feedback line linking to We Want to Hear From You. New pages the dealer experience needs on top of these: Orders and invoices (`/dashboard/orders`), Saved searches, and a dashboard overview with the dealer's numbers.
+
+### Diamond Search (dealer)
+
+- Note at the top: all prices shown are for Asset (purchase); short-term memo pricing by phone.
+- Filters: shape (Round, Oval, Pear, Emerald, Princess, Radiant, Cushion, Marquise, Asscher, Heart), price range, carat range, color (D to K) range, cut, clarity (FL to SI2), polish and symmetry (Ideal to Fair) ranges, fluorescence (None to Very Strong), certificate lab (GCAL, IGI).
+- Results table: Compare, shape, size, color, clarity, Memo PPC, Asset PPC, Memo price, Asset price, cut, polish, symmetry, measurements, lab, table percent, depth percent. Default sort is off Rap ascending.
+
+### Jewelry catalog (dealer)
+
+- 375 items. Listing: sort (Featured, Newest, Name), page size (24, 48, 72, 96), filter rail by product type and subtype (for earrings: diamond jackets, drops and dangles, fashion, halo, hearts, hoops and huggies, huggies, pave, studs), style, collection and material (14K white, yellow and rose gold, enamel, sterling silver, yellow sterling silver).
+- Product page: name and style number, quality line (for example Color E to F, Clarity VVS to VS, certificates on request for a fee), dealer price, metal and total carat weight options, quantity, special instructions, Add to Cart, Ask a Question, share, Drop a Hint, print.
+- Checkout steps: Cart, Store Details, Review, Confirmation.
+
+### Programs (dealer)
+
+- Made to Order: exclusively for Surreal dealers. Any shape in any carat weight or dimensions. Under 4 carats FG+ color and VS+ clarity; over 4 carats G+ color and VS+ clarity. Every stone has an IGI certificate and a brochure with nine visual touchpoints. Priced as a fixed program fee plus the stone.
+- Legacy: list of Legacy diamonds; FAQ (shapes, growing two at once, timing, whether the seed is returned, color and clarity, growing larger than the original); the SEED time capsule; priced as a fixed program fee.
+- Custom Orders: request form (active account or new; company and location; contact; in-store delivery deadline; PO number; style number; CAD requested; item type ring, pendant, earring, bracelet or bangle, other; metal 14K, 18K or platinum; gold color or two tone; center stone shape and size; finger size; matching bands; image uploads). Diamond quality F+ and VS+ on all custom items.
+
+### Admin (Thinkspace, the baseline for our staff console)
+
+| Area | Modules |
+|---|---|
+| Shop | Orders, Carts, Order Transactions, Point of Sale, Price Rules, Price List, Promotional Codes, Tax Classes, Financing Terms, Gift Cards, Warranties, Currencies, Exchange Rates, Shipping Carriers, Shipping Costs, Shipping Emails |
+| Catalog | Products, Brands, Collections, Departments, Types, Subtypes, Styles, Categories, Variant Options and Values, Product Feeds, Product Imports |
+| Inbox | Email responses, Appointments, Career responses, Webhook responses |
+| Diamonds | Diamonds, Certifiers, Diamond Markups, Lab Grown Markups, grading tables (clarity, color, cut, fluorescence, fancy colors) |
+| Content | Pages, Menus, FAQ, Media, Slideshows, Page Redirects |
+| Blog | Posts, Categories, Tags |
+| Company | Store Locations, Employees, Corporate Contacts, Testimonials, Career Postings, Organizations, Embeds, Sales Incentives |
+| Forms | Forms, Notifications, System Emails, Newsletters, Webhooks |
+| Users | Users, User Groups, Wishlists |
+| Settings | Website, Commerce, Catalog, Diamond, Email, Analytics, Social, User Accounts, Vendor |
+
+Phase 1 console, proposed: Dealers (applications and approval, stores, authorized users, pricing groups, territories), Orders and payments, Memo, Catalog and imports, Diamonds and markups (feed status for RightClick later), Program requests (M2O, Legacy, Custom), Inbox (forms and appointments), Content (banners, pages), Marketing resources for the dashboard, Staff users and roles.
 
 ## Jewelry divisions
 
@@ -156,14 +219,14 @@ Signed in, a dealer bar sits under the hero: greeting with the store name, open 
 ## Open questions for the client
 
 1. Main Door: confirm it is the public trade entrance (pitch, Log in, Apply) and whether it replaces the homepage for signed-out visitors or is its own page.
-2. Retailer Dashboard subpages: being mapped from the live dashboard.
-3. Payment provider and dealer payment methods (card, ACH, net terms), and whether memo orders skip payment.
-4. Dealer pricing: one price list or tiers per dealer; shown on every card or only in the cart.
-5. RightClick: parked until the meeting. Supplier feeds: which suppliers, format and frequency.
-6. Shape list and carat ranges for Diamond Search.
+2. Migration: does the new site replace Thinkspace entirely (catalog of 375 items, diamonds, dealer accounts, orders, memo records), and can we export from it.
+3. Online payment: which provider for card and ACH at checkout; whether wire, check and Zelle stay offline; whether memo orders skip payment.
+4. Dealer pricing: Thinkspace uses price rules and markups; one price list or groups per dealer.
+5. Memo data source for reconciliation (today it updates daily).
+6. RightClick: parked until the meeting. Supplier feeds: which suppliers, format and frequency.
 7. Email provider or CRM for inquiries and applications.
 8. The real Instagram handle.
-9. Whether the education pages and blog move to Phase 2 or are dropped.
+9. Whether the education pages, blog and Surreal University content move over as they are.
 
 ## Working rules
 
