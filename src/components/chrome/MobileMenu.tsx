@@ -17,7 +17,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { brand } from "@/content/site";
+import { account, brand } from "@/content/site";
 import { registerGsap, gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import { lockScroll } from "@/lib/scroll";
@@ -232,7 +232,7 @@ export default function MobileMenu({ open, onClose, links, secondary, visitHref 
                     data-cursor="link"
                     onClick={(e) => {
                       onClose();
-                      if (item.href === "/contact#appointment") {
+                      if (item.href === account.appointment) {
                         e.preventDefault();
                         window.setTimeout(() => openContactDrawer("other", "visit"), 450);
                       }
@@ -253,7 +253,7 @@ export default function MobileMenu({ open, onClose, links, secondary, visitHref 
           data-cursor="view"
           onClick={(e) => {
             onClose();
-            if (visitHref === "/contact#appointment") {
+            if (visitHref === account.appointment) {
               e.preventDefault();
               window.setTimeout(() => openContactDrawer("other", "visit"), 450);
             }

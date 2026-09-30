@@ -27,7 +27,7 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 | 2 | Jewelry listing and product page | [x] (Quick View set aside) |
 | 3 | Diamond page (Nivoda style list, quick filters, Quick View, M2O entry) | [x] on the sample feed |
 | 4 | Custom Portal request form, with the live preview demo (R-23) | [x] demo awaits approval (A5) |
-| 5 | Inquiries and Contact | [ ] |
+| 5 | Inquiries and Contact | [x] emails wait on M1 |
 | 6 | Retailer Dashboard home (personalized) | [ ] |
 | 7 | Open memo items report and Reorder | [ ] |
 | 8 | Cart and checkout | [x] |
@@ -41,7 +41,8 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 - [x] Custom Portal (R-22): the live custom request fields (account status, company and location, contact, in-store delivery deadline, PO number, style number, CAD requested, item type, metal, gold color or two tone, center stone shape and size, finger size, matching bands, instructions, image uploads)
 - [x] Live diamond preview demo for the custom form (R-23): shape, size and color update a drawn stone, set as a ring, pendant, studs, bangle or loose, in the chosen metal
 - [ ] Show the R-23 demo to Surreal for approval (A5)
-- [ ] Contact page (R-24): inquiry type selector, routing per type, acknowledgement to the sender; schedule an appointment
+- [x] Contact page (R-24): inquiry type selector, routing per type, acknowledgement to the sender; schedule an appointment
+- [ ] Confirm the inquiry routing (type to team) with Surreal (C-05) and connect the team inboxes and acknowledgement email (M1, C-14)
 - [ ] Dashboard home: greeting, open orders, memo count, recent items, tiles for the subpages
 - [ ] Open memo report (R-28) and order history with Reorder (R-25)
 - [ ] Admin console shell: inventory table, featured and hot deal toggles, default sort per page, banner manager

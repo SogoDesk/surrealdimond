@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import GatePage from "@/components/pages/GatePage";
-import { gates } from "@/content/gates";
+import ContactPage from "@/components/contact/ContactPage";
 
-export const metadata: Metadata = { title: "Contact | Surreal Diamond" };
+export const metadata: Metadata = {
+  title: "Inquiries and Contact | Surreal Diamond",
+  description: "Contact Surreal Diamond's North American Office at 551 Fifth Avenue, New York. Become a dealer, schedule an appointment, or ask about an order.",
+};
 
 export default function Page() {
-  return <GatePage {...gates.contact} />;
+  return <ContactPage />;
 }

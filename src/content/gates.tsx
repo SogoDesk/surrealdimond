@@ -50,14 +50,6 @@ export const gates = {
     crumbs: [{ label: "About" }],
     image: "/media/photos/sb-3502.webp",
   },
-  contact: {
-    kind: "building",
-    eyebrow: "Inquiries and contact",
-    title: <>We want to <em>hear from you</em></>,
-    line: "North American Office, 551 Fifth Avenue, Suite 2601, New York, NY 10176. (844) 999-7262, Monday to Friday, 9:30am to 6pm EST.",
-    crumbs: [{ label: "Contact" }],
-    image: "/media/photos/sb-3970.webp",
-  },
   apply: {
     kind: "building",
     eyebrow: "Apply for an account",

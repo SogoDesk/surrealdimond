@@ -58,7 +58,7 @@ Last reviewed: 30 September 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-24 | Contact form with an inquiry type selector routing to the right person, automatic acknowledgement | Partial | Contact drawer has the topic selector and validation; build the page, routing and the acknowledgement email (C-14 for the sending domain) |
+| R-24 | Contact form with an inquiry type selector routing to the right person, automatic acknowledgement | Partial (emails wait on M1, C-14) | `/contact` merges the live Contact Us, Schedule an Appointment and We Want to Hear From You forms: seven inquiry types, each routed to a team (`src/content/inquiries.ts`, to confirm with C-05), type-specific fields, a reference number and the acknowledgement email shown on the page. The contact drawer shares the same types and server action. Sending the two emails waits on the email service |
 
 ## 5.7 Retailer Dashboard
 

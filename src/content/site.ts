@@ -67,7 +67,7 @@ export const account = {
   apply: "/apply",
   dashboard: "/dashboard",
   cart: "/cart",
-  appointment: "/contact#appointment",
+  appointment: "/contact?type=appointment",
   search: "/search",
 } as const;
 
@@ -118,7 +118,7 @@ export const footerColumns = [
     title: "Trade",
     links: [
       { label: "Retailer Dashboard", href: "/dashboard" },
-      { label: "Become a Retailer", href: "/contact?topic=trade" },
+      { label: "Become a Retailer", href: "/contact?type=dealer" },
     ],
   },
 ] as const;

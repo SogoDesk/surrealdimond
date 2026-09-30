@@ -6,44 +6,40 @@
  * "surreal:contact" window event. Paper panel, 480px (a full-screen sheet below
  * 768px), slides in from the right on a GSAP x tween, traps focus, closes on
  * Escape or the backdrop, and locks the page scroll while open. The form posts
- * to the submitContact server action; on submit every underline draws once in
- * ink and a thank-you line replaces the fields.
+ * to the submitInquiry server action, the same one as the contact page, so
+ * the inquiry type routes it to the right team (BRD R-24); on submit every
+ * underline draws once in ink and a thank-you line with the reference
+ * number replaces the fields.
  */
 
-import { useActionState, useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { startTransition, useActionState, useCallback, useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
 import Button from "@/components/ui/Button";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import { lockScroll } from "@/lib/scroll";
-import { submitContact, type ContactIntent, type ContactState, type ContactTopic } from "@/app/actions/contact";
+import { submitInquiry, type InquiryState } from "@/app/actions/inquiry";
+import { ACK_LINE, inquiryTypes, type InquiryType } from "@/content/inquiries";
 import styles from "./ContactDrawer.module.css";
 
 export const CONTACT_EVENT = "surreal:contact";
 
-/* Mirrors TOPICS in src/app/actions/contact.ts. */
-export const CONTACT_TOPICS: { value: ContactTopic; label: string }[] = [
-  { value: "engagement", label: "Engagement" },
-  { value: "made-to-order", label: "Made to Order" },
-  { value: "legacy", label: "Diamond Legacy" },
-  { value: "custom", label: "Custom" },
-  { value: "trade", label: "Trade" },
-  { value: "other", label: "Other" },
-];
+export type ContactIntent = "visit" | "contact";
 
 export interface ContactOpenDetail {
-  topic: ContactTopic;
+  topic: InquiryType;
   intent: ContactIntent;
 }
 
-/** Open the drawer with the select preset to the door that opened it. */
-export function openContactDrawer(topic: ContactTopic = "other", intent: ContactIntent = "contact") {
+/** Open the drawer with the inquiry type preset to the door that opened it; a visit door presets an appointment. */
+export function openContactDrawer(topic: InquiryType = "other", intent: ContactIntent = "contact") {
   if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent<ContactOpenDetail>(CONTACT_EVENT, { detail: { topic, intent } }));
+  const preset: InquiryType = intent === "visit" && topic === "other" ? "appointment" : topic;
+  window.dispatchEvent(new CustomEvent<ContactOpenDetail>(CONTACT_EVENT, { detail: { topic: preset, intent } }));
 }
 
 const TITLES: Record<ContactIntent, string> = { visit: "Schedule an appointment", contact: "Contact us" };
 const FOCUSABLE = "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])";
-const INITIAL_STATE: ContactState = { ok: false };
+const INITIAL_STATE: InquiryState = { ok: false };
 
 export default function ContactDrawer() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -201,15 +197,15 @@ function ContactForm({
   onSent,
   onClose,
 }: {
-  topic: ContactTopic;
+  topic: InquiryType;
   intent: ContactIntent;
   onSent: () => void;
   onClose: () => void;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const thanksRef = useRef<HTMLDivElement>(null);
-  const [state, formAction, pending] = useActionState(submitContact, INITIAL_STATE);
-  const [topic, setTopic] = useState<ContactTopic>(preset);
+  const [state, formAction, pending] = useActionState(submitInquiry, INITIAL_STATE);
+  const [topic, setTopic] = useState<InquiryType>(preset);
   const [lastPreset, setLastPreset] = useState(preset);
   const uid = useId();
   const id = (field: string) => `${uid}-${field}`;
@@ -221,7 +217,11 @@ function ContactForm({
   }
 
   // Every underline draws once in ink as the form leaves.
-  const onSubmit = () => {
+  // Dispatched by hand rather than through the form action, so the fields keep their values when the server sends errors back.
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    startTransition(() => formAction(data));
     const form = formRef.current;
     if (!form) return;
     registerGsap();
@@ -258,10 +258,13 @@ function ContactForm({
           Thank you.
         </h3>
         <p className="t-body">
-          {intent === "visit"
-            ? "We have your note and will write back to find a time for your visit."
-            : "We have your note and will write back soon."}
+          {intent === "visit" ? "We have your note and will write back to find a time for your visit." : ACK_LINE}
         </p>
+        {state.reference && (
+          <p className={`t-caption ${styles.note}`}>
+            Reference {state.reference}. A copy is on its way to your inbox.
+          </p>
+        )}
         <div className={styles.thanksAction}>
           <Button variant="secondary" onClick={onClose}>
             Close
@@ -272,11 +275,10 @@ function ContactForm({
   }
 
   return (
-    <form ref={formRef} action={formAction} onSubmit={onSubmit} className={styles.form} noValidate>
-      <input type="hidden" name="intent" value={intent} />
+    <form ref={formRef} onSubmit={onSubmit} className={styles.form} noValidate>
       <div className={styles.honeypot} aria-hidden>
-        <label htmlFor={id("company")}>Company</label>
-        <input id={id("company")} name="company" type="text" tabIndex={-1} autoComplete="off" />
+        <label htmlFor={id("website")}>Website</label>
+        <input id={id("website")} name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <Field id={id("name")} label="Name" error={errors.name}>
@@ -287,10 +289,10 @@ function ContactForm({
         <input id={id("email")} name="email" type="email" placeholder=" " autoComplete="email" required maxLength={254} inputMode="email" aria-invalid={errors.email ? true : undefined} aria-describedby={errors.email ? `${id("email")}-error` : undefined} />
       </Field>
 
-      <Field id={id("topic")} label="What brings you in" error={errors.topic} floated>
-        <select id={id("topic")} name="topic" value={topic} onChange={(e) => setTopic(e.target.value as ContactTopic)} aria-invalid={errors.topic ? true : undefined} aria-describedby={errors.topic ? `${id("topic")}-error` : undefined}>
-          {CONTACT_TOPICS.map((t) => (
-            <option key={t.value} value={t.value}>
+      <Field id={id("topic")} label="What is it about" error={errors.type} floated>
+        <select id={id("topic")} name="type" value={topic} onChange={(e) => setTopic(e.target.value as InquiryType)} aria-invalid={errors.type ? true : undefined} aria-describedby={errors.type ? `${id("topic")}-error` : undefined}>
+          {inquiryTypes.map((t) => (
+            <option key={t.id} value={t.id}>
               {t.label}
             </option>
           ))}
