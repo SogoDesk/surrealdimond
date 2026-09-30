@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import GatePage from "@/components/pages/GatePage";
-import { gates } from "@/content/gates";
+import MadeToOrderPage from "@/components/diamonds/MadeToOrderPage";
 
-export const metadata: Metadata = { title: "Made to Order | Surreal Diamond" };
+export const metadata: Metadata = {
+  title: "Made to Order | Surreal Diamond",
+  description: "A diamond grown to your client's exact specification: any shape, any carat weight, with an IGI certificate. Exclusively for Surreal dealers.",
+};
 
 export default function Page() {
-  return <GatePage {...gates.madeToOrder} />;
+  return <MadeToOrderPage />;
 }

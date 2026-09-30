@@ -33,12 +33,12 @@ Last reviewed: 30 September 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-14 | One line per diamond, Nivoda style: specs, certificate number, stock ID, ratios, shipment details, price, Add to Cart inline | To do | Build on a sample feed shaped like the live search columns |
-| R-15 | Quick View opens further detail on any stone | To do | |
-| R-16 | Quick filters above the list, Surreal's parameters | Waiting (C-03) | Start with the live filters: shape, price, carat, color, cut, clarity, polish, symmetry, fluorescence, lab |
-| R-17 | Columns follow Surreal's attribute list | Waiting (C-04) | Start with the live columns |
-| R-18 | A stone leaves available inventory the moment a purchase or memo order completes | To do | Needs the inventory service; preview can mark stones sold in the browser |
-| R-19 | Made to order entry on this page, M2O request prefilled from the search | Partial (Q7) | `/diamonds/made-to-order` holding page; build the prefilled request |
+| R-14 | One line per diamond, Nivoda style: specs, certificate number, stock ID, ratios, shipment details, price, Add to Cart inline | Partial (sample feed) | Built at `/diamonds` on a 260-stone sample feed (`src/content/diamonds.ts`): shape, carat, color, clarity, cut, polish, symmetry, fluorescence, measurements, ratio, table, depth, lab and certificate, stock ID, shipment, price slot, Quick View and Add inline; cards on phones. Prices wait on the price list (Q8); live stones wait on RightClick (C-07) |
+| R-15 | Quick View opens further detail on any stone | Done | Drawer with the plan drawing and dimensions, every attribute, certificate, shipment, dealer price box, Add to cart, Request on memo, Grow one like it to order, previous and next |
+| R-16 | Quick filters above the list, Surreal's parameters | Partial (C-03) | Shape icons, carat range and presets, color and clarity ranges, cut, lab; More filters for polish, symmetry, fluorescence, ratio, source. Swap to Surreal's parameters when C-03 arrives |
+| R-17 | Columns follow Surreal's attribute list | Partial (C-04) | Columns follow the live dealer search plus the BRD fields; swap to Surreal's sheet when C-04 arrives |
+| R-18 | A stone leaves available inventory the moment a purchase or memo order completes | Partial (preview) | Stones on a placed order or a memo request leave the list at once; the inventory service makes it hold across dealers |
+| R-19 | Made to order entry on this page, M2O request prefilled from the search | Done (Q7 open) | Entry banner above the list and in Quick View; `/diamonds/made-to-order` has the live M2O fields prefilled with shape, size, ratio, the source stone and the dealer. Whether it stays its own page is Q7 |
 
 ## 5.4 Content pages: Diamond Legacy, Main Door, About Us / Company History
 
@@ -85,7 +85,7 @@ Last reviewed: 30 September 2026.
 
 | # | Rule | Status | Where it stands, next action |
 |---|---|---|---|
-| B-01 | Every stone is one of a kind; gone from availability the moment an order completes | To do | With R-18 |
+| B-01 | Every stone is one of a kind; gone from availability the moment an order completes | Partial (preview) | Stones are quantity one in the cart and leave the list once ordered or on memo; enforced server side with the inventory service |
 | B-02 | An article never shows a metal color it does not exist in | Done | With R-12 |
 | B-03 | Each dealer's logged-in experience reflects their own account and history | Partial | Preview session; real accounts with the auth service |
 | B-04 | Access by roles, no approval step | To do | Roles below; page access from C-05 |

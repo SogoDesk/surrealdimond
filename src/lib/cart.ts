@@ -15,6 +15,8 @@ import { createLocalStore } from "./localStore";
 export interface CartLine {
   key: string;
   productId: string;
+  /** Set for a loose stone from the diamond page: one of a kind, quantity always 1 (BRD B-01). productId is empty then. */
+  stoneId?: string;
   metal: Metal;
   carat: number;
   size: string | null;
@@ -68,6 +70,13 @@ export function addToCart(line: Omit<CartLine, "key">) {
     if (found) return lines.map((l) => (l.key === key ? { ...l, qty: Math.min(99, l.qty + line.qty), note: line.note || l.note } : l));
     return [...lines, { ...line, key }];
   });
+  window.dispatchEvent(new CustomEvent(CART_ADDED, { detail: key }));
+}
+
+/** Add a loose stone. A stone is one of a kind, so adding it again changes nothing. */
+export function addStone(stoneId: string, carat: number) {
+  const key = `stone|${stoneId}`;
+  cart.set((lines) => (lines.some((l) => l.key === key) ? lines : [...lines, { key, productId: "", stoneId, metal: "wg", carat, size: null, qty: 1, note: "" }]));
   window.dispatchEvent(new CustomEvent(CART_ADDED, { detail: key }));
 }
 

@@ -17,6 +17,8 @@ import { CART_ADDED, caratTotal, pieceCount, removeLine, useCart } from "@/lib/c
 import { useDealer } from "@/lib/dealer";
 import { account } from "@/content/site";
 import { groundStyle } from "@/content/grounds";
+import { stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
+import ShapeIcon from "@/components/brand/ShapeIcon";
 import styles from "./chrome.module.css";
 
 function BagIcon() {
@@ -107,6 +109,27 @@ export default function MiniCart() {
             <>
               <ul className={styles.miniLines} data-lenis-prevent>
                 {lines.map((l) => {
+                  const st = l.stoneId ? stoneById(l.stoneId) : undefined;
+                  if (st)
+                    return (
+                      <li key={l.key} className={styles.miniLine} data-flash={flash === l.key ? "true" : undefined}>
+                        <span className={`${styles.miniThumb} ${styles.miniStone}`}>
+                          <ShapeIcon shape={st.shape} detail className={styles.miniStoneIcon} />
+                        </span>
+                        <span className={styles.miniText}>
+                          <span className={styles.miniName}>{stoneTitle(st)}</span>
+                          <span className={styles.miniMeta}>
+                            {stoneGrade(st)}, {st.lab}
+                          </span>
+                          <span className={styles.miniMeta}>Stock {st.id}</span>
+                        </span>
+                        <button type="button" className={styles.miniRemove} onClick={() => removeLine(l.key)} aria-label={`Remove ${stoneTitle(st)}`}>
+                          <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
+                            <path d="M3 3l10 10M13 3 3 13" />
+                          </svg>
+                        </button>
+                      </li>
+                    );
                   const p = productById(l.productId);
                   if (!p) return null;
                   const metal = metals.find((m) => m.id === l.metal)?.label;

@@ -200,3 +200,9 @@
 .confirmDoors { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
 .previewNote { margin: 0; font-size: 0.75rem; color: var(--stone); }
 .confirmLines { display: flex; flex-direction: column; gap: 10px; }
+
+/* Loose stone lines */
+.stoneThumb { background: radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255, 255, 255, 0) 72%), var(--mist) !important; color: var(--ink); }
+.stoneIcon { width: 70%; height: 70%; }
+.stoneIconSmall { width: 72%; height: 72%; color: var(--ink); }
+.oneOfAKind { font-size: 0.8125rem; color: var(--stone); }

@@ -561,3 +561,5 @@ a.accountItem:hover, button.accountItem:hover { background: var(--porcelain); co
 @media (max-width: 599px) {
   .mini { position: fixed; left: 12px; right: 12px; top: calc(var(--nav-h) + 8px); width: auto; }
 }
+.miniStone { background: radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255, 255, 255, 0) 72%), var(--mist); color: var(--ink); }
+.miniStoneIcon { width: 70%; height: 70%; }

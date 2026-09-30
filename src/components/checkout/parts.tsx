@@ -16,6 +16,8 @@ import { formatCarat, metals, productById, productHref, renderSrc, styleRef } fr
 import { RING_SIZES, SIZED_CATEGORIES, beforeCutoff, caratTotal, pieceCount, removeLine, setNote, setQty, setSize, type CartLine } from "@/lib/cart";
 import { useWishlist } from "@/components/store/useWishlist";
 import { groundStyle } from "@/content/grounds";
+import { measurements, shipment, stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
+import ShapeIcon from "@/components/brand/ShapeIcon";
 import s from "./checkout.module.css";
 
 export const STEPS = ["Cart", "Store details", "Payment", "Review", "Confirmation"] as const;
@@ -41,9 +43,55 @@ export function Steps({ at }: { at: number }) {
   );
 }
 
+function StoneLine({ line, editable }: { line: CartLine; editable: boolean }) {
+  const st = line.stoneId ? stoneById(line.stoneId) : undefined;
+  if (!st) return null;
+  return (
+    <article className={s.line} data-compact={editable ? undefined : "true"}>
+      <Link href={`/diamonds?stone=${st.id}`} className={`${s.lineThumb} ${s.stoneThumb}`} aria-label={stoneTitle(st)}>
+        <ShapeIcon shape={st.shape} detail className={s.stoneIcon} />
+      </Link>
+      <div className={s.lineBody}>
+        <div className={s.lineTop}>
+          <div className={s.lineTitle}>
+            <Link href={`/diamonds?stone=${st.id}`} className={s.lineName}>
+              {stoneTitle(st)}
+            </Link>
+            <span className={s.lineDetail}>
+              Loose lab grown diamond · Stock {st.id} · {st.lab} {st.certificate}
+            </span>
+          </div>
+          <span className={s.linePrice}>
+            <span>Dealer price</span>
+            On confirmation
+          </span>
+        </div>
+        <div className={s.lineSpecs}>
+          <span className={s.specChip}>{stoneGrade(st)}</span>
+          {st.cut && <span className={s.specChip}>{st.cut} cut</span>}
+          <span className={s.specChip}>{measurements(st)}</span>
+          <span className={s.specChip}>{shipment(st)}</span>
+          {!editable && <span className={s.specChip}>Qty 1</span>}
+        </div>
+        {editable && (
+          <div className={s.lineActions}>
+            <span className={s.oneOfAKind}>One of a kind, quantity 1</span>
+            <span className={s.lineLinks}>
+              <button type="button" className={s.textBtn} onClick={() => removeLine(line.key)}>
+                Remove
+              </button>
+            </span>
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
 export function LineItem({ line, editable = true }: { line: CartLine; editable?: boolean }) {
-  const p = productById(line.productId);
   const { has, toggle } = useWishlist();
+  if (line.stoneId) return <StoneLine line={line} editable={editable} />;
+  const p = productById(line.productId);
   if (!p) return null;
   const metal = metals.find((m) => m.id === line.metal);
   const ref = styleRef(p);
@@ -134,6 +182,22 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
       {compact && (
         <ul className={s.summaryLines}>
           {lines.map((l) => {
+            const st = l.stoneId ? stoneById(l.stoneId) : undefined;
+            if (st)
+              return (
+                <li key={l.key}>
+                  <span className={`${s.summaryThumb} ${s.stoneThumb}`}>
+                    <ShapeIcon shape={st.shape} className={s.stoneIconSmall} />
+                    <span className={s.summaryQty}>1</span>
+                  </span>
+                  <span className={s.summaryName}>
+                    {stoneTitle(st)}
+                    <span>
+                      {stoneGrade(st)}, stock {st.id}
+                    </span>
+                  </span>
+                </li>
+              );
             const p = productById(l.productId);
             if (!p) return null;
             return (

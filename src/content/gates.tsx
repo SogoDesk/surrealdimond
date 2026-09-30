@@ -2,22 +2,6 @@ import type { GatePageProps } from "@/components/pages/GatePage";
 
 /** Holding pages until each route's build lands (docs/TASKS.md). Copy stays inside the verified facts. */
 export const gates = {
-  diamonds: {
-    kind: "dealer",
-    eyebrow: "Lab Diamond Search",
-    title: <>Search the stones <em>we grow</em></>,
-    line: "Round to heart, up to 15 carats, with memo and asset pricing for your store. Diamond Search is open to Surreal dealers.",
-    crumbs: [{ label: "Diamonds" }],
-    image: "/media/photos/sb-3984.webp",
-  },
-  madeToOrder: {
-    kind: "dealer",
-    eyebrow: "Made to Order (M2O)",
-    title: <>A diamond grown <em>for one client</em></>,
-    line: "Any shape, in any carat weight or dimensions, with an IGI certificate and a nine touchpoint brochure. Exclusively for Surreal dealers.",
-    crumbs: [{ label: "Diamonds", href: "/diamonds" }, { label: "Made to Order" }],
-    image: "/media/photos/sb-3996.webp",
-  },
   orderForm: {
     kind: "dealer",
     eyebrow: "Jewelry order form",

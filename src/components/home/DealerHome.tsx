@@ -6,7 +6,8 @@
  * pitch. A greeting with the store name and the time of day in New York,
  * quick doors (cart, dashboard, diamond search, custom request,
  * appointment), then three cards: quick reorder from past orders (one click
- * per line, or the whole last order), recently viewed pieces, and the
+ * per line, or the whole last order; loose stones are one of a kind and never
+ * reorder), recently viewed pieces, and the
  * account card (cart, delivery countdown, last order). Signed out it renders
  * nothing.
  */
@@ -50,6 +51,7 @@ export default function DealerHome() {
   const seen = new Set<string>();
   const reorderLines = orders
     .flatMap((o) => o.lines)
+    .filter((l) => !l.stoneId)
     .filter((l) => (seen.has(l.key) ? false : (seen.add(l.key), true)))
     .slice(0, 4);
   const viewed = recent.map((id) => productById(id)).filter((p): p is Product => Boolean(p)).slice(0, 4);
@@ -98,7 +100,7 @@ export default function DealerHome() {
             <div className={s.cardHead}>
               <p className={s.cardTitle}>Quick reorder</p>
               {last && (
-                <button type="button" className={s.textBtn} onClick={() => last.lines.forEach(reorder)}>
+                <button type="button" className={s.textBtn} onClick={() => last.lines.filter((l) => !l.stoneId).forEach(reorder)}>
                   Reorder all of {last.number}
                 </button>
               )}
