@@ -311,7 +311,7 @@ export default function MadeToOrder({ nextId = "lookbook", className = "" }: Mad
               inception to final inspection, then set it for you or send it to you loose.
             </Reveal>
             <Reveal effect="fade-up" delay={0.3} className={styles.cta}>
-              <Button href="/made-to-order" variant="primary" arrow>
+              <Button href="/diamonds/made-to-order" variant="primary" arrow>
                 Start a made to order diamond
               </Button>
               <Button href="/contact" variant="secondary">

@@ -2,7 +2,7 @@
 
 /**
  * The site chrome in one client component: the fixed header (with ThemeSync
- * inside it), the mobile menu sheet and the custom cursor. Drop it once in
+ * inside it) and the mobile menu sheet. Drop it once in
  * the root layout or page, before the page content, so the header's #site-logo
  * exists when the preloader looks for it.
  */
@@ -13,7 +13,6 @@ import type { Theme } from "@/components/ui/Section";
 import { brand } from "@/content/site";
 import Header, { PRIMARY_LINKS, RETAILERS_LINK, SEARCH_LINK, VISIT_LINK, type ChromeLink } from "./Header";
 import MobileMenu from "./MobileMenu";
-import Cursor from "./Cursor";
 
 const SECONDARY_LINKS: ChromeLink[] = [SEARCH_LINK, RETAILERS_LINK, VISIT_LINK, { label: "Instagram", href: brand.social.instagram }];
 
@@ -40,7 +39,6 @@ export default function SiteChrome({ initialTheme = "dark" }: SiteChromeProps) {
     <>
       <Header menuOpen={menuOpen} onMenuToggle={toggle} initialTheme={initialTheme} />
       <MobileMenu open={menuOpen} onClose={close} links={PRIMARY_LINKS} secondary={SECONDARY_LINKS} visitHref={VISIT_LINK.href} />
-      <Cursor />
     </>
   );
 }

@@ -122,7 +122,7 @@ function Frame({ state, shimmer = false }: { state: "live" | StageKey; shimmer?:
   );
 }
 
-export default function Custom({ nextId = "education", className = "" }: CustomProps) {
+export default function Custom({ nextId = "visit", className = "" }: CustomProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const frameColRef = useRef<HTMLDivElement>(null);

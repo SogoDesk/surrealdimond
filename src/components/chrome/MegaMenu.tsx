@@ -60,8 +60,8 @@ const COLUMNS: MegaColumn[] = [
   {
     title: "Stones",
     items: [
-      { label: "Loose Diamonds", href: shopHref("Loose Diamonds", "/diamonds"), render: DEFAULT_RENDER },
-      { label: "Made to Order", href: shopHref("Made to Order Diamonds", "/made-to-order"), render: DEFAULT_RENDER },
+      { label: "Diamond Search", href: shopHref("Diamond Search", "/diamonds"), render: DEFAULT_RENDER },
+      { label: "Made to Order", href: shopHref("Made to Order", "/diamonds/made-to-order"), render: DEFAULT_RENDER },
     ],
   },
 ];

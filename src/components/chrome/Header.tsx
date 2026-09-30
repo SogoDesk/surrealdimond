@@ -5,7 +5,7 @@
  *
  * Left: the live line mark at 28px and the SURREAL wordmark inside #site-logo,
  * the element the preloader Flips its mark into. Centre (from 1024px): the six
- * primary links, with Shop opening the mega menu on hover intent. Right: Search
+ * primary links, with Jewelry opening the mega menu on hover intent. Right: Search
  * diamonds, Retailers, the Book a visit pill, the Bag and, below 1024px, the
  * circle Menu button. Colour follows the page through data-theme, which
  * ThemeSync writes on the header as chapters cross the bar.
@@ -40,17 +40,17 @@ const hrefFor = (label: string, fallback: string) => nav.find((n) => n.label ===
 
 /** Centre links in the order the specification names them. */
 export const PRIMARY_LINKS: ChromeLink[] = [
-  { label: "Shop", href: hrefFor("Jewelry", "/jewelry"), chapters: ["collections", "lookbook", "foreveryone"] },
-  { label: "Engagement", href: hrefFor("Engagement", "/jewelry/engagement"), chapters: ["engagement"] },
-  { label: "Made to Order", href: hrefFor("Made to Order", "/made-to-order"), chapters: ["made-to-order"] },
+  { label: "Jewelry", href: hrefFor("Jewelry", "/jewelry"), chapters: ["engagement", "collections", "lookbook", "foreveryone"] },
+  { label: "Diamonds", href: hrefFor("Diamonds", "/diamonds"), chapters: ["made-to-order"] },
   { label: "Legacy", href: hrefFor("Legacy", "/legacy"), chapters: ["legacy"] },
   { label: "Custom", href: hrefFor("Custom", "/custom"), chapters: ["custom"] },
-  { label: "Education", href: hrefFor("Education", "/education"), chapters: ["education"] },
+  { label: "About", href: hrefFor("About", "/about"), chapters: ["time"] },
+  { label: "Contact", href: hrefFor("Contact", "/contact"), chapters: ["visit"] },
 ];
 
 /** Right cluster and mobile secondary links. */
 export const SEARCH_LINK: ChromeLink = { label: "Search diamonds", href: hrefFor("Diamonds", "/diamonds") };
-export const RETAILERS_LINK: ChromeLink = { label: "Retailers", href: "/dashboard" };
+export const RETAILERS_LINK: ChromeLink = { label: "Retailers", href: hrefFor("Retailers", "/dashboard") };
 export const VISIT_LINK: ChromeLink = { label: "Book a visit", href: hrefFor("Contact", "/contact") };
 
 export interface HeaderProps {
@@ -202,7 +202,7 @@ export default function Header({ menuOpen, onMenuToggle, initialTheme = "dark", 
 
         <nav className={styles.center} aria-label="Primary">
           {PRIMARY_LINKS.map((item) => {
-            const isShop = item.label === "Shop";
+            const isShop = item.label === "Jewelry";
             const link = (
               <Link
                 key={item.label}
@@ -241,7 +241,7 @@ export default function Header({ menuOpen, onMenuToggle, initialTheme = "dark", 
                     setShopOpen((o) => !o);
                   }}
                 >
-                  {shopOpen ? "Close the Shop menu" : "Open the Shop menu"}
+                  {shopOpen ? "Close the Jewelry menu" : "Open the Jewelry menu"}
                 </button>
               </span>
             );

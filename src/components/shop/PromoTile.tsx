@@ -12,7 +12,7 @@ import LineMark from "@/components/brand/LineMark";
 import { LINE_MARK_ASPECT } from "@/components/brand/lineMarkPaths";
 import s from "./shop.module.css";
 
-const HREF = "/made-to-order";
+const HREF = "/diamonds/made-to-order";
 
 export default function PromoTile() {
   return (

@@ -1,6 +1,6 @@
 # Surreal Diamond website
 
-The new homepage experience for Surreal Diamond (surrealdiamond.com): a lab-grown diamond grower and fine jewelry house in New York. The design direction, section specifications and motion language are documented in [DESIGN.md](DESIGN.md).
+The website for Surreal Diamond (surrealdiamond.com): a lab-grown diamond grower and fine jewelry house in New York. Phase 1 scope and the page structure are in [docs/CONTEXT.md](docs/CONTEXT.md), progress in [docs/TASKS.md](docs/TASKS.md), and the design direction, section specifications and motion language in [DESIGN.md](DESIGN.md).
 
 ## Stack
 
@@ -8,7 +8,6 @@ The new homepage experience for Surreal Diamond (surrealdiamond.com): a lab-grow
 - Tailwind CSS v4 with the brand tokens declared in `src/app/globals.css`
 - GSAP 3.15 (ScrollTrigger, SplitText, DrawSVG, Flip, Observer, CustomEase) registered once in `src/lib/gsap.ts`
 - Lenis smooth scrolling (`src/components/providers/SmoothScroll.tsx`), which drives ScrollTrigger from the same ticker
-- three.js with React Three Fiber and drei for the single WebGL element on the page, the hero diamond
 - Fonts through `next/font/google`: Italiana (display), Cormorant Garamond (editorial), Jost (interface)
 
 ## Getting started
@@ -25,14 +24,13 @@ The site runs at http://localhost:3000 by default. `npm run build` produces the 
 ```
 src/app                 layout, homepage, global styles, icons and social images
 src/components/brand    the logo line mark (procedural SVG), wordmark and lockup
-src/components/chrome   header, mega menu, mobile menu, preloader, cursor, contact drawer
+src/components/chrome   header, mega menu, mobile menu, preloader, contact drawer
 src/components/motion   reusable scroll and reveal primitives (sequence, parallax, horizontal scroll, split text)
 src/components/sections one component per homepage chapter, in page order
-src/components/three    the procedural round brilliant and its lazy WebGL scene
 src/components/ui       buttons, eyebrow labels, section wrapper
 src/content             verified brand facts, navigation, footer links and the product catalog
 src/hooks               media query and viewport hooks
-src/lib                 GSAP registration, scroll helpers, diamond geometry
+src/lib                 GSAP registration, scroll helpers
 public/media            processed photography, renders, turntable videos and frame sequences
 ```
 
@@ -50,10 +48,6 @@ The contact drawer submits through a server action in `src/app/actions/contact.t
 
 ## Accessibility and motion
 
-Every chapter respects `prefers-reduced-motion`: pinned stages become static, scrubbed sequences show their final frame and reveals become short fades. Pinned stages carry skip links, the custom cursor only appears on fine pointers, and all interactive elements keep visible focus styles.
-
-## Credits
-
-The diamond model in `public/media/models/diamond.glb` is "Diamond" by RBG_illustrations on Sketchfab (https://sketchfab.com/3d-models/diamond-7acd98d5c8df4e04a73ea5d5a81c8911), licensed CC BY 4.0. That license requires a visible credit wherever the model is used, so either keep a credit line on the site or replace the model with one the client owns before launch.
+Every chapter respects `prefers-reduced-motion`: pinned stages become static, scrubbed sequences show their final frame and reveals become short fades. Pinned stages carry skip links and all interactive elements keep visible focus styles.
 
 ## End

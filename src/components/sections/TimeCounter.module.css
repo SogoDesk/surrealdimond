@@ -1,7 +1,7 @@
 /* 02. Just weeks: pinned counter chapter (see TimeCounter.tsx and DESIGN.md) */
 
 .section {
-  /* Rises over the held hero stage as the opening stone glides across. */
+  /* Rises over the held hero stage. */
   z-index: 2;
   background: var(--studio);
   color: var(--porcelain);
@@ -38,7 +38,7 @@
 
 .stage {
   position: relative;
-  z-index: 2; /* above the opening stone layer, which sits at 1 inside this chapter */
+  z-index: 2;
   height: 100vh;
   min-height: 720px;
   overflow: hidden;
@@ -276,12 +276,7 @@
 }
 
 
-/* Desktop: the figure lives in the right half so the opening stone owns the left. */
 @media (min-width: 768px) {
-  .center {
-    left: 34vw;
-    right: var(--gutter);
-  }
   .counter {
     font-size: clamp(56px, 8.8vw, 136px);
   }

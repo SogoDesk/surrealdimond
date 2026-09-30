@@ -15,7 +15,7 @@ import { prefersReducedMotion } from "@/hooks/useMedia";
 import s from "./shop.module.css";
 
 const PROGRAMS = [
-  { id: "made-to-order", eyebrow: "Made to Order", line: "Grown specifically for you.", link: "Made to order diamonds", href: "/made-to-order" },
+  { id: "made-to-order", eyebrow: "Made to Order", line: "Grown specifically for you.", link: "Made to order diamonds", href: "/diamonds/made-to-order" },
   { id: "legacy", eyebrow: "Diamond Legacy", line: "One seed line, every generation.", link: "Diamond Legacy", href: "/legacy" },
   { id: "custom", eyebrow: "Custom", line: "From a sketch to a setting.", link: "Custom jewelry", href: "/custom" },
 ];

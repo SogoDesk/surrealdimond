@@ -10,7 +10,6 @@ import Lookbook from "@/components/sections/Lookbook";
 import Foreveryone from "@/components/sections/Foreveryone";
 import Legacy from "@/components/sections/Legacy";
 import Custom from "@/components/sections/Custom";
-import Education from "@/components/sections/Education";
 import Visit from "@/components/sections/Visit";
 import Trade from "@/components/sections/Trade";
 import Footer from "@/components/sections/Footer";
@@ -39,7 +38,6 @@ export default function Home() {
         <Foreveryone />
         <Legacy />
         <Custom />
-        <Education />
         <Visit />
         <Trade />
         <Footer />

@@ -30,21 +30,21 @@ export const brand = {
   },
 } as const;
 
+/** The Phase 1 page set (docs/CONTEXT.md). */
 export const nav = [
-  { label: "Diamonds", href: "/diamonds" },
   { label: "Jewelry", href: "/jewelry" },
-  { label: "Engagement", href: "/jewelry/engagement" },
-  { label: "Made to Order", href: "/made-to-order" },
+  { label: "Diamonds", href: "/diamonds" },
+  { label: "Made to Order", href: "/diamonds/made-to-order" },
   { label: "Legacy", href: "/legacy" },
   { label: "Custom", href: "/custom" },
-  { label: "Education", href: "/education" },
-  { label: "Company", href: "/company" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Retailers", href: "/dashboard" },
 ] as const;
 
 export const footerColumns = [
   {
-    title: "Shop",
+    title: "Jewelry",
     links: [
       { label: "Engagement Rings", href: "/jewelry/engagement" },
       { label: "Wedding Bands", href: "/jewelry/wedding-bands" },
@@ -54,35 +54,30 @@ export const footerColumns = [
       { label: "Rings", href: "/jewelry/rings" },
       { label: "Bracelets", href: "/jewelry/bracelets" },
       { label: "Sterling Silver", href: "/jewelry/sterling-silver" },
-      { label: "Loose Diamonds", href: "/diamonds" },
+    ],
+  },
+  {
+    title: "Diamonds",
+    links: [
+      { label: "Diamond Search", href: "/diamonds" },
+      { label: "Made to Order", href: "/diamonds/made-to-order" },
+      { label: "Diamond Legacy", href: "/legacy" },
     ],
   },
   {
     title: "Surreal",
     links: [
-      { label: "Made to Order Diamonds", href: "/made-to-order" },
-      { label: "Diamond Legacy", href: "/legacy" },
-      { label: "Custom Jewelry", href: "/custom" },
-      { label: "Our Company", href: "/company" },
-      { label: "Our Team", href: "/company/team" },
-      { label: "Journal", href: "/journal" },
-    ],
-  },
-  {
-    title: "Learn",
-    links: [
-      { label: "Why CVD Lab Grown", href: "/education/why-cvd" },
-      { label: "History of Lab Grown Diamonds", href: "/education/history" },
-      { label: "Diamond Guide", href: "/education/diamond-guide" },
-      { label: "Frequently Asked Questions", href: "/education/faq" },
+      { label: "About Us", href: "/about" },
+      { label: "Company History", href: "/about#history" },
+      { label: "Custom Portal", href: "/custom" },
+      { label: "Inquiries and Contact", href: "/contact" },
     ],
   },
   {
     title: "Trade",
     links: [
       { label: "Retailer Dashboard", href: "/dashboard" },
-      { label: "Become a Retailer", href: "/contact?topic=retail" },
-      { label: "Contact", href: "/contact" },
+      { label: "Become a Retailer", href: "/contact?topic=trade" },
     ],
   },
 ] as const;

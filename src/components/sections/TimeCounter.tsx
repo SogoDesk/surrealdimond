@@ -20,7 +20,6 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import { registerGsap, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion, useBreakpoint, useReducedMotion } from "@/hooks/useMedia";
 import { scrollToTarget } from "@/lib/scroll";
-import OpeningStone from "./OpeningStone";
 import styles from "./TimeCounter.module.css";
 
 const START = 1_500_000_000;
@@ -226,7 +225,6 @@ export default function TimeCounter({ nextId = "engagement" }: TimeCounterProps)
 
   return (
     <Section id="time" theme="dark" label="Just weeks" className={styles.section}>
-      <OpeningStone />
       <a href={`#${nextId}`} className={styles.skip} onClick={skip} data-cursor="link">
         Skip to the next section
       </a>
@@ -289,8 +287,8 @@ export default function TimeCounter({ nextId = "engagement" }: TimeCounterProps)
               ecological damage.
             </p>
             <div data-cta>
-              <Button variant="tertiary" href="/education/why-cvd">
-                How a diamond is grown
+              <Button variant="tertiary" href="/about">
+                Our story
               </Button>
             </div>
           </div>
