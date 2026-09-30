@@ -2,7 +2,7 @@
 
 Every numbered item in the BRD (v1.1 draft for sign-off, 18 September 2026) with where the build stands. Phase 1 only: Phase 2 (Enterprise Level Integration and the invoicing and payment portal) is out of this list. Scope and background are in [CONTEXT.md](CONTEXT.md); the work plan is in [TASKS.md](TASKS.md).
 
-Status: **Done** built and checked in the browser · **Partial** built in part or on preview data · **To do** not started · **Waiting** blocked on a client input (C-) or answer (Q-) · **Conflict** built differently from the BRD, needs a change · **Set aside** not pursued for now by decision.
+Status: **Done** built and checked in the browser · **In progress** being built now · **Partial** built in part or on preview data · **To do** not started · **Waiting** blocked on a client input (C-) or answer (Q-) · **Conflict** built differently from the BRD, needs a change · **Set aside** not pursued for now by decision.
 
 Last reviewed: 30 September 2026.
 
@@ -65,12 +65,12 @@ Last reviewed: 30 September 2026.
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
 | R-25 | Reorder an exact previous item in a couple of clicks | Partial | Whole-order Reorder on the dashboard home and quick reorder per line on the homepage band; order history with per-line Reorder comes with the Orders page (key screen 7) |
-| R-26 | Trade show appointments | Waiting (Q9) | Request form or time-slot booking |
-| R-27 | Payment methods managed by the dealer (invoice payment in Phase 2) | To do | |
-| R-28 | Open memo items report from existing data | To do | Live memo table mapped (memo date, memo number, stock number, price, shape, size, cut, color, clarity) |
+| R-26 | Trade show appointments | Waiting (Q9) | Dashboard section with a holding page (`/dashboard/trade-shows`) pointing to Schedule an appointment; request form or time-slot booking once Q9 is answered |
+| R-27 | Payment methods managed by the dealer (invoice payment in Phase 2) | To do | Dashboard section with a holding page (`/dashboard/payments`); build with the processor details (C-10) |
+| R-28 | Open memo items report from existing data | In progress | Live memo table mapped (memo date, memo number, stock number, price, shape, size, cut, color, clarity); building `/dashboard/memo` now |
 | R-29 | Dashboard search integrates Surreal's existing search | Partial / Waiting (C-06) | Dashboard search built: sections, the dealer's orders, memo and requests by number, catalog by name or style, stones by stock ID; swap the source to Surreal's search when C-06 arrives |
 | R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer homepage band, dealer pricing notes, cart and checkout know the store; Retailer Dashboard home with the store's figures, orders, memo, requests and recently viewed |
-| R-31 | Remaining subpages (about 10) | Waiting (Q5) | Live dashboard has 15 tiles, mapped in CONTEXT.md |
+| R-31 | Remaining subpages (about 10) | Waiting (Q5) | Every live tile has a dashboard section; the ones in design open a holding page listing what they will hold (`src/content/dashboard.ts`) |
 
 ## 5.8 Admin console
 
@@ -87,7 +87,7 @@ Last reviewed: 30 September 2026.
 |---|---|---|---|
 | B-01 | Every stone is one of a kind; gone from availability the moment an order completes | Partial (preview) | Stones are quantity one in the cart and leave the list once ordered or on memo; enforced server side with the inventory service |
 | B-02 | An article never shows a metal color it does not exist in | Done | With R-12 |
-| B-03 | Each dealer's logged-in experience reflects their own account and history | Partial | Preview session; real accounts with the auth service |
+| B-03 | Each dealer's logged-in experience reflects their own account and history | Partial | Homepage band, dashboard, cart, checkout and forms use the dealer's store, orders, memo and requests; preview session until real accounts with the auth service |
 | B-04 | Access by roles, no approval step | To do | Roles below; page access from C-05 |
 | B-05 | Card, ACH and wire, through Surreal's existing card processor | Partial / Waiting (Q2, Q3, C-10) | Checkout offers credit or debit card, ACH and wire only; check and Zelle stay offline on the dashboard's Payment Methods page; the processor connects once named |
 | B-06 | Out-of-stock display rule | Waiting (Q1) | |
@@ -115,7 +115,7 @@ Last reviewed: 30 September 2026.
 | Milestone | Due | Status |
 |---|---|---|
 | M1 Scope lock and architecture baseline: screen list, data model, working environments | End of build week 2 | To do |
-| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and most key screens exist as working pages (list in TASKS.md) |
+| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and seven of ten key screens built as working pages; Orders and memo in progress, then the admin console shell; Main Door waits on Q6 |
 | M3 Feature complete on staging for UAT, code freeze | End of build week 10 | To do |
 | M4 Go-live, handover documentation, operations runbook | End of build week 12 | To do |
 

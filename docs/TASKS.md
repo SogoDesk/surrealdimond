@@ -6,7 +6,7 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` waiting on a clien
 
 ## Next up
 
-In order. Block A (the BRD fixes to built screens) is done; block B completes the ten key screens for M2 while the client inputs arrive.
+In order. Block A (the BRD fixes to built screens) is done. Block B completes the ten key screens for M2 while the client inputs arrive: seven are built, screen 7 is in progress, then the admin console shell; Main Door waits on Q6.
 
 ### A. Bring built screens in line with the BRD
 
@@ -29,7 +29,7 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 | 4 | Custom Portal request form, with the live preview demo (R-23) | [x] demo awaits approval (A5) |
 | 5 | Inquiries and Contact | [x] emails wait on M1 |
 | 6 | Retailer Dashboard home (personalized) | [x] |
-| 7 | Open memo items report and Reorder | [ ] |
+| 7 | Orders with Reorder, and the open memo items report | [~] |
 | 8 | Cart and checkout | [x] |
 | 9 | Log in and Main Door | [~] log in done; Main Door waits on Q6 |
 | 10 | Admin console: inventory, featuring, banners | [ ] |
@@ -44,7 +44,7 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 - [x] Contact page (R-24): inquiry type selector, routing per type, acknowledgement to the sender; schedule an appointment
 - [ ] Confirm the inquiry routing (type to team) with Surreal (C-05) and connect the team inboxes and acknowledgement email (M1, C-14)
 - [x] Dashboard home: greeting, open orders, memo count, recent items, tiles for the subpages. Dashboard shell with the sidebar (the live 15 tiles regrouped), order-level Reorder, memo and program request panels, dashboard search (R-29, local until C-06), holding pages for the sections still in design
-- [ ] Open memo report (R-28) and order history with Reorder (R-25)
+- [~] Open memo report (R-28) and order history with Reorder (R-25)
 - [ ] Admin console shell: inventory table, featured and hot deal toggles, default sort per page, banner manager
 - [?] Main Door page (Q6)
 - [?] Trade show appointments (Q9)
@@ -111,3 +111,11 @@ Dealer preview
 
 - [x] Log in page with the Apply panel; preview session (any email or the demo dealer)
 - [x] Cart, mini cart, checkout (store details, payment, review, confirmation), orders kept in the browser; no prices until the price list is connected
+
+Key screens, 30 Sept 2026
+
+- [x] Diamond page on a 260-stone sample feed with Quick View, compare, memo requests and the M2O request (`/diamonds`, `/diamonds/made-to-order`)
+- [x] Diamond story bands under the search, with labelled placeholders for Surreal's assets
+- [x] Custom Portal with the live preview demo (`/custom`)
+- [x] Inquiries and Contact with seven routed inquiry types and the acknowledgement; the contact drawer shares them (`/contact`)
+- [x] Retailer Dashboard shell and home, dashboard search, holding pages for sections in design (`/dashboard`, `/dashboard/*`)
