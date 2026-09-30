@@ -114,7 +114,7 @@ Last reviewed: 30 September 2026.
 
 | Milestone | Due | Status |
 |---|---|---|
-| M1 Scope lock and architecture baseline: screen list, data model, working environments | End of build week 2 | To do |
+| M1 Scope lock and architecture baseline: screen list, data model, working environments | End of build week 2 | In progress: architecture proposal and data model in ARCHITECTURE.md, decisions D1 to D8 awaiting approval; screen list waits on C-05 |
 | M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and nine of ten key screens built as working pages; Main Door waits on Q6 |
 | M3 Feature complete on staging for UAT, code freeze | End of build week 10 | To do |
 | M4 Go-live, handover documentation, operations runbook | End of build week 12 | To do |

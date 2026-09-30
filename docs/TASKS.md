@@ -53,11 +53,13 @@ In order. Block A (the BRD fixes to built screens) is done. Block B completes th
 
 ## M1: scope lock and architecture baseline (end of build week 2)
 
+The proposal is in [ARCHITECTURE.md](ARCHITECTURE.md); decisions D1 to D8 wait on approval.
+
 - [ ] Screen list agreed with Surreal (from the checklist and C-05)
-- [ ] Data model: dealers and organizations, users and roles, articles and variants (metals, default metal, images), divisions, collections, matching sets, diamonds (attribute list C-04), memo items, carts, orders, payments, inquiries, content pages, banners, featured lists
-- [ ] Managed services chosen and set up in Surreal's name (A7, A9): hosting, authentication with roles, database, content management, email delivery, file storage
-- [ ] Environments: development, staging for UAT, production
-- [ ] Repository, continuous integration, preview deployments
+- [~] Data model drafted in ARCHITECTURE.md section 6: dealers and organizations, users and roles, articles and variants (metals, default metal, images), divisions, collections, matching sets, diamonds (attribute list C-04), memo items, carts, orders, payments, inquiries, content pages, banners, featured lists
+- [~] Managed services proposed (Vercel, Neon, Clerk, Vercel Blob, Resend, Sanity, Sentry; commerce D1 after C-10); set up in Surreal's name (A7, A9) once approved
+- [~] Environments proposed: local, preview per pull request, staging for UAT, production
+- [~] Repository, continuous integration, preview deployments proposed; repository moves to Surreal's GitHub (D8)
 - [ ] Access matrix implemented from C-05 (B-04)
 - [?] RightClick method agreed on the provider call (C-07); import path (likely Excel) designed
 - [?] Existing search connection (C-06)
