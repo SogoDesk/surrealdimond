@@ -76,6 +76,8 @@
   overflow-x: auto;
   scrollbar-width: none;
   scroll-snap-type: x proximity;
+  /* Snapping aligns items to the snapport, which ignores padding: this keeps the first circle on the page gutter. */
+  scroll-padding-inline: var(--inset);
 }
 .railList::-webkit-scrollbar { display: none; }
 .railList > li { flex: 0 0 auto; scroll-snap-align: start; }
@@ -569,3 +571,44 @@
 .drawerClear { height: 48px; padding: 0 22px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ink); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
 .drawerApply { flex: 1 1 auto; height: 48px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
 .drawerApply:hover { background: #163548; }
+
+/* Campaign photo tiles in the grid */
+.photoCell { min-width: 0; min-height: 280px; }
+.photoCell[data-span="2"] { grid-column: span 2; }
+.photoLink {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--hairline);
+  color: var(--porcelain);
+}
+.photoImage { object-fit: cover; z-index: -2; transition: transform 1.4s var(--ease-surreal); }
+.photoLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(10, 11, 12, 0) 45%, rgba(10, 11, 12, 0.62) 100%);
+}
+.photoLink:hover .photoImage { transform: scale(1.05); }
+.photoLink:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+.photoCopy { position: absolute; left: 18px; right: 64px; bottom: 16px; display: flex; flex-direction: column; gap: 4px; }
+.photoKicker { font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.85; }
+.photoTitle { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: clamp(1.375rem, 1.6vw, 1.75rem); line-height: 1.1; }
+.photoGo {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(242, 244, 246, 0.7);
+  transition: background-color 0.4s var(--ease-surreal), color 0.4s var(--ease-surreal), transform 0.5s var(--ease-surreal);
+}
+.photoLink:hover .photoGo { background: var(--porcelain); color: var(--ink); transform: rotate(45deg); }

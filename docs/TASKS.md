@@ -63,6 +63,9 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 - [ ] Listing filters from the live catalog once the full 375 piece catalog is imported: type and subtype, style, collection, material; sort Newest
 - [x] Product page `/jewelry/[category]/[product]` for every piece: two-up gallery with the turntable, reference from the render file name, dealer price box, metal, total carat weight, ring size, quantity, special instructions, Log in to add to cart, Ask a question, share, wishlist, service notes, details cards, similar designs, sticky action bar
 - [~] Wishlist: saved in this browser for now (`useWishlist`); moves to the dealer account with auth
+- [x] Campaign photographs through the store grid in a six row rhythm (`content/editorial.ts`), fewer on phones
+- [x] Product page, second pass: gallery with campaign views and a full screen viewer, next day delivery countdown (4:00pm EST cutoff), program banners, details tabs (Product details, Dealer pricing) with accordions beside the image, See it in New York band, You may also like (All and Similar designs), Complete the look, Explore by center stone or metal, Dealer questions from the live site
+- [x] The Surreal Assurance before the footer on home, store and product pages
 - [ ] Jewelry order form (bulk by style number)
 
 ## 5. Diamond Search (dealer)

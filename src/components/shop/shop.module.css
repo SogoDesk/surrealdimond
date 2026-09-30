@@ -1,4 +1,4 @@
-/* Shared shop pieces: the made to order placeholder (Placeholder.tsx) and the programs band (ProgramsBand.tsx). */
+/* Shared shop pieces: the made to order placeholder (Placeholder.tsx). */
 
 .placeholder {
   position: absolute;
@@ -35,43 +35,3 @@
 }
 .placeholderStage .placeholderMark { width: 24%; max-width: 100px; margin-bottom: 16px; }
 .placeholderStage .placeholderLine { font-size: 1.75rem; line-height: 1.1; }
-
-.programs {
-  padding: 64px var(--gutter) 128px;
-}
-.programGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.program {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 32px;
-  min-height: 280px;
-  padding: 36px 32px;
-  background: var(--paper);
-  box-shadow: 0 0 0 1px var(--hairline);
-}
-.programCopy {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.programLine {
-  margin: 0;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
-  font-size: 1.75rem;
-  line-height: 1.1;
-  color: var(--fg);
-}
-@media (max-width: 767px) {
-  .programs { padding: 40px var(--gutter) 96px; }
-  .programGrid { grid-template-columns: minmax(0, 1fr); }
-  .program { min-height: 0; padding: 28px 24px; }
-}

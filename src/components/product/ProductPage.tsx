@@ -1,51 +1,44 @@
 "use client";
 
 /**
- * Product page, on Tanishq's product pattern in the Surreal system
- * (docs/CONTEXT.md, "UX reference"). Left: the gallery, a two-up grid of
- * square views on white (the turntable first when the piece has one, then
- * the renders); on phones a swipe row with a counter. Right, held in view
- * while the gallery scrolls: category, name, reference, the dealer price box,
- * the selectors (metal, total carat weight, ring size where it applies,
- * quantity), special instructions, the two doors (Log in to add to cart, Ask
- * a question) and service notes. Then the details panel, similar designs,
- * the programs band and the footer. A slim action bar rises from the bottom
- * once the main doors scroll out of view.
+ * Product page, on Tanishq's product page in the Surreal system
+ * (docs/CONTEXT.md, "UX reference"), top to bottom:
  *
- * The metal and carat arrive from the card through ?metal=&ct= and are read
- * inside a Suspense boundary; the fallback renders the piece's defaults.
+ *   1. Gallery (Gallery.tsx) and, held beside it, the buying column: name,
+ *      reference, wishlist and share, the dealer price box, metal, total
+ *      carat weight, ring size, quantity, special instructions, the doors,
+ *      the delivery countdown and service notes.
+ *   2. Program banners: grow the center stone to order, or go custom.
+ *   3. Jewelry details: Product details and Dealer pricing tabs, the
+ *      accordions beside the piece's image.
+ *   4. See it in person: the New York office band.
+ *   5. You may also like: All designs and Similar designs, five across.
+ *   6. Complete the look: a campaign photograph and pieces from other
+ *      categories.
+ *   7. Explore by center stone (or by metal where pieces have no center).
+ *   8. Dealer questions, answered from the live dealer site.
+ *   9. The Surreal Assurance, then the footer.
+ *
+ * A slim action bar rises from the bottom once the main doors scroll away.
+ * The metal and carat arrive from the card through ?metal=&ct=, read inside
+ * a Suspense boundary whose fallback renders the piece's defaults.
  */
 
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer, { openContactDrawer } from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
-import ProgramsBand from "@/components/shop/ProgramsBand";
-import Placeholder from "@/components/shop/Placeholder";
+import Assurance from "@/components/brand/Assurance";
 import { defaultSelection, renderForSelection, type PieceSelection } from "@/components/shop/filters";
-import StoreCard from "@/components/store/StoreCard";
 import { useWishlist } from "@/components/store/useWishlist";
-import {
-  caratOptions,
-  categories,
-  categoryLabel,
-  formatCarat,
-  metals,
-  productById,
-  productMetals,
-  productViews,
-  products,
-  renderSrc,
-  shapes,
-  styleRef,
-  videoSrc,
-  type Metal,
-  type Product,
-} from "@/content/catalog";
+import { caratOptions, categoryLabel, formatCarat, metals, productById, renderSrc, styleRef, type Metal, type Product } from "@/content/catalog";
 import { account } from "@/content/site";
+import Gallery from "./Gallery";
+import DeliveryCountdown from "./DeliveryCountdown";
+import { CompleteLook, DealerQuestions, Details, Explore, InPerson, ProgramBanners, Similar } from "./ProductSections";
 import s from "./product.module.css";
 
 const SIZED = new Set(["engagement", "wedding-bands", "rings"]);
@@ -62,8 +55,12 @@ export default function ProductPage({ productId }: { productId: string }) {
         <Suspense fallback={<ProductView product={product} params={null} />}>
           <WithParams product={product} />
         </Suspense>
+        <InPerson product={product} />
         <Similar product={product} />
-        <ProgramsBand />
+        <CompleteLook product={product} />
+        <Explore product={product} />
+        <DealerQuestions />
+        <Assurance />
         <Footer />
       </main>
     </>
@@ -85,57 +82,6 @@ function initialSelection(product: Product, params: URLSearchParams | null): Pie
   };
 }
 
-function Gallery({ product, selection }: { product: Product; selection: PieceSelection }) {
-  const primary = renderForSelection(product, selection);
-  const views = useMemo(() => {
-    const rest = productViews(product).filter((v) => v !== primary);
-    return primary ? [primary, ...rest] : rest;
-  }, [product, primary]);
-  const video = product.video ? videoSrc(product.video) : null;
-  const rowRef = useRef<HTMLUListElement>(null);
-  const [at, setAt] = useState(0);
-  const total = views.length + (video ? 1 : 0) + (primary ? 0 : 1);
-
-  useEffect(() => {
-    const row = rowRef.current;
-    if (!row) return;
-    const onScroll = () => setAt(Math.round(row.scrollLeft / Math.max(1, row.clientWidth)));
-    row.addEventListener("scroll", onScroll, { passive: true });
-    return () => row.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <div className={s.gallery}>
-      <ul ref={rowRef} className={s.views} aria-label={`${product.name}, views`}>
-        {!primary && (
-          <li className={`${s.view} ${s.viewWide}`}>
-            <Placeholder metal={selection.metal} carat={selection.carat} size="stage" className={s.viewPlaceholder} />
-          </li>
-        )}
-        {views.slice(0, 1).map((v) => (
-          <li key={v} className={`${s.view} ${primary ? s.viewWide : ""}`}>
-            <Image src={renderSrc(v)} alt={`${product.name}, ${product.detail}`} width={1200} height={1200} sizes="(min-width: 1024px) 50vw, 100vw" priority className={s.viewImage} />
-          </li>
-        ))}
-        {video && (
-          <li className={s.view}>
-            <video className={s.viewVideo} src={video.mp4} poster={video.poster} muted playsInline loop autoPlay preload="metadata" aria-label={`${product.name} turning on the turntable`} />
-            <span className={s.viewTag}>360 turntable</span>
-          </li>
-        )}
-        {views.slice(1, 6).map((v) => (
-          <li key={v} className={s.view}>
-            <Image src={renderSrc(v)} alt="" width={1200} height={1200} sizes="(min-width: 1024px) 25vw, 100vw" className={s.viewImage} />
-          </li>
-        ))}
-      </ul>
-      <span className={s.viewCount} aria-hidden>
-        {Math.min(at + 1, total)} / {total}
-      </span>
-    </div>
-  );
-}
-
 function ProductView({ product, params }: { product: Product; params: URLSearchParams | null }) {
   const [selection, setSelection] = useState<PieceSelection>(() => initialSelection(product, params));
   const [size, setSize] = useState<string>("6.5");
@@ -146,13 +92,11 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
   const doorsRef = useRef<HTMLDivElement>(null);
   const { has, toggle } = useWishlist();
   const ref = styleRef(product);
-  const shape = shapes.find((x) => x.id === product.shape)?.label;
-  const shown = productMetals(product);
   const sized = SIZED.has(product.category);
-  const cat = categories.find((c) => c.id === product.category);
   const next = `/jewelry/${product.category}/${product.id}?metal=${selection.metal}&ct=${selection.carat}`;
   const loginHref = `${account.login}?next=${encodeURIComponent(next)}`;
   const metalLabel = metals.find((m) => m.id === selection.metal)?.label ?? "";
+  const saved = has(product.id);
 
   /* The action bar rises once the main doors have scrolled above the viewport (checked on scroll, so a jump to the top hides it too). */
   useEffect(() => {
@@ -217,9 +161,9 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                 <div className={s.refRow}>
                   {ref && <span className={`${s.ref} tabular`}>Ref. {ref}</span>}
                   <span className={s.refActions}>
-                    <button type="button" className={s.iconBtn} aria-pressed={has(product.id)} onClick={() => toggle(product.id)} aria-label={has(product.id) ? "Remove from wishlist" : "Save to wishlist"}>
+                    <button type="button" className={s.iconBtn} aria-pressed={saved} onClick={() => toggle(product.id)} aria-label={saved ? "Remove from wishlist" : "Save to wishlist"}>
                       <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden>
-                        <path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0 1 10 5.6a3.6 3.6 0 0 1 6.5 2.3c0 4.7-6.5 8.6-6.5 8.6Z" fill={has(product.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+                        <path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0 1 10 5.6a3.6 3.6 0 0 1 6.5 2.3c0 4.7-6.5 8.6-6.5 8.6Z" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
                       </svg>
                     </button>
                     <button type="button" className={s.iconBtn} onClick={share} aria-label="Share this piece">
@@ -327,21 +271,27 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                   Not a Surreal dealer yet? <Link href={account.apply}>Apply for an account</Link>.
                 </p>
 
+                <DeliveryCountdown />
                 <ul className={s.service}>
                   <li>
-                    <ServiceIcon kind="truck" />
+                    <span className={s.serviceIcon} aria-hidden>
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M7 4h10l4 5-9 11L3 9Z" />
+                        <path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5" />
+                      </svg>
+                    </span>
                     <span>
-                      <strong>Next day delivery</strong> for dealer orders placed before 4:00pm EST
+                      <strong>Grown by Surreal</strong>, the largest CVD grower
                     </span>
                   </li>
                   <li>
-                    <ServiceIcon kind="gem" />
-                    <span>
-                      <strong>Grown by Surreal</strong>, lab grown CVD diamonds from the largest CVD grower
+                    <span className={s.serviceIcon} aria-hidden>
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="4" y="3.5" width="16" height="12" rx="1" />
+                        <path d="M8 8h8M8 11h5" />
+                        <path d="m9 15.5-1 5 4-2 4 2-1-5" />
+                      </svg>
                     </span>
-                  </li>
-                  <li>
-                    <ServiceIcon kind="cert" />
                     <span>
                       <strong>Certificates</strong> can be provided on request
                     </span>
@@ -353,87 +303,8 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
         </div>
       </section>
 
-      <section className={s.details} aria-labelledby="details-title">
-        <div className={s.wrap}>
-          <h2 id="details-title" className={s.sectionTitle}>
-            Jewelry <em>details</em>
-          </h2>
-          <div className={s.detailGrid}>
-            <div className={s.detailCard}>
-              <p className={s.detailHead}>Piece</p>
-              <dl className={s.specs}>
-                <div>
-                  <dt>Category</dt>
-                  <dd>{categoryLabel(product.category)}</dd>
-                </div>
-                {ref && (
-                  <div>
-                    <dt>Reference</dt>
-                    <dd className="tabular">{ref}</dd>
-                  </div>
-                )}
-                <div>
-                  <dt>Design</dt>
-                  <dd>{product.detail}</dd>
-                </div>
-                {shape && (
-                  <div>
-                    <dt>Center stone</dt>
-                    <dd>{shape}</dd>
-                  </div>
-                )}
-                <div>
-                  <dt>Turntable</dt>
-                  <dd>{product.video ? "360 video" : "Renders"}</dd>
-                </div>
-              </dl>
-            </div>
-            <div className={s.detailCard}>
-              <p className={s.detailHead}>Metal</p>
-              <dl className={s.specs}>
-                <div>
-                  <dt>Pictured in</dt>
-                  <dd>{shown.map((m) => metals.find((x) => x.id === m)?.label).join(", ")}</dd>
-                </div>
-                <div>
-                  <dt>Made to order in</dt>
-                  <dd>{metals.map((m) => m.label).join(", ")}</dd>
-                </div>
-                <div>
-                  <dt>Selected</dt>
-                  <dd>{metalLabel}</dd>
-                </div>
-              </dl>
-            </div>
-            <div className={s.detailCard}>
-              <p className={s.detailHead}>Diamonds</p>
-              <dl className={s.specs}>
-                <div>
-                  <dt>Origin</dt>
-                  <dd>Lab grown, CVD, by Surreal</dd>
-                </div>
-                <div>
-                  <dt>Total carat weight</dt>
-                  <dd>{caratOptions[product.category].map(formatCarat).join(", ")}</dd>
-                </div>
-                <div>
-                  <dt>Selected</dt>
-                  <dd>{formatCarat(selection.carat)}</dd>
-                </div>
-              </dl>
-            </div>
-            <div className={`${s.detailCard} ${s.detailText}`}>
-              <p className={s.detailHead}>Description</p>
-              <p>
-                {product.name}: {product.detail.toLowerCase()}. {cat?.blurb}
-              </p>
-              <button type="button" className={s.textLink} onClick={() => openContactDrawer("other", "contact")}>
-                Ask about this piece
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProgramBanners product={product} />
+      <Details product={product} selection={selection} ringSize={sized ? size : null} />
 
       <div className={s.bar} data-on={barOn ? "true" : undefined} aria-hidden={!barOn} inert={!barOn}>
         <div className={s.barInner}>
@@ -453,70 +324,5 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
         </div>
       </div>
     </>
-  );
-}
-
-function ServiceIcon({ kind }: { kind: "truck" | "gem" | "cert" }) {
-  return (
-    <span className={s.serviceIcon} aria-hidden>
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-        {kind === "truck" && (
-          <>
-            <path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7" />
-            <circle cx="7" cy="17.5" r="1.6" />
-            <circle cx="17" cy="17.5" r="1.6" />
-          </>
-        )}
-        {kind === "gem" && (
-          <>
-            <path d="M7 4h10l4 5-9 11L3 9Z" />
-            <path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5" />
-          </>
-        )}
-        {kind === "cert" && (
-          <>
-            <rect x="4" y="3.5" width="16" height="12" rx="1" />
-            <path d="M8 8h8M8 11h5" />
-            <path d="m9 15.5-1 5 4-2 4 2-1-5" />
-          </>
-        )}
-      </svg>
-    </span>
-  );
-}
-
-function Similar({ product }: { product: Product }) {
-  const [mode, setMode] = useState<"category" | "shape">("category");
-  const sameCategory = products.filter((p) => p.category === product.category && p.id !== product.id);
-  const sameShape = product.shape ? products.filter((p) => p.shape === product.shape && p.id !== product.id) : [];
-  const list = (mode === "shape" && sameShape.length ? sameShape : sameCategory).slice(0, 10);
-  if (list.length === 0) return null;
-  return (
-    <section className={s.similar} aria-labelledby="similar-title">
-      <div className={s.wrap}>
-        <div className={s.similarHead}>
-          <h2 id="similar-title" className={s.sectionTitle}>
-            You may <em>also like</em>
-          </h2>
-          <div className={s.tabs} role="tablist" aria-label="Similar pieces">
-            <button type="button" role="tab" aria-selected={mode === "category"} className={s.tab} onClick={() => setMode("category")}>
-              {categoryLabel(product.category)}
-            </button>
-            {sameShape.length > 0 && (
-              <button type="button" role="tab" aria-selected={mode === "shape"} className={s.tab} onClick={() => setMode("shape")}>
-                Same center stone
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-      <ul className={s.similarRail}>
-        {list.map((p) => (
-          <li key={p.id} className={s.similarItem}>
-            <StoreCard product={p} preferredMetal={null} />
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }

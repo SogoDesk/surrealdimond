@@ -2,18 +2,28 @@
 
 /**
  * The store grid. Columns come from the density (4, 5 or 6) capped by the
- * viewport in CSS; the grid reads its own live column count so the inserts
- * land on row boundaries: the "find your match" panel spans the row after
- * the second row of cards, and a Made to Order tile two columns wide sits
- * after the fourth. Pages are six full rows; Load more adds six more, with
- * a progress bar and "Showing x of y" above it (the Tanishq pattern). An
- * empty result offers Clear filters.
+ * viewport in CSS; the grid reads its live column count and lays the list
+ * out row by row in a six row rhythm, so image tiles land on row edges:
+ *
+ *   row 1  cards
+ *   row 2  cards and a campaign photo at the end, then (first page only)
+ *          the "find your match" panel
+ *   row 3  a wide campaign photo, then cards
+ *   row 4  cards, then the Made to Order tile (first page) or a photo
+ *   row 5  a campaign photo, then cards
+ *   row 6  cards, then a wide campaign photo
+ *
+ * Photos come from the category's campaign set (content/editorial.ts), or
+ * from each category in turn on the all-jewelry page, and link to their
+ * category. Load more adds six rows (twelve on phones, where two columns
+ * carry fewer photos). An empty result offers Clear filters.
  */
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react";
-import type { Category, Product } from "@/content/catalog";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { categoryLabel, type Category, type Product } from "@/content/catalog";
+import { editorial, editorialOrder, type Editorial } from "@/content/editorial";
 import type { ShopQuery } from "@/components/shop/filters";
 import StoreCard from "./StoreCard";
 import MatchPanel from "./MatchPanel";
@@ -21,6 +31,12 @@ import type { Density } from "./StoreToolbar";
 import s from "./store.module.css";
 
 const ROWS_PER_PAGE = 6;
+
+type Slot =
+  | { kind: "card"; product: Product; index: number }
+  | { kind: "photo"; photo: Editorial; category: Category; span: 1 | 2; key: string }
+  | { kind: "panel" }
+  | { kind: "promo" };
 
 export interface StoreGridProps {
   category: Category | null;
@@ -30,6 +46,64 @@ export interface StoreGridProps {
   showShapes: boolean;
   onQueryChange: (next: ShopQuery) => void;
   onClear: () => void;
+}
+
+/** A photo supplier that walks the category's set, or every category in turn. */
+function photoSource(category: Category | null) {
+  let single = 0;
+  let wide = 0;
+  let turn = 0;
+  return (span: 1 | 2): { photo: Editorial; category: Category } => {
+    const cat = category ?? editorialOrder[turn++ % editorialOrder.length];
+    const set = editorial[cat];
+    const list = span === 2 && set.wide.length ? set.wide : set.single;
+    const n = span === 2 ? wide++ : single++;
+    return { photo: list[n % list.length], category: cat };
+  };
+}
+
+function layout(matches: Product[], cols: number, rows: number, category: Category | null): { slots: Slot[]; placed: number } {
+  const slots: Slot[] = [];
+  const pick = photoSource(category);
+  let i = 0;
+  for (let r = 0; r < rows && i < matches.length; r++) {
+    const k = r % ROWS_PER_PAGE;
+    const firstPage = r < ROWS_PER_PAGE;
+    let free = cols;
+    const lead: Slot[] = [];
+    const tail: Slot[] = [];
+    const left = () => matches.length - i;
+    // A leading image needs cards after it; a trailing one needs enough cards to fill the row before it. The grid never ends on an image.
+    const photo = (span: 1 | 2, at: "lead" | "tail") => {
+      if (free < span || (span === free && at === "tail")) return false;
+      if (at === "lead" ? left() < 1 : left() < free - span) return false;
+      const p = pick(span);
+      (at === "lead" ? lead : tail).push({ kind: "photo", photo: p.photo, category: p.category, span, key: `photo-${r}-${span}` });
+      free -= span;
+      return true;
+    };
+    if (cols <= 2) {
+      // Phones: two columns leave little room, so one photo in every six rows and a full width one in the next six.
+      if (r % 12 === 3) photo(1, "lead");
+      if (r % 12 === 9) photo(2, "lead");
+    } else {
+      if (k === 1) photo(1, "tail");
+      if (k === 2) photo(2, "lead");
+      if (k === 3) {
+        if (firstPage && left() >= free - 2) {
+          tail.push({ kind: "promo" });
+          free -= 2;
+        } else photo(1, "tail");
+      }
+      if (k === 4) photo(1, "lead");
+      if (k === 5) photo(2, "tail");
+    }
+    slots.push(...lead);
+    for (let c = 0; c < free && i < matches.length; c++, i++) slots.push({ kind: "card", product: matches[i], index: i });
+    slots.push(...tail);
+    if (k === 1 && firstPage && i < matches.length) slots.push({ kind: "panel" });
+  }
+  return { slots, placed: i };
 }
 
 function PromoTile() {
@@ -55,6 +129,25 @@ function PromoTile() {
   );
 }
 
+function PhotoTile({ photo, category, span }: { photo: Editorial; category: Category; span: 1 | 2 }) {
+  return (
+    <li className={s.photoCell} data-span={span}>
+      <Link href={`/jewelry/${category}`} className={s.photoLink}>
+        <Image src={photo.src} alt={photo.alt} fill sizes={span === 2 ? "(min-width: 1280px) 40vw, 100vw" : "(min-width: 1280px) 20vw, 50vw"} className={s.photoImage} />
+        <span className={s.photoCopy}>
+          <span className={s.photoKicker}>{photo.caption}</span>
+          <span className={s.photoTitle}>{categoryLabel(category)}</span>
+        </span>
+        <span className={s.photoGo} aria-hidden>
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 12 12 4M6 4h6v6" />
+          </svg>
+        </span>
+      </Link>
+    </li>
+  );
+}
+
 export default function StoreGrid({ category, matches, density, query, showShapes, onQueryChange, onClear }: StoreGridProps) {
   const gridRef = useRef<HTMLUListElement>(null);
   const [cols, setCols] = useState<number>(density);
@@ -73,13 +166,8 @@ export default function StoreGrid({ category, matches, density, query, showShape
     return () => ro.disconnect();
   }, [density]);
 
-  const panelAt = cols * 2;
-  const promoAt = cols * 4 - 2;
-  // Pages are whole rows: the Made to Order tile takes two card slots once the list reaches it.
-  const slots = cols * ROWS_PER_PAGE * pages;
-  const promoOn = cols >= 3 && matches.length > promoAt;
-  const shown = Math.min(matches.length, promoOn && slots > promoAt ? slots - 2 : slots);
-  const visible = matches.slice(0, shown);
+  const rowsPerPage = cols <= 2 ? ROWS_PER_PAGE * 2 : ROWS_PER_PAGE;
+  const { slots, placed } = useMemo(() => layout(matches, cols, rowsPerPage * pages, category), [matches, cols, rowsPerPage, pages, category]);
 
   if (matches.length === 0) {
     return (
@@ -96,29 +184,32 @@ export default function StoreGrid({ category, matches, density, query, showShape
   return (
     <>
       <ul ref={gridRef} className={s.grid} data-cols={density} style={{ "--cols": density } as CSSProperties} aria-label="Pieces">
-        {visible.map((p, i) => (
-          <Fragment key={p.id}>
-            {i === panelAt && visible.length > panelAt && (
-              <li className={s.panelRow}>
+        {slots.map((slot) => {
+          if (slot.kind === "card")
+            return (
+              <li key={slot.product.id} className={s.cell}>
+                <StoreCard product={slot.product} preferredMetal={query.metal} priority={slot.index < cols} />
+              </li>
+            );
+          if (slot.kind === "photo") return <PhotoTile key={slot.key} photo={slot.photo} category={slot.category} span={slot.span} />;
+          if (slot.kind === "panel")
+            return (
+              <li key="panel" className={s.panelRow}>
                 <MatchPanel category={category} query={query} showShapes={showShapes} onApply={onQueryChange} />
               </li>
-            )}
-            {i === promoAt && promoOn && <PromoTile />}
-            <li className={s.cell}>
-              <StoreCard product={p} preferredMetal={query.metal} priority={i < cols} />
-            </li>
-          </Fragment>
-        ))}
+            );
+          return <PromoTile key="promo" />;
+        })}
       </ul>
 
       <div className={s.more}>
         <span className={s.moreText}>
-          Showing {shown} of {matches.length}
+          Showing {placed} of {matches.length}
         </span>
         <span className={s.moreBar} aria-hidden>
-          <span style={{ transform: `scaleX(${shown / matches.length})` }} />
+          <span style={{ transform: `scaleX(${placed / matches.length})` }} />
         </span>
-        {shown < matches.length && (
+        {placed < matches.length && (
           <button type="button" className={s.moreBtn} onClick={() => setPages((n) => n + 1)}>
             Load more
           </button>

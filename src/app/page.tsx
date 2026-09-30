@@ -10,6 +10,7 @@ import Featured from "@/components/home/Featured";
 import Stories from "@/components/home/Stories";
 import Benefits from "@/components/home/Benefits";
 import Experience from "@/components/home/Experience";
+import Assurance from "@/components/brand/Assurance";
 import Footer from "@/components/sections/Footer";
 
 /**
@@ -17,7 +18,7 @@ import Footer from "@/components/sections/Footer";
  * trade, on Tanishq's commerce structure in the Surreal design system. Hero
  * banners, the grower pitch, shop by category, collections, programs,
  * featured pieces, turntable stories, the dealer program and the experience
- * grid, closed by the navy footer. Fixed layers (preloader, chrome, contact
+ * grid and the Surreal Assurance, closed by the navy footer. Fixed layers (preloader, chrome, contact
  * drawer) sit outside <main>.
  */
 export default function Home() {
@@ -36,6 +37,7 @@ export default function Home() {
         <Stories />
         <Benefits />
         <Experience />
+        <Assurance />
         <Footer />
       </main>
     </>

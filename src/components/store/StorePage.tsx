@@ -8,8 +8,8 @@
  * thumbnails, the sticky toolbar (Filters, Metal, Shape, Sort, density), the
  * active filter chips, then the grid: four to six cards a row on desktop,
  * with the "find your match" panel after the second row, a Made to Order
- * tile after the fourth, and Load more at the foot. The programs band and
- * the footer close the page.
+ * tile after the fourth, campaign photographs through the rows, and Load
+ * more at the foot. The Surreal Assurance and the footer close the page.
  *
  * Filters and the sort live in the query string (shared with the older shop
  * helpers in components/shop/filters.ts). Reading it goes through
@@ -24,7 +24,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
-import ProgramsBand from "@/components/shop/ProgramsBand";
+import Assurance from "@/components/brand/Assurance";
 import DivisionMotif from "@/components/brand/DivisionMotif";
 import { categoryFor, clearedQuery, matchesQuery, parseQuery, poolFor, serializeQuery, showsShapes, sortProducts, type ShopQuery } from "@/components/shop/filters";
 import { renderSrc, type Category } from "@/content/catalog";
@@ -48,7 +48,7 @@ export default function StorePage({ category }: StorePageProps) {
         <Suspense fallback={<StoreView category={category} params={null} />}>
           <WithParams category={category} />
         </Suspense>
-        <ProgramsBand />
+        <Assurance />
         <Footer />
       </main>
     </>
