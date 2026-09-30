@@ -4,11 +4,10 @@ import type { ReactNode } from "react";
 import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
-import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
 import DivisionMotif from "@/components/brand/DivisionMotif";
 import type { DivisionMotif as Motif } from "@/content/divisions";
-import { account, brand } from "@/content/site";
+import GateDoors from "./GateDoors";
 import s from "./GatePage.module.css";
 
 /**
@@ -34,7 +33,6 @@ const DEALER_POINTS = [
   "Digital marketing support positioning you as a grower",
   "Territory exclusivity",
 ];
-
 export default function GatePage({ kind, eyebrow, title, line, crumbs, image = "/media/photos/sb-3990.webp", motif, benefits = DEALER_POINTS }: GatePageProps) {
   return (
     <>
@@ -57,40 +55,7 @@ export default function GatePage({ kind, eyebrow, title, line, crumbs, image = "
                 <Eyebrow>{eyebrow}</Eyebrow>
                 <h1 className={s.title}>{title}</h1>
                 <p className={s.line}>{line}</p>
-                {kind === "dealer" ? (
-                  <>
-                    <div className={s.doors}>
-                      <Button href={account.login} variant="primary" arrow>
-                        Dealer log in
-                      </Button>
-                      <Button href={account.apply} variant="secondary">
-                        Become a dealer
-                      </Button>
-                    </div>
-                    <ul className={s.points}>
-                      {benefits.map((b) => (
-                        <li key={b}>
-                          <svg aria-hidden viewBox="0 0 10 10" width="9" height="9">
-                            <path d="M5 0.5 9.5 5 5 9.5 0.5 5Z" fill="currentColor" />
-                          </svg>
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                ) : (
-                  <>
-                    <div className={s.doors}>
-                      <Button href="/" variant="primary" arrow>
-                        Back to the homepage
-                      </Button>
-                      <Button href={brand.office.phoneHref} variant="secondary">
-                        Call {brand.office.phone}
-                      </Button>
-                    </div>
-                    <p className={s.note}>This page is in design and arrives with the next release.</p>
-                  </>
-                )}
+                <GateDoors kind={kind} benefits={benefits} />
               </div>
               <div className={s.visual}>
                 {motif ? <DivisionMotif motif={motif} className={s.motif} /> : <Image src={image} alt="" fill priority sizes="(min-width: 900px) 44vw, 100vw" className={image.startsWith("/media/renders/") ? s.render : s.image} />}

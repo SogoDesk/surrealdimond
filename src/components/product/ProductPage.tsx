@@ -36,6 +36,8 @@ import { defaultSelection, renderForSelection, type PieceSelection } from "@/com
 import { useWishlist } from "@/components/store/useWishlist";
 import { caratOptions, categoryLabel, formatCarat, metals, productById, renderSrc, styleRef, type Metal, type Product } from "@/content/catalog";
 import { account } from "@/content/site";
+import { useDealer } from "@/lib/dealer";
+import { addToCart } from "@/lib/cart";
 import Gallery from "./Gallery";
 import DeliveryCountdown from "./DeliveryCountdown";
 import { CompleteLook, DealerQuestions, Details, Explore, InPerson, ProgramBanners, Similar } from "./ProductSections";
@@ -97,6 +99,8 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
   const loginHref = `${account.login}?next=${encodeURIComponent(next)}`;
   const metalLabel = metals.find((m) => m.id === selection.metal)?.label ?? "";
   const saved = has(product.id);
+  const dealer = useDealer();
+  const add = () => addToCart({ productId: product.id, metal: selection.metal, carat: selection.carat, size: sized ? size : null, qty, note: notes.trim() });
 
   /* The action bar rises once the main doors have scrolled above the viewport (checked on scroll, so a jump to the top hides it too). */
   useEffect(() => {
@@ -182,13 +186,22 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                       <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
                     </svg>
                   </span>
-                  <span className={s.priceText}>
-                    <strong>Dealer price</strong>
-                    <span>Log in to see your price and availability.</span>
-                  </span>
-                  <Link href={loginHref} className={s.priceLink}>
-                    Log in
-                  </Link>
+                  {dealer ? (
+                    <span className={s.priceText}>
+                      <strong>On your dealer price list</strong>
+                      <span>Confirmed for {dealer.store} when Surreal accepts your order.</span>
+                    </span>
+                  ) : (
+                    <>
+                      <span className={s.priceText}>
+                        <strong>Dealer price</strong>
+                        <span>Log in to see your price and availability.</span>
+                      </span>
+                      <Link href={loginHref} className={s.priceLink}>
+                        Log in
+                      </Link>
+                    </>
+                  )}
                 </div>
 
                 <div className={s.field}>
@@ -257,19 +270,31 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                 </label>
 
                 <div ref={doorsRef} className={s.doors}>
-                  <Link href={loginHref} className={s.primary}>
-                    Log in to add to cart
-                    <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 8h10M9 4l4 4-4 4" />
-                    </svg>
-                  </Link>
+                  {dealer ? (
+                    <button type="button" className={s.primary} onClick={add}>
+                      Add to cart
+                      <svg aria-hidden viewBox="0 0 18 18" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2.5 5.5h13l-.9 10.5H3.4z" />
+                        <path d="M6 5.5V4.8a3 3 0 0 1 6 0v.7" />
+                      </svg>
+                    </button>
+                  ) : (
+                    <Link href={loginHref} className={s.primary}>
+                      Log in to add to cart
+                      <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 8h10M9 4l4 4-4 4" />
+                      </svg>
+                    </Link>
+                  )}
                   <button type="button" className={s.secondary} onClick={() => openContactDrawer("other", "contact")}>
                     Ask a question
                   </button>
                 </div>
-                <p className={s.apply}>
-                  Not a Surreal dealer yet? <Link href={account.apply}>Apply for an account</Link>.
-                </p>
+                {!dealer && (
+                  <p className={s.apply}>
+                    Not a Surreal dealer yet? <Link href={account.apply}>Apply for an account</Link>.
+                  </p>
+                )}
 
                 <DeliveryCountdown />
                 <ul className={s.service}>
@@ -318,9 +343,15 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
               {sized ? `, size ${size}` : ""}, qty {qty}
             </span>
           </span>
-          <Link href={loginHref} className={s.primary}>
-            Log in to add to cart
-          </Link>
+          {dealer ? (
+            <button type="button" className={s.primary} onClick={add}>
+              Add to cart
+            </button>
+          ) : (
+            <Link href={loginHref} className={s.primary}>
+              Log in to add to cart
+            </Link>
+          )}
         </div>
       </div>
     </>

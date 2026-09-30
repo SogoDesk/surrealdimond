@@ -8,14 +8,17 @@
 
 import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
-import { brand } from "@/content/site";
+import { account, brand } from "@/content/site";
+import { useDealer } from "@/lib/dealer";
 import Header, { APPLY_LINK, APPOINTMENT_LINK, DASHBOARD_LINK, LOGIN_LINK, PRIMARY_LINKS, type ChromeLink } from "./Header";
 import MobileMenu from "./MobileMenu";
 
 const SECONDARY_LINKS: ChromeLink[] = [LOGIN_LINK, APPLY_LINK, DASHBOARD_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
+const DEALER_LINKS: ChromeLink[] = [{ label: "Cart and checkout", href: account.cart }, DASHBOARD_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
 
 export default function SiteChrome() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const dealer = useDealer();
   const pathname = usePathname();
 
   // The sheet closes on navigation; adjusted during render so the new route never paints with it open.
@@ -31,7 +34,7 @@ export default function SiteChrome() {
   return (
     <>
       <Header menuOpen={menuOpen} onMenuToggle={toggle} />
-      <MobileMenu open={menuOpen} onClose={close} links={PRIMARY_LINKS} secondary={SECONDARY_LINKS} visitHref={APPOINTMENT_LINK.href} />
+      <MobileMenu open={menuOpen} onClose={close} links={PRIMARY_LINKS} secondary={dealer ? DEALER_LINKS : SECONDARY_LINKS} visitHref={APPOINTMENT_LINK.href} />
     </>
   );
 }

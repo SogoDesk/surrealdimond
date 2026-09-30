@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import GatePage from "@/components/pages/GatePage";
-import { gates } from "@/content/gates";
+import LoginPage from "@/components/account/LoginPage";
 
-export const metadata: Metadata = { title: "Log in | Surreal Diamond" };
+export const metadata: Metadata = { title: "Dealer log in | Surreal Diamond", robots: { index: false } };
 
 export default function Page() {
-  return <GatePage {...gates.login} />;
+  return <LoginPage />;
 }

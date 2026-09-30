@@ -38,7 +38,7 @@ export const gates = {
     kind: "dealer",
     eyebrow: "Your order",
     title: <>Your cart is <em>waiting</em></>,
-    line: "Log in to see your cart, your store details and dealer pricing. Order before 4:00pm EST to receive next day delivery.",
+    line: "Log in to fill your cart, check out and pay for your store. Order before 4:00pm EST to receive next day delivery.",
     crumbs: [{ label: "Cart" }],
     image: "/media/photos/sb-3614.webp",
   },
@@ -81,14 +81,6 @@ export const gates = {
     line: "North American Office, 551 Fifth Avenue, Suite 2601, New York, NY 10176. (844) 999-7262, Monday to Friday, 9:30am to 6pm EST.",
     crumbs: [{ label: "Contact" }],
     image: "/media/photos/sb-3970.webp",
-  },
-  login: {
-    kind: "building",
-    eyebrow: "Dealer log in",
-    title: <>Welcome <em>back</em></>,
-    line: "Dealer sign in arrives with the next release.",
-    crumbs: [{ label: "Log in" }],
-    image: "/media/photos/sb-3592.webp",
   },
   apply: {
     kind: "building",

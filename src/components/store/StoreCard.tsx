@@ -19,6 +19,8 @@ import { defaultSelection, renderForSelection, type PieceSelection } from "@/com
 import Placeholder from "@/components/shop/Placeholder";
 import { account } from "@/content/site";
 import { useWishlist } from "./useWishlist";
+import { useDealer } from "@/lib/dealer";
+import { addToCart } from "@/lib/cart";
 import s from "./store.module.css";
 
 const SIZES = "(min-width: 1600px) 16vw, (min-width: 1280px) 19vw, (min-width: 1024px) 24vw, (min-width: 768px) 31vw, 46vw";
@@ -28,6 +30,7 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
   const [pick, setPick] = useState<PieceSelection | null>(null);
   const [hover, setHover] = useState(false);
   const { has, toggle } = useWishlist();
+  const dealer = useDealer();
 
   // A newly filtered metal takes over a picked card's metal (adjusted during render).
   const [seenPreferred, setSeenPreferred] = useState(preferredMetal);
@@ -96,13 +99,23 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
           {product.name}
         </Link>
         <span className={s.detail}>{product.detail}</span>
-        <Link href={account.login} className={s.price}>
-          <svg aria-hidden viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
-            <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
-          </svg>
-          Log in for dealer price
-        </Link>
+        {dealer ? (
+          <button type="button" className={s.price} onClick={() => addToCart({ productId: product.id, metal: selection.metal, carat: selection.carat, size: null, qty: 1, note: "" })}>
+            <svg aria-hidden viewBox="0 0 18 18" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2.5 5.5h13l-.9 10.5H3.4z" />
+              <path d="M6 5.5V4.8a3 3 0 0 1 6 0v.7" />
+            </svg>
+            Add to cart
+          </button>
+        ) : (
+          <Link href={account.login} className={s.price}>
+            <svg aria-hidden viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
+              <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
+            </svg>
+            Log in for dealer price
+          </Link>
+        )}
       </div>
 
       <div className={s.selectors}>

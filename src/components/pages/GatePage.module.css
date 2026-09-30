@@ -46,3 +46,5 @@
 .visual:has(.render) { background: var(--white); }
 .render { object-fit: contain; padding: 12%; }
 .motif { width: 100%; height: 100%; }
+.signedIn { margin: 0; padding: 14px 16px; border-radius: 12px; background: var(--mist); font-size: 0.9375rem; line-height: 1.55; color: var(--graphite); max-width: 460px; }
+.signedIn strong { color: var(--ink); font-weight: 500; }

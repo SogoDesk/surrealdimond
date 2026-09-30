@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import GatePage from "@/components/pages/GatePage";
-import { gates } from "@/content/gates";
+import CartPage from "@/components/checkout/CartPage";
 
 export const metadata: Metadata = { title: "Cart | Surreal Diamond", robots: { index: false } };
 
 export default function Page() {
-  return <GatePage {...gates.cart} />;
+  return <CartPage />;
 }

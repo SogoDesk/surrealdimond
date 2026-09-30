@@ -16,8 +16,8 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 - [x] Map the live Retailer Dashboard (15 tiles), dealer Diamond Search, catalog, program forms and the Thinkspace admin
 - [x] Verified facts and team added to `src/content/site.ts`
 - [x] Divisions data for the 16 live entries (`src/content/divisions.ts`); the 8 without a grid yet open a dealer holding page
-- [ ] Mock auth: signed-out and signed-in dealer states, route gating with return to the requested page
-- [ ] Shared commerce state: cart store, bag count, dealer pricing from a mock price list
+- [x] Preview dealer session (`lib/dealer.ts`): log in with any email or as the demo dealer, account menu, ?next= return, session-aware holding pages and mobile menu
+- [x] Cart and orders stores in the browser (`lib/cart.ts`); no prices stored until the dealer price list is connected
 - [x] Holding pages for every Phase 1 route (`GatePage`: dealer login for gated routes, in design for public ones)
 
 ## 1. Homepage revamp
@@ -42,18 +42,19 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 
 ## 2. Main Door and accounts
 
-- [ ] `/login`: log in, forgot password, Apply panel
+- [x] `/login`: log in, show password, forgot password, Apply panel, preview note
 - [ ] `/apply`: dealer application (live fields), pending approval state
 - [?] Main Door form confirmed with the client (open question 1)
 
 ## 3. Cart and checkout (dealer)
 
-- [ ] Mini cart popover from the cart icon
-- [ ] Add to cart from product cards and the product page (after auth)
-- [ ] `/cart`: line items (image, style number, metal, carat, size, quantity, remove, note), order summary at dealer price, trust badges, sticky total bar
-- [ ] Empty cart state
-- [ ] `/checkout`: Store details, Payment, Review, Confirmation; next day delivery cutoff note (order before 4:00pm EST)
-- [?] Online payment provider for card and ACH (open question 3); check, wire and Zelle shown as offline options
+- [x] Mini cart popover from the cart icon, opening on add
+- [x] Add to cart from store cards and the product page when signed in
+- [x] `/cart`: step bar, ship to card with the delivery countdown, line items (metal, carat, ring size, quantity, note, wishlist, remove), trust row, order summary, memo card, wishlist or featured pieces, mobile checkout bar
+- [x] Empty cart state
+- [x] `/checkout`: Store details (validated), Payment (card via provider form at launch, ACH, wire, check, Zelle), Review with Terms agreement, Confirmation with order number and next steps
+- [?] Online payment provider for card and ACH (open question 3): the card step shows where the provider's secure form mounts
+- [ ] Order totals once the dealer price list is connected (open question 4)
 - [ ] Memo request path where the program allows
 
 ## 4. Jewelry (dealer)

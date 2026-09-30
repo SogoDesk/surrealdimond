@@ -6,7 +6,7 @@
  * Top row: the live line mark and wordmark (#site-logo, the element the
  * preloader Flips its mark into), a wide search field with rotating prompts,
  * and the trade utilities: appointments, Log in, the Become a dealer pill and
- * the cart. Second row (from 1024px): the primary links, with Jewelry opening
+ * the cart (signed in: the store's account menu and the mini cart). Second row (from 1024px): the primary links, with Jewelry opening
  * the mega menu on hover intent. Past 80px of scroll the second row folds
  * away and the bar keeps only the top row; it returns near the top of the
  * page. The bar is always light: every page it sits on is a light commerce
@@ -25,6 +25,9 @@ import { LINE_MARK_ASPECT } from "@/components/brand/lineMarkPaths";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import MegaMenu from "./MegaMenu";
+import MiniCart from "./MiniCart";
+import AccountMenu from "./AccountMenu";
+import { useDealer } from "@/lib/dealer";
 import { MenuButton } from "./MobileMenu";
 import styles from "./chrome.module.css";
 
@@ -91,15 +94,6 @@ function UserIcon() {
     <svg aria-hidden viewBox="0 0 18 18" className={styles.icon} fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
       <circle cx="9" cy="6.25" r="3.25" />
       <path d="M2.75 16c.8-3.1 3.2-4.75 6.25-4.75S14.45 12.9 15.25 16" />
-    </svg>
-  );
-}
-
-function BagIcon() {
-  return (
-    <svg aria-hidden viewBox="0 0 18 18" className={styles.icon} fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2.5 5.5h13l-.9 10.5H3.4z" />
-      <path d="M6 5.5V4.8a3 3 0 0 1 6 0v.7" />
     </svg>
   );
 }
@@ -177,6 +171,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef }: HeaderProp
   const pathname = usePathname();
   const [shopOpen, setShopOpen] = useState(false);
   const condensed = useSyncExternalStore(subscribeScroll, pastCondense, notPast);
+  const dealer = useDealer();
   const intentTimer = useRef(0);
 
   const { contextSafe } = useGSAP({ scope: ref });
@@ -281,21 +276,22 @@ export default function Header({ menuOpen, onMenuToggle, headerRef }: HeaderProp
             <CalendarIcon />
             <span className={styles.utilLabel}>Appointments</span>
           </button>
-          <Link href={LOGIN_LINK.href} className={`${styles.util} ${styles.iconLink}`} data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
-            <UserIcon />
-            <span className={styles.utilLabel}>{LOGIN_LINK.label}</span>
-          </Link>
-          <span className={styles.pillWrap}>
-            <Button variant="primary" href={APPLY_LINK.href} className={styles.pill}>
-              {APPLY_LINK.label}
-            </Button>
-          </span>
-          <Link href={account.cart} className={`${styles.bag} ${styles.iconLink}`} aria-label="Cart, 0 items">
-            <BagIcon />
-            <span className={styles.count} aria-hidden>
-              0
-            </span>
-          </Link>
+          {dealer ? (
+            <AccountMenu dealer={dealer} />
+          ) : (
+            <>
+              <Link href={LOGIN_LINK.href} className={`${styles.util} ${styles.iconLink}`} data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
+                <UserIcon />
+                <span className={styles.utilLabel}>{LOGIN_LINK.label}</span>
+              </Link>
+              <span className={styles.pillWrap}>
+                <Button variant="primary" href={APPLY_LINK.href} className={styles.pill}>
+                  {APPLY_LINK.label}
+                </Button>
+              </span>
+            </>
+          )}
+          <MiniCart />
           <MenuButton open={menuOpen} onToggle={onMenuToggle} />
         </div>
       </div>
