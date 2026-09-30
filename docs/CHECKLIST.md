@@ -133,7 +133,7 @@ Last reviewed: 30 September 2026.
 | C-08 | Matching-piece data for Shop the Set | No |
 | C-09 | Account and user structure | No |
 | C-10 | Card processor name and contact | No |
-| C-11 | Legacy, Main Door and About content | No |
+| C-11 | Legacy, Main Door and About content; for the diamond story: growth chamber film, process photos and copy, a sample lab report, named dealer quotes | No |
 | C-12 | Nominated decision-maker | No |
 | C-13 | Read access to the current site, export of dealer organizations and users | No |
 | C-14 | Domain, DNS and email-sending domain control | No |

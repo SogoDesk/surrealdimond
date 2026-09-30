@@ -19,6 +19,9 @@
  * The Made to Order entry (R-19) sits above the list and again after it,
  * carrying the search into the M2O request. Up to four stones can be
  * compared side by side. ?stone= opens a stone's Quick View directly.
+ *
+ * Below the list, the story (DiamondStory) for retailers who are not dealers
+ * yet; a signed-out visitor gets a line under the lead that jumps to it.
  */
 
 import Link from "next/link";
@@ -36,6 +39,8 @@ import { useDealer } from "@/lib/dealer";
 import { useUnavailable } from "@/lib/memo";
 import { EMPTY, SORT_LABEL, activeCount, describe, m2oHref, matches, sortStones, type DiamondQuery, type SortKey } from "./query";
 import StoneDrawer from "./StoneDrawer";
+import DiamondStory from "./DiamondStory";
+import { scrollToTarget } from "@/lib/scroll";
 import s from "./diamonds.module.css";
 
 const PAGE = 50;
@@ -184,6 +189,11 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
     if (next) setOpenId(next.id);
   };
   const add = (st: Stone) => addStone(st.id, st.carat);
+  /** A door in the story below: apply its filters (none keeps the search as it is) and go back up to the stones. */
+  const applyFromStory = (patch: Partial<DiamondQuery>) => {
+    if (Object.keys(patch).length) update({ ...EMPTY, sort: q.sort, ...patch });
+    scrollToTarget("#diamonds-title", -180);
+  };
   const loginFor = (st: Stone) => `${account.login}?next=${encodeURIComponent(`/diamonds?stone=${st.id}`)}`;
 
   const m2oBanner = (
@@ -219,6 +229,16 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                 CVD diamonds we grow, primarily DEF color and VVS clarity, up to 15 carats, with supplier stones alongside. All prices shown are for asset; for short-term memo
                 pricing, call {brand.office.phone}.
               </p>
+              {!dealer && (
+                <p className={s.storyLink}>
+                  New to Surreal?{" "}
+                  <button type="button" onClick={() => scrollToTarget("#diamond-story", -60)}>
+                    How our diamonds are grown
+                  </button>
+                  <span aria-hidden>·</span>
+                  <Link href={account.apply}>Become a dealer</Link>
+                </p>
+              )}
             </div>
             <p className={s.sampleNote}>
               <strong>Sample feed.</strong> These stones show the layout. Live inventory arrives with the RightClick connection and supplier feeds.
@@ -445,6 +465,8 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
           )}
         </div>
       </section>
+
+      <DiamondStory onApply={applyFromStory} />
 
       {compared.length > 0 && (
         <div className={s.tray} role="region" aria-label="Compare stones">
