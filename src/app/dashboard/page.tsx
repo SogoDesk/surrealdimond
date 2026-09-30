@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import GatePage from "@/components/pages/GatePage";
-import { gates } from "@/content/gates";
+import DashboardShell from "@/components/dashboard/DashboardShell";
+import DashboardHome from "@/components/dashboard/DashboardHome";
 
 export const metadata: Metadata = { title: "Retailer Dashboard | Surreal Diamond", robots: { index: false } };
 
 export default function Page() {
-  return <GatePage {...gates.dashboard} />;
+  return (
+    <DashboardShell>
+      <DashboardHome />
+    </DashboardShell>
+  );
 }

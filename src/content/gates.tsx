@@ -10,14 +10,6 @@ export const gates = {
     crumbs: [{ label: "Jewelry", href: "/jewelry" }, { label: "Order form" }],
     image: "/media/photos/sb-3730.webp",
   },
-  dashboard: {
-    kind: "dealer",
-    eyebrow: "Retailer Dashboard",
-    title: <>Everything for <em>your store</em></>,
-    line: "Memo, marketing programs, catalogs and flyers, social content, training videos, website feeds, trade shows and your team, in one place.",
-    crumbs: [{ label: "Retailer Dashboard" }],
-    image: "/media/photos/sb-3631.webp",
-  },
   cart: {
     kind: "dealer",
     eyebrow: "Your order",

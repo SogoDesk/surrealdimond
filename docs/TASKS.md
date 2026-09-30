@@ -28,7 +28,7 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 | 3 | Diamond page (Nivoda style list, quick filters, Quick View, M2O entry) | [x] on the sample feed |
 | 4 | Custom Portal request form, with the live preview demo (R-23) | [x] demo awaits approval (A5) |
 | 5 | Inquiries and Contact | [x] emails wait on M1 |
-| 6 | Retailer Dashboard home (personalized) | [ ] |
+| 6 | Retailer Dashboard home (personalized) | [x] |
 | 7 | Open memo items report and Reorder | [ ] |
 | 8 | Cart and checkout | [x] |
 | 9 | Log in and Main Door | [~] log in done; Main Door waits on Q6 |
@@ -43,7 +43,7 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 - [ ] Show the R-23 demo to Surreal for approval (A5)
 - [x] Contact page (R-24): inquiry type selector, routing per type, acknowledgement to the sender; schedule an appointment
 - [ ] Confirm the inquiry routing (type to team) with Surreal (C-05) and connect the team inboxes and acknowledgement email (M1, C-14)
-- [ ] Dashboard home: greeting, open orders, memo count, recent items, tiles for the subpages
+- [x] Dashboard home: greeting, open orders, memo count, recent items, tiles for the subpages. Dashboard shell with the sidebar (the live 15 tiles regrouped), order-level Reorder, memo and program request panels, dashboard search (R-29, local until C-06), holding pages for the sections still in design
 - [ ] Open memo report (R-28) and order history with Reorder (R-25)
 - [ ] Admin console shell: inventory table, featured and hot deal toggles, default sort per page, banner manager
 - [?] Main Door page (Q6)

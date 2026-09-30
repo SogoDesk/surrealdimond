@@ -25,7 +25,7 @@ import Assurance from "@/components/brand/Assurance";
 import ShapeIcon from "@/components/brand/ShapeIcon";
 import { brand } from "@/content/site";
 import { useDealer } from "@/lib/dealer";
-import { createLocalStore } from "@/lib/localStore";
+import { customRequests as requests, type CustomRequest } from "@/lib/requests";
 import StonePreview, { CUSTOM_SHAPES, stoneSize, type CustomShape, type GoldColor, type ItemType, type MetalKind, type StoneColor } from "./StonePreview";
 import s from "./custom.module.css";
 
@@ -76,16 +76,6 @@ interface Values {
 }
 type Key = keyof Values;
 
-interface CustomRequest {
-  number: string;
-  item: string;
-  shape: string;
-  carat: string;
-  images: string[];
-  sentAt: string;
-}
-const isRequests = (v: unknown): v is CustomRequest[] => Array.isArray(v);
-const requests = createLocalStore<CustomRequest[]>("surreal-custom", [], isRequests);
 
 const MAX_FILES = 6;
 const MAX_BYTES = 10 * 1024 * 1024;

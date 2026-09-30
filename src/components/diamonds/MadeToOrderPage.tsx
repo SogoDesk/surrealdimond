@@ -23,20 +23,12 @@ import ShapeIcon from "@/components/brand/ShapeIcon";
 import { SHAPE_LABEL, stoneById, stoneTitle, type StoneShape } from "@/content/diamonds";
 import { account, brand } from "@/content/site";
 import { useDealer } from "@/lib/dealer";
-import { createLocalStore } from "@/lib/localStore";
+import { m2oRequests as requests, type M2ORequest } from "@/lib/requests";
 import s from "./m2o.module.css";
 
 /** The shapes offered on the live M2O form. */
 const M2O_SHAPES: StoneShape[] = ["round", "radiant", "oval", "cushion", "emerald", "pear"];
 
-interface M2ORequest {
-  number: string;
-  shape: string;
-  size: string;
-  sentAt: string;
-}
-const isRequests = (v: unknown): v is M2ORequest[] => Array.isArray(v);
-const requests = createLocalStore<M2ORequest[]>("surreal-m2o", [], isRequests);
 
 const FACTS = [
   "Exclusively for Surreal dealers",

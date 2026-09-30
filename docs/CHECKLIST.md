@@ -64,12 +64,12 @@ Last reviewed: 30 September 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-25 | Reorder an exact previous item in a couple of clicks | To do | Orders are kept in the preview; build order history with Reorder |
+| R-25 | Reorder an exact previous item in a couple of clicks | Partial | Whole-order Reorder on the dashboard home and quick reorder per line on the homepage band; order history with per-line Reorder comes with the Orders page (key screen 7) |
 | R-26 | Trade show appointments | Waiting (Q9) | Request form or time-slot booking |
 | R-27 | Payment methods managed by the dealer (invoice payment in Phase 2) | To do | |
 | R-28 | Open memo items report from existing data | To do | Live memo table mapped (memo date, memo number, stock number, price, shape, size, cut, color, clarity) |
-| R-29 | Dashboard search integrates Surreal's existing search | Waiting (C-06) | Build the search screens now |
-| R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer homepage band, dealer pricing notes, cart and checkout know the store |
+| R-29 | Dashboard search integrates Surreal's existing search | Partial / Waiting (C-06) | Dashboard search built: sections, the dealer's orders, memo and requests by number, catalog by name or style, stones by stock ID; swap the source to Surreal's search when C-06 arrives |
+| R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer homepage band, dealer pricing notes, cart and checkout know the store; Retailer Dashboard home with the store's figures, orders, memo, requests and recently viewed |
 | R-31 | Remaining subpages (about 10) | Waiting (Q5) | Live dashboard has 15 tiles, mapped in CONTEXT.md |
 
 ## 5.8 Admin console
