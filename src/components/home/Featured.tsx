@@ -2,7 +2,8 @@
 
 /**
  * 6. Hot this week (BRD R-03), on Tanishq's new arrivals pattern, fed from
- * the featuring list the admin console will own (content/featuring.ts). A
+ * the featuring list the admin console owns (lib/merch.ts, defaults in
+ * content/featuring.ts). A
  * photographic band (copy and a count chip on the left, the photograph
  * dissolving in from the right) with a row of product cards riding over its
  * lower edge. The row is a native horizontal scroller with snap, driven by
@@ -14,17 +15,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { metals, productById, productMetals, renderSrc, type Product } from "@/content/catalog";
-import { hotThisWeek } from "@/content/featuring";
+import { useMerch } from "@/lib/merch";
 import { account } from "@/content/site";
 import { groundStyle } from "@/content/grounds";
 import { useRevealIn } from "./useRevealIn";
 import h from "./home.module.css";
 import s from "./Featured.module.css";
-
-const items = hotThisWeek.map((id) => productById(id)).filter((p): p is Product => Boolean(p));
 
 function altView(p: Product) {
   if (p.angles?.[0]) return p.angles[0];
@@ -77,6 +76,8 @@ export default function Featured() {
   const ref = useRef<HTMLElement>(null);
   const railRef = useRef<HTMLUListElement>(null);
   const [edge, setEdge] = useState({ start: true, end: false });
+  const { hot } = useMerch();
+  const items = useMemo(() => hot.map((id) => productById(id)).filter((p): p is Product => Boolean(p)), [hot]);
   useRevealIn(ref);
 
   const measure = useCallback(() => {
@@ -107,7 +108,7 @@ export default function Featured() {
   };
 
   return (
-    <section ref={ref} className={`${h.section} ${s.section}`} aria-labelledby="featured-title" data-chapter="featured">
+    <section ref={ref} id="featured" className={`${h.section} ${s.section}`} aria-labelledby="featured-title" data-chapter="featured" hidden={items.length === 0}>
       <div className={h.wrap}>
         <div className={s.band}>
           <Image src="/media/photos/sb-3594.webp" alt="" fill sizes="(min-width: 900px) 70vw, 100vw" className={s.bandImage} />

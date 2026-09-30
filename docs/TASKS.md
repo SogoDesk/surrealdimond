@@ -6,7 +6,7 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` waiting on a clien
 
 ## Next up
 
-In order. Block A (the BRD fixes to built screens) is done. Block B completes the ten key screens for M2 while the client inputs arrive: eight are built, the admin console shell is next; Main Door waits on Q6.
+In order. Block A (the BRD fixes to built screens) is done. Block B completes the ten key screens for M2 while the client inputs arrive: nine are built; Main Door waits on Q6. Next: M1 architecture choices (vendors to approve) and the client inputs.
 
 ### A. Bring built screens in line with the BRD
 
@@ -32,7 +32,7 @@ In order. Block A (the BRD fixes to built screens) is done. Block B completes th
 | 7 | Orders with Reorder, and the open memo items report | [x] |
 | 8 | Cart and checkout | [x] |
 | 9 | Log in and Main Door | [~] log in done; Main Door waits on Q6 |
-| 10 | Admin console: inventory, featuring, banners | [ ] |
+| 10 | Admin console: inventory, featuring, banners | [x] shell with four working modules |
 
 - [x] Diamond page on a sample feed shaped like the live search: one line per stone (shape, carat, color, clarity, cut, polish, symmetry, fluorescence, measurements, ratio, table, depth, lab and certificate, stock ID, shipment, price slot, Quick View, Add), quick filters and More filters, sort, compare up to four, cards on phones; stones leave the list once ordered or on memo
 - [x] M2O request prefilled from the diamond search or a stone (R-19): shape, exact size, ratio, girdle inscription, customer name for the booklet, notes, dealer details
@@ -46,7 +46,8 @@ In order. Block A (the BRD fixes to built screens) is done. Block B completes th
 - [x] Dashboard home: greeting, open orders, memo count, recent items, tiles for the subpages. Dashboard shell with the sidebar (the live 15 tiles regrouped), order-level Reorder, memo and program request panels, dashboard search (R-29, local until C-06), holding pages for the sections still in design
 - [x] Open memo report (R-28) and order history with Reorder (R-25): `/dashboard/orders` with frequently reordered, search, date filters, CSV, per-line and whole-order Reorder, status steps and order details; `/dashboard/memo` with the live columns, days on memo by age, filters, CSV and the reconciliation (sold, confirm, discrepancy note, RC number). The demo account shows labelled sample memo lines
 - [ ] Order status beyond Received, and the real memo with daily prices, from the order system and RightClick (C-07)
-- [ ] Admin console shell: inventory table, featured and hot deal toggles, default sort per page, banner manager
+- [x] Admin console shell at `/admin`: sign in by role, access matrix locking modules (proposed until C-05), Overview, Inventory (jewelry and diamonds, Hot this week and featured switches, CSV), Merchandising (Hot this week order, featured pieces and default sort per page), Banners (on or off, order, add from the library), Staff and roles; holding pages for Dealers, Orders and payments, Memo, Requests, Content, Dealer resources. The storefront reads the console's settings (Hot this week, pins, default sort, hero banners)
+- [ ] Console modules still in design: Dealers, Orders and payments, Memo, Requests and inbox, Content pages (R-20), Dealer resources; metal color options per article editable (R-12, C-02)
 - [?] Main Door page (Q6)
 - [?] Trade show appointments (Q9)
 
@@ -121,3 +122,4 @@ Key screens, 30 Sept 2026
 - [x] Inquiries and Contact with seven routed inquiry types and the acknowledgement; the contact drawer shares them (`/contact`)
 - [x] Retailer Dashboard shell and home, dashboard search, holding pages for sections in design (`/dashboard`, `/dashboard/*`)
 - [x] Orders with Reorder and the open memo items report with reconciliation (`/dashboard/orders`, `/dashboard/memo`)
+- [x] Admin console shell with Inventory, Merchandising, Banners and Staff and roles; the storefront follows its settings (`/admin`)

@@ -12,7 +12,7 @@ Last reviewed: 30 September 2026.
 |---|---|---|---|
 | R-01 | Keep the story feel, roughly half the old length | Partial | Ten compact sections replace the thirteen-chapter concept; confirm the section list against C-01 |
 | R-02 | Rotating banners at the top | Done | Hero carousel of the client's web banners, square artwork on phones |
-| R-03 | Featured "Hot this week" area, controlled from admin | Partial | Hot this week on the homepage, fed from one featuring list (`src/content/featuring.ts`); the admin console takes it over with R-33 |
+| R-03 | Featured "Hot this week" area, controlled from admin | Done (preview) | Hot this week on the homepage follows the console's Merchandising list and Inventory switches (`src/lib/merch.ts`, defaults in `src/content/featuring.ts`); empty hides the band. Settings are per browser until the database |
 | R-04 | One strong image per category | Done | Shop by category leads with one campaign photograph per type; the render on its colored ground shows on hover. Stud Earrings borrows a worn-earrings photograph until Surreal supplies a studs image |
 | R-05 | Highlight Surreal's own photography | Done | Campaign photographs across home, store tiles and product galleries |
 | R-06 | Remove the cursor shade / trailing effect | Done | Removed 30 Sept |
@@ -76,10 +76,10 @@ Last reviewed: 30 September 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-32 | Full inventory view | To do | |
-| R-33 | Feature or toggle any product to the top of any page, including hot deal items | To do | |
-| R-34 | Admin-defined default sort per page; customers can still re-sort | To do | Store already re-sorts client side |
-| R-35 | Manage banners, featured area, metal color options, content pages, users and roles per the access matrix | To do | |
+| R-32 | Full inventory view | Partial (sample feed) | `/admin/inventory`: every piece (style, category, metals, default metal) and every stone (grades, lab and certificate, source, status available, on memo or ordered), search, filters, CSV. Stones are the sample feed until RightClick (C-07); pieces move to the database with bulk upload (A1) |
+| R-33 | Feature or toggle any product to the top of any page, including hot deal items | Done (preview) | Inventory switches and `/admin/merchandising`: Hot this week, and pieces featured to the top of All jewelry or any category, in order; the store pages follow |
+| R-34 | Admin-defined default sort per page; customers can still re-sort | Done (preview) | Default sort per jewelry page in Merchandising; the page opens in it, customers can re-sort, and featured pieces lead only the default order |
+| R-35 | Manage banners, featured area, metal color options, content pages, users and roles per the access matrix | Partial | Banners (on or off, order, labels, links, add from the library) and the featured area work; the access matrix locks modules per role (proposed until C-05); metal options are shown, editing them, content pages and named staff users come with the database and authentication |
 
 ## 6. Rules across the site
 
@@ -88,7 +88,7 @@ Last reviewed: 30 September 2026.
 | B-01 | Every stone is one of a kind; gone from availability the moment an order completes | Partial (preview) | Stones are quantity one in the cart and leave the list once ordered or on memo; enforced server side with the inventory service |
 | B-02 | An article never shows a metal color it does not exist in | Done | With R-12 |
 | B-03 | Each dealer's logged-in experience reflects their own account and history | Partial | Homepage band, dashboard, cart, checkout and forms use the dealer's store, orders, memo and requests; preview session until real accounts with the auth service |
-| B-04 | Access by roles, no approval step | To do | Roles below; page access from C-05 |
+| B-04 | Access by roles, no approval step | Partial | The console enforces a proposed access matrix per staff role (edit, view, none); confirm with C-05; dealer associate permissions with real accounts |
 | B-05 | Card, ACH and wire, through Surreal's existing card processor | Partial / Waiting (Q2, Q3, C-10) | Checkout offers credit or debit card, ACH and wire only; check and Zelle stay offline on the dashboard's Payment Methods page; the processor connects once named |
 | B-06 | Out-of-stock display rule | Waiting (Q1) | |
 
@@ -96,7 +96,7 @@ Last reviewed: 30 September 2026.
 
 | Role | Status |
 |---|---|
-| Administrator, Accounts / Finance, HR, Sales, Manager | To do (admin console, access matrix C-05) |
+| Administrator, Accounts / Finance, HR, Sales, Manager | Partial (console by role in the preview, proposed access matrix; named logins Q10, confirm C-05) |
 | Dealer, Dealer Associate | Partial (one preview dealer session; associates and permissions to do) |
 | Public visitor | Done (marketing pages, no ordering, dealer holding pages) |
 
@@ -115,7 +115,7 @@ Last reviewed: 30 September 2026.
 | Milestone | Due | Status |
 |---|---|---|
 | M1 Scope lock and architecture baseline: screen list, data model, working environments | End of build week 2 | To do |
-| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and eight of ten key screens built as working pages; the admin console shell is next; Main Door waits on Q6 |
+| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and nine of ten key screens built as working pages; Main Door waits on Q6 |
 | M3 Feature complete on staging for UAT, code freeze | End of build week 10 | To do |
 | M4 Go-live, handover documentation, operations runbook | End of build week 12 | To do |
 

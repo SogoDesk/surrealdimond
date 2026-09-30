@@ -20,7 +20,8 @@
 import Link from "next/link";
 import { getImageProps } from "next/image";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
-import { heroSlides, type HeroSlide } from "@/content/home";
+import type { HeroSlide } from "@/content/home";
+import { useBanners } from "@/lib/merch";
 import { useReducedMotion } from "@/hooks/useMedia";
 import { useLoop } from "./useLoop";
 import s from "./HeroCarousel.module.css";
@@ -51,8 +52,14 @@ function Arrow({ dir }: { dir: "prev" | "next" }) {
   );
 }
 
+/** The banners come from the admin console (lib/merch.ts); a changed set remounts the carousel at its first slide. */
 export default function HeroCarousel() {
-  const n = heroSlides.length;
+  const slides = useBanners();
+  return <Carousel key={slides.map((b) => b.id).join("|")} slides={slides} />;
+}
+
+function Carousel({ slides }: { slides: HeroSlide[] }) {
+  const n = slides.length;
   const { index, rel, jumped, go, next, prev } = useLoop(n);
   const reduced = useReducedMotion();
   const [paused, setPaused] = useState(false);
@@ -112,7 +119,7 @@ export default function HeroCarousel() {
         }}
       >
         <ul className={s.track} aria-live={running ? "off" : "polite"}>
-          {heroSlides.map((slide, i) => {
+          {slides.map((slide, i) => {
             const r = rel(i);
             const active = r === 0;
             return (
@@ -148,7 +155,7 @@ export default function HeroCarousel() {
 
       <div className={s.controls}>
         <div className={s.dots} role="tablist" aria-label="Choose a slide">
-          {heroSlides.map((slide, i) => (
+          {slides.map((slide, i) => (
             <button
               key={slide.id}
               type="button"

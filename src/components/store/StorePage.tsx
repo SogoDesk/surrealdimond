@@ -11,6 +11,10 @@
  * tile after the fourth, campaign photographs through the rows, and Load
  * more at the foot. The Surreal Assurance and the footer close the page.
  *
+ * The admin console (lib/merch.ts) sets each page's default sort and the
+ * pieces featured to its top (BRD R-33, R-34); the pins hold in the page's
+ * default order, and a customer's own sort re-sorts everything.
+ *
  * Filters and the sort live in the query string (shared with the older shop
  * helpers in components/shop/filters.ts). Reading it goes through
  * useSearchParams inside a Suspense boundary whose fallback is the same view
@@ -28,6 +32,7 @@ import Assurance from "@/components/brand/Assurance";
 import DivisionMotif from "@/components/brand/DivisionMotif";
 import { categoryFor, clearedQuery, matchesQuery, parseQuery, poolFor, serializeQuery, showsShapes, sortProducts, type ShopQuery } from "@/components/shop/filters";
 import { renderSrc, type Category } from "@/content/catalog";
+import { applyPins, pageSort, useMerch } from "@/lib/merch";
 import { divisions } from "@/content/divisions";
 import { account } from "@/content/site";
 import StoreToolbar, { type Density } from "./StoreToolbar";
@@ -90,11 +95,21 @@ function DivisionRail({ active }: { active: Category | null }) {
 function StoreView({ category, params }: StorePageProps & { params: URLSearchParams | null }) {
   const router = useRouter();
   const pathname = usePathname();
-  const query = useMemo(() => parseQuery(params), [params]);
+  const merch = useMerch();
+  const page = category ?? "all";
+  const defaultSort = pageSort(merch, page);
+  const pinned = merch.pins[page];
+  const query = useMemo(() => {
+    const q = parseQuery(params);
+    return params?.get("sort") ? q : { ...q, sort: defaultSort };
+  }, [params, defaultSort]);
   const shapesOn = showsShapes(category);
   const meta = categoryFor(category);
 
-  const pool = useMemo(() => sortProducts(poolFor(category), query.sort), [category, query.sort]);
+  const pool = useMemo(() => {
+    const sorted = sortProducts(poolFor(category), query.sort);
+    return query.sort === defaultSort ? applyPins(sorted, pinned) : sorted;
+  }, [category, query.sort, defaultSort, pinned]);
   const matches = useMemo(() => pool.filter((p) => matchesQuery(p, query, shapesOn)), [pool, query, shapesOn]);
 
   const [density, setDensity] = useState<Density>(5);
@@ -102,10 +117,13 @@ function StoreView({ category, params }: StorePageProps & { params: URLSearchPar
 
   const setQuery = useCallback(
     (next: ShopQuery) => {
-      const qs = serializeQuery(next);
+      // The page's default sort stays out of the URL; any other choice, "featured" included, is written out.
+      const params = new URLSearchParams(serializeQuery({ ...next, sort: "featured" }));
+      if (next.sort !== defaultSort) params.set("sort", next.sort);
+      const qs = params.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     },
-    [router, pathname],
+    [router, pathname, defaultSort],
   );
   const clearFilters = useCallback(() => setQuery(clearedQuery(query)), [query, setQuery]);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
