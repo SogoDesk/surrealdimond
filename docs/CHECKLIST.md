@@ -51,8 +51,8 @@ Last reviewed: 30 September 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-22 | Custom diamond request form with the details a dealer's customer wants | To do | Live form fields are mapped in CONTEXT.md |
-| R-23 | Proposed: live diamond preview updating with shape, size and color (demo first) | To do | Build the demo for approval (A5) |
+| R-22 | Custom diamond request form with the details a dealer's customer wants | Partial (preview) | Built at `/custom` with every live field in four parts, image uploads and a CU request number; open to new accounts as on the live form. Request emails and image storage connect in M1 |
+| R-23 | Proposed: live diamond preview updating with shape, size and color (demo first) | Demo built, awaiting approval (A5) | Redraws with item type, metal and gold color, shape, carat (to scale) and D to F color; matching bands and finger size for rings; floating preview on phones |
 
 ## 5.6 Inquiries and Contact
 

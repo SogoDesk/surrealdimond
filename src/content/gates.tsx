@@ -42,14 +42,6 @@ export const gates = {
     crumbs: [{ label: "Diamond Legacy" }],
     image: "/media/photos/sb-4117.webp",
   },
-  custom: {
-    kind: "building",
-    eyebrow: "Custom Portal",
-    title: <>From a sketch <em>to a setting</em></>,
-    line: "Our state of the art CAD department can make just about any jewelry item. The portal for briefs, CAD review and approvals is in design.",
-    crumbs: [{ label: "Custom" }],
-    image: "/media/banners/social-8.webp",
-  },
   about: {
     kind: "building",
     eyebrow: "Our story",

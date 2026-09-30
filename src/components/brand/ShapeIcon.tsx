@@ -7,7 +7,7 @@ import type { StoneShape } from "@/content/diamonds";
  * keep the outline and table only.
  */
 
-const OUTLINE: Record<StoneShape, string> = {
+export const OUTLINE: Record<StoneShape, string> = {
   round: "M20 4a16 16 0 1 0 0 32a16 16 0 1 0 0-32Z",
   oval: "M20 3c7 0 11 7.6 11 17s-4 17-11 17S9 29.4 9 20 13 3 20 3Z",
   pear: "M20 3c6 6 11.5 13 11.5 20a11.5 11.5 0 0 1-23 0C8.5 16 14 9 20 3Z",
@@ -20,7 +20,7 @@ const OUTLINE: Record<StoneShape, string> = {
   heart: "M20 35C10 27 5 21 5 14.5A7.5 7.5 0 0 1 20 11a7.5 7.5 0 0 1 15 3.5C35 21 30 27 20 35Z",
 };
 
-const TABLE: Record<StoneShape, string> = {
+export const TABLE: Record<StoneShape, string> = {
   round: "M20 11a9 9 0 1 0 0 18a9 9 0 1 0 0-18Z",
   oval: "M20 10c4 0 6.2 4.5 6.2 10S24 30 20 30s-6.2-4.5-6.2-10S16 10 20 10Z",
   pear: "M20 11c3.5 3.8 6.5 8 6.5 12a6.5 6.5 0 0 1-13 0c0-4 3-8.2 6.5-12Z",
@@ -33,7 +33,7 @@ const TABLE: Record<StoneShape, string> = {
   heart: "M20 28c-5-4-7.5-7.2-7.5-10.5a3.8 3.8 0 0 1 7.5-1.7 3.8 3.8 0 0 1 7.5 1.7C27.5 20.8 25 24 20 28Z",
 };
 
-const FACETS: Partial<Record<StoneShape, string>> = {
+export const FACETS: Partial<Record<StoneShape, string>> = {
   round: "M20 4v7M20 29v7M4 20h7M29 20h7M8.7 8.7l5 5M26.3 26.3l5 5M31.3 8.7l-5 5M13.7 26.3l-5 5",
   oval: "M20 3v7M20 30v7M9 20h4.8M26.2 20H31M12 8l3.2 4.5M28 8l-3.2 4.5M12 32l3.2-4.5M28 32l-3.2-4.5",
   pear: "M20 3v8M8.5 23h5M26.5 23H31.5M11 31l4.4-3.6M29 31l-4.4-3.6M20 34.5v-5",

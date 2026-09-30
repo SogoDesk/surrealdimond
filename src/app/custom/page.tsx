@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import GatePage from "@/components/pages/GatePage";
-import { gates } from "@/content/gates";
+import CustomPortal from "@/components/custom/CustomPortal";
 
-export const metadata: Metadata = { title: "Custom | Surreal Diamond" };
+export const metadata: Metadata = {
+  title: "Custom Portal | Surreal Diamond",
+  description: "Begin a custom design with Surreal's CAD department. F+ color, VS+ clarity diamonds on every custom item, with a live preview of the piece.",
+};
 
 export default function Page() {
-  return <GatePage {...gates.custom} />;
+  return <CustomPortal />;
 }

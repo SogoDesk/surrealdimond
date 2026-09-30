@@ -26,7 +26,7 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 | 1 | Homepage, signed out and signed in | [x] |
 | 2 | Jewelry listing and product page | [x] (Quick View set aside) |
 | 3 | Diamond page (Nivoda style list, quick filters, Quick View, M2O entry) | [x] on the sample feed |
-| 4 | Custom Portal request form, with the live preview demo (R-23) | [ ] |
+| 4 | Custom Portal request form, with the live preview demo (R-23) | [x] demo awaits approval (A5) |
 | 5 | Inquiries and Contact | [ ] |
 | 6 | Retailer Dashboard home (personalized) | [ ] |
 | 7 | Open memo items report and Reorder | [ ] |
@@ -38,8 +38,9 @@ In order. Block A (the BRD fixes to built screens) is done; block B completes th
 - [x] M2O request prefilled from the diamond search or a stone (R-19): shape, exact size, ratio, girdle inscription, customer name for the booklet, notes, dealer details
 - [x] Diamond story under the search, after Tanishq's natural diamonds page: opening, four truths, seed to stone, the four Cs (each tab applies its filters to the search), certificate facts, lab grown and mined, dealer voices, doors. Signed-out visitors get a line under the lead that jumps to it
 - [ ] Replace the story placeholders with Surreal's assets: growth chamber film, five process photos and confirmed process copy, a real lab report, named dealer quotes
-- [ ] Custom Portal (R-22): the live custom request fields (account status, company and location, contact, in-store delivery deadline, PO number, style number, CAD requested, item type, metal, gold color or two tone, center stone shape and size, finger size, matching bands, instructions, image uploads)
-- [ ] Live diamond preview demo for the custom form (R-23): shape, size and color update a drawn stone
+- [x] Custom Portal (R-22): the live custom request fields (account status, company and location, contact, in-store delivery deadline, PO number, style number, CAD requested, item type, metal, gold color or two tone, center stone shape and size, finger size, matching bands, instructions, image uploads)
+- [x] Live diamond preview demo for the custom form (R-23): shape, size and color update a drawn stone, set as a ring, pendant, studs, bangle or loose, in the chosen metal
+- [ ] Show the R-23 demo to Surreal for approval (A5)
 - [ ] Contact page (R-24): inquiry type selector, routing per type, acknowledgement to the sender; schedule an appointment
 - [ ] Dashboard home: greeting, open orders, memo count, recent items, tiles for the subpages
 - [ ] Open memo report (R-28) and order history with Reorder (R-25)
