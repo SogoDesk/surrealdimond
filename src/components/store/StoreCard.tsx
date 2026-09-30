@@ -1,0 +1,133 @@
+"use client";
+
+/**
+ * Store card, compact enough for five across (docs/CONTEXT.md, "Listing").
+ * A square white well with the render; the 360 badge when the piece has a
+ * turntable; a wishlist heart. Hover crossfades to the second view (or plays
+ * the turntable) and raises a View details bar. Beneath: name, design line,
+ * then the card's own selectors: metal swatches and carat chips. A selection
+ * the render library does not cover shows the made to order placeholder.
+ * The whole well and title lead to the product page.
+ */
+
+import Image from "next/image";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import { caratOptions, formatCarat, metals, productHref, renderSrc, videoSrc, type Metal, type Product } from "@/content/catalog";
+import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
+import { defaultSelection, renderForSelection, type PieceSelection } from "@/components/shop/filters";
+import Placeholder from "@/components/shop/Placeholder";
+import { account } from "@/content/site";
+import { useWishlist } from "./useWishlist";
+import s from "./store.module.css";
+
+const SIZES = "(min-width: 1600px) 16vw, (min-width: 1280px) 19vw, (min-width: 1024px) 24vw, (min-width: 768px) 31vw, 46vw";
+
+export default function StoreCard({ product, preferredMetal, priority = false }: { product: Product; preferredMetal: Metal | null; priority?: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [pick, setPick] = useState<PieceSelection | null>(null);
+  const [hover, setHover] = useState(false);
+  const { has, toggle } = useWishlist();
+
+  // A newly filtered metal takes over a picked card's metal (adjusted during render).
+  const [seenPreferred, setSeenPreferred] = useState(preferredMetal);
+  if (seenPreferred !== preferredMetal) {
+    setSeenPreferred(preferredMetal);
+    if (preferredMetal && pick && pick.metal !== preferredMetal) setPick({ ...pick, metal: preferredMetal });
+  }
+  const selection = pick ?? defaultSelection(product, preferredMetal);
+  const slug = renderForSelection(product, selection);
+  const alt = product.angles?.[0] ?? null;
+  const video = product.video ? videoSrc(product.video) : null;
+  const saved = has(product.id);
+  const href = `${productHref(product)}?metal=${selection.metal}&ct=${selection.carat}`;
+
+  const enter = () => {
+    if (isTouchDevice() || prefersReducedMotion() || !slug) return;
+    setHover(true);
+    const v = videoRef.current;
+    if (video && v) {
+      if (!v.src) {
+        v.src = video.mp4;
+        v.load();
+      }
+      v.play().catch(() => undefined);
+    }
+  };
+  const leave = () => {
+    setHover(false);
+    const v = videoRef.current;
+    if (v && v.src) {
+      v.pause();
+      v.currentTime = 0;
+    }
+  };
+
+  const select = (patch: Partial<PieceSelection>) => setPick((prev) => ({ ...(prev ?? defaultSelection(product, preferredMetal)), ...patch }));
+
+  return (
+    <article className={s.card} data-hover={hover ? (video ? "video" : alt ? "angle" : "lift") : undefined} onPointerEnter={enter} onPointerLeave={leave}>
+      <div className={s.well}>
+        <Link href={href} className={s.wellLink} aria-label={`${product.name}, ${product.detail}`}>
+          {slug ? (
+            <Image key={slug} src={renderSrc(slug)} alt="" width={800} height={800} sizes={SIZES} priority={priority} className={`${s.render} ${s.renderBase}`} />
+          ) : (
+            <Placeholder metal={selection.metal} carat={selection.carat} className={s.placeholder} />
+          )}
+          {slug && alt && !video && <Image src={renderSrc(alt)} alt="" width={800} height={800} sizes={SIZES} loading="lazy" className={`${s.render} ${s.renderAlt}`} />}
+          {slug && video && <video ref={videoRef} className={s.video} poster={video.poster} muted playsInline loop preload="none" aria-hidden tabIndex={-1} />}
+          <span className={s.viewBar} aria-hidden>
+            View details
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </span>
+        </Link>
+        {video && <span className={s.badge}>360</span>}
+        <button type="button" className={s.heart} aria-pressed={saved} aria-label={saved ? `Remove ${product.name} from your wishlist` : `Save ${product.name} to your wishlist`} onClick={() => toggle(product.id)}>
+          <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden>
+            <path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0 1 10 5.6a3.6 3.6 0 0 1 6.5 2.3c0 4.7-6.5 8.6-6.5 8.6Z" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div className={s.meta}>
+        <Link href={href} className={s.name}>
+          {product.name}
+        </Link>
+        <span className={s.detail}>{product.detail}</span>
+        <Link href={account.login} className={s.price}>
+          <svg aria-hidden viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
+            <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
+          </svg>
+          Log in for dealer price
+        </Link>
+      </div>
+
+      <div className={s.selectors}>
+        <div className={s.swatches} role="group" aria-label={`Metal for ${product.name}`}>
+          {metals.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              className={s.swatch}
+              style={{ background: m.swatch }}
+              aria-pressed={selection.metal === m.id}
+              aria-label={m.label}
+              title={m.label}
+              onClick={() => select({ metal: m.id })}
+            />
+          ))}
+        </div>
+        <div className={s.carats} role="group" aria-label={`Carat for ${product.name}`}>
+          {caratOptions[product.category].map((ct) => (
+            <button key={ct} type="button" className={s.carat} aria-pressed={selection.carat === ct} onClick={() => select({ carat: ct })}>
+              {formatCarat(ct)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+}

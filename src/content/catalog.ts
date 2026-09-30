@@ -196,3 +196,25 @@ export function productMetals(p: Product): Metal[] {
 export const featured = products.filter((p) => p.featured);
 export const byCategory = (c: Category) => products.filter((p) => p.category === c);
 export const productById = (id: string) => products.find((p) => p.id === id);
+
+/** The product page route. */
+export const productHref = (p: Product) => `/jewelry/${p.category}/${p.id}`;
+
+/**
+ * The reference printed on a product: the client's render files are named by
+ * style number (LE2004W442.11741.jpg, CA24MR0021-8784.jpg), so the leading
+ * style code of the primary render is shown. Descriptive file names
+ * (In and Out Hoops WG.jpg) carry no code and return null.
+ */
+export function styleRef(p: Product): string | null {
+  const head = p.image.split("-")[0];
+  return /^[a-z]{2,}\d/.test(head) ? head.toUpperCase() : null;
+}
+
+/** Every view of a piece for its gallery: the primary render, its angles, then its other metals. */
+export function productViews(p: Product): string[] {
+  const views = [p.image, ...(p.angles ?? []), ...Object.values(p.variants ?? {}).filter((v): v is string => Boolean(v))];
+  return Array.from(new Set(views));
+}
+
+export const categoryLabel = (c: Category) => categories.find((x) => x.id === c)?.label ?? c;

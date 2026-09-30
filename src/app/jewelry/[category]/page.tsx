@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import ShopPage from "@/components/shop/ShopPage";
+import StorePage from "@/components/store/StorePage";
 import GatePage from "@/components/pages/GatePage";
 import { categories } from "@/content/catalog";
 import { pendingDivisions, divisionById } from "@/content/divisions";
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
   const meta = find(category);
-  if (meta) return <ShopPage category={meta.id} />;
+  if (meta) return <StorePage category={meta.id} />;
   const division = divisionById(category);
   if (!division?.pending) notFound();
   return (

@@ -49,7 +49,7 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 ## 3. Cart and checkout (dealer)
 
 - [ ] Mini cart popover from the cart icon
-- [ ] Add to cart from product cards, quick view and product detail
+- [ ] Add to cart from product cards and the product page (after auth)
 - [ ] `/cart`: line items (image, style number, metal, carat, size, quantity, remove, note), order summary at dealer price, trust badges, sticky total bar
 - [ ] Empty cart state
 - [ ] `/checkout`: Store details, Payment, Review, Confirmation; next day delivery cutoff note (order before 4:00pm EST)
@@ -58,10 +58,11 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 
 ## 4. Jewelry (dealer)
 
-- [ ] Jewelry landing on the Tanishq listing pattern (breadcrumb, count, filter and sort bar, inline "find your match" panel)
+- [x] Store listing (`components/store`): breadcrumb, title with count, dealer pricing note, round division rail, sticky toolbar (Filters, Metal, Center stone, 4/5/6 per row, Sort), filter chips, compact cards with metal and carat selectors and wishlist, find your match panel, Made to Order tile, Load more, filter drawer
 - [ ] 16 division pages
-- [ ] Listing filters from the live catalog: type and subtype, style, collection, material; sort Featured, Newest, Name
-- [ ] Product detail `/jewelry/[division]/[product]`: gallery with turntable, style number, quality line, dealer price, metal and total carat weight, quantity, special instructions, add to cart, ask a question, sticky action bar, similar designs
+- [ ] Listing filters from the live catalog once the full 375 piece catalog is imported: type and subtype, style, collection, material; sort Newest
+- [x] Product page `/jewelry/[category]/[product]` for every piece: two-up gallery with the turntable, reference from the render file name, dealer price box, metal, total carat weight, ring size, quantity, special instructions, Log in to add to cart, Ask a question, share, wishlist, service notes, details cards, similar designs, sticky action bar
+- [~] Wishlist: saved in this browser for now (`useWishlist`); moves to the dealer account with auth
 - [ ] Jewelry order form (bulk by style number)
 
 ## 5. Diamond Search (dealer)

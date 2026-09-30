@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ShopPage from "@/components/shop/ShopPage";
+import StorePage from "@/components/store/StorePage";
 
 export const metadata: Metadata = {
   title: "The Collection | Surreal Diamond",
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 
 /** Every piece. Filters and the sort are read from the query string on the client. */
 export default function JewelryPage() {
-  return <ShopPage category={null} />;
+  return <StorePage category={null} />;
 }
