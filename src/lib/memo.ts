@@ -37,3 +37,30 @@ export function useUnavailable(): Set<string> {
   memos.forEach((m) => ids.add(m.stoneId));
   return ids;
 }
+
+/**
+ * Memo reconciliation from the open memo report (the live report's form):
+ * the items the dealer reports as sold, whether they confirm the list is
+ * accurate, and a note for any discrepancy. Kept in this browser with an RC
+ * number until the memo data comes from RightClick.
+ */
+export interface MemoReport {
+  number: string;
+  sentAt: string;
+  /** Memo line ids reported sold. */
+  sold: string[];
+  confirmed: boolean;
+  note: string;
+}
+
+const isReports = (v: unknown): v is MemoReport[] => Array.isArray(v) && v.every((r) => typeof r === "object" && r !== null && Array.isArray((r as MemoReport).sold));
+const reports = createLocalStore<MemoReport[]>("surreal-memo-reports", [], isReports);
+
+export const useMemoReports = reports.useStore;
+
+export function sendMemoReport(report: Omit<MemoReport, "number" | "sentAt">): MemoReport {
+  const now = new Date();
+  const sent: MemoReport = { ...report, number: `RC-${String(now.getTime()).slice(-6)}`, sentAt: now.toISOString() };
+  reports.set((list) => [sent, ...list]);
+  return sent;
+}

@@ -64,10 +64,10 @@ Last reviewed: 30 September 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-25 | Reorder an exact previous item in a couple of clicks | Partial | Whole-order Reorder on the dashboard home and quick reorder per line on the homepage band; order history with per-line Reorder comes with the Orders page (key screen 7) |
+| R-25 | Reorder an exact previous item in a couple of clicks | Done (preview data) | `/dashboard/orders`: frequently reordered pieces and every order line reorder in one click with the same metal, carat weight, size and quantity; Reorder all per order; Change and reorder opens the piece preset. Also on the dashboard home and the homepage band. Loose stones stay one of a kind |
 | R-26 | Trade show appointments | Waiting (Q9) | Dashboard section with a holding page (`/dashboard/trade-shows`) pointing to Schedule an appointment; request form or time-slot booking once Q9 is answered |
 | R-27 | Payment methods managed by the dealer (invoice payment in Phase 2) | To do | Dashboard section with a holding page (`/dashboard/payments`); build with the processor details (C-10) |
-| R-28 | Open memo items report from existing data | In progress | Live memo table mapped (memo date, memo number, stock number, price, shape, size, cut, color, clarity); building `/dashboard/memo` now |
+| R-28 | Open memo items report from existing data | Partial (waiting on C-07) | `/dashboard/memo`: the live columns plus days on memo colored by age, figures, filters, CSV, and the live reconciliation (tick sold, confirm the list, note a discrepancy, RC number). Reads the dealer's memo requests, plus labelled sample lines for the demo account; RightClick supplies the real memo and daily prices |
 | R-29 | Dashboard search integrates Surreal's existing search | Partial / Waiting (C-06) | Dashboard search built: sections, the dealer's orders, memo and requests by number, catalog by name or style, stones by stock ID; swap the source to Surreal's search when C-06 arrives |
 | R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer homepage band, dealer pricing notes, cart and checkout know the store; Retailer Dashboard home with the store's figures, orders, memo, requests and recently viewed |
 | R-31 | Remaining subpages (about 10) | Waiting (Q5) | Every live tile has a dashboard section; the ones in design open a holding page listing what they will hold (`src/content/dashboard.ts`) |
@@ -115,7 +115,7 @@ Last reviewed: 30 September 2026.
 | Milestone | Due | Status |
 |---|---|---|
 | M1 Scope lock and architecture baseline: screen list, data model, working environments | End of build week 2 | To do |
-| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and seven of ten key screens built as working pages; Orders and memo in progress, then the admin console shell; Main Door waits on Q6 |
+| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and eight of ten key screens built as working pages; the admin console shell is next; Main Door waits on Q6 |
 | M3 Feature complete on staging for UAT, code freeze | End of build week 10 | To do |
 | M4 Go-live, handover documentation, operations runbook | End of build week 12 | To do |
 

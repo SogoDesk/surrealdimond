@@ -4,7 +4,7 @@
  * adds (orders with reorder R-25, trade shows R-26, payment methods R-27,
  * open memo R-28). The final list of about ten subpages is Q5, so "design"
  * sections open a holding page that says what they will hold; "live" ones go
- * to pages that exist today; "next" marks the screen being built next.
+ * to pages that exist today; "next" marks a screen being built next.
  */
 
 export type DashIcon =
@@ -33,28 +33,8 @@ export const dashGroups: DashGroup[] = ["Overview", "Orders and memo", "Order", 
 export const dashSections: DashSection[] = [
   { id: "home", label: "Dashboard", line: "Your store at a glance", href: "/dashboard", group: "Overview", icon: "home", status: "live" },
 
-  {
-    id: "orders",
-    label: "Orders",
-    line: "Order history and one-click reorder",
-    href: "/dashboard/orders",
-    group: "Orders and memo",
-    icon: "orders",
-    status: "next",
-    holds: ["Every order with its date, pieces, payment method and status", "Reorder an exact previous piece, or a whole order, in a couple of clicks", "Order details: metal, carat weight, size and notes per line"],
-    meanwhile: { label: "Reorder from the dashboard home", href: "/dashboard#reorder" },
-  },
-  {
-    id: "memo",
-    label: "Open memo items",
-    line: "Memo reconciliation, prices updated daily",
-    href: "/dashboard/memo",
-    group: "Orders and memo",
-    icon: "memo",
-    status: "next",
-    holds: ["On-hand long-term memo diamonds and jewelry: memo date, memo number, stock number, price, shape, size, cut, color, clarity", "Prices updated daily", "Report sales, confirm the list is accurate, or note discrepancies"],
-    meanwhile: { label: "Request a stone on memo", href: "/diamonds" },
-  },
+  { id: "orders", label: "Orders", line: "Order history and one-click reorder", href: "/dashboard/orders", group: "Orders and memo", icon: "orders", status: "live" },
+  { id: "memo", label: "Open memo items", line: "Memo reconciliation, prices updated daily", href: "/dashboard/memo", group: "Orders and memo", icon: "memo", status: "live" },
   { id: "cart", label: "Cart and checkout", line: "Pay by card, ACH or wire", href: "/cart", group: "Orders and memo", icon: "cart", status: "live" },
 
   { id: "diamonds", label: "Diamond search", line: "Loose stones, one line each", href: "/diamonds", group: "Order", icon: "search", status: "live" },
@@ -187,5 +167,5 @@ export const dashSections: DashSection[] = [
 ];
 
 /** Sections that open the dashboard's holding page at /dashboard/[section]. */
-export const holdingSections = dashSections.filter((d) => d.href.startsWith("/dashboard/"));
+export const holdingSections = dashSections.filter((d) => d.href.startsWith("/dashboard/") && d.status !== "live");
 export const dashSection = (id: string) => dashSections.find((d) => d.id === id);
