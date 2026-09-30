@@ -1,0 +1,50 @@
+/* Homepage, shared layout (docs/CONTEXT.md, "Homepage plan") */
+.section {
+  position: relative;
+  padding: clamp(72px, 8vw, 128px) 0;
+  background: var(--porcelain);
+}
+.wrap {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* Section heading, centred (the Tanishq title and subtitle pair) or as a row with an action */
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 0 auto clamp(36px, 4vw, 56px);
+  max-width: 760px;
+  text-align: center;
+}
+.headRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(32px, 3.6vw, 52px);
+}
+.headRow .headText { display: flex; flex-direction: column; gap: 14px; max-width: 680px; }
+.title {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.title em { font-style: italic; }
+.sub {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--fg-soft);
+  max-width: 52ch;
+}
+.head .sub { margin: 0 auto; }

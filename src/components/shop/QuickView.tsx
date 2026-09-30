@@ -6,7 +6,7 @@
  * its thumbnails, right the category eyebrow, the name, the detail, a metal
  * chooser with the carat chips beneath it (mirroring the card, and starting
  * from the card's selection), a hairline, three factual lines, then the
- * doors: Enquire about this piece (contact drawer) and Book a visit. When
+ * doors: Enquire about this piece (contact drawer) and Schedule an appointment. When
  * the selection has no render the stage shows the placeholder. Previous and
  * Next in the head step through the current filtered list. The URL never
  * changes.
@@ -203,7 +203,7 @@ function QuickViewBody({ product, initial, titleId, onEnquire, onVisit }: QuickV
           Enquire about this piece
         </Button>
         <Button variant="secondary" onClick={onVisit}>
-          Book a visit
+          Schedule an appointment
         </Button>
       </div>
     </div>

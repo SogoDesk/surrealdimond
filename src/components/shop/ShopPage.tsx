@@ -38,7 +38,7 @@ export interface ShopPageProps {
 export default function ShopPage({ category }: ShopPageProps) {
   return (
     <>
-      <SiteChrome initialTheme="light" />
+      <SiteChrome />
       <ContactDrawer />
       <main id="main">
         <Suspense fallback={<ShopView category={category} params={null} />}>

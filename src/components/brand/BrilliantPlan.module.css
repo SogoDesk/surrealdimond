@@ -1,0 +1,4 @@
+.brilliant { width: 100%; height: auto; overflow: visible; }
+.spin { transform-box: fill-box; transform-origin: center; animation: brilliantSpin 40s linear infinite; }
+@keyframes brilliantSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }

@@ -8,7 +8,7 @@
  * stage the 28px one.
  */
 
-import { BrilliantPlan } from "@/components/sections/CollectionsPanels";
+import { BrilliantPlan } from "@/components/brand/BrilliantPlan";
 import { formatCarat, metals, type Metal } from "@/content/catalog";
 import s from "./shop.module.css";
 

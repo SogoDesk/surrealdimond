@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, type ReactNode } from "react";
 import { categories, renderSrc, type Category } from "@/content/catalog";
-import { BrilliantPlan } from "@/components/sections/CollectionsPanels";
+import { BrilliantPlan } from "@/components/brand/BrilliantPlan";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import s from "./shop.module.css";

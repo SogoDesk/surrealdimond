@@ -232,7 +232,7 @@ export default function MobileMenu({ open, onClose, links, secondary, visitHref 
                     data-cursor="link"
                     onClick={(e) => {
                       onClose();
-                      if (item.href === "/contact") {
+                      if (item.href === "/contact#appointment") {
                         e.preventDefault();
                         window.setTimeout(() => openContactDrawer("other", "visit"), 450);
                       }
@@ -253,7 +253,7 @@ export default function MobileMenu({ open, onClose, links, secondary, visitHref 
           data-cursor="view"
           onClick={(e) => {
             onClose();
-            if (visitHref === "/contact") {
+            if (visitHref === "/contact#appointment") {
               e.preventDefault();
               window.setTimeout(() => openContactDrawer("other", "visit"), 450);
             }

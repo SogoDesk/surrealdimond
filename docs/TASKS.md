@@ -14,29 +14,30 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` blocked on the cli
 - [x] Remove the pointer light behind the cursor
 - [x] Study the live site: B2B only, 16 jewelry divisions, login gating, checkout steps, forms, verified facts
 - [x] Map the live Retailer Dashboard (15 tiles), dealer Diamond Search, catalog, program forms and the Thinkspace admin
-- [ ] Verified facts and team added to `src/content/site.ts`
-- [ ] Catalog divisions extended to the 16 live entries
+- [x] Verified facts and team added to `src/content/site.ts`
+- [x] Divisions data for the 16 live entries (`src/content/divisions.ts`); the 8 without a grid yet open a dealer holding page
 - [ ] Mock auth: signed-out and signed-in dealer states, route gating with return to the requested page
 - [ ] Shared commerce state: cart store, bag count, dealer pricing from a mock price list
-- [ ] Route stubs for every Phase 1 page so no header or footer link 404s
+- [x] Holding pages for every Phase 1 route (`GatePage`: dealer login for gated routes, in design for public ones)
 
 ## 1. Homepage revamp
 
-- [ ] Confirm the section list in CONTEXT.md, "Homepage plan"
-- [ ] Two-tier header: search, signed-out utilities (Log in, Become a dealer), signed-in utilities (store name menu, cart), division row, sticky collapse
-- [ ] Mega menu on the Tanishq pattern: group rail (Types, Collections, Programs), link grid with thumbnails, promo strip, editorial card
-- [ ] Hero banner carousel
-- [ ] Grower proof strip
-- [ ] Collections bento
-- [ ] Shop by division grid
-- [ ] Programs: Made to Order, Legacy, Custom
-- [ ] Featured items
-- [ ] Turntable stories carousel
-- [ ] Why Surreal for your store (dealer benefits) with Apply
-- [ ] Experience grid
-- [ ] Signed-in dealer bar
+- [x] Confirm the section list in CONTEXT.md, "Homepage plan"
+- [x] Two-tier header: search with rotating prompts, appointments, Log in, Become a dealer, cart, link row that folds on scroll
+- [ ] Signed-in header utilities (store name menu) once mock auth exists
+- [x] Mega menu on the Tanishq pattern: group rail (Types, Collections, Programs), link grid with thumbnails, promo strip, editorial card
+- [x] Hero banner carousel
+- [x] Grower proof strip
+- [x] Collections bento
+- [x] Shop by division grid
+- [x] Programs: Made to Order, Legacy, Custom
+- [x] Featured items
+- [x] Turntable stories carousel
+- [x] Why Surreal for your store (dealer benefits) with Apply
+- [x] Experience grid
+- [ ] Signed-in dealer bar (needs mock auth)
 - [ ] Footer rebuilt with the new columns
-- [ ] Retire old chapters no longer used once replaced
+- [x] Retire old chapters no longer used once replaced
 - [ ] Mobile, reduced motion and Lighthouse passes
 
 ## 2. Main Door and accounts

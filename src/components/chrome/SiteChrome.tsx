@@ -1,27 +1,20 @@
 "use client";
 
 /**
- * The site chrome in one client component: the fixed header (with ThemeSync
- * inside it) and the mobile menu sheet. Drop it once in
- * the root layout or page, before the page content, so the header's #site-logo
- * exists when the preloader looks for it.
+ * The site chrome in one client component: the fixed two-row header and the
+ * mobile menu sheet. Drop it once per page, before the page content, so the
+ * header's #site-logo exists when the preloader looks for it.
  */
 
 import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
-import type { Theme } from "@/components/ui/Section";
 import { brand } from "@/content/site";
-import Header, { PRIMARY_LINKS, RETAILERS_LINK, SEARCH_LINK, VISIT_LINK, type ChromeLink } from "./Header";
+import Header, { APPLY_LINK, APPOINTMENT_LINK, DASHBOARD_LINK, LOGIN_LINK, PRIMARY_LINKS, type ChromeLink } from "./Header";
 import MobileMenu from "./MobileMenu";
 
-const SECONDARY_LINKS: ChromeLink[] = [SEARCH_LINK, RETAILERS_LINK, VISIT_LINK, { label: "Instagram", href: brand.social.instagram }];
+const SECONDARY_LINKS: ChromeLink[] = [LOGIN_LINK, APPLY_LINK, DASHBOARD_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
 
-export interface SiteChromeProps {
-  /** Theme the header paints before the first chapter is measured. The homepage hero is dark. */
-  initialTheme?: Theme;
-}
-
-export default function SiteChrome({ initialTheme = "dark" }: SiteChromeProps) {
+export default function SiteChrome() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -37,8 +30,8 @@ export default function SiteChrome({ initialTheme = "dark" }: SiteChromeProps) {
 
   return (
     <>
-      <Header menuOpen={menuOpen} onMenuToggle={toggle} initialTheme={initialTheme} />
-      <MobileMenu open={menuOpen} onClose={close} links={PRIMARY_LINKS} secondary={SECONDARY_LINKS} visitHref={VISIT_LINK.href} />
+      <Header menuOpen={menuOpen} onMenuToggle={toggle} />
+      <MobileMenu open={menuOpen} onClose={close} links={PRIMARY_LINKS} secondary={SECONDARY_LINKS} visitHref={APPOINTMENT_LINK.href} />
     </>
   );
 }

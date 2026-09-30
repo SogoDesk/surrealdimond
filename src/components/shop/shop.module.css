@@ -13,7 +13,7 @@
   justify-content: flex-end;
   gap: 48px;
   min-height: 62vh;
-  padding: calc(var(--nav-h) + 64px) var(--gutter) 40px;
+  padding: calc(var(--header-full) + 48px) var(--gutter) 40px;
 }
 .mark {
   position: absolute;

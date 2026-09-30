@@ -1,45 +1,41 @@
 import Preloader from "@/components/chrome/Preloader";
 import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer from "@/components/chrome/ContactDrawer";
-import Hero from "@/components/sections/Hero";
-import TimeCounter from "@/components/sections/TimeCounter";
-import Engagement from "@/components/sections/Engagement";
-import Collections from "@/components/sections/Collections";
-import MadeToOrder from "@/components/sections/MadeToOrder";
-import Lookbook from "@/components/sections/Lookbook";
-import Foreveryone from "@/components/sections/Foreveryone";
-import Legacy from "@/components/sections/Legacy";
-import Custom from "@/components/sections/Custom";
-import Visit from "@/components/sections/Visit";
-import Trade from "@/components/sections/Trade";
+import HeroCarousel from "@/components/home/HeroCarousel";
+import GrowerStrip from "@/components/home/GrowerStrip";
+import DivisionGrid from "@/components/home/DivisionGrid";
+import CollectionsBento from "@/components/home/CollectionsBento";
+import Programs from "@/components/home/Programs";
+import Featured from "@/components/home/Featured";
+import Stories from "@/components/home/Stories";
+import Benefits from "@/components/home/Benefits";
+import Experience from "@/components/home/Experience";
 import Footer from "@/components/sections/Footer";
 
 /**
- * Homepage. The chapters run in the order set out in DESIGN.md: a dark opening
- * (hero, time), the engagement aperture into light, the light commerce and
- * program chapters, a second dark chapter (foreveryone, legacy), the light
- * service chapters, the sky arrival (visit, trade) and the navy back cover.
- * Fixed layers (preloader, chrome, contact drawer) sit outside <main> so the
- * pinned and sticky chapters never inherit a transform or clip from a wrapper.
+ * Homepage (docs/CONTEXT.md, "Homepage plan"): the public front door for the
+ * trade, on Tanishq's commerce structure in the Surreal design system. Hero
+ * banners, the grower pitch, shop by category, collections, programs,
+ * featured pieces, turntable stories, the dealer program and the experience
+ * grid, closed by the navy footer. Fixed layers (preloader, chrome, contact
+ * drawer) sit outside <main>.
  */
 export default function Home() {
   return (
     <>
       <Preloader />
-      <SiteChrome initialTheme="dark" />
+      <SiteChrome />
       <ContactDrawer />
       <main id="main">
-        <Hero />
-        <TimeCounter />
-        <Engagement />
-        <Collections />
-        <MadeToOrder />
-        <Lookbook />
-        <Foreveryone />
-        <Legacy />
-        <Custom />
-        <Visit />
-        <Trade />
+        <HeroCarousel />
+        <GrowerStrip />
+        <DivisionGrid />
+        <CollectionsBento />
+        <Programs />
+        <Featured />
+        <Stories />
+        <Benefits />
+        <Experience />
         <Footer />
       </main>
     </>

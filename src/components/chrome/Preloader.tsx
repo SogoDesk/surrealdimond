@@ -32,9 +32,8 @@ export const PRELOADER_SESSION_KEY = "surreal-preloaded";
 export const PRELOADER_REVEAL_EVENT = "surreal:reveal";
 export type PreloaderRevealMode = "full" | "repeat" | "reduced" | "skipped";
 
-const HERO_SRC = "/media/photos/hero-3984-wide.webp";
-const FRAME_DIR = "/media/seq/le2004w442-11771";
-const FRAME_COUNT = 12;
+/** The first hero banner, at the width the carousel requests on desktop and on phones. */
+const HERO_SRCS = ["/media/banners/web-2.webp", "/media/photos/sb-4091-sm.webp"];
 const MIN_DISPLAY = 1.8;
 const COUNTER_START = 0.4;
 const COUNTER_SPAN = 1.2;
@@ -57,12 +56,11 @@ function loadImage(src: string): Promise<void> {
   });
 }
 
-/** Fonts, the hero photograph and the first turntable frames, with a hard cap. */
+/** Fonts and the first hero slide, with a hard cap. */
 function preloadAssets(onProgress: (p: number) => void): Promise<void> {
   const tasks: Promise<void>[] = [
     document.fonts.ready.then(() => undefined),
-    loadImage(HERO_SRC),
-    ...Array.from({ length: FRAME_COUNT }, (_, i) => loadImage(`${FRAME_DIR}/${String(i + 1).padStart(3, "0")}.webp`)),
+    loadImage(window.matchMedia("(min-width: 768px)").matches ? HERO_SRCS[0] : HERO_SRCS[1]),
   ];
   let done = 0;
   const tracked = tasks.map((t) =>
@@ -285,7 +283,7 @@ export default function Preloader() {
           } else {
             tl.to(word, { autoAlpha: 0, duration: 0.4, ease: "none" }, 0);
           }
-          // The nav sits on the dark hero: ink strokes cross to the header's stroke colour over the last 0.4 s.
+          // Strokes settle on the header's own colours over the last 0.4 s.
           tl.to(inkPaths, { stroke: inkTo, duration: 0.4, ease: "none" }, 0.5);
           tl.to(skyPaths, { stroke: skyTo, duration: 0.4, ease: "none" }, 0.5);
           tl.set(logo, { clearProps: "opacity" }, 0.9);

@@ -41,7 +41,7 @@ export function openContactDrawer(topic: ContactTopic = "other", intent: Contact
   window.dispatchEvent(new CustomEvent<ContactOpenDetail>(CONTACT_EVENT, { detail: { topic, intent } }));
 }
 
-const TITLES: Record<ContactIntent, string> = { visit: "Book a visit", contact: "Contact us" };
+const TITLES: Record<ContactIntent, string> = { visit: "Schedule an appointment", contact: "Contact us" };
 const FOCUSABLE = "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])";
 const INITIAL_STATE: ContactState = { ok: false };
 

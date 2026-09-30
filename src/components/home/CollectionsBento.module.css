@@ -1,0 +1,148 @@
+/* 4. Collections bento */
+.bento {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, clamp(220px, 22vw, 320px));
+  gap: clamp(12px, 1.4vw, 20px);
+}
+.bento > li { min-width: 0; }
+.cellFeature { grid-column: 1 / span 5; grid-row: 1 / span 2; }
+.cell1 { grid-column: 6 / span 4; grid-row: 1; }
+.cell2 { grid-column: 10 / span 3; grid-row: 1; }
+.cell3 { grid-column: 6 / span 3; grid-row: 2; }
+.cell4 { grid-column: 9 / span 4; grid-row: 2; }
+@media (max-width: 899px) {
+  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: auto; }
+  .cellFeature { grid-column: 1 / -1; grid-row: auto; height: 380px; }
+  .cell1, .cell2, .cell3, .cell4 { grid-column: auto; grid-row: auto; height: 220px; }
+  .tile:not([data-featured]) .name { font-size: 1.375rem; }
+  .tile:not([data-featured]) .note { display: none; }
+  .tile:not([data-featured]) .copy { right: 16px; bottom: 60px; }
+  .tile:not([data-featured]) .go { width: 36px; height: 36px; left: 16px; right: auto; bottom: 16px; }
+}
+
+.tile {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--ink);
+  background: var(--paper);
+  transition: transform 0.7s var(--ease-surreal), box-shadow 0.7s var(--ease-surreal);
+}
+.tile[data-tone="dark"] { color: var(--porcelain); background: var(--ink); }
+/* Each tile's ground matches its motif's own ground, so a motif held to one side reads as part of the tile */
+.tile[data-id="constellation"] { background: #0b1f2a; }
+.tile[data-id="enamour-enamel"] { background: #dceff7; }
+.tile[data-id="laser-pierced"] { background: #0a0b0c; }
+.tile[data-id="vermeil"] { background: #f7efe0; }
+.tile[data-id="sterling-silver"] { background: linear-gradient(135deg, #ffffff, #e4e8eb 60%, #f2f4f6); }
+.art { position: absolute; inset: 0; }
+.motif {
+  width: 100%;
+  height: 100%;
+  transition: transform 1.4s var(--ease-surreal);
+}
+/* Small tiles hold the motif as a square on the right so the name has clear ground */
+.tile:not([data-featured]) .motif {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  transform-origin: 70% 50%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 35%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 35%);
+}
+.tile[data-tone="dark"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 31, 42, 0) 40%, rgba(11, 31, 42, 0.75) 100%);
+  pointer-events: none;
+}
+.tile[data-id="vermeil"]::after,
+.tile[data-id="enamour-enamel"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(250, 251, 252, 0) 45%, rgba(250, 251, 252, 0.7) 100%);
+  pointer-events: none;
+}
+.render {
+  position: absolute;
+  right: -4%;
+  top: 50%;
+  width: 62%;
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  transition: transform 1.2s var(--ease-surreal);
+}
+.render { mix-blend-mode: multiply; }
+.render img { width: 100%; height: 100%; object-fit: contain; }
+
+.copy {
+  position: absolute;
+  z-index: 1;
+  left: clamp(18px, 2vw, 28px);
+  right: 72px;
+  bottom: clamp(18px, 2vw, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.kicker { font-size: 0.6875rem; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.7; }
+.name {
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 2.2vw, 2.25rem);
+  line-height: 1.05;
+}
+.tile[data-featured] .name { font-size: clamp(2.5rem, 4vw, 3.75rem); font-weight: 300; }
+.note { font-size: 0.875rem; line-height: 1.45; opacity: 0.8; max-width: 30ch; }
+.go {
+  position: absolute;
+  z-index: 1;
+  right: clamp(16px, 1.8vw, 24px);
+  bottom: clamp(16px, 1.8vw, 24px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px currentColor;
+  transition: background-color 0.4s var(--ease-surreal), color 0.4s var(--ease-surreal), transform 0.5s var(--ease-surreal);
+}
+@media (hover: hover) {
+  .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+  .tile:hover .motif { transform: scale(1.06); }
+  .tile:hover .render { transform: translateY(-50%) scale(1.06); }
+  .tile:hover .go { background: currentColor; transform: rotate(45deg); }
+  .tile:hover .go svg { color: var(--ink); }
+  .tile[data-tone="light"]:hover .go svg { color: var(--porcelain); }
+}
+.tile:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+
+/* Twinkle: stars and lit dots breathe on staggered delays */
+.motif [data-twinkle] {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+.motif [data-twinkle]:nth-of-type(3n) { animation-delay: -1.2s; }
+.motif [data-twinkle]:nth-of-type(3n + 1) { animation-delay: -2.4s; }
+.motif [data-twinkle]:nth-of-type(4n) { animation-duration: 4.8s; }
+@keyframes twinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.7); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motif [data-twinkle] { animation: none; }
+}
