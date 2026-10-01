@@ -86,7 +86,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  font: 300 15px/1 var(--font-ui), "Jost", sans-serif;
+  font: 400 15px/1 var(--font-ui), "Jost", sans-serif;
   color: var(--ink);
 }
 .searchInput::-webkit-search-cancel-button { -webkit-appearance: none; }
@@ -98,7 +98,7 @@
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  font: 300 15px/1.2 var(--font-ui), "Jost", sans-serif;
+  font: 400 15px/1.2 var(--font-ui), "Jost", sans-serif;
   color: var(--stone);
   pointer-events: none;
   white-space: nowrap;
@@ -143,7 +143,7 @@
   padding: 6px 0;
   color: var(--ink);
   font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -226,7 +226,7 @@
 .link[aria-expanded="true"]::after,
 .link[data-active="true"]::after { transform: scaleX(1); transform-origin: left; }
 .link[aria-expanded="true"] .chevron { transform: rotate(180deg); }
-.link[data-active="true"] { font-weight: 500; }
+.link[data-active="true"] { font-weight: 600; }
 .shopItem { position: relative; display: inline-flex; align-items: center; }
 
 /* Focus ring, shared by every interactive element in the chrome */
@@ -290,13 +290,13 @@
   gap: 12px;
   padding: 12px 16px;
   border-radius: 10px;
-  font: 400 15px/1.2 var(--font-ui), "Jost", sans-serif;
+  font: 500 15px/1.2 var(--font-ui), "Jost", sans-serif;
   color: var(--graphite);
   text-align: left;
   transition: background-color 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal);
 }
 .megaRailItem:hover { color: var(--ink); }
-.megaRailItem[aria-selected="true"] { background: var(--mist); color: var(--ink); font-weight: 500; }
+.megaRailItem[aria-selected="true"] { background: var(--mist); color: var(--ink); font-weight: 600; }
 .megaRailCount { font-size: 11px; color: var(--stone); font-variant-numeric: tabular-nums; }
 .megaCenter { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
 .megaGrid {
@@ -314,7 +314,7 @@
   gap: 14px;
   padding: 8px 10px 8px 6px;
   border-radius: 999px;
-  font: 400 15px/1.25 var(--font-ui), "Jost", sans-serif;
+  font: 500 15px/1.25 var(--font-ui), "Jost", sans-serif;
   color: var(--graphite);
   transition: background-color 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal);
 }
@@ -359,7 +359,7 @@
 .megaPromoThumb + .megaPromoThumb { margin-left: -12px; }
 .megaPromoThumb img { width: 84%; height: 84%; object-fit: contain; mix-blend-mode: multiply; }
 .megaPromoText { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.megaPromoTitle { font: 400 20px/1.1 var(--font-editorial), "Cormorant Garamond", serif; color: var(--ink); }
+.megaPromoTitle { font: 600 20px/1.1 var(--font-editorial), "Cormorant Garamond", serif; color: var(--ink); }
 .megaPromoLine { font-size: 13px; line-height: 1.4; color: var(--graphite); }
 .megaPromoCta {
   flex: 0 0 auto;
@@ -392,7 +392,7 @@
 .megaCardLayer { object-fit: cover; opacity: 0; transition: opacity 0.5s var(--ease-surreal), transform 1s var(--ease-surreal); }
 .megaCardLayer[data-active="true"] { opacity: 1; }
 .megaCard:hover .megaCardLayer[data-active="true"] { transform: scale(1.04); }
-.megaCardCaption { font: 400 19px/1.2 var(--font-editorial), "Cormorant Garamond", serif; }
+.megaCardCaption { font: 600 19px/1.2 var(--font-editorial), "Cormorant Garamond", serif; }
 .megaCardCta { display: inline-flex; align-items: center; gap: 8px; color: var(--graphite); font-size: 11px; }
 .megaFoot {
   max-width: 1440px;
@@ -449,7 +449,7 @@
 .sheetLink {
   display: inline-block;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 40px;
   line-height: 1.15;
   color: var(--ink);
@@ -494,13 +494,13 @@
 }
 .tileLabel {
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 28px;
   line-height: 1.05;
 }
 .tileAddress {
   font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 11px;
   letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
@@ -513,7 +513,7 @@
 @media (min-width: 768px) { .account { display: block; } }
 .accountBtn { display: inline-flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px 0 5px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--hairline); background: var(--white); color: var(--ink); font-size: 0.8125rem; transition: box-shadow 0.3s var(--ease-surreal); }
 .accountBtn:hover, .accountBtn[aria-expanded="true"] { box-shadow: inset 0 0 0 1px var(--ink); }
-.avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--beam), var(--sky) 60%, var(--line)); color: var(--ink); font-size: 0.6875rem; letter-spacing: 0.06em; font-weight: 500; }
+.avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--beam), var(--sky) 60%, var(--line)); color: var(--ink); font-size: 0.6875rem; letter-spacing: 0.06em; font-weight: 600; }
 .accountName { max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 1279px) { .accountName { display: none; } }
 .accountMenu { position: absolute; right: 0; top: calc(100% + 10px); z-index: 5; width: 260px; padding: 6px; border-radius: var(--radius-md); background: var(--white); box-shadow: 0 0 0 1px var(--hairline), var(--shadow-lift); animation: popIn 0.25s var(--ease-surreal); }

@@ -12,7 +12,7 @@ const display = Italiana({
 
 const editorial = Cormorant_Garamond({
   variable: "--font-editorial",
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
@@ -20,7 +20,7 @@ const editorial = Cormorant_Garamond({
 
 const ui = Jost({
   variable: "--font-ui",
-  weight: ["300", "400", "500"],
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });

@@ -59,7 +59,7 @@
   display: block;
   margin-top: 0.85rem;
   font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.28em;
   margin-right: -0.28em;
@@ -73,7 +73,7 @@
   left: var(--gutter);
   bottom: clamp(1.5rem, 4vh, 2.5rem);
   font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 11px;
   letter-spacing: 0.3em;
   font-variant-numeric: tabular-nums;
@@ -121,7 +121,7 @@
   clip-path: inset(50%);
   white-space: nowrap;
   font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;

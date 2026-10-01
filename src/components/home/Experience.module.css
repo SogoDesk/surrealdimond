@@ -37,7 +37,7 @@
   text-align: center;
   transition: background-color 0.5s var(--ease-surreal), color 0.5s var(--ease-surreal);
 }
-.label { font-size: 0.75rem; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); transition: color 0.5s var(--ease-surreal); }
+.label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); transition: color 0.5s var(--ease-surreal); }
 .line { font-size: 0.8125rem; color: var(--stone); transition: color 0.5s var(--ease-surreal); }
 @media (hover: hover) {
   .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }

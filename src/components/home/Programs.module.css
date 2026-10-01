@@ -68,7 +68,7 @@
 .title {
   margin: 0;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: clamp(2rem, 2.8vw, 2.75rem);
   line-height: 1.05;
   color: var(--ink);

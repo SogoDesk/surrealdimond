@@ -13,7 +13,7 @@
 .title {
   margin: 0;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: clamp(2.25rem, 3.8vw, 3.5rem);
   line-height: 1.04;
   color: var(--ink);
@@ -85,5 +85,5 @@
 }
 .text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .index { color: var(--stone); }
-.itemTitle { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 400; font-size: 1.5rem; line-height: 1.15; color: var(--ink); }
+.itemTitle { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.5rem; line-height: 1.15; color: var(--ink); }
 .itemLine { font-size: 0.9375rem; line-height: 1.55; color: var(--graphite); }

@@ -21,7 +21,7 @@
 .title {
   margin: 0;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: clamp(2.75rem, 5vw, 4.75rem);
   line-height: 1.02;
   color: var(--ink);
@@ -47,4 +47,4 @@
 .render { object-fit: contain; padding: 12%; }
 .motif { width: 100%; height: 100%; }
 .signedIn { margin: 0; padding: 14px 16px; border-radius: 12px; background: var(--mist); font-size: 0.9375rem; line-height: 1.55; color: var(--graphite); max-width: 460px; }
-.signedIn strong { color: var(--ink); font-weight: 500; }
+.signedIn strong { color: var(--ink); font-weight: 600; }

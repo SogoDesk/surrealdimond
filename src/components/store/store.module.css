@@ -24,12 +24,12 @@
 .title {
   margin: 0;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: clamp(2.25rem, 3.6vw, 3.25rem);
   line-height: 1.05;
   color: var(--ink);
 }
-.titleCount { font-family: var(--font-ui), "Jost", sans-serif; font-size: 0.9375rem; font-weight: 300; color: var(--stone); letter-spacing: 0; vertical-align: middle; }
+.titleCount { font-family: var(--font-ui), "Jost", sans-serif; font-size: 0.9375rem; font-weight: 400; color: var(--stone); letter-spacing: 0; vertical-align: middle; }
 .blurb { margin: 0; font-size: 0.9375rem; color: var(--graphite); max-width: 60ch; }
 .dealerNote {
   display: flex;
@@ -42,7 +42,7 @@
   font-size: 0.8125rem;
   color: var(--graphite);
 }
-.dealerNoteText strong { font-weight: 500; color: var(--ink); }
+.dealerNoteText strong { font-weight: 600; color: var(--ink); }
 .dealerNoteDoors { display: inline-flex; gap: 6px; }
 .dealerLogin, .dealerApply {
   display: inline-flex;
@@ -101,7 +101,7 @@
 .railLabel { font-size: 0.75rem; line-height: 1.25; color: var(--graphite); }
 .railItem:hover .railThumb { transform: translateY(-3px); box-shadow: inset 0 0 0 1px var(--hairline), var(--shadow-card); }
 .railItem[aria-current] .railThumb { box-shadow: 0 0 0 2px var(--porcelain), 0 0 0 3px var(--ink); }
-.railItem[aria-current] .railLabel { color: var(--ink); font-weight: 500; }
+.railItem[aria-current] .railLabel { color: var(--ink); font-weight: 600; }
 .railItem:focus-visible { outline: none; }
 .railItem:focus-visible .railThumb { box-shadow: 0 0 0 2px var(--porcelain), 0 0 0 4px var(--sky); }
 
@@ -200,7 +200,7 @@
   text-align: left;
 }
 .menuItem:hover, .menuItem:focus-visible { background: var(--porcelain); color: var(--ink); outline: none; }
-.menuItem[aria-selected="true"] { color: var(--ink); font-weight: 500; }
+.menuItem[aria-selected="true"] { color: var(--ink); font-weight: 600; }
 .menuCheck { margin-left: auto; color: var(--line); }
 .count { font-size: 0.8125rem; color: var(--stone); margin-right: 6px; white-space: nowrap; }
 @media (max-width: 599px) { .count { display: none; } }
@@ -352,7 +352,7 @@
 .meta { display: flex; flex-direction: column; gap: 2px; padding: 0 2px; min-width: 0; }
 .name {
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 1.1875rem;
   line-height: 1.2;
   color: var(--ink);
@@ -443,7 +443,7 @@
 .promoLink:hover .promoImage { transform: scale(1.04); }
 .promoCopy { position: absolute; left: 24px; top: 24px; bottom: 24px; max-width: 60%; display: flex; flex-direction: column; gap: 10px; }
 .promoEyebrow { font-size: 0.6875rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--stone); }
-.promoTitle { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 300; font-size: clamp(1.75rem, 2.2vw, 2.25rem); line-height: 1.05; }
+.promoTitle { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(1.75rem, 2.2vw, 2.25rem); line-height: 1.05; }
 .promoTitle em { font-style: italic; }
 .promoLine { font-size: 0.875rem; line-height: 1.5; color: var(--graphite); }
 .promoCta {
@@ -473,7 +473,7 @@
   box-shadow: inset 0 0 0 1px #d3e8f1;
 }
 .matchHead { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
-.matchTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 300; font-size: clamp(1.75rem, 2.4vw, 2.5rem); line-height: 1.05; color: var(--ink); }
+.matchTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(1.75rem, 2.4vw, 2.5rem); line-height: 1.05; color: var(--ink); }
 .matchTitle em { font-style: italic; }
 .matchTabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 0 0 1px var(--hairline); }
 .matchTab { height: 34px; padding: 0 16px; border-radius: 999px; font-size: 0.8125rem; color: var(--graphite); transition: background-color 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal); }
@@ -495,7 +495,7 @@
   transition: box-shadow 0.25s var(--ease-surreal), background-color 0.25s var(--ease-surreal);
 }
 .matchChip:hover { box-shadow: inset 0 0 0 1px #b9c2ca; }
-.matchChip[aria-pressed="true"] { box-shadow: inset 0 0 0 1.5px var(--ink); background: var(--white); font-weight: 500; }
+.matchChip[aria-pressed="true"] { box-shadow: inset 0 0 0 1.5px var(--ink); background: var(--white); font-weight: 600; }
 .matchChip:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .matchApply {
   display: inline-flex;
@@ -532,7 +532,7 @@
 .moreBtn:hover { background: var(--ink); color: var(--porcelain); }
 
 .empty { max-width: 520px; margin: 64px auto 0; padding: 0 var(--gutter); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.emptyTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 2rem; font-weight: 300; color: var(--ink); }
+.emptyTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 2rem; font-weight: 500; color: var(--ink); }
 .emptyLine { margin: 0; color: var(--graphite); }
 .emptyBtn { margin-top: 8px; height: 44px; padding: 0 26px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
 
@@ -553,7 +553,7 @@
   outline: none;
 }
 .drawerHead { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--hairline); }
-.drawerTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 1.75rem; font-weight: 300; }
+.drawerTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 1.75rem; font-weight: 500; }
 .drawerClose { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--hairline); }
 .drawerClose:hover { background: var(--porcelain); }
 .drawerBody { flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; padding: 4px 24px 24px; }

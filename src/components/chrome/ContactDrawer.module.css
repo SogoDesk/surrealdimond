@@ -52,7 +52,7 @@
   margin: 0;
   padding-top: 6px;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 2rem;
   line-height: 1.1;
   letter-spacing: 0;
@@ -105,7 +105,7 @@
   background: transparent;
   color: var(--ink);
   font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1rem;
   line-height: 1.5;
   outline: none;
@@ -134,7 +134,7 @@
   pointer-events: none;
   color: var(--stone);
   font-family: var(--font-ui), "Jost", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 1rem;
   line-height: 1.5;
   transform-origin: 0% 50%;
@@ -200,7 +200,7 @@
   margin: 0;
   outline: none;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: clamp(2.5rem, 4.6vw, 3.5rem);
   line-height: 1.04;
   letter-spacing: -0.01em;
