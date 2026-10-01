@@ -17,6 +17,10 @@
  * from each category in turn on the all-jewelry page, and link to their
  * category. Load more adds six rows (twelve on phones, where two columns
  * carry fewer photos). An empty result offers Clear filters.
+ *
+ * Clicking a card opens Quick View (QuickView.tsx) on that piece, starting
+ * from the card's metal and carat; its previous and next step through the
+ * current results, and View full details opens the product page.
  */
 
 import Image from "next/image";
@@ -24,8 +28,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { categoryLabel, type Category, type Product } from "@/content/catalog";
 import { editorial, editorialOrder, type Editorial } from "@/content/editorial";
-import type { ShopQuery } from "@/components/shop/filters";
+import { defaultSelection, type PieceSelection, type ShopQuery } from "@/components/shop/filters";
 import StoreCard from "./StoreCard";
+import QuickView from "./QuickView";
 import MatchPanel from "./MatchPanel";
 import type { Density } from "./StoreToolbar";
 import s from "./store.module.css";
@@ -152,6 +157,18 @@ export default function StoreGrid({ category, matches, density, query, showShape
   const gridRef = useRef<HTMLUListElement>(null);
   const [cols, setCols] = useState<number>(density);
   const [pages, setPages] = useState(1);
+  const [quick, setQuick] = useState<{ id: string; selection: PieceSelection | null; opening: number } | null>(null);
+  const [quickOpen, setQuickOpen] = useState(false);
+
+  const openQuick = (product: Product, selection: PieceSelection) => {
+    setQuick((q) => ({ id: product.id, selection, opening: (q?.opening ?? 0) + 1 }));
+    setQuickOpen(true);
+  };
+  const position = quick ? matches.findIndex((p) => p.id === quick.id) : -1;
+  const stepQuick = (d: 1 | -1) => {
+    const next = matches[position + d];
+    if (next) setQuick((q) => ({ id: next.id, selection: defaultSelection(next, query.metal), opening: (q?.opening ?? 0) + 1 }));
+  };
 
   /* The live column count, read from the resolved grid template. */
   useEffect(() => {
@@ -188,7 +205,7 @@ export default function StoreGrid({ category, matches, density, query, showShape
           if (slot.kind === "card")
             return (
               <li key={slot.product.id} className={s.cell}>
-                <StoreCard product={slot.product} preferredMetal={query.metal} priority={slot.index < cols} />
+                <StoreCard product={slot.product} preferredMetal={query.metal} priority={slot.index < cols} onQuickView={openQuick} />
               </li>
             );
           if (slot.kind === "photo") return <PhotoTile key={slot.key} photo={slot.photo} category={slot.category} span={slot.span} />;
@@ -215,6 +232,17 @@ export default function StoreGrid({ category, matches, density, query, showShape
           </button>
         )}
       </div>
+
+      <QuickView
+        product={position >= 0 ? matches[position] : null}
+        selection={quick?.selection ?? null}
+        opening={quick?.opening ?? 0}
+        open={quickOpen && position >= 0}
+        position={position}
+        total={matches.length}
+        onClose={() => setQuickOpen(false)}
+        onStep={stepQuick}
+      />
     </>
   );
 }

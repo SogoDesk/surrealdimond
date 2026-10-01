@@ -8,12 +8,14 @@
  * then the card's own selectors: swatches for only the metals the piece
  * exists in (BRD R-12, B-02) and carat chips. A carat size without a render
  * shows the made to order placeholder.
- * The whole well and title lead to the product page.
+ * Clicking the well or the name opens Quick View through onQuickView, with
+ * the card's metal and carat; a modified click (new tab, new window) still
+ * follows the link to the product page.
  */
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import { caratOptions, formatCarat, metals, productHref, productMetals, renderSrc, videoSrc, type Metal, type Product } from "@/content/catalog";
 import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
 import { defaultSelection, renderForSelection, type PieceSelection } from "@/components/shop/filters";
@@ -27,7 +29,7 @@ import s from "./store.module.css";
 
 const SIZES = "(min-width: 1600px) 16vw, (min-width: 1280px) 19vw, (min-width: 1024px) 24vw, (min-width: 768px) 31vw, 46vw";
 
-export default function StoreCard({ product, preferredMetal, priority = false }: { product: Product; preferredMetal: Metal | null; priority?: boolean }) {
+export default function StoreCard({ product, preferredMetal, priority = false, onQuickView }: { product: Product; preferredMetal: Metal | null; priority?: boolean; onQuickView?: (product: Product, selection: PieceSelection) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [pick, setPick] = useState<PieceSelection | null>(null);
   const [hover, setHover] = useState(false);
@@ -69,12 +71,18 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
     }
   };
 
+  const quick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (!onQuickView || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    onQuickView(product, selection);
+  };
+
   const select = (patch: Partial<PieceSelection>) => setPick((prev) => ({ ...(prev ?? defaultSelection(product, preferredMetal)), ...patch }));
 
   return (
     <article className={s.card} data-hover={hover ? (video ? "video" : alt ? "angle" : "lift") : undefined} onPointerEnter={enter} onPointerLeave={leave}>
       <div className={s.well} style={groundStyle(product.category)}>
-        <Link href={href} className={s.wellLink} aria-label={`${product.name}, ${product.detail}`}>
+        <Link href={href} className={s.wellLink} aria-label={`Quick view: ${product.name}, ${product.detail}`} aria-haspopup="dialog" onClick={quick}>
           {slug ? (
             <Image key={slug} src={renderSrc(slug)} alt="" width={800} height={800} sizes={SIZES} priority={priority} className={`${s.render} ${s.renderBase}`} />
           ) : (
@@ -83,7 +91,7 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
           {slug && alt && !video && <Image src={renderSrc(alt)} alt="" width={800} height={800} sizes={SIZES} loading="lazy" className={`${s.render} ${s.renderAlt}`} />}
           {slug && video && <video ref={videoRef} className={s.video} poster={video.poster} muted playsInline loop preload="none" aria-hidden tabIndex={-1} />}
           <span className={s.viewBar} aria-hidden>
-            View details
+            Quick view
             <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 8h10M9 4l4 4-4 4" />
             </svg>
@@ -98,7 +106,7 @@ export default function StoreCard({ product, preferredMetal, priority = false }:
       </div>
 
       <div className={s.meta}>
-        <Link href={href} className={s.name}>
+        <Link href={href} className={s.name} aria-haspopup="dialog" onClick={quick}>
           {product.name}
         </Link>
         <span className={s.detail}>{product.detail}</span>
