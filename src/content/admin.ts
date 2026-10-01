@@ -27,7 +27,7 @@ export const ROLE_LINE: Record<Role, string> = {
 
 export type Access = "edit" | "view" | "none";
 
-export type AdminIcon = "overview" | "inventory" | "merch" | "banners" | "dealers" | "orders" | "memo" | "requests" | "content" | "marketing" | "staff";
+export type AdminIcon = "overview" | "inventory" | "merch" | "banners" | "promo" | "dealers" | "orders" | "memo" | "requests" | "content" | "marketing" | "staff";
 
 export interface AdminModule {
   id: string;
@@ -70,6 +70,15 @@ export const adminModules: AdminModule[] = [
     icon: "banners",
     status: "live",
     access: { administrator: "edit", finance: "none", hr: "none", sales: "view", manager: "edit" },
+  },
+  {
+    id: "promo",
+    label: "Pop-up banner",
+    line: "Offers and festive messages on the homepage",
+    href: "/admin/promo",
+    icon: "promo",
+    status: "live",
+    access: { administrator: "edit", finance: "none", hr: "none", sales: "edit", manager: "edit" },
   },
   {
     id: "dealers",
@@ -144,3 +153,20 @@ export const adminModules: AdminModule[] = [
 
 export const adminModule = (id: string) => adminModules.find((m) => m.id === id);
 export const adminHolding = adminModules.filter((m) => m.status === "design");
+
+/** Pages a banner or pop-up can lead to. */
+export const SITE_LINKS: { href: string; label: string }[] = [
+  { href: "/jewelry", label: "All jewelry" },
+  { href: "/jewelry/engagement", label: "Engagement rings" },
+  { href: "/jewelry/wedding-bands", label: "Wedding bands" },
+  { href: "/jewelry/earrings", label: "Earrings" },
+  { href: "/jewelry/necklaces", label: "Necklaces" },
+  { href: "/jewelry/pendants", label: "Pendants" },
+  { href: "/jewelry/rings", label: "Rings" },
+  { href: "/jewelry/bracelets", label: "Bracelets" },
+  { href: "/diamonds", label: "Diamond search" },
+  { href: "/diamonds/made-to-order", label: "Made to Order" },
+  { href: "/custom", label: "Custom Portal" },
+  { href: "/contact?type=appointment", label: "Schedule an appointment" },
+  { href: "/contact?type=dealer", label: "Become a dealer" },
+];

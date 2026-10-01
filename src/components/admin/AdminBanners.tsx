@@ -13,6 +13,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
+import { SITE_LINKS as LINKS } from "@/content/admin";
 import { heroSlides } from "@/content/home";
 import { move, resetMerch, setMerch, useMerch, type Banner } from "@/lib/merch";
 import { useAdminAccess } from "./AdminShell";
@@ -20,20 +21,6 @@ import s from "./admin.module.css";
 
 const DESKTOP = Array.from({ length: 8 }, (_, i) => `/media/banners/web-${i + 1}.webp`);
 const PHONE = [..."12345678", ..."abcdefghi"].map((c) => `/media/banners/social-${c}.webp`);
-const LINKS = [
-  { href: "/jewelry", label: "All jewelry" },
-  { href: "/jewelry/engagement", label: "Engagement rings" },
-  { href: "/jewelry/wedding-bands", label: "Wedding bands" },
-  { href: "/jewelry/earrings", label: "Earrings" },
-  { href: "/jewelry/necklaces", label: "Necklaces" },
-  { href: "/jewelry/pendants", label: "Pendants" },
-  { href: "/jewelry/rings", label: "Rings" },
-  { href: "/jewelry/bracelets", label: "Bracelets" },
-  { href: "/diamonds", label: "Diamond search" },
-  { href: "/diamonds/made-to-order", label: "Made to Order" },
-  { href: "/custom", label: "Custom Portal" },
-  { href: "/contact?type=dealer", label: "Become a dealer" },
-];
 const own = new Set(heroSlides.map((b) => b.id));
 
 export default function AdminBanners() {
