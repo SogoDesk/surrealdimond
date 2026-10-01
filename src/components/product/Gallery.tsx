@@ -1,17 +1,25 @@
 "use client";
 
 /**
- * Product gallery (after Tanishq's two-up gallery). Desktop: a wide first
- * view, then square tiles: the turntable, the other renders and two campaign
- * photographs from the category (tagged Campaign, since they show the
- * collection rather than this exact piece). Phones: one swipe row with a
- * counter. Any view opens the full screen viewer: arrows, keyboard, swipe,
- * thumbnails, Escape to close. A View similar pill on the first view jumps
- * to the similar designs.
+ * Product gallery, in the Amazon manner: one large view at a time, with
+ * every view as a thumbnail in a vertical strip on its left (a row under it
+ * on phones). The views: the render in the chosen metal, the turntable, the
+ * other renders, and two campaign photographs from the category (tagged
+ * Campaign, since they show the collection rather than this exact piece).
+ *
+ * The stage moves to the next view on its own every few seconds (longer on
+ * the turntable), with a progress line on the active thumbnail. It holds
+ * while the pointer or focus is on the gallery, while it is off screen or
+ * the tab is hidden, and when the visitor presses pause; it never moves with
+ * reduced motion. Thumbnails, arrows, swipe and the arrow keys choose a view;
+ * the stage opens the full screen viewer. On desktop the gallery stays in
+ * view while the buying column scrolls, so the details below are one short
+ * scroll away. A View similar pill jumps to the similar designs.
  */
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent } from "react";
+import { useReducedMotion } from "@/hooks/useMedia";
 import Placeholder from "@/components/shop/Placeholder";
 import { renderForSelection, type PieceSelection } from "@/components/shop/filters";
 import { productViews, renderSrc, videoSrc, type Product } from "@/content/catalog";
@@ -97,6 +105,18 @@ function Lightbox({ views, at, onClose, onGo }: { views: View[]; at: number; onC
   );
 }
 
+/** How long each view holds before the next, in milliseconds. */
+const DWELL = 4500;
+const DWELL_VIDEO = 8000;
+
+type Item = View | { kind: "placeholder" };
+
+function Thumb({ item }: { item: Item }) {
+  if (item.kind === "placeholder") return <span className={s.thumbPlaceholder} aria-hidden />;
+  const src = item.kind === "video" ? item.poster : item.src;
+  return <Image src={src} alt="" width={160} height={160} sizes="72px" className={item.kind === "photo" ? s.thumbPhoto : s.thumbImage} />;
+}
+
 export default function Gallery({ product, selection }: { product: Product; selection: PieceSelection }) {
   const primary = renderForSelection(product, selection);
   const video = product.video ? videoSrc(product.video) : null;
@@ -109,56 +129,170 @@ export default function Gallery({ product, selection }: { product: Product; sele
     editorial[product.category].single.slice(0, 2).forEach((p) => list.push({ kind: "photo", src: p.src, alt: p.alt }));
     return list;
   }, [product, primary, video]);
+  const items = useMemo<Item[]>(() => (primary ? views : [{ kind: "placeholder" }, ...views]), [primary, views]);
+  const offset = primary ? 0 : 1;
+  const n = items.length;
 
   const ground = groundStyle(product.category);
-  const rowRef = useRef<HTMLUListElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const startX = useRef<number | null>(null);
+  const reduced = useReducedMotion();
   const [at, setAt] = useState(0);
+  const [hold, setHold] = useState(false);
+  const [stopped, setStopped] = useState(false);
+  const [onScreen, setOnScreen] = useState(true);
   const [open, setOpen] = useState<number | null>(null);
-  const total = views.length + (primary ? 0 : 1);
+
+  // A new metal or carat changes the first view: start again from it (adjusted during render).
+  const [seen, setSeen] = useState(primary);
+  if (seen !== primary) {
+    setSeen(primary);
+    setAt(0);
+  }
+
+  const cur = n ? at % n : 0;
+  const item = items[cur];
+  const dwell = item?.kind === "video" ? DWELL_VIDEO : DWELL;
+  const running = !reduced && !hold && !stopped && onScreen && open === null && n > 1;
 
   useEffect(() => {
-    const row = rowRef.current;
-    if (!row) return;
-    const onScroll = () => setAt(Math.round(row.scrollLeft / Math.max(1, row.clientWidth)));
-    row.addEventListener("scroll", onScroll, { passive: true });
-    return () => row.removeEventListener("scroll", onScroll);
+    if (!running) return;
+    const id = window.setTimeout(() => setAt((a) => (a + 1) % n), dwell);
+    return () => window.clearTimeout(id);
+  }, [running, cur, dwell, n]);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    let inView = true;
+    const sync = () => setOnScreen(inView && document.visibilityState === "visible");
+    const io = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      sync();
+    });
+    io.observe(el);
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+    };
   }, []);
 
+  const go = (i: number) => setAt(((i % n) + n) % n);
+  const onKey = (e: ReactKeyboardEvent) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+      e.preventDefault();
+      go(cur + 1);
+    } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      go(cur - 1);
+    }
+  };
+  const down = (e: PointerEvent) => (startX.current = e.clientX);
+  const up = (e: PointerEvent) => {
+    if (startX.current === null) return;
+    const dx = e.clientX - startX.current;
+    startX.current = null;
+    if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+  };
   const toSimilar = () => document.getElementById("similar")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
-    <div className={s.gallery}>
-      <ul ref={rowRef} className={s.views} aria-label={`${product.name}, views`}>
-        {!primary && (
-          <li className={`${s.view} ${s.viewWide}`} style={ground}>
-            <Placeholder metal={selection.metal} carat={selection.carat} size="stage" className={s.viewPlaceholder} />
-          </li>
-        )}
-        {views.map((v, i) => (
-          <li key={`${v.kind}-${v.src}`} className={`${s.view} ${i === 0 && primary ? s.viewWide : ""}`} data-kind={v.kind} style={v.kind === "photo" ? undefined : ground}>
-            <button type="button" className={s.viewOpen} onClick={() => setOpen(i)} aria-label={`Open view ${i + 1} of ${views.length} full screen`}>
-              <ViewMedia view={v} sizes={i === 0 ? "(min-width: 1024px) 55vw, 100vw" : "(min-width: 1024px) 28vw, 100vw"} priority={i === 0} />
+    <div
+      ref={rootRef}
+      className={s.gallery}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHold(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setHold(false)}
+      onFocus={() => setHold(true)}
+      onBlur={(e) => !e.currentTarget.contains(e.relatedTarget as Node | null) && setHold(false)}
+    >
+      <ul className={s.thumbs} aria-label={`${product.name}, views`} onKeyDown={onKey}>
+        {items.map((it, i) => (
+          <li key={it.kind === "placeholder" ? "placeholder" : `${it.kind}-${it.src}`}>
+            <button
+              type="button"
+              className={s.thumb}
+              aria-current={i === cur ? "true" : undefined}
+              aria-label={`View ${i + 1} of ${n}${it.kind === "video" ? ", 360 turntable" : it.kind === "photo" ? ", campaign photograph" : ""}`}
+              onClick={() => go(i)}
+              onMouseEnter={() => go(i)}
+              data-kind={it.kind}
+              style={it.kind === "photo" ? undefined : ground}
+            >
+              <Thumb item={it} />
+              {it.kind === "video" && (
+                <span className={s.thumbPlay} aria-hidden>
+                  <svg viewBox="0 0 12 12" width="10" height="10">
+                    <path d="M3.5 2.2v7.6L9.8 6Z" fill="currentColor" />
+                  </svg>
+                </span>
+              )}
+              {i === cur && running && <span key={`${cur}-${dwell}`} className={s.thumbProgress} style={{ animationDuration: `${dwell}ms` }} aria-hidden />}
             </button>
-            {v.kind === "video" && <span className={s.viewTag}>360 turntable</span>}
-            {v.kind === "photo" && <span className={s.viewTag}>Campaign</span>}
-            {i === 0 && (
-              <button type="button" className={s.similarPill} onClick={toSimilar}>
-                <svg aria-hidden viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
-                  <rect x="2" y="2" width="5" height="5" rx="1" />
-                  <rect x="9" y="2" width="5" height="5" rx="1" />
-                  <rect x="2" y="9" width="5" height="5" rx="1" />
-                  <rect x="9" y="9" width="5" height="5" rx="1" />
-                </svg>
-                View similar
-              </button>
-            )}
           </li>
         ))}
       </ul>
-      <span className={s.viewCount} aria-hidden>
-        {Math.min(at + 1, total)} / {total}
-      </span>
-      {open !== null && <Lightbox views={views} at={open} onClose={() => setOpen(null)} onGo={setOpen} />}
+
+      <div className={s.stage} data-kind={item?.kind} style={item?.kind === "photo" ? undefined : ground} onPointerDown={down} onPointerUp={up} aria-live={running ? "off" : "polite"}>
+        {item?.kind === "placeholder" ? (
+          <Placeholder metal={selection.metal} carat={selection.carat} size="stage" className={s.viewPlaceholder} />
+        ) : (
+          item && (
+            <button type="button" className={s.viewOpen} onClick={() => setOpen(cur - offset)} aria-label={`Open view ${cur + 1} of ${n} full screen`}>
+              <span key={cur} className={s.stageMedia}>
+                <ViewMedia view={item} sizes="(min-width: 1024px) 50vw, 100vw" priority={cur === 0} />
+              </span>
+            </button>
+          )
+        )}
+        {item?.kind === "video" && <span className={s.viewTag}>360 turntable</span>}
+        {item?.kind === "photo" && <span className={s.viewTag}>Campaign</span>}
+
+        {n > 1 && (
+          <>
+            <button type="button" className={`${s.stageArrow} ${s.stagePrev}`} onClick={() => go(cur - 1)} aria-label="Previous view">
+              <svg aria-hidden viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12.5 4 6.5 10l6 6" />
+              </svg>
+            </button>
+            <button type="button" className={`${s.stageArrow} ${s.stageNext}`} onClick={() => go(cur + 1)} aria-label="Next view">
+              <svg aria-hidden viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m7.5 4 6 6-6 6" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        <div className={s.stageFoot}>
+          <span className={`${s.stageCount} tabular`}>
+            {cur + 1} / {n}
+          </span>
+          {n > 1 && !reduced && (
+            <button type="button" className={s.stagePause} onClick={() => setStopped((v) => !v)} aria-label={stopped ? "Play the views" : "Pause the views"} aria-pressed={stopped}>
+              {stopped ? (
+                <svg aria-hidden viewBox="0 0 12 12" width="10" height="10">
+                  <path d="M3.5 2.2v7.6L9.8 6Z" fill="currentColor" />
+                </svg>
+              ) : (
+                <svg aria-hidden viewBox="0 0 12 12" width="10" height="10">
+                  <path d="M3 2h2v8H3zM7 2h2v8H7z" fill="currentColor" />
+                </svg>
+              )}
+            </button>
+          )}
+          <button type="button" className={s.similarPill} onClick={toSimilar}>
+            <svg aria-hidden viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
+              <rect x="2" y="2" width="5" height="5" rx="1" />
+              <rect x="9" y="2" width="5" height="5" rx="1" />
+              <rect x="2" y="9" width="5" height="5" rx="1" />
+              <rect x="9" y="9" width="5" height="5" rx="1" />
+            </svg>
+            View similar
+          </button>
+        </div>
+      </div>
+
+      {open !== null && open >= 0 && <Lightbox views={views} at={open} onClose={() => setOpen(null)} onGo={setOpen} />}
     </div>
   );
 }
