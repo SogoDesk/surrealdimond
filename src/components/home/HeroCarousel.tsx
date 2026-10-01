@@ -151,36 +151,37 @@ function Carousel({ slides }: { slides: HeroSlide[] }) {
         <button type="button" className={`${s.arrow} ${s.arrowNext}`} onClick={next} aria-label="Next slide">
           <Arrow dir="next" />
         </button>
+
+        <div className={s.controls}>
+          <div className={s.dots} role="tablist" aria-label="Choose a slide">
+            {slides.map((slide, i) => (
+              <button
+                key={slide.id}
+                type="button"
+                role="tab"
+                aria-selected={i === index}
+                aria-label={`Slide ${i + 1}: ${slide.label}`}
+                className={s.dot}
+                onClick={() => go(i)}
+              >
+                {i === index && (
+                  <span
+                    key={`fill-${index}`}
+                    className={s.fill}
+                    style={{ animationDuration: `${INTERVAL}s`, animationPlayState: running ? "running" : "paused" }}
+                    data-static={reduced ? "true" : undefined}
+                    onAnimationEnd={next}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+          <span className={`t-index ${s.counter}`} aria-hidden>
+            {String(index + 1).padStart(2, "0")} <span className={s.counterRule} /> {String(n).padStart(2, "0")}
+          </span>
+        </div>
       </div>
 
-      <div className={s.controls}>
-        <div className={s.dots} role="tablist" aria-label="Choose a slide">
-          {slides.map((slide, i) => (
-            <button
-              key={slide.id}
-              type="button"
-              role="tab"
-              aria-selected={i === index}
-              aria-label={`Slide ${i + 1}: ${slide.label}`}
-              className={s.dot}
-              onClick={() => go(i)}
-            >
-              {i === index && (
-                <span
-                  key={`fill-${index}`}
-                  className={s.fill}
-                  style={{ animationDuration: `${INTERVAL}s`, animationPlayState: running ? "running" : "paused" }}
-                  data-static={reduced ? "true" : undefined}
-                  onAnimationEnd={next}
-                />
-              )}
-            </button>
-          ))}
-        </div>
-        <span className={`t-index ${s.counter}`} aria-hidden>
-          {String(index + 1).padStart(2, "0")} <span className={s.counterRule} /> {String(n).padStart(2, "0")}
-        </span>
-      </div>
     </section>
   );
 }

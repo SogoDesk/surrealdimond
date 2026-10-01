@@ -5,9 +5,12 @@
   --w: min(1360px, calc(100vw - 2 * var(--gutter) - 2 * var(--peek)));
   --ratio: 3;
   position: relative;
+  z-index: 1;
   padding: calc(var(--header-full) + clamp(16px, 2vw, 28px)) 0 0;
   background: var(--porcelain);
-  overflow: hidden;
+  /* Clip only the sides (the peeking slides); the active slide's shadow fades into the next section instead of being cut off. */
+  overflow-x: clip;
+  overflow-y: visible;
 }
 @media (max-width: 767px) {
   .hero { --ratio: 1; --peek: 22px; --gap: 10px; --w: calc(100vw - 2 * 16px - 2 * var(--peek)); }
@@ -93,14 +96,21 @@
 .arrow:hover { background: var(--ink); color: var(--porcelain); }
 .arrow:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
 
+/* Dots, fill timer and counter, on the active slide at its bottom center, in a frosted pill so they read on any photograph. */
 .controls {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  bottom: clamp(12px, 1.6vw, 22px);
+  z-index: 3;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
-  width: var(--w);
-  margin: clamp(16px, 1.8vw, 24px) auto 0;
+  gap: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(11, 31, 42, 0.38);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
 }
 .dots { display: flex; align-items: center; gap: 8px; }
 .dot {
@@ -108,18 +118,18 @@
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--hairline);
+  background: rgba(255, 255, 255, 0.5);
   overflow: hidden;
   transition: width 0.6s var(--ease-surreal), background-color 0.3s var(--ease-surreal);
 }
-.dot:hover { background: #c3cbd2; }
-.dot[aria-selected="true"] { width: 40px; background: var(--hairline); }
+.dot:hover { background: rgba(255, 255, 255, 0.8); }
+.dot[aria-selected="true"] { width: 40px; background: rgba(255, 255, 255, 0.35); }
 .dot:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
 .fill {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--ink);
+  background: var(--white);
   transform-origin: left;
   animation-name: heroFill;
   animation-timing-function: linear;
@@ -131,12 +141,12 @@
   to { transform: scaleX(1); }
 }
 .counter {
-  position: absolute;
-  right: 0;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--stone);
+  padding-left: 14px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.9);
 }
 .counterRule { display: inline-block; width: 18px; height: 1px; background: currentColor; opacity: 0.6; }
 @media (max-width: 767px) { .counter { display: none; } }

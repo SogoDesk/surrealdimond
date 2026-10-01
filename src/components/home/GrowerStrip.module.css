@@ -1,7 +1,7 @@
 /* 2. Grower strip */
 .section {
   position: relative;
-  padding: clamp(56px, 6vw, 96px) 0 clamp(64px, 7vw, 112px);
+  padding: clamp(40px, 4vw, 64px) 0 clamp(64px, 7vw, 112px);
   background: var(--porcelain);
 }
 .intro {
