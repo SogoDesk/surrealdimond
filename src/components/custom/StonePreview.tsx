@@ -215,7 +215,7 @@ export default function StonePreview({ item, metal, gold, shape, carat, color, m
         <text x={5 * K / 2} y={-6} className={s.pvLabel} textAnchor="middle">
           5 mm
         </text>
-        <path d={`M0 0v6M0 3h${5 * K}M${5 * K} 0v6`} stroke="#8f9aa3" strokeWidth={1} fill="none" />
+        <path d={`M0 0v6M0 3h${5 * K}M${5 * K} 0v6`} stroke="#636e78" strokeWidth={1} fill="none" />
       </g>
     </svg>
   );

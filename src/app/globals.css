@@ -10,7 +10,7 @@
   --porcelain: #f2f4f6;
   --paper: #fafbfc;
   --hairline: #dce1e6;
-  --stone: #8f9aa3;
+  --stone: #636e78;
   --graphite: #3a3f44;
   --ink: #0b1f2a;
   --studio: #0a0b0c;
@@ -59,7 +59,8 @@
   --bg: var(--studio);
   --fg: var(--porcelain);
   --fg-soft: rgba(242, 244, 246, 0.78);
-  --fg-muted: var(--stone);
+  /* The lighter grey: on the dark studio ground it reads at about 7:1, where --stone would be too dark. */
+  --fg-muted: #8f9aa3;
   --rule: var(--carbon);
   --surface: #111417;
   --accent: var(--sky);

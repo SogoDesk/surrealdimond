@@ -42,7 +42,7 @@
 .pvSparkles path { opacity: 0; transform-box: fill-box; transform-origin: center; animation: twinkle 2.7s ease-in-out infinite; }
 @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.4); } 45% { opacity: 0.95; transform: scale(1); } 60% { opacity: 0; transform: scale(0.6); } }
 @media (prefers-reduced-motion: reduce) { .pvStone { transition: none; } .pvShape, .pvFade { animation: none; } .pvSparkles path { animation: none; opacity: 0; } }
-.pvLabel { font-family: var(--font-ui), "Jost", sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; fill: #8f9aa3; }
+.pvLabel { font-family: var(--font-ui), "Jost", sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; fill: var(--stone); }
 .summary { margin: 0; padding: 4px 18px 6px; border-top: 1px solid var(--hairline); }
 .summary > div { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-top: 1px solid var(--hairline); font-size: 0.8125rem; }
 .summary > div:first-child { border-top: 0; }

@@ -29,7 +29,7 @@ A cool porcelain lookbook, opened and closed by the client's own hard-light stud
 - `--porcelain` #F2F4F6: Page ground for every light section and the preloader. A cool off-white chosen to sit with the sky blue and the cold black-and-white photography; never warm ivory, never pure white.
 - `--paper` #FAFBFC: Cards, product tiles, the Made to Order panel, mega menu surface, the contact drawer on light.
 - `--hairline` #DCE1E6: Rules, dividers, card borders, the giant background line mark on light, inactive rails.
-- `--stone` #8F9AA3: Captions, indices, disabled states, eyebrows on light, secondary text on light.
+- `--stone` #636E78: Captions, indices, disabled states, eyebrows on light, secondary text on light. Darkened from #8F9AA3 on 1 Oct 2026 so small text meets 4.5:1 contrast on porcelain (about 4.7:1).
 - `--graphite` #3A3F44: Body copy on light. Never pure black on porcelain.
 - `--ink` #0B1F2A: Brand navy: headlines and wordmark on light, primary buttons on light, text on the sky panel, the dark stroke family of the line mark, footer ground.
 - `--studio` #0A0B0C: Ground of the dark chapters (hero, time, the start of engagement, foreveryone, legacy). Kept a shade above pure black so the photographs' true blacks read deeper than the UI.
