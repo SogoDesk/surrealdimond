@@ -38,7 +38,7 @@ import { addToCart, RING_SIZES, SIZED_CATEGORIES } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { useWishlist } from "./useWishlist";
 import s from "./quickview.module.css";
-import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, jewelryPrice } from "@/lib/pricing";
+import { formatUSD, jewelryPrice } from "@/lib/pricing";
 
 export interface QuickViewProps {
   product: Product | null;
@@ -199,11 +199,9 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
       <div className={s.priceBox}>
         {dealer ? (
           <span>
-            <strong className="tabular">
-              {formatUSD(jewelryPrice(product, selection.metal, selection.carat))}
-              {qty > 1 && <small> × {qty} = {formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</small>}
-            </strong>
-            Your dealer price, in US dollars, confirmed when Surreal accepts your order.{PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
+            Dealer price{qty > 1 ? `, ${qty} pieces` : ""}
+            <strong className="tabular">{formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</strong>
+            {qty > 1 && <>{formatUSD(jewelryPrice(product, selection.metal, selection.carat))} each</>}
           </span>
         ) : (
           <>

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
 import StoreCard from "@/components/store/StoreCard";
+import { useQuickViewList } from "@/components/store/useQuickViewList";
 import { renderForSelection, type PieceSelection } from "@/components/shop/filters";
 import {
   caratOptions,
@@ -256,16 +257,18 @@ export function InPerson({ product }: { product: Product }) {
 
 function CardGrid({ list, emptyNote }: { list: Product[]; emptyNote?: string }) {
   const [shown, setShown] = useState(10);
+  const quick = useQuickViewList(list);
   if (list.length === 0) return emptyNote ? <p className={s.emptyNote}>{emptyNote}</p> : null;
   return (
     <>
       <ul className={s.cardGrid}>
         {list.slice(0, shown).map((p) => (
           <li key={p.id}>
-            <StoreCard product={p} preferredMetal={null} />
+            <StoreCard product={p} preferredMetal={null} onQuickView={quick.open} />
           </li>
         ))}
       </ul>
+      {quick.drawer}
       {shown < list.length && (
         <div className={s.loadRow}>
           <button type="button" className={s.loadBtn} onClick={() => setShown((n) => n + 10)}>
@@ -327,6 +330,7 @@ export function CompleteLook({ product }: { product: Product }) {
     .map((c) => products.find((p) => p.category === c && p.featured) ?? products.find((p) => p.category === c))
     .filter((p): p is Product => Boolean(p));
   const photo = editorial[product.category].wide[0] ?? editorial[product.category].single[0];
+  const quick = useQuickViewList(picks);
   return (
     <section className={`${s.block} ${s.blockPaper}`} aria-labelledby="look-title">
       <div className={s.wrap}>
@@ -347,10 +351,11 @@ export function CompleteLook({ product }: { product: Product }) {
           <ul className={s.lookGrid}>
             {picks.map((p) => (
               <li key={p.id}>
-                <StoreCard product={p} preferredMetal={null} />
+                <StoreCard product={p} preferredMetal={null} onQuickView={quick.open} />
               </li>
             ))}
           </ul>
+          {quick.drawer}
         </div>
       </div>
     </section>
@@ -370,6 +375,8 @@ export function Explore({ product }: { product: Product }) {
         .filter((m) => products.some((p) => p.category === product.category && productMetals(p).includes(m.id)))
         .map((m) => ({ id: m.id, label: m.label, on: metal === m.id, pick: () => setMetal(m.id), swatch: m.swatch }));
   const more = byShape ? `/jewelry/engagement?shape=${shape}` : `/jewelry/${product.category}?metal=${metal}`;
+  const shown = list.slice(0, 12);
+  const quick = useQuickViewList(shown);
 
   return (
     <section className={s.block} aria-labelledby="explore-title">
@@ -392,12 +399,13 @@ export function Explore({ product }: { product: Product }) {
         </div>
       </div>
       <ul className={s.rail}>
-        {list.slice(0, 12).map((p) => (
+        {shown.map((p) => (
           <li key={p.id} className={s.railItem}>
-            <StoreCard product={p} preferredMetal={byShape ? null : metal} />
+            <StoreCard product={p} preferredMetal={byShape ? null : metal} onQuickView={quick.open} />
           </li>
         ))}
       </ul>
+      {quick.drawer}
     </section>
   );
 }

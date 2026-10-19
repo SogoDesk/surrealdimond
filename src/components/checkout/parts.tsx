@@ -18,7 +18,7 @@ import { useWishlist } from "@/components/store/useWishlist";
 import { groundStyle } from "@/content/grounds";
 import { measurements, shipment, stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
 import ShapeIcon from "@/components/brand/ShapeIcon";
-import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, jewelryPrice, linesTotal, stonePrice } from "@/lib/pricing";
+import { formatUSD, jewelryPrice, linesTotal, stonePrice } from "@/lib/pricing";
 import s from "./checkout.module.css";
 
 export const STEPS = ["Cart", "Store details", "Payment", "Review", "Confirmation"] as const;
@@ -242,8 +242,7 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
         </div>
       </dl>
       <p className={s.summaryNote}>
-        Dealer prices in US dollars, from your price list, confirmed when Surreal accepts your order, as set out in the{" "}
-        <Link href="/terms">Prices Policy</Link>.{PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
+        See the <Link href="/terms">Prices Policy</Link>.
       </p>
       {children}
     </aside>

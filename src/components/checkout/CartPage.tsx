@@ -28,6 +28,7 @@ import { RING_SIZES, SIZED_CATEGORIES, pieceCount, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { LineItem, Steps, Summary, TrustRow } from "./parts";
 import s from "./checkout.module.css";
+import { useQuickViewList } from "@/components/store/useQuickViewList";
 
 function EmptyBag() {
   return (
@@ -46,6 +47,9 @@ export default function CartPage() {
   const lines = useCart();
   const router = useRouter();
   const { ids } = useWishlist();
+  const saved = ids.map((id) => productById(id)).filter((p): p is Product => Boolean(p));
+  const suggestions = (saved.length ? saved : featured).slice(0, 5);
+  const quick = useQuickViewList(suggestions);
 
   if (!dealer) return <GatePage {...gates.cart} />;
 
@@ -54,8 +58,6 @@ export default function CartPage() {
     const p = productById(l.productId);
     return p && SIZED_CATEGORIES.has(p.category) && !l.size;
   });
-  const saved = ids.map((id) => productById(id)).filter((p): p is Product => Boolean(p));
-  const suggestions = (saved.length ? saved : featured).slice(0, 5);
 
   return (
     <>
@@ -164,10 +166,11 @@ export default function CartPage() {
             <ul className={s.moreGrid}>
               {suggestions.map((p) => (
                 <li key={p.id}>
-                  <StoreCard product={p} preferredMetal={null} />
+                  <StoreCard product={p} preferredMetal={null} onQuickView={quick.open} />
                 </li>
               ))}
             </ul>
+            {quick.drawer}
           </div>
         </section>
         <Footer />

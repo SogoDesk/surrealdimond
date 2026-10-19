@@ -45,7 +45,7 @@ import DeliveryCountdown from "./DeliveryCountdown";
 import { CompleteLook, DealerQuestions, Details, Explore, InPerson, ProgramBanners, Similar } from "./ProductSections";
 import s from "./product.module.css";
 import { useMetalKey, useWithMetals } from "@/lib/metals";
-import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, jewelryPrice } from "@/lib/pricing";
+import { formatUSD, jewelryPrice } from "@/lib/pricing";
 
 const SIZED = new Set(["engagement", "wedding-bands", "rings"]);
 const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];
@@ -191,22 +191,19 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                 </div>
 
                 <div className={s.priceBox}>
-                  <span className={s.priceIcon} aria-hidden>
-                    <svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
-                      <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
-                    </svg>
-                  </span>
+                  {!dealer && (
+                    <span className={s.priceIcon} aria-hidden>
+                      <svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
+                        <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
+                      </svg>
+                    </span>
+                  )}
                   {dealer ? (
                     <span className={s.priceText}>
-                      <strong className="tabular">
-                        {formatUSD(jewelryPrice(product, selection.metal, selection.carat))}
-                        {qty > 1 && <span className={s.priceQty}> × {qty} = {formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</span>}
-                      </strong>
-                      <span>
-                        Your dealer price for {dealer.store}, in US dollars, confirmed when Surreal accepts your order.
-                        {PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
-                      </span>
+                      <span>Dealer price{qty > 1 ? `, ${qty} pieces` : ""}</span>
+                      <strong className="tabular">{formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</strong>
+                      {qty > 1 && <span>{formatUSD(jewelryPrice(product, selection.metal, selection.carat))} each</span>}
                     </span>
                   ) : (
                     <>

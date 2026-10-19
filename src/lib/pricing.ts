@@ -6,18 +6,13 @@
  * SAMPLE PRICE LIST. Surreal's dealer price list has not arrived, so the
  * figures below are a placeholder model: a base price per category at the
  * category's first carat size, scaled by carat weight and metal, and a per
- * carat price for loose stones scaled by size, color and clarity. Every
- * screen that shows a price also shows SAMPLE_NOTE while PRICES_ARE_SAMPLE
- * is true. When the real list is connected (from RightClick or an Excel
- * import), replace jewelryPrice and stonePrice with lookups and set the flag
- * to false; nothing else changes.
+ * carat price for loose stones scaled by size, color and clarity. When the
+ * real list is connected (from RightClick or an Excel import), replace
+ * jewelryPrice and stonePrice with lookups; nothing else changes.
  */
 
 import { caratOptions, productById, type Category, type Metal, type Product } from "@/content/catalog";
 import { stoneById } from "@/content/diamonds";
-
-export const PRICES_ARE_SAMPLE = true;
-export const SAMPLE_NOTE = "Sample prices until your dealer price list is connected.";
 
 const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 /** Whole dollars, e.g. $2,450. */

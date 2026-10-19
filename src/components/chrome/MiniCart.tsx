@@ -20,7 +20,7 @@ import { groundStyle } from "@/content/grounds";
 import { stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
 import ShapeIcon from "@/components/brand/ShapeIcon";
 import styles from "./chrome.module.css";
-import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, linePrice, linesTotal } from "@/lib/pricing";
+import { formatUSD, linePrice, linesTotal } from "@/lib/pricing";
 
 function BagIcon() {
   return (
@@ -166,9 +166,6 @@ export default function MiniCart() {
                 <span>Subtotal</span>
                 <span className="tabular">{formatUSD(linesTotal(lines))}</span>
               </div>
-              <p className={styles.miniNote}>
-                Dealer prices in US dollars, confirmed when Surreal accepts your order.{PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
-              </p>
               <div className={styles.miniDoors}>
                 <Link href={account.cart} className={styles.miniSecondary} onClick={() => setOpen(false)}>
                   View cart
