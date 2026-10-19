@@ -1,0 +1,219 @@
+/*
+  11. See them in the light (visit). Layout only: the sky circle, the reveals and
+  the tilt are driven from Visit.tsx so nothing here can strand content hidden.
+  The section keeps a porcelain ground of its own and the sky layer paints the
+  arrival on top; the chapter is themed sky throughout so nothing jumps.
+*/
+
+.section {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+  isolation: isolate;
+}
+.section.section[data-theme] {
+  background: var(--porcelain);
+}
+
+/* The sky layer: a circle opening from the bottom center of the viewport (clip-path set from Visit.tsx) */
+.sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--sky);
+  clip-path: circle(0px at 50% 0px);
+  pointer-events: none;
+}
+.sky[data-open] {
+  clip-path: none;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding-top: calc(var(--nav-h) + 72px);
+  padding-bottom: 120px;
+}
+
+.grid {
+  align-items: center;
+  row-gap: 56px;
+}
+
+/* Left: copy, address block and calls to action */
+.copy {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.headline {
+  margin: 16px 0 0;
+  font-size: clamp(3rem, 6vw, 6.5rem);
+  max-width: 12ch;
+}
+.body {
+  margin: 32px 0 0;
+}
+
+.address {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  margin: 40px 0 0;
+  font-style: normal;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+.row {
+  display: block;
+  padding: 14px 0;
+}
+a.row {
+  transition: opacity 0.3s var(--ease-surreal);
+}
+a.row:hover {
+  opacity: 0.7;
+}
+a.row:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 4px;
+}
+.rule {
+  display: block;
+  height: 1px;
+  background: var(--rule);
+  transform-origin: 0% 50%;
+}
+.char {
+  display: inline-block;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 40px;
+  width: 100%;
+}
+.ctaWrap {
+  display: inline-flex;
+}
+
+/* Right: the white card holding the studio portrait behind its ink frame */
+.cardCol {
+  grid-column: 1 / -1;
+}
+/* Padding makes room for the ink frame (12px, 18px on hover) so the clip-path reveal includes it; the negative margin keeps the layout box unchanged. */
+.cardWrap {
+  position: relative;
+  padding: 18px;
+  margin: -18px;
+}
+.card {
+  position: relative;
+  background: var(--white);
+  padding: 16px;
+  box-shadow: 0 24px 48px rgba(11, 31, 42, 0.08);
+}
+.frame {
+  position: absolute;
+  inset: -12px;
+  border: 1px solid var(--ink);
+  pointer-events: none;
+  transition: inset 0.5s var(--ease-surreal);
+}
+.card[data-lift] .frame {
+  inset: -18px;
+}
+.photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--porcelain);
+}
+.parallax {
+  position: absolute;
+  inset: 0;
+}
+.img {
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+/* Bottom right: the Instagram text link */
+.social {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-end;
+  margin-top: 40px;
+  color: var(--fg);
+  text-transform: uppercase;
+}
+.social span {
+  position: relative;
+}
+.social span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.social:hover span::after {
+  transform: scaleX(1);
+}
+.social:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .section { --nav-h: 60px; }
+  .inner {
+    padding-top: calc(var(--nav-h) + 48px);
+    padding-bottom: 64px;
+  }
+  .ctas {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ctaWrap,
+  .ctaWrap > * {
+    width: 100%;
+  }
+  .cardCol {
+    padding: 12px;
+  }
+  .social {
+    margin-top: 32px;
+  }
+}
+
+@media (min-width: 768px) {
+  .copy {
+    grid-column: 1 / span 6;
+  }
+  .cardCol {
+    grid-column: 8 / span 5;
+  }
+  .social {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 40px;
+    margin: 0;
+  }
+}

@@ -9,13 +9,12 @@
  *      name, reference, wishlist and share, the dealer price box, metal,
  *      total carat weight, ring size, quantity, special instructions, the
  *      doors, the delivery countdown and service notes.
- *   2. Jewelry details: Product details and Dealer pricing tabs, the
- *      accordions beside the piece's image. Straight after the price, since
- *      dealers read the details next.
- *   3. Program banners: grow the center stone to order, or go custom.
- *   4. See it in person: the New York office band.
- *   5. Complete the look: a campaign photograph and pieces from other
- *      categories.
+ *   2. Complete the look: a campaign photograph and pieces from other
+ *      categories, straight under the buying column.
+ *   3. Jewelry details: Product details and Dealer pricing tabs, the
+ *      accordions beside the piece's image.
+ *   4. Program banners: grow the center stone to order, or go custom.
+ *   5. See it in person: the New York office band.
  *   6. You may also like: All designs and Similar designs, five across.
  *   7. Explore by center stone (or by metal where pieces have no center).
  *   8. Dealer questions, answered from the live dealer site.
@@ -61,7 +60,6 @@ export default function ProductPage({ productId }: { productId: string }) {
           <WithParams product={product} />
         </Suspense>
         <InPerson product={product} />
-        <CompleteLook product={product} />
         <Similar product={product} />
         <Explore product={product} />
         <DealerQuestions />
@@ -338,6 +336,7 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
         </div>
       </section>
 
+      <CompleteLook product={product} />
       <Details product={product} selection={selection} ringSize={sized ? size : null} />
       <ProgramBanners product={product} />
 

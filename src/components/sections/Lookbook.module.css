@@ -1,0 +1,269 @@
+/*
+  Lookbook (DESIGN.md 06). A free-form editorial grid in two parts:
+  - .stage: the eyebrow, the first two prints, the statement and the copy, in flow.
+  - .hold: the last three prints, position sticky at the top of the viewport.
+  The section keeps one extra viewport of room (.room) after the hold and pulls
+  the next chapter up over it with a negative bottom margin, so the hold stays
+  stuck exactly while the dark chapter slides over it. Nothing outside this
+  section has to change for the hold to work; the next chapter only needs to be
+  positioned (Section already is) with an opaque ground.
+*/
+
+.section {
+  z-index: 0;
+  margin-bottom: -100vh;
+}
+
+/* Skip link for keyboard users, before the sticky hold */
+.skip {
+  position: absolute;
+  top: 1rem;
+  left: var(--gutter);
+  z-index: 5;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip:focus-visible {
+  width: auto;
+  height: auto;
+  clip-path: none;
+  padding: 0.75rem 1rem;
+  background: var(--paper);
+  color: var(--ink);
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+/* Part one: the grid in flow */
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto auto auto auto;
+  column-gap: var(--col-gap);
+  padding: clamp(5rem, 12vh, 9rem) var(--gutter) 4vh;
+}
+.eyebrow {
+  grid-column: 1 / 6;
+  grid-row: 1;
+  margin-bottom: 2rem;
+}
+.necklace {
+  grid-column: 1 / 6;
+  grid-row: 2;
+}
+.silver {
+  grid-column: 8 / 13;
+  grid-row: 1 / 4;
+  align-self: start;
+  margin-top: 30vh;
+}
+.statement {
+  grid-column: 1 / 8;
+  grid-row: 3;
+  margin: clamp(3rem, 9vh, 6rem) 0 0;
+  line-height: 1.12;
+  color: var(--fg);
+}
+.copy {
+  grid-column: 8 / 12;
+  grid-row: 4;
+  margin-top: 2rem;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+  margin-top: 2.5rem;
+}
+
+/* Part two: the sticky hold */
+.hold {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(10, 1fr);
+  column-gap: var(--col-gap);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 0 var(--gutter);
+  background: var(--bg);
+}
+.hands {
+  grid-column: 2 / 7;
+  grid-row: 1 / 7;
+  align-self: start;
+  margin-top: 22vh;
+  max-width: 60vh;
+}
+.laughing {
+  grid-column: 7 / 11;
+  grid-row: 1 / 8;
+  align-self: start;
+  margin-top: 20vh;
+  max-width: 42vh;
+}
+.portrait {
+  grid-column: 10 / 13;
+  grid-row: 6 / 11;
+  align-self: end;
+  z-index: 1;
+  margin-bottom: 8vh;
+  max-width: 28vh;
+}
+.room {
+  height: 100vh;
+}
+
+/* Prints */
+.print {
+  position: relative;
+}
+.link {
+  display: block;
+}
+.frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+.media {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.img {
+  object-fit: cover;
+  transition: transform 1s var(--ease-surreal);
+}
+.caption {
+  display: block;
+  margin-top: 0.875rem;
+}
+.captionText {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.captionText::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.link:hover .img,
+.link:focus-visible .img {
+  transform: scale(1.04);
+}
+.link:hover .captionText,
+.link:focus-visible .captionText {
+  transform: translateY(-8px);
+}
+.link:hover .captionText::after,
+.link:focus-visible .captionText::after {
+  transform: scaleX(1);
+}
+.link:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+/* Tablet: give the copy more room */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .copy {
+    grid-column: 7 / 13;
+  }
+}
+
+/* Mobile: two-column staggered masonry, 56vw and 40vw prints, hold kept */
+@media (max-width: 767px) {
+  .stage {
+    display: flex;
+    flex-direction: column;
+    padding-top: 4rem;
+    padding-bottom: 3vh;
+  }
+  .eyebrow {
+    margin-bottom: 1.5rem;
+  }
+  .necklace {
+    width: 56vw;
+    align-self: flex-start;
+  }
+  .silver {
+    width: 40vw;
+    align-self: flex-end;
+    z-index: 1;
+    margin-top: -20vw;
+  }
+  .statement {
+    margin-top: 8vh;
+  }
+  .copy {
+    margin-top: 2rem;
+  }
+  .hold {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8svh;
+    padding-bottom: 6svh;
+  }
+  .hands,
+  .laughing,
+  .portrait {
+    margin: 0;
+  }
+  .hands {
+    width: 56vw;
+    max-width: 45svh;
+    align-self: flex-start;
+  }
+  .laughing {
+    width: 40vw;
+    max-width: 24svh;
+    align-self: flex-end;
+    margin-top: -12vw;
+  }
+  .portrait {
+    width: 40vw;
+    max-width: 24svh;
+    align-self: flex-start;
+    margin: -8vw 0 0 8vw;
+  }
+}
+
+/* Reduced motion: no hold, the section stacks statically */
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    margin-bottom: 0;
+  }
+  .hold {
+    position: static;
+    top: auto;
+  }
+  .room {
+    display: none;
+  }
+  .img,
+  .captionText,
+  .captionText::after {
+    transition: none;
+  }
+  .link:hover .img,
+  .link:hover .captionText {
+    transform: none;
+  }
+}

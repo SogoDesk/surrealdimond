@@ -1,0 +1,198 @@
+/* Foreveryone chapter: a dark studio block rising over the lookbook's hold, centered copy above a three-column parallax collage. */
+
+.root {
+  position: relative;
+  z-index: 2;
+  overflow: clip;
+}
+
+.inner {
+  box-sizing: border-box;
+  /* Tailwind's container utility caps the width at each breakpoint; the collage runs to the gutter. */
+  max-width: none;
+  align-items: start;
+  padding-top: clamp(5rem, 13vh, 9rem);
+  padding-bottom: clamp(5rem, 13vh, 9rem);
+}
+
+/* Copy, columns 1 to 4, held while the collage drifts past. */
+.copyCol {
+  grid-column: 1 / span 4;
+  align-self: stretch;
+}
+.copy {
+  position: sticky;
+  top: calc(var(--header-full) + 10vh);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.headline {
+  margin: 16px 0 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(3.25rem, 5.4vw, 6rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.headline em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+.body {
+  margin: 28px 0 0;
+}
+.cta {
+  margin-top: 36px;
+}
+
+/* Collage, columns 5 to 12, on its own 8-column grid. */
+.collage {
+  grid-column: 5 / -1;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  align-items: start;
+}
+
+.figure {
+  position: relative;
+  margin: 0;
+}
+.dahlia {
+  grid-column: 1 / span 5;
+}
+.dahlia .frame {
+  height: 76vh;
+}
+.veronica {
+  grid-column: 6 / span 3;
+  margin-top: 18vh;
+}
+.veronica .frame {
+  height: 54vh;
+}
+.hoops {
+  position: absolute;
+  z-index: 2;
+  top: 52vh;
+  left: calc(62.5% - 13vw);
+  width: 19vw;
+}
+.hoops .frame {
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--carbon);
+  background: var(--studio);
+}
+
+.frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--surface);
+}
+/* .zoom is scaled by the reveal tween; the hover scale lives on the image so no CSS transition fights it */
+.zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+.frame:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+.img {
+  object-fit: cover;
+  transform-origin: 50% 50%;
+  transition: transform 1s var(--ease-surreal);
+}
+.frame:hover .img,
+.frame:focus-visible .img {
+  transform: scale(1.04);
+}
+.dahlia .img {
+  object-position: 50% 62%;
+}
+.veronica .img {
+  object-position: 50% 45%;
+}
+.hoops .img {
+  object-position: 40% 50%;
+}
+
+/* Captions, Jost 10px stone, underline draws on hover of the image or the caption */
+.caption {
+  position: relative;
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-ui), "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  color: var(--stone);
+}
+.caption::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: var(--sky);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-surreal);
+}
+.figure:hover .caption::after,
+.caption:focus-visible::after {
+  transform: scaleX(1);
+}
+.caption:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .inner {
+    padding-top: 6rem;
+    padding-bottom: 5rem;
+  }
+  .copyCol {
+    grid-column: 1 / -1;
+  }
+  .copy {
+    position: static;
+  }
+  .collage {
+    grid-column: 1 / -1;
+    margin-top: 3rem;
+  }
+  .dahlia {
+    grid-column: 1 / -1;
+  }
+  .dahlia .frame {
+    height: 64vh;
+  }
+  .veronica {
+    grid-column: 1 / span 4;
+    margin-top: 1.5rem;
+  }
+  .veronica .frame {
+    height: auto;
+    aspect-ratio: 2 / 3;
+  }
+  .hoops {
+    position: relative;
+    grid-column: 5 / span 4;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+}

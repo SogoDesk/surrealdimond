@@ -563,3 +563,86 @@ a.accountItem:hover, button.accountItem:hover { background: var(--porcelain); co
 }
 .miniStone { background: radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255, 255, 255, 0) 72%), var(--mist); color: var(--ink); }
 .miniStoneIcon { width: 70%; height: 70%; }
+
+/* Pin progress hairline (ThemeSync, homepage only) */
+.progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--sky);
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-surreal);
+  pointer-events: none;
+  z-index: 3;
+}
+.progress[data-visible="true"] { opacity: 1; }
+
+/*
+  Chapter theming (homepage only): ThemeSync copies the chapter under the bar
+  onto the header's data-theme. Over a dark or navy chapter the bar turns to
+  light-on-dark glass, and at the very top of the page (not yet condensed) it
+  is fully clear so the hero photograph runs under it. The Jewelry panel and
+  the mobile sheet always open on light.
+*/
+.header::before { transition: box-shadow 0.4s var(--ease-surreal), background-color 0.5s var(--ease-surreal), opacity 0.5s var(--ease-surreal); }
+.header,
+.logo,
+.iconLink,
+.link,
+.search,
+.searchInput,
+.searchSubmit { transition-property: color, background-color, box-shadow; transition-duration: 0.45s; transition-timing-function: var(--ease-surreal); }
+
+.header[data-theme="dark"]:not([data-shop-open="true"]):not([data-menu-open="true"]),
+.header[data-theme="navy"]:not([data-shop-open="true"]):not([data-menu-open="true"]) {
+  color: var(--porcelain);
+  --onbar: var(--porcelain);
+}
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"])::before {
+  background: color-mix(in srgb, var(--studio) 55%, transparent);
+  box-shadow: 0 1px 0 rgba(242, 244, 246, 0.08);
+}
+.header[data-theme="navy"]:not([data-shop-open="true"]):not([data-menu-open="true"])::before {
+  background: color-mix(in srgb, var(--ink) 70%, transparent);
+}
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-condensed="true"]):not([data-shop-open="true"]):not([data-menu-open="true"])::before {
+  background: linear-gradient(180deg, rgba(10, 11, 12, 0.55) 0%, rgba(10, 11, 12, 0) 100%);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) :is(.logo, .iconLink, .link) { color: var(--porcelain); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .logo [data-layer="ink"] { stroke: var(--porcelain); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .logo [data-layer="sky"] { stroke: var(--sky); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .search {
+  background: rgba(242, 244, 246, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(242, 244, 246, 0.18);
+  color: rgba(242, 244, 246, 0.7);
+}
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .search[data-focused="true"] {
+  background: rgba(242, 244, 246, 0.14);
+  box-shadow: inset 0 0 0 1px var(--sky), 0 0 0 4px rgba(134, 223, 255, 0.18);
+}
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) :is(.searchInput, .promptWord) { color: var(--porcelain); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .searchPrompt { color: rgba(242, 244, 246, 0.6); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .searchSubmit { background: rgba(242, 244, 246, 0.12); color: var(--porcelain); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .searchSubmit:hover { background: var(--porcelain); color: var(--ink); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .row { border-top-color: rgba(242, 244, 246, 0.12); }
+.header:is([data-theme="dark"], [data-theme="navy"]):not([data-shop-open="true"]):not([data-menu-open="true"]) .count { background: var(--porcelain); color: var(--ink); }
+/* The open panel and sheet restore the light bar's tokens. */
+.header:is([data-shop-open="true"], [data-menu-open="true"]) {
+  --bg: var(--porcelain);
+  --fg: var(--ink);
+  --fg-soft: var(--graphite);
+  --fg-muted: var(--stone);
+  --btn-fill: var(--ink);
+  --btn-fill-fg: var(--porcelain);
+  --btn-hover-fill: var(--porcelain);
+  --btn-hover-fg: var(--ink);
+  --mark-a: var(--ink);
+  --mark-b: var(--line);
+}

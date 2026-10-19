@@ -9,8 +9,9 @@
  * the cart (signed in: the store's account menu and the mini cart). Second row (from 1024px): the primary links, with Jewelry opening
  * the mega menu on hover intent. Past 80px of scroll the second row folds
  * away and the bar keeps only the top row; it returns near the top of the
- * page. The bar is always light: every page it sits on is a light commerce
- * page, so there is no chapter theming.
+ * page. The bar is light on the commerce pages; the homepage passes
+ * `chapters`, which mounts ThemeSync so the bar follows each chapter's
+ * data-theme (light-on-dark glass over the dark chapters).
  */
 
 import Link from "next/link";
@@ -25,6 +26,7 @@ import { LINE_MARK_ASPECT } from "@/components/brand/lineMarkPaths";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import MegaMenu from "./MegaMenu";
+import ThemeSync from "./ThemeSync";
 import MiniCart from "./MiniCart";
 import AccountMenu from "./AccountMenu";
 import { useDealer } from "@/lib/dealer";
@@ -68,6 +70,8 @@ export interface HeaderProps {
   menuOpen: boolean;
   onMenuToggle: () => void;
   headerRef?: RefObject<HTMLElement | null>;
+  /** Follow the homepage chapters' themes (ThemeSync). */
+  chapters?: boolean;
 }
 
 function MagnifierIcon() {
@@ -163,7 +167,7 @@ function SearchField() {
   );
 }
 
-export default function Header({ menuOpen, onMenuToggle, headerRef }: HeaderProps) {
+export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = false }: HeaderProps) {
   const localRef = useRef<HTMLElement | null>(null);
   const ref = headerRef ?? localRef;
   const logoRef = useRef<HTMLAnchorElement>(null);
@@ -258,6 +262,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef }: HeaderProp
       data-site-header
       data-condensed={condensed && !shopOpen ? "true" : undefined}
       data-menu-open={menuOpen ? "true" : "false"}
+      data-shop-open={shopOpen ? "true" : undefined}
       onBlur={onHeaderBlur}
       onPointerLeave={onHeaderLeave}
     >
@@ -340,6 +345,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef }: HeaderProp
       </nav>
 
       <MegaMenu open={shopOpen} onIntent={intend} onClose={closeShop} />
+      {chapters && <ThemeSync headerRef={ref} />}
     </header>
   );
 }

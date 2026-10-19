@@ -167,6 +167,15 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
     setDrawerOpen(true);
   }
 
+  // ?shape= (the homepage shape strip) preselects that shape once.
+  const linkedShape = params?.get("shape") ?? null;
+  const [seenShape, setSeenShape] = useState<string | null>(null);
+  if (linkedShape && linkedShape !== seenShape) {
+    setSeenShape(linkedShape);
+    const shape = SHAPES.find((sh) => sh === linkedShape);
+    if (shape) setQ((prev) => ({ ...prev, shapes: [shape] }));
+  }
+
   const update = (patch: Partial<DiamondQuery>) => {
     setQ((prev) => ({ ...prev, ...patch }));
     setShown(PAGE);

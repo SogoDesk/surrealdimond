@@ -149,6 +149,9 @@ html {
   scroll-behavior: auto;
   background: var(--porcelain);
 }
+/* The homepage's dark chapters paint the root too, so overscroll never flashes porcelain (ThemeSync sets this). */
+html[data-page-theme="dark"] { background: var(--studio); }
+html[data-page-theme="navy"] { background: var(--ink); }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
