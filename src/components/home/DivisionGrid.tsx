@@ -3,8 +3,10 @@
 /**
  * 3. Shop by category: one strong campaign photograph per jewelry type (BRD
  * R-04, R-05) and a tenth tile that leads to the full catalog of sixteen
- * divisions. On hover a tile lifts, the photograph gives way to the type's
- * render on its story ground, and an arrow slides in beside the label.
+ * divisions. Set as loose prints like the lookbook: each photograph opens
+ * from its bottom edge in a wave across the row, and on hover gives way to
+ * the type's render on its story ground while a sky hairline draws under the
+ * label and an arrow slides in beside it.
  */
 
 import Image from "next/image";
@@ -41,7 +43,7 @@ function ArrowSmall() {
 
 export default function DivisionGrid() {
   const ref = useRef<HTMLElement>(null);
-  useRevealIn(ref);
+  useRevealIn(ref, { handoff: true });
 
   return (
     <section ref={ref} className={`${h.section} ${s.section}`} aria-labelledby="divisions-title" data-chapter="divisions">
@@ -58,16 +60,16 @@ export default function DivisionGrid() {
         />
         <ul className={s.grid}>
           {divisionTypes.map((d, i) => (
-            <li key={d.id} data-rise>
+            <li key={d.id}>
               <Link href={d.href} className={s.tile}>
-                <span className={s.well} style={groundStyle(GROUND[d.id] ?? "engagement")}>
+                <span className={s.well} style={groundStyle(GROUND[d.id] ?? "engagement")} data-reveal-img data-reveal-delay={(i % 5) * 0.08}>
                   {d.image && <Image src={renderSrc(d.image)} alt="" width={600} height={600} sizes="(min-width: 1280px) 17vw, (min-width: 768px) 30vw, 44vw" className={s.render} />}
                   {d.photo && <Image src={d.photo} alt="" fill sizes="(min-width: 1280px) 17vw, (min-width: 768px) 30vw, 44vw" className={s.photo} />}
                   <span className={`t-index ${s.index}`} aria-hidden>
                     {String(i + 1).padStart(2, "0")}
                   </span>
                 </span>
-                <span className={s.label}>
+                <span className={s.label} data-rise>
                   <span>{d.label}</span>
                   <span className={s.arrow}>
                     <ArrowSmall />

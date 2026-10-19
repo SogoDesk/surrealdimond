@@ -116,7 +116,7 @@ export default function Featured() {
             <span data-rise>
               <Eyebrow>Featured by Surreal</Eyebrow>
             </span>
-            <h2 id="featured-title" className={s.bandTitle} data-rise>
+            <h2 id="featured-title" className={s.bandTitle} data-split>
               Hot <em>this week</em>
             </h2>
             <p className={s.bandLine} data-rise>

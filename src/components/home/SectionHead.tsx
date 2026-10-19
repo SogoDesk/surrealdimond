@@ -28,7 +28,7 @@ export default function SectionHead({
           <Eyebrow rule={align === "row"}>{eyebrow}</Eyebrow>
         </span>
       )}
-      <h2 id={id} className={s.title} data-rise>
+      <h2 id={id} className={s.title} data-split>
         {title}
       </h2>
       {sub && (

@@ -6,7 +6,8 @@
  * motif (DivisionMotif) full bleed, with the name set over it; Sterling Silver
  * shows its real render. Constellation takes the tall tile. Lines draw in on
  * entry and the stars twinkle on a slow loop (CSS); on hover the motif drifts
- * larger and the arrow fills.
+ * larger and the arrow fills. Constellation opens from its bottom edge, the
+ * others wipe in from alternating sides.
  */
 
 import Image from "next/image";
@@ -56,7 +57,7 @@ function Tile({ d, featured = false }: { d: Division; featured?: boolean }) {
 
 export default function CollectionsBento() {
   const ref = useRef<HTMLElement>(null);
-  useRevealIn(ref);
+  useRevealIn(ref, { handoff: true });
   const [first, ...rest] = divisionCollections;
 
   return (
@@ -79,11 +80,11 @@ export default function CollectionsBento() {
           }
         />
         <ul className={s.bento}>
-          <li className={s.cellFeature} data-rise>
+          <li className={s.cellFeature} data-reveal-img="bottom">
             <Tile d={first} featured />
           </li>
           {rest.map((d, i) => (
-            <li key={d.id} className={s[`cell${i + 1}`]} data-rise>
+            <li key={d.id} className={s[`cell${i + 1}`]} data-reveal-img={i % 2 ? "right" : "left"} data-reveal-delay={0.1 + (i % 2) * 0.1}>
               <Tile d={d} />
             </li>
           ))}

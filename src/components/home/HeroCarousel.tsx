@@ -13,8 +13,10 @@
  * Timing lives in CSS: the active pagination pill fills over the autoplay
  * interval and its animationend advances the carousel, so pausing (hover,
  * keyboard focus, a hidden tab) is just animation-play-state. Swipe and drag
- * move one slide; a drag suppresses the click. Reduced motion: no autoplay
- * and no slide transition.
+ * move one slide; a drag suppresses the click. On the homepage it follows the
+ * programs: the track grows out of a smaller, lowered frame as it scrolls in,
+ * and sinks under Hot this week as it leaves (useRevealIn hand-off). Reduced
+ * motion: no autoplay, no slide transition and no scroll motion.
  */
 
 import Link from "next/link";
@@ -22,8 +24,10 @@ import { getImageProps } from "next/image";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import type { HeroSlide } from "@/content/home";
 import { useBanners } from "@/lib/merch";
-import { useReducedMotion } from "@/hooks/useMedia";
+import { useReducedMotion, prefersReducedMotion } from "@/hooks/useMedia";
+import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { useLoop } from "./useLoop";
+import { useRevealIn } from "./useRevealIn";
 import s from "./HeroCarousel.module.css";
 
 const INTERVAL = 6.5;
@@ -66,6 +70,22 @@ function Carousel({ slides }: { slides: HeroSlide[] }) {
   const [hidden, setHidden] = useState(false);
   const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null);
   const suppressClick = useRef(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  useRevealIn(sectionRef, { handoff: true });
+
+  useGSAP(
+    () => {
+      registerGsap();
+      const track = sectionRef.current?.querySelector<HTMLElement>(`.${s.track}`);
+      if (!track || prefersReducedMotion()) return;
+      gsap.fromTo(
+        track,
+        { scale: 0.86, y: 80 },
+        { scale: 1, y: 0, ease: "none", scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "top 25%", scrub: 0.6 } },
+      );
+    },
+    { scope: sectionRef },
+  );
 
   useEffect(() => {
     const onVis = () => setHidden(document.visibilityState === "hidden");
@@ -97,7 +117,7 @@ function Carousel({ slides }: { slides: HeroSlide[] }) {
   const running = !reduced && !paused && !hidden;
 
   return (
-    <section className={s.hero} aria-roledescription="carousel" aria-label="Featured jewelry" data-chapter="hero">
+    <section ref={sectionRef} className={s.hero} aria-roledescription="carousel" aria-label="Featured jewelry" data-chapter="banners">
       <div
         className={s.viewport}
         onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}

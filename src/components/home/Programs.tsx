@@ -27,10 +27,10 @@ function Bullet() {
   );
 }
 
-function Card({ p, wide = false }: { p: Program; wide?: boolean }) {
+function Card({ p, wide = false, side = "left" }: { p: Program; wide?: boolean; side?: "left" | "right" }) {
   return (
     <article className={s.card} data-wide={wide ? "true" : undefined} data-rise>
-      <div className={s.media} data-reveal-img>
+      <div className={s.media} data-reveal-img={side}>
         <Image src={p.image} alt={p.imageAlt} fill sizes={wide ? "(min-width: 900px) 56vw, 100vw" : "(min-width: 900px) 44vw, 100vw"} className={s.image} />
         <span className={s.chip}>{p.chip}</span>
       </div>
@@ -64,7 +64,7 @@ function Card({ p, wide = false }: { p: Program; wide?: boolean }) {
 
 export default function Programs() {
   const ref = useRef<HTMLElement>(null);
-  useRevealIn(ref);
+  useRevealIn(ref, { handoff: true });
   const [lead, ...pair] = programs;
 
   return (
@@ -88,8 +88,8 @@ export default function Programs() {
         />
         <div className={s.grid}>
           <Card p={lead} wide />
-          {pair.map((p) => (
-            <Card key={p.id} p={p} />
+          {pair.map((p, i) => (
+            <Card key={p.id} p={p} side={i ? "right" : "left"} />
           ))}
         </div>
       </div>

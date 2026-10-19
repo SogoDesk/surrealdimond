@@ -1,5 +1,6 @@
 /* 6. Featured pieces */
-.section { background: var(--porcelain); padding-bottom: clamp(56px, 6vw, 96px); }
+/* z-index 2: slides up over the banner carousel (z-index 1) as it sinks away. */
+.section { z-index: 2; background: var(--porcelain); padding-bottom: clamp(56px, 6vw, 96px); }
 .band {
   position: relative;
   height: clamp(340px, 30vw, 440px);
@@ -31,8 +32,8 @@
 .bandTitle {
   margin: 0;
   font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 500;
-  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  font-weight: 300;
+  font-size: clamp(2.5rem, 4.6vw, 4.5rem);
   line-height: 1.02;
   color: var(--ink);
 }
