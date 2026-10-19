@@ -30,6 +30,7 @@ import { addToCart, caratTotal, pieceCount, useOrders, type CartLine, type Place
 import { downloadCsv } from "@/lib/csv";
 import { useNow } from "@/lib/useNow";
 import s from "./pages.module.css";
+import { formatUSD, linesTotal } from "@/lib/pricing";
 
 const PAYMENT: Record<PlacedOrder["payment"], string> = { card: "Credit or debit card", ach: "ACH", wire: "Wire transfer" };
 const STEPS = ["Received", "Confirmed", "Shipped", "Delivered"];
@@ -248,7 +249,7 @@ export default function OrdersPage() {
                       <button type="button" className={s.orderToggle} aria-expanded={isOpen} aria-controls={`order-${o.number}`} onClick={() => toggle(o.number)}>
                         <span className={s.orderNumber}>{o.number}</span>
                         <span className={s.orderMeta}>
-                          {longDate(o.placedAt)} · {pieceCount(o.lines)} {pieceCount(o.lines) === 1 ? "piece" : "pieces"}, {caratTotal(o.lines)} ct · {PAYMENT[o.payment]}
+                          {longDate(o.placedAt)} · {pieceCount(o.lines)} {pieceCount(o.lines) === 1 ? "piece" : "pieces"}, {caratTotal(o.lines)} ct · {formatUSD(linesTotal(o.lines))} · {PAYMENT[o.payment]}
                         </span>
                         <svg aria-hidden className={s.chev} viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
                           <path d="M2 4.5l4 4 4-4" />

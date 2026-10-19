@@ -15,6 +15,7 @@ import { divisionGroups, divisions } from "@/content/divisions";
 import { SORTS, matchesQuery, poolFor, toggleOne, type ShopQuery, type Sort } from "@/components/shop/filters";
 import { trapTab, useDrawer } from "@/components/shop/useDrawer";
 import s from "./store.module.css";
+import { useWithMetalsList } from "@/lib/metals";
 
 export interface FilterDrawerProps {
   open: boolean;
@@ -54,7 +55,9 @@ export default function FilterDrawer({ open, category, query, showShapes, onAppl
     if (open) setDraft(query);
   }
 
-  const count = useMemo(() => poolFor(category).filter((p) => matchesQuery(p, draft, showShapes)).length, [category, draft, showShapes]);
+  const source = useMemo(() => poolFor(category), [category]);
+  const configured = useWithMetalsList(source);
+  const count = useMemo(() => configured.filter((p) => matchesQuery(p, draft, showShapes)).length, [configured, draft, showShapes]);
 
   return (
     <div ref={rootRef} className={s.drawerRoot} inert={!open} aria-hidden={!open} onKeyDown={onKeyDown} data-lenis-prevent>

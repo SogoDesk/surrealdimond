@@ -63,14 +63,15 @@ export const lineKey = (productId: string, metal: Metal, carat: number, size: st
 
 export const CART_ADDED = "surreal-cart-added";
 
-export function addToCart(line: Omit<CartLine, "key">) {
+/** quiet: skip the mini cart flash, for Buy now, which goes straight to checkout. */
+export function addToCart(line: Omit<CartLine, "key">, { quiet = false }: { quiet?: boolean } = {}) {
   const key = lineKey(line.productId, line.metal, line.carat, line.size);
   cart.set((lines) => {
     const found = lines.find((l) => l.key === key);
     if (found) return lines.map((l) => (l.key === key ? { ...l, qty: Math.min(99, l.qty + line.qty), note: line.note || l.note } : l));
     return [...lines, { ...line, key }];
   });
-  window.dispatchEvent(new CustomEvent(CART_ADDED, { detail: key }));
+  if (!quiet) window.dispatchEvent(new CustomEvent(CART_ADDED, { detail: key }));
 }
 
 /** Add a loose stone. A stone is one of a kind, so adding it again changes nothing. */

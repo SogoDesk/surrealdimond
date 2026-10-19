@@ -11,7 +11,7 @@
 .headRow { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 48px; flex-wrap: wrap; margin-bottom: clamp(32px, 3.6vw, 52px); }
 .headText, .headLeft { display: flex; flex-direction: column; gap: 14px; }
 .headLeft { margin-bottom: 28px; }
-.title { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(2.125rem, 3.8vw, 3.5rem); line-height: 1.05; letter-spacing: -0.01em; color: var(--fg); }
+.title { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(2.125rem, 3.8vw, 3.5rem); line-height: 1.05; letter-spacing: -0.01em; color: var(--fg); }
 .title em { font-style: italic; }
 .draftNote { margin: 0; max-width: 340px; padding: 10px 14px; border-radius: 12px; background: var(--mist); font-size: 0.8125rem; line-height: 1.5; color: var(--graphite); }
 
@@ -35,9 +35,9 @@
 @media (max-width: 899px) { .openingGrid { grid-template-columns: 1fr; } }
 .openingText { display: flex; flex-direction: column; gap: 20px; }
 .openingTitle { margin: 0; font-family: var(--font-display), "Italiana", serif; font-weight: 400; font-size: clamp(2.75rem, 5.6vw, 5.25rem); line-height: 1; letter-spacing: -0.01em; }
-.openingTitle em { display: block; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-style: italic; color: var(--sky); }
+.openingTitle em { display: block; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-style: italic; color: var(--sky); }
 .openingBody { margin: 0; max-width: 46ch; font-size: 1.0625rem; line-height: 1.65; color: rgba(242, 244, 246, 0.8); }
-.openingMission { margin: 0; padding-top: 18px; border-top: 1px solid rgba(242, 244, 246, 0.14); max-width: 46ch; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 1.375rem; line-height: 1.35; color: var(--porcelain); }
+.openingMission { margin: 0; padding-top: 18px; border-top: 1px solid rgba(242, 244, 246, 0.14); max-width: 46ch; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-style: italic; font-size: 1.375rem; line-height: 1.35; color: var(--porcelain); }
 .openingMedia { aspect-ratio: 16 / 11; }
 .openingMedia .ph { border-radius: var(--radius-lg); }
 
@@ -49,7 +49,7 @@
 .truth:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
 .truthNum { position: absolute; top: 22px; right: 24px; font-family: var(--font-display), "Italiana", serif; font-size: 1.75rem; color: var(--mist); }
 .truthIcon { width: 48px; height: 48px; color: var(--line); }
-.truthTitle { margin: 8px 0 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.625rem; line-height: 1.1; }
+.truthTitle { margin: 8px 0 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 1.625rem; line-height: 1.1; }
 .truthBody { margin: 0; font-size: 0.9375rem; line-height: 1.6; color: var(--graphite); }
 
 /* 3. Seed to stone */
@@ -59,7 +59,7 @@
 .step .ph { aspect-ratio: 4 / 5; min-height: 0; margin-bottom: 10px; }
 .step .phIcon { width: 46%; }
 .stepNum { font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
-.stepTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.5rem; line-height: 1.1; }
+.stepTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 1.5rem; line-height: 1.1; }
 .stepBody { margin: 0; font-size: 0.875rem; line-height: 1.6; color: var(--graphite); }
 
 /* 4. The four Cs */
@@ -70,7 +70,7 @@
 .csTab { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 22px 26px; border-bottom: 1px solid var(--hairline); text-align: left; color: var(--stone); transition: background-color 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal); }
 .csTab:last-child { border-bottom: 0; }
 @media (max-width: 899px) { .csTab { flex: 1 0 auto; padding: 16px 18px; border-bottom: 0; } }
-.csTab strong { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.625rem; line-height: 1; color: var(--graphite); }
+.csTab strong { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 1.625rem; line-height: 1; color: var(--graphite); }
 .csTab span { font-size: 0.75rem; letter-spacing: 0.04em; }
 @media (max-width: 559px) { .csTab span { display: none; } }
 .csTab:hover { background: var(--porcelain); }
@@ -98,7 +98,7 @@
 .caratItem figcaption { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 0.6875rem; color: var(--stone); white-space: nowrap; }
 .caratItem figcaption strong { font-size: 0.8125rem; font-weight: 600; color: var(--ink); }
 .profile { width: 100%; max-width: 420px; height: auto; color: var(--ink); }
-.profileLabel { font-family: var(--font-ui), "Jost", sans-serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--graphite); }
+.profileLabel { font-family: var(--font-ui), "Urbanist", sans-serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--graphite); }
 .gradeScale { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 480px; }
 .gradeBar { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); overflow: hidden; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--hairline); background: var(--white); }
 .gradeBarColor { background: linear-gradient(90deg, #ffffff 0%, #ffffff 30%, #fbf6e4 70%, #f3e6bd 100%); }
@@ -146,9 +146,9 @@
 .compareRow > span { padding: 20px 24px; font-size: 0.9375rem; line-height: 1.55; color: var(--graphite); }
 .compareHead > span { padding-top: 18px; padding-bottom: 18px; font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
 .compareHead > span:nth-child(2) { color: var(--ink); }
-.compareKey { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 1.25rem !important; line-height: 1.2 !important; color: var(--ink) !important; }
+.compareKey { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-size: 1.25rem !important; line-height: 1.2 !important; color: var(--ink) !important; }
 .compareLab { background: var(--beam); color: var(--ink) !important; }
-.same { padding: 3px 8px; border-radius: 999px; background: var(--mist); font-family: var(--font-ui), "Jost", sans-serif; font-size: 0.625rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
+.same { padding: 3px 8px; border-radius: 999px; background: var(--mist); font-family: var(--font-ui), "Urbanist", sans-serif; font-size: 0.625rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
 @media (max-width: 699px) {
   .compareRow { grid-template-columns: 1fr 1fr; }
   .compareRow > span { padding: 14px 16px; font-size: 0.875rem; }
@@ -161,7 +161,7 @@
 @media (max-width: 899px) { .voices { grid-template-columns: 1fr; } }
 .voice { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 56px 28px 28px; border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); }
 .voice .phTag { top: 20px; left: 28px; }
-.quoteMark { height: 44px; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 5.5rem; line-height: 1; color: var(--line); opacity: 0.45; }
+.quoteMark { height: 44px; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-size: 5.5rem; line-height: 1; color: var(--line); opacity: 0.45; }
 .voiceLines { display: flex; flex-direction: column; gap: 10px; }
 .voiceLines i { display: block; height: 10px; border-radius: 5px; background: var(--porcelain); }
 .voiceLines i:last-child { width: 60%; }
@@ -174,8 +174,8 @@
 .door { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; padding: 30px 28px; border-radius: var(--radius-lg); background: var(--white); box-shadow: var(--shadow-card); text-align: left; color: var(--graphite); font-size: 0.9375rem; line-height: 1.6; transition: transform 0.5s var(--ease-surreal), box-shadow 0.5s var(--ease-surreal); }
 .door:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
 .door:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
-.door strong { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.875rem; line-height: 1.1; color: var(--ink); }
-.door strong::after { content: " \2192"; font-family: var(--font-ui), "Jost", sans-serif; font-size: 1.125rem; color: var(--line); }
+.door strong { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 1.875rem; line-height: 1.1; color: var(--ink); }
+.door strong::after { content: " \2192"; font-family: var(--font-ui), "Urbanist", sans-serif; font-size: 1.125rem; color: var(--line); }
 .doorKicker { font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
 .doorInk { background: var(--ink); color: rgba(242, 244, 246, 0.78); }
 .doorInk strong { color: var(--porcelain); }

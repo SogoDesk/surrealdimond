@@ -73,7 +73,7 @@ export default function Wordmark({ size = 40, withByline = false, withTm = false
               position: "absolute",
               right: 0,
               top: "0.12em",
-              fontFamily: 'var(--font-ui), "Jost", sans-serif',
+              fontFamily: 'var(--font-ui), "Urbanist", sans-serif',
               fontWeight: 400,
               fontSize: "0.125em",
               letterSpacing: "0.04em",
@@ -87,7 +87,7 @@ export default function Wordmark({ size = 40, withByline = false, withTm = false
       {withByline ? (
         <span
           style={{
-            fontFamily: 'var(--font-ui), "Jost", sans-serif',
+            fontFamily: 'var(--font-ui), "Urbanist", sans-serif',
             fontWeight: 400,
             fontSize: `${WORDMARK_BYLINE_RATIO}em`,
             letterSpacing: "0.28em",

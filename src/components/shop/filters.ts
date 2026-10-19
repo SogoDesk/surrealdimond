@@ -7,7 +7,7 @@
  * state and never reach the URL.
  */
 
-import { caratOptions, categories, defaultMetalOf, metals, products, productMetals, shapes, type Category, type Metal, type Product, type Shape } from "@/content/catalog";
+import { caratOptions, categories, defaultMetalOf, imageMetals, metals, products, productMetals, shapes, type Category, type Metal, type Product, type Shape } from "@/content/catalog";
 
 export type Sort = "featured" | "az" | "za";
 
@@ -112,16 +112,16 @@ export function defaultSelection(product: Product, preferredMetal: Metal | null)
 }
 
 /**
- * The render slug for a selection, or null when the library has none. A
- * piece only offers the metals it exists in, so the metal always has a
- * render (its variant, else the primary image); other carat sizes have no
- * render yet and show the made to order placeholder.
+ * The render slug for a selection, or null when the library has none: its
+ * variant, else the primary image when that is the metal shown. A metal the
+ * console turned on before its render arrived, and other carat sizes, show
+ * the made to order placeholder.
  */
 export function renderForSelection(product: Product, selection: PieceSelection): string | null {
   if (selection.carat !== firstCarat(product)) return null;
   const variant = product.variants?.[selection.metal];
   if (variant) return variant;
-  return productMetals(product).includes(selection.metal) ? product.image : null;
+  return imageMetals(product).includes(selection.metal) ? product.image : null;
 }
 
 /** Category label with its last word emphasized: "Engagement <em>rings</em>." A one word label keeps its capital. */

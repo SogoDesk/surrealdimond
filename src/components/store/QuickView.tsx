@@ -9,8 +9,9 @@
  * Inside: the views (the render in the chosen metal, the turntable, other
  * angles) with thumbnails; the category, name, design line and reference;
  * the dealer price box; metal (only the metals the piece exists in, BRD
- * R-12), total carat weight, ring size for rings, quantity; Add to cart for
- * a signed-in dealer (Log in to add to cart otherwise) and the wishlist
+ * R-12), total carat weight, ring size for rings, quantity; Add to cart and
+ * Buy now (straight to checkout) for a signed-in dealer, Log in to order
+ * otherwise, and the wishlist
  * heart; the next day delivery countdown and three facts; and View full
  * details, which opens the product page with the same metal and carat.
  * Previous and next step through the store's current results. Mechanics
@@ -25,6 +26,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import { defaultSelection, renderForSelection, type PieceSelection } from "@/components/shop/filters";
 import Placeholder from "@/components/shop/Placeholder";
 import { trapTab, useDrawer } from "@/components/shop/useDrawer";
@@ -36,6 +38,7 @@ import { addToCart, RING_SIZES, SIZED_CATEGORIES } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { useWishlist } from "./useWishlist";
 import s from "./quickview.module.css";
+import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, jewelryPrice } from "@/lib/pricing";
 
 export interface QuickViewProps {
   product: Product | null;
@@ -114,6 +117,7 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
   const [qty, setQty] = useState(1);
   const [at, setAt] = useState(0);
   const [added, setAdded] = useState(false);
+  const router = useRouter();
 
   const sized = SIZED_CATEGORIES.has(product.category);
   const primary = renderForSelection(product, selection);
@@ -141,9 +145,16 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
     setAt(0);
     setAdded(false);
   };
+  const line = () => ({ productId: product.id, metal: selection.metal, carat: selection.carat, size: sized ? size : null, qty, note: "" });
   const add = () => {
-    addToCart({ productId: product.id, metal: selection.metal, carat: selection.carat, size: sized ? size : null, qty, note: "" });
+    addToCart(line());
     setAdded(true);
+  };
+  /** Buy now: the piece goes into the cart and the dealer straight to checkout. */
+  const buyNow = () => {
+    addToCart(line(), { quiet: true });
+    onClose();
+    router.push(account.checkout);
   };
 
   return (
@@ -188,8 +199,11 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
       <div className={s.priceBox}>
         {dealer ? (
           <span>
-            <strong>On your dealer price list</strong>
-            Confirmed for {dealer.store} when Surreal accepts your order.
+            <strong className="tabular">
+              {formatUSD(jewelryPrice(product, selection.metal, selection.carat))}
+              {qty > 1 && <small> × {qty} = {formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</small>}
+            </strong>
+            Your dealer price, in US dollars, confirmed when Surreal accepts your order.{PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
           </span>
         ) : (
           <>
@@ -266,15 +280,20 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
 
       <div className={s.doors}>
         {dealer ? (
-          <button type="button" className={s.primary} onClick={add}>
-            {added ? "Added to cart" : "Add to cart"}
-          </button>
+          <>
+            <button type="button" className={s.primary} onClick={add}>
+              {added ? "Added to cart" : "Add to cart"}
+            </button>
+            <button type="button" className={s.buy} onClick={buyNow}>
+              Buy now
+            </button>
+          </>
         ) : (
-          <Link href={loginHref} className={s.primary} onClick={onClose}>
-            Log in to add to cart
+          <Link href={loginHref} className={`${s.primary} ${s.wide}`} onClick={onClose}>
+            Log in to order
           </Link>
         )}
-        <Link href={full} className={s.secondary} onClick={onClose}>
+        <Link href={full} className={`${s.secondary} ${s.wide}`} onClick={onClose}>
           View full details
           <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 8h10M9 4l4 4-4 4" />

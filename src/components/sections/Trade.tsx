@@ -10,7 +10,10 @@
  * over 6s) and brighten to full ink within 120px of the pointer through a small
  * pointer-distance loop. The white portrait card on the right parallaxes at
  * 1.1 and tilts 3 degrees toward the pointer. A straight hairline at the bottom
- * marks the seam where the footer's navy begins.
+ * marks the seam where the footer's navy begins. The twelve parts of the
+ * dealer program (dealerBenefits) sit under the body as a two column list,
+ * rising in a stagger after it; they replaced the homepage's Benefits and
+ * Assurance bands, which repeated this pitch.
  *
  * "Talk to us" opens the contact drawer through openContactDrawer, which
  * raises the "surreal:contact" window event with the topic preset to Trade.
@@ -28,6 +31,7 @@ import LineMark from "@/components/brand/LineMark";
 import { getLineMarkPaths, sampleLineMarkCurve } from "@/components/brand/lineMarkPaths";
 import { useSplitLines } from "@/components/motion/SplitReveal";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
+import { dealerBenefits } from "@/content/site";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
 import styles from "./Trade.module.css";
@@ -97,6 +101,7 @@ export default function Trade({ className = "" }: TradeProps) {
       const eyebrowLabel = copy.querySelector<HTMLElement>("[data-eyebrow] > span:last-child");
       const body = copy.querySelector<HTMLElement>("[data-body]");
       const ctas = copy.querySelector<HTMLElement>("[data-ctas]");
+      const benefits = Array.from(copy.querySelectorAll<HTMLElement>("[data-benefits] > li"));
       const caption = card.querySelector<HTMLElement>("[data-caption]");
       const reduced = prefersReducedMotion();
 
@@ -118,6 +123,7 @@ export default function Trade({ className = "" }: TradeProps) {
       if (eyebrowLabel) gsap.set(eyebrowLabel, { autoAlpha: 0, x: -8 });
       if (body) gsap.set(body, { autoAlpha: 0, y: 40 });
       if (ctas) gsap.set(ctas, { autoAlpha: 0, y: 24 });
+      if (benefits.length) gsap.set(benefits, { autoAlpha: 0, y: 12 });
       gsap.set(frame, { clipPath: "inset(0 0 100% 0)" });
       gsap.set(image, { scale: 1.12, transformOrigin: "50% 50%" });
       if (caption) gsap.set(caption, { autoAlpha: 0, y: 12 });
@@ -152,7 +158,8 @@ export default function Trade({ className = "" }: TradeProps) {
       }, 0.3);
       if (eyebrowLabel) tl.to(eyebrowLabel, { autoAlpha: 1, x: 0, duration: 1, ease: "surreal" }, 0.45);
       if (body) tl.to(body, { autoAlpha: 1, y: 0, duration: 1.2, ease: "surreal" }, 0.7);
-      if (ctas) tl.to(ctas, { autoAlpha: 1, y: 0, duration: 1.1, ease: "surreal" }, 0.9);
+      if (benefits.length) tl.to(benefits, { autoAlpha: 1, y: 0, duration: 0.8, ease: "surreal", stagger: 0.04 }, 0.85);
+      if (ctas) tl.to(ctas, { autoAlpha: 1, y: 0, duration: 1.1, ease: "surreal" }, 1.2);
       tl.to(frame, { clipPath: "inset(0 0 0% 0)", duration: 1.3, ease: "surreal" }, 0.5);
       tl.to(image, { scale: 1, duration: 1.3, ease: "surreal" }, 0.5);
       if (caption) tl.to(caption, { autoAlpha: 1, y: 0, duration: 1, ease: "surreal" }, 1.4);
@@ -284,8 +291,18 @@ export default function Trade({ className = "" }: TradeProps) {
             </h2>
             <p data-body className={`t-body ${styles.body}`}>
               Retailers and designers work with us as the grower, not a reseller: loose diamonds and finished jewelry, one
-              relationship, through the Retailer Dashboard.
+              relationship, through the Retailer Dashboard. Every dealer gets the full program.
             </p>
+            <ul data-benefits className={styles.benefits} aria-label="The Surreal dealer program">
+              {dealerBenefits.map((b) => (
+                <li key={b.id} title={b.line}>
+                  <svg aria-hidden viewBox="0 0 10 10" width="8" height="8" className={styles.bullet}>
+                    <path d="M5 0.5 9.5 5 5 9.5 0.5 5Z" fill="currentColor" />
+                  </svg>
+                  {b.title}
+                </li>
+              ))}
+            </ul>
             <div data-ctas className={styles.ctas}>
               <Button href="/dashboard" variant="primary" arrow>
                 Retailer Dashboard

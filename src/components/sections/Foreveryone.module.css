@@ -31,8 +31,8 @@
 
 .headline {
   margin: 16px 0 0;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
   font-size: clamp(3.25rem, 5.4vw, 6rem);
   line-height: 1.02;
   letter-spacing: -0.01em;
@@ -40,7 +40,7 @@
 }
 .headline em {
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .body {
@@ -130,7 +130,7 @@
   position: relative;
   display: inline-block;
   margin-top: 12px;
-  font-family: var(--font-ui), "Jost", sans-serif;
+  font-family: var(--font-ui), "Urbanist", sans-serif;
   font-weight: 400;
   font-size: 0.625rem;
   letter-spacing: 0.08em;

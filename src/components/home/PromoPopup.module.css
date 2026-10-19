@@ -36,7 +36,7 @@
 
 .eyebrow { margin: 0; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--stone); }
 .card[data-tone="navy"] .eyebrow, .card[data-layout="image"] .eyebrow { color: var(--sky); }
-.title { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(2rem, 3.6vw, 2.75rem); line-height: 1.04; letter-spacing: -0.01em; }
+.title { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(2rem, 3.6vw, 2.75rem); line-height: 1.04; letter-spacing: -0.01em; }
 .title em { font-style: italic; }
 .card[data-tone="navy"] .title em, .card[data-layout="image"] .title em { color: var(--sky); }
 .message { margin: 0; max-width: 40ch; font-size: 0.9375rem; line-height: 1.6; color: var(--graphite); }

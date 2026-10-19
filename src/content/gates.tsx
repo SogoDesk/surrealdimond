@@ -26,22 +26,6 @@ export const gates = {
     crumbs: [{ label: "Search" }],
     image: "/media/photos/sb-3605.webp",
   },
-  legacy: {
-    kind: "building",
-    eyebrow: "LEGACY by Surreal",
-    title: <>One seed line, <em>every milestone</em></>,
-    line: "Every diamond in a Legacy collection is grown from the same seed line, for a push present, an anniversary or a future engagement.",
-    crumbs: [{ label: "Diamond Legacy" }],
-    image: "/media/photos/sb-4117.webp",
-  },
-  about: {
-    kind: "building",
-    eyebrow: "Our story",
-    title: <>If a Diamond is Forever, Surreal is <em>the New Forever</em></>,
-    line: "We grow primarily DEF color, VVS clarity diamonds on machines we manufacture ourselves, from a recipe we created.",
-    crumbs: [{ label: "About" }],
-    image: "/media/photos/sb-3502.webp",
-  },
   apply: {
     kind: "building",
     eyebrow: "Apply for an account",

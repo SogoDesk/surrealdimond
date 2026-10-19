@@ -5,7 +5,7 @@
 .hello { display: flex; align-items: center; gap: 16px; }
 .avatar { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--beam), var(--sky) 60%, var(--line)); color: var(--ink); font-size: 0.9375rem; font-weight: 600; letter-spacing: 0.06em; flex: 0 0 auto; }
 .kicker { margin: 0; font-size: 0.6875rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--stone); }
-.title { margin: 2px 0 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(2rem, 3.2vw, 2.75rem); line-height: 1.05; color: var(--ink); }
+.title { margin: 2px 0 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(2rem, 3.2vw, 2.75rem); line-height: 1.05; color: var(--ink); }
 .title em { font-style: italic; }
 .doors { display: flex; flex-wrap: wrap; gap: 8px; }
 .door { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; color: var(--ink); transition: box-shadow 0.3s var(--ease-surreal), background-color 0.3s var(--ease-surreal); }
@@ -17,7 +17,7 @@
 @media (max-width: 699px) { .grid { grid-template-columns: 1fr; } }
 .card { display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); min-width: 0; }
 .cardHead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.cardTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 1.5rem; color: var(--ink); }
+.cardTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-size: 1.5rem; color: var(--ink); }
 .textBtn { font-size: 0.8125rem; color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; white-space: nowrap; }
 .empty { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px; border-radius: var(--radius-md); background: var(--porcelain); font-size: 0.875rem; color: var(--graphite); flex: 1 1 auto; }
 .empty p { margin: 0; line-height: 1.55; }
@@ -28,7 +28,7 @@
 .thumb { width: 56px; height: 56px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; flex: 0 0 auto; background: radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255, 255, 255, 0) 70%), var(--ground, var(--white)); }
 .thumb img { width: 86%; height: 86%; object-fit: contain; mix-blend-mode: multiply; }
 .rowText { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
-.rowName { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 1.125rem; color: var(--ink); }
+.rowName { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-size: 1.125rem; color: var(--ink); }
 .rowName:hover { text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .rowMeta { font-size: 0.75rem; color: var(--stone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .reorder { height: 36px; padding: 0 16px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; flex: 0 0 auto; transition: background-color 0.3s var(--ease-surreal); }

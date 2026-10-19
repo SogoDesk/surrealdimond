@@ -20,14 +20,14 @@
 }
 .placeholderMark svg { display: block; }
 .placeholderLine {
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
   font-size: 1.375rem;
   line-height: 1.2;
   color: var(--fg);
 }
 .placeholderNote {
-  font-family: var(--font-ui), "Jost", sans-serif;
+  font-family: var(--font-ui), "Urbanist", sans-serif;
   font-weight: 400;
   font-size: 0.75rem;
   letter-spacing: 0.04em;

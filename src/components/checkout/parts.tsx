@@ -18,6 +18,7 @@ import { useWishlist } from "@/components/store/useWishlist";
 import { groundStyle } from "@/content/grounds";
 import { measurements, shipment, stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
 import ShapeIcon from "@/components/brand/ShapeIcon";
+import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, jewelryPrice, linesTotal, stonePrice } from "@/lib/pricing";
 import s from "./checkout.module.css";
 
 export const STEPS = ["Cart", "Store details", "Payment", "Review", "Confirmation"] as const;
@@ -63,7 +64,7 @@ function StoneLine({ line, editable }: { line: CartLine; editable: boolean }) {
           </div>
           <span className={s.linePrice}>
             <span>Dealer price</span>
-            On confirmation
+            {formatUSD(stonePrice(st))}
           </span>
         </div>
         <div className={s.lineSpecs}>
@@ -116,8 +117,8 @@ export function LineItem({ line, editable = true }: { line: CartLine; editable?:
             </span>
           </div>
           <span className={s.linePrice}>
-            <span>Dealer price</span>
-            On confirmation
+            <span>{line.qty > 1 ? `${line.qty} × ${formatUSD(jewelryPrice(p, line.metal, line.carat))}` : "Dealer price"}</span>
+            {formatUSD(jewelryPrice(p, line.metal, line.carat) * line.qty)}
           </span>
         </div>
         <div className={s.lineSpecs}>
@@ -237,12 +238,12 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
         </div>
         <div className={s.summaryTotal}>
           <dt>Order total</dt>
-          <dd>On confirmation</dd>
+          <dd className="tabular">{formatUSD(linesTotal(lines))}</dd>
         </div>
       </dl>
       <p className={s.summaryNote}>
-        Dealer prices come from your price list and are confirmed when Surreal accepts your order, as set out in the{" "}
-        <Link href="/terms">Prices Policy</Link>.
+        Dealer prices in US dollars, from your price list, confirmed when Surreal accepts your order, as set out in the{" "}
+        <Link href="/terms">Prices Policy</Link>.{PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
       </p>
       {children}
     </aside>

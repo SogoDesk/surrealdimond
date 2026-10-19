@@ -31,8 +31,8 @@
 }
 .bandTitle {
   margin: 0;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
   font-size: clamp(2.5rem, 4.6vw, 4.5rem);
   line-height: 1.02;
   color: var(--ink);
@@ -140,7 +140,7 @@
   color: var(--graphite);
 }
 .meta { display: flex; flex-direction: column; gap: 4px; padding: 4px 18px 14px; }
-.name { font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-size: 1.375rem; line-height: 1.15; color: var(--ink); }
+.name { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-size: 1.375rem; line-height: 1.15; color: var(--ink); }
 .detail { font-size: 0.8125rem; line-height: 1.45; color: var(--stone); }
 .foot {
   display: flex;

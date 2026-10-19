@@ -44,6 +44,8 @@ import Gallery from "./Gallery";
 import DeliveryCountdown from "./DeliveryCountdown";
 import { CompleteLook, DealerQuestions, Details, Explore, InPerson, ProgramBanners, Similar } from "./ProductSections";
 import s from "./product.module.css";
+import { useMetalKey, useWithMetals } from "@/lib/metals";
+import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, jewelryPrice } from "@/lib/pricing";
 
 const SIZED = new Set(["engagement", "wedding-bands", "rings"]);
 const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];
@@ -70,9 +72,12 @@ export default function ProductPage({ productId }: { productId: string }) {
   );
 }
 
+/** The piece as the admin console configured its metals; the view restarts when that changes, since its selection is seeded from it. */
 function WithParams({ product }: { product: Product }) {
   const params = useSearchParams();
-  return <ProductView product={product} params={params} />;
+  const configured = useWithMetals(product);
+  const metalKey = useMetalKey(product.id);
+  return <ProductView key={metalKey} product={configured} params={params} />;
 }
 
 function initialSelection(product: Product, params: URLSearchParams | null): PieceSelection {
@@ -194,8 +199,14 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                   </span>
                   {dealer ? (
                     <span className={s.priceText}>
-                      <strong>On your dealer price list</strong>
-                      <span>Confirmed for {dealer.store} when Surreal accepts your order.</span>
+                      <strong className="tabular">
+                        {formatUSD(jewelryPrice(product, selection.metal, selection.carat))}
+                        {qty > 1 && <span className={s.priceQty}> × {qty} = {formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</span>}
+                      </strong>
+                      <span>
+                        Your dealer price for {dealer.store}, in US dollars, confirmed when Surreal accepts your order.
+                        {PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
+                      </span>
                     </span>
                   ) : (
                     <>

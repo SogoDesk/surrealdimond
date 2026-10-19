@@ -2,9 +2,11 @@
 
 /**
  * Nine ways to begin, restored from the 9e31102 homepage in place of the
- * programs cards. A header row (eyebrow and headline on the left, the body
- * and Shop all on the right, sharing a baseline) above a slow, continuous
- * carousel of the nine category cards and two lifestyle interludes. The
+ * programs cards, and since merged with Shop by category. A header row
+ * (eyebrow and headline on the left, the body and Shop all on the right,
+ * sharing a baseline) above a slow, continuous carousel: the nine jewelry
+ * types, each with its one campaign photograph (BRD R-04) giving way on hover
+ * to its render on the story ground, then loose diamonds and all divisions. The
  * cards are half the original width, so five sit in view on a laptop and
  * two on a phone; the track drifts left at a walking pace, pauses under the pointer
  * and loops seamlessly.
@@ -22,31 +24,26 @@ import Marquee from "@/components/motion/Marquee";
 import { useRevealIn } from "@/components/home/useRevealIn";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { useReducedMotion, prefersReducedMotion } from "@/hooks/useMedia";
-import { footerColumns } from "@/content/site";
-import { CategoryCard, Interlude, LooseDiamondsCard } from "./NineWaysPanels";
+import { divisions, divisionTypes } from "@/content/divisions";
+import type { Category } from "@/content/catalog";
+import { groundStyle } from "@/content/grounds";
+import { AllDivisionsCard, CategoryCard, LooseDiamondsCard } from "./NineWaysPanels";
 import s from "./NineWays.module.css";
 
 const SHOP_ALL = "/jewelry";
-const jewelryHref = (label: string, fallback: string) => footerColumns[0].links.find((l) => l.label === label)?.href ?? fallback;
 
-type Panel =
-  | { kind: "card"; number: number; label: string; href: string; image: string; alt: string }
-  | { kind: "interlude"; src: string; width: number; height: number; caption: string; alt: string }
-  | { kind: "loose"; number: number; label: string; href: string };
-
-const PANELS: Panel[] = [
-  { kind: "card", number: 1, label: "Engagement Rings", href: jewelryHref("Engagement Rings", "/jewelry/engagement"), image: "le2004w442-11741", alt: "Oval halo engagement ring" },
-  { kind: "card", number: 2, label: "Wedding Bands", href: jewelryHref("Wedding Bands", "/jewelry/wedding-bands"), image: "lgbrdl2658-eng-wg-lgbrdl2658-band-wg", alt: "Engagement ring with its matching wedding band" },
-  { kind: "card", number: 3, label: "Earrings", href: jewelryHref("Earrings", "/jewelry/earrings"), image: "in-and-out-hoops-yg", alt: "Inside out diamond hoop earrings in yellow gold" },
-  { kind: "card", number: 4, label: "Necklaces", href: jewelryHref("Necklaces", "/jewelry/necklaces"), image: "nkov18w440wg", alt: "Oval diamond tennis necklace" },
-  { kind: "interlude", src: "/media/photos/sb-3605.webp", width: 1708, height: 2020, caption: "Worn every day", alt: "Diamond jewelry worn in the studio" },
-  { kind: "card", number: 5, label: "Pendants", href: jewelryHref("Pendants", "/jewelry/pendants"), image: "branding-images8028", alt: "Teardrop pave pendant" },
-  { kind: "card", number: 6, label: "Rings", href: jewelryHref("Rings", "/jewelry/rings"), image: "branding-images8022", alt: "Bypass pave ring" },
-  { kind: "card", number: 7, label: "Bracelets", href: jewelryHref("Bracelets", "/jewelry/bracelets"), image: "ca24mr0083-2725", alt: "Diamond tennis bracelet with an oval center" },
-  { kind: "card", number: 8, label: "Sterling Silver", href: jewelryHref("Sterling Silver", "/jewelry/sterling-silver"), image: "jbii247sil-2638", alt: "Oval bezel pendant in sterling silver" },
-  { kind: "interlude", src: "/media/photos/sb-3730.webp", width: 2399, height: 2400, caption: "Gold, stacked", alt: "Stacked gold and diamond jewelry" },
-  { kind: "loose", number: 9, label: "Loose Diamonds", href: "/diamonds" },
-];
+/** Each type's story ground, by the catalog category it draws from. */
+const GROUND: Record<string, Category> = {
+  engagement: "engagement",
+  "wedding-bands": "wedding-bands",
+  rings: "rings",
+  "stud-earrings": "earrings",
+  earrings: "earrings",
+  bracelets: "bracelets",
+  "flexi-bangles": "bracelets",
+  pendants: "pendants",
+  necklaces: "necklaces",
+};
 
 export default function NineWays() {
   const ref = useRef<HTMLElement>(null);
@@ -69,11 +66,13 @@ export default function NineWays() {
 
   const panels = (
     <ul role="list" className={s.track} aria-label="Shop by category">
-      {PANELS.map((panel, i) => {
-        if (panel.kind === "interlude") return <Interlude key={i} {...panel} />;
-        if (panel.kind === "loose") return <LooseDiamondsCard key={i} {...panel} />;
-        return <CategoryCard key={i} {...panel} />;
-      })}
+      {divisionTypes.map((d, i) =>
+        d.photo ? (
+          <CategoryCard key={d.id} number={i + 1} label={d.label} href={d.href} photo={d.photo} render={d.image} ground={groundStyle(GROUND[d.id] ?? "engagement")} />
+        ) : null,
+      )}
+      <LooseDiamondsCard number={divisionTypes.length + 1} label="Loose Diamonds" href="/diamonds" />
+      <AllDivisionsCard count={divisions.length} href={SHOP_ALL} />
     </ul>
   );
 
@@ -91,8 +90,8 @@ export default function NineWays() {
           </div>
           <div className={s.bodyCol}>
             <p className={`t-body ${s.body}`} data-rise>
-              Engagement rings, wedding bands, earrings, necklaces, pendants, rings, bracelets, sterling silver, and loose diamonds by the stone.
-              Every piece set with a diamond we grew.
+              Engagement rings, wedding bands, rings, studs, earrings, bracelets, flexi bangles, pendants and necklaces, every piece set with a
+              diamond we grew.
             </p>
             <span data-rise>
               <Button variant="tertiary" href={SHOP_ALL} arrow>

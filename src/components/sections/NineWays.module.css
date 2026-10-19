@@ -32,8 +32,8 @@
 }
 .headline {
   margin: 0;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
   font-size: clamp(2.5rem, 4.6vw, 4.5rem);
   line-height: 1.02;
   letter-spacing: -0.01em;
@@ -41,7 +41,7 @@
 }
 .headline em {
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
 }
 .bodyCol {
   grid-column: 8 / span 5;
@@ -90,17 +90,13 @@
   list-style: none;
 }
 
-.card,
-.interlude {
+.card {
   flex: 0 0 auto;
   height: var(--panel-h);
   scroll-snap-align: start;
 }
 .card {
   width: var(--card-w);
-}
-.interlude {
-  width: calc(var(--panel-h) * 0.86);
 }
 
 /* Paper card */
@@ -148,7 +144,7 @@
   left: 16px;
   right: 48px;
   bottom: 16px;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
   font-weight: 500;
   font-size: clamp(1.25rem, 1.5vw, 1.5rem);
   line-height: 1.1;
@@ -194,40 +190,103 @@
   text-align: center;
 }
 
-/* Lifestyle interlude */
-.interludeFrame {
-  position: relative;
-  height: 100%;
-  margin: 0;
+/* Category card: the campaign photograph over the render on its story ground */
+.photoCard {
   overflow: hidden;
+  border: 0;
+  border-radius: 2px;
   background: var(--studio);
 }
-.photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 1s var(--ease-surreal);
+.ground {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 40px;
+  background: radial-gradient(90% 80% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0.55) 38%, rgba(255, 255, 255, 0) 72%), var(--ground, var(--white));
 }
-.interludeFrame:hover .photo {
-  transform: scale(1.04);
+.photo {
+  object-fit: cover;
+  transition: opacity 0.7s var(--ease-surreal), transform 1.2s var(--ease-surreal);
 }
 .scrim {
   position: absolute;
   inset: auto 0 0 0;
   height: 45%;
-  background: linear-gradient(to top, rgba(10, 11, 12, 0.4), rgba(10, 11, 12, 0));
+  background: linear-gradient(to top, rgba(10, 11, 12, 0.55), rgba(10, 11, 12, 0));
   pointer-events: none;
+  transition: opacity 0.6s var(--ease-surreal);
 }
-.caption {
-  position: absolute;
-  left: 20px;
-  bottom: 18px;
-  margin: 0;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
-  font-weight: 300;
-  font-style: italic;
-  font-size: clamp(1.375rem, 1.7vw, 1.75rem);
-  line-height: 1.1;
+.photoCard .index {
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--graphite);
+}
+.photoCard .title,
+.photoCard .arrow {
+  z-index: 1;
+  color: var(--porcelain);
+  transition: color 0.5s var(--ease-surreal), transform 0.6s var(--ease-surreal);
+}
+.photoCard .render {
+  width: 64%;
+}
+@media (hover: hover) {
+  .photoCard:hover .photo,
+  .photoCard:focus-visible .photo {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  .photoCard:hover .scrim,
+  .photoCard:focus-visible .scrim {
+    opacity: 0;
+  }
+  .photoCard:hover .title,
+  .photoCard:hover .arrow,
+  .photoCard:focus-visible .title,
+  .photoCard:focus-visible .arrow {
+    color: var(--ink);
+  }
+}
+
+/* Closing card: all divisions */
+.allCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  border: 0;
+  border-radius: 2px;
+  color: var(--porcelain);
+  white-space: normal;
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(134, 223, 255, 0.22), rgba(134, 223, 255, 0) 60%),
+    linear-gradient(160deg, #12303f, var(--ink));
+}
+.allFigure {
+  font-family: var(--font-display), "Italiana", serif;
+  font-size: clamp(4rem, 6vw, 6rem);
+  line-height: 0.85;
+  color: var(--sky);
+}
+.allText {
+  margin-top: auto;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: rgba(242, 244, 246, 0.8);
+  max-width: 20ch;
+}
+.allCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   color: var(--porcelain);
 }
 
@@ -242,9 +301,6 @@
   .root {
     --card-w: 44vw;
     --panel-gap: 12px;
-  }
-  .interlude {
-    width: 60vw;
   }
   .title {
     left: 12px;
@@ -269,8 +325,7 @@
   .cardLink:hover,
   .cardLink:focus-visible,
   .cardLink:hover .render,
-  .cardLink:hover .arrow,
-  .interludeFrame:hover .photo {
+  .cardLink:hover .arrow {
     transform: none;
   }
 }

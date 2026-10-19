@@ -1,18 +1,21 @@
 /**
  * Panels for the Nine ways to begin carousel (restored from the 9e31102
- * homepage): the paper category card, the lifestyle interlude, and the loose
- * diamonds card with its plan-view brilliant drawing. Every panel is an <li>
- * so the carousel stays a list for keyboard and screen readers.
+ * homepage): the category card with its campaign photograph, the loose
+ * diamonds card with its plan-view brilliant drawing, and the closing card
+ * for all divisions. Every panel is an <li> so the carousel stays a list for
+ * keyboard and screen readers.
  */
 
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
+import { renderSrc } from "@/content/catalog";
 import s from "./NineWays.module.css";
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
-const RENDER_SIZES = "(min-width: 768px) 16vw, 44vw";
-const PHOTO_SIZES = "(min-width: 768px) 30vw, 80vw";
+const RENDER_SIZES = "(min-width: 768px) 14vw, 36vw";
+const PHOTO_SIZES = "(min-width: 768px) 18vw, 46vw";
 
 function Arrow({ className }: { className?: string }) {
   return (
@@ -22,14 +25,20 @@ function Arrow({ className }: { className?: string }) {
   );
 }
 
-export function CategoryCard({ number, label, href, image, alt }: { number: number; label: string; href: string; image: string; alt: string }) {
+/**
+ * A category: its one campaign photograph (BRD R-04), which gives way on hover
+ * to the type's render on its story ground, as on the old Shop by category.
+ */
+export function CategoryCard({ number, label, href, photo, render, ground }: { number: number; label: string; href: string; photo: string; render?: string; ground: CSSProperties }) {
   return (
     <li className={s.card}>
-      <Link href={href} className={s.cardLink} aria-label={`${label}, shop the category`} draggable={false}>
-        <span className={`t-index ${s.index}`}>{pad2(number)}</span>
-        <span className={s.renderWell}>
-          <Image src={`/media/renders/${image}.webp`} alt={alt} width={800} height={800} sizes={RENDER_SIZES} draggable={false} className={`render-multiply ${s.render}`} />
+      <Link href={href} className={`${s.cardLink} ${s.photoCard}`} aria-label={`${label}, shop the category`} draggable={false}>
+        <span className={s.ground} style={ground} aria-hidden>
+          {render && <Image src={renderSrc(render)} alt="" width={600} height={600} sizes={RENDER_SIZES} draggable={false} className={`render-multiply ${s.render}`} />}
         </span>
+        <Image src={photo} alt="" fill sizes={PHOTO_SIZES} draggable={false} className={s.photo} />
+        <span aria-hidden className={s.scrim} />
+        <span className={`t-index ${s.index}`}>{pad2(number)}</span>
         <span className={s.title}>{label}</span>
         <Arrow className={s.arrow} />
       </Link>
@@ -37,14 +46,18 @@ export function CategoryCard({ number, label, href, image, alt }: { number: numb
   );
 }
 
-export function Interlude({ src, width, height, caption, alt }: { src: string; width: number; height: number; caption: string; alt: string }) {
+/** The closing card: every division, with the count. */
+export function AllDivisionsCard({ count, href }: { count: number; href: string }) {
   return (
-    <li className={s.interlude}>
-      <figure className={s.interludeFrame}>
-        <Image src={src} alt={alt} width={width} height={height} sizes={PHOTO_SIZES} draggable={false} className={s.photo} />
-        <span aria-hidden className={s.scrim} />
-        <figcaption className={s.caption}>{caption}</figcaption>
-      </figure>
+    <li className={s.card}>
+      <Link href={href} className={`${s.cardLink} ${s.allCard}`} draggable={false}>
+        <span className={s.allFigure}>{count}</span>
+        <span className={s.allText}>divisions, from engagement rings to the seasonal catalogs</span>
+        <span className={`t-nav ${s.allCta}`}>
+          View all
+          <Arrow />
+        </span>
+      </Link>
     </li>
   );
 }

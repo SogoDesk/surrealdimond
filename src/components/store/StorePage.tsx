@@ -33,6 +33,7 @@ import DivisionMotif from "@/components/brand/DivisionMotif";
 import { categoryFor, clearedQuery, matchesQuery, parseQuery, poolFor, serializeQuery, showsShapes, sortProducts, type ShopQuery } from "@/components/shop/filters";
 import { renderSrc, type Category } from "@/content/catalog";
 import { applyPins, pageSort, useMerch } from "@/lib/merch";
+import { useWithMetalsList } from "@/lib/metals";
 import { divisions } from "@/content/divisions";
 import { account } from "@/content/site";
 import StoreToolbar, { type Density } from "./StoreToolbar";
@@ -106,10 +107,12 @@ function StoreView({ category, params }: StorePageProps & { params: URLSearchPar
   const shapesOn = showsShapes(category);
   const meta = categoryFor(category);
 
+  const source = useMemo(() => poolFor(category), [category]);
+  const configured = useWithMetalsList(source);
   const pool = useMemo(() => {
-    const sorted = sortProducts(poolFor(category), query.sort);
+    const sorted = sortProducts(configured, query.sort);
     return query.sort === defaultSort ? applyPins(sorted, pinned) : sorted;
-  }, [category, query.sort, defaultSort, pinned]);
+  }, [configured, query.sort, defaultSort, pinned]);
   const matches = useMemo(() => pool.filter((p) => matchesQuery(p, query, shapesOn)), [pool, query, shapesOn]);
 
   const [density, setDensity] = useState<Density>(5);

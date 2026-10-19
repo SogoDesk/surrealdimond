@@ -17,13 +17,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { metals, productById, productMetals, renderSrc, type Product } from "@/content/catalog";
+import { caratOptions, defaultMetalOf, metals, productById, productHref, productMetals, renderSrc, type Product } from "@/content/catalog";
 import { useMerch } from "@/lib/merch";
 import { account } from "@/content/site";
 import { groundStyle } from "@/content/grounds";
 import { useRevealIn } from "./useRevealIn";
 import h from "./home.module.css";
 import s from "./Featured.module.css";
+import { useWithMetalsList } from "@/lib/metals";
+import { formatUSD, jewelryPrice } from "@/lib/pricing";
+import { useDealer } from "@/lib/dealer";
 
 function altView(p: Product) {
   if (p.angles?.[0]) return p.angles[0];
@@ -44,6 +47,7 @@ function LockIcon() {
 function Card({ p }: { p: Product }) {
   const alt = altView(p);
   const ms = productMetals(p);
+  const dealer = useDealer();
   return (
     <article className={s.card}>
       <Link href={`/jewelry/${p.category}`} className={s.cardLink} aria-label={`${p.name}, ${p.detail}`}>
@@ -63,10 +67,16 @@ function Card({ p }: { p: Product }) {
             <span key={m} className={s.metal} style={{ background: metals.find((x) => x.id === m)?.swatch }} />
           ))}
         </span>
-        <Link href={account.login} className={s.price}>
-          <LockIcon />
-          Dealer price
-        </Link>
+        {dealer ? (
+          <Link href={productHref(p)} className={`${s.price} tabular`}>
+            {formatUSD(jewelryPrice(p, defaultMetalOf(p), caratOptions[p.category][0]))}
+          </Link>
+        ) : (
+          <Link href={account.login} className={s.price}>
+            <LockIcon />
+            Dealer price
+          </Link>
+        )}
       </div>
     </article>
   );
@@ -77,7 +87,9 @@ export default function Featured() {
   const railRef = useRef<HTMLUListElement>(null);
   const [edge, setEdge] = useState({ start: true, end: false });
   const { hot } = useMerch();
-  const items = useMemo(() => hot.map((id) => productById(id)).filter((p): p is Product => Boolean(p)), [hot]);
+  const dealer = useDealer();
+  const listed = useMemo(() => hot.map((id) => productById(id)).filter((p): p is Product => Boolean(p)), [hot]);
+  const items = useWithMetalsList(listed);
   useRevealIn(ref);
 
   const measure = useCallback(() => {
@@ -121,7 +133,7 @@ export default function Featured() {
             </h2>
             <p className={s.bandLine} data-rise>
               <span className={s.count}>{items.length} pieces</span>
-              Picked by the Surreal team. Dealer pricing and ordering after you log in.
+              {dealer ? "Picked by the Surreal team, at your dealer prices." : "Picked by the Surreal team. Dealer pricing and ordering after you log in."}
             </p>
           </div>
           <div className={s.arrows}>

@@ -4,7 +4,10 @@
  * Inventory (BRD R-32): the full view, in two tabs.
  *
  * Jewelry: every piece with its render, style number, category, the metals
- * it exists in and its default metal (R-12, R-13), and two switches that
+ * it is offered in and its default metal (R-12, R-13, C-02), both editable:
+ * a toggle per metal (a metal with no render yet shows the made to order
+ * placeholder until one is added) and the metal it opens in, with a reset to
+ * the catalog's own. Then two switches that
  * write to the storefront at once (R-33): Hot this week on the homepage, and
  * Featured to the top of its category page. Search, category filter, CSV.
  *
@@ -20,12 +23,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import ShapeIcon from "@/components/brand/ShapeIcon";
-import { categories, categoryLabel, defaultMetalOf, metals, productMetals, products, renderSrc, styleRef, type Category } from "@/content/catalog";
+import { categories, categoryLabel, defaultMetalOf, imageMetals, metals, productMetals, products, renderSrc, styleRef, type Category, type Metal, type Product } from "@/content/catalog";
 import { SHAPES, SHAPE_LABEL, stones, type StoneShape } from "@/content/diamonds";
 import { groundStyle } from "@/content/grounds";
 import { useOrders } from "@/lib/cart";
 import { downloadCsv } from "@/lib/csv";
 import { setMerch, useMerch } from "@/lib/merch";
+import { clearMetalOption, setMetalOption, useMetalOptions, withMetals } from "@/lib/metals";
 import { useMemos } from "@/lib/memo";
 import { useAdminAccess } from "./AdminShell";
 import s from "./admin.module.css";
@@ -48,6 +52,7 @@ export default function AdminInventory() {
   const access = useAdminAccess();
   const readOnly = access !== "edit";
   const merch = useMerch();
+  const metalOptions = useMetalOptions();
   const orders = useOrders();
   const memos = useMemos();
   const [tab, setTab] = useState<Tab>("jewelry");
@@ -63,8 +68,16 @@ export default function AdminInventory() {
 
   const pieces = useMemo(() => {
     const term = q.trim().toLowerCase();
-    return products.filter((p) => (cat === "all" || p.category === cat) && (!term || [p.name, p.detail, styleRef(p) ?? "", p.id].join(" ").toLowerCase().includes(term)));
-  }, [q, cat]);
+    return products
+      .filter((p) => (cat === "all" || p.category === cat) && (!term || [p.name, p.detail, styleRef(p) ?? "", p.id].join(" ").toLowerCase().includes(term)))
+      .map((p) => withMetals(p, metalOptions));
+  }, [q, cat, metalOptions]);
+
+  const toggleMetal = (p: Product, m: Metal) => {
+    const on = productMetals(p);
+    const next = on.includes(m) ? on.filter((x) => x !== m) : [...on, m];
+    if (next.length) setMetalOption(p.id, next, defaultMetalOf(p));
+  };
 
   const gems = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -106,7 +119,11 @@ export default function AdminInventory() {
         <div>
           <p className={s.kicker}>Inventory</p>
           <h1 className={s.pageTitle}>Every piece and stone</h1>
-          <p className={s.pageLine}>Switches here change the storefront straight away: Hot this week on the homepage, and featured pieces at the top of their category page.</p>
+          <p className={s.pageLine}>
+            Changes here reach the storefront straight away: the metals each piece is offered in and the one it opens in, Hot this week on the
+            homepage, and featured pieces at the top of their category page. A metal marked * has no render yet and shows the made to order
+            placeholder.
+          </p>
         </div>
       </header>
 
@@ -192,13 +209,52 @@ export default function AdminInventory() {
                   <td className="tabular">{styleRef(p) ?? "None"}</td>
                   <td>{categoryLabel(p.category)}</td>
                   <td>
-                    <span className={s.swatches}>
-                      {productMetals(p).map((m) => (
-                        <span key={m} title={metalLabel(m)} style={{ background: metals.find((x) => x.id === m)?.swatch }} />
-                      ))}
+                    <span className={s.metalToggles} role="group" aria-label={`Metals for ${p.name}`}>
+                      {metals.map((m) => {
+                        const on = productMetals(p).includes(m.id);
+                        const pictured = imageMetals(p).includes(m.id);
+                        return (
+                          <button
+                            key={m.id}
+                            type="button"
+                            className={s.metalToggle}
+                            aria-pressed={on}
+                            disabled={readOnly || (on && productMetals(p).length === 1)}
+                            title={`${m.label}${pictured ? "" : ", no render yet"}`}
+                            onClick={() => toggleMetal(p, m.id)}
+                          >
+                            <span style={{ background: m.swatch }} />
+                            {m.id.toUpperCase()}
+                            {!pictured && on && <em aria-label="no render yet">*</em>}
+                          </button>
+                        );
+                      })}
                     </span>
                   </td>
-                  <td>{metalLabel(defaultMetalOf(p))}</td>
+                  <td>
+                    <span className={s.defaultCell}>
+                      <select
+                        className={s.selectSm}
+                        value={defaultMetalOf(p)}
+                        disabled={readOnly || productMetals(p).length < 2}
+                        aria-label={`Default metal for ${p.name}`}
+                        onChange={(e) => setMetalOption(p.id, productMetals(p), e.target.value as Metal)}
+                      >
+                        {metals
+                          .filter((m) => productMetals(p).includes(m.id))
+                          .map((m) => (
+                            <option key={m.id} value={m.id}>
+                              {m.label}
+                            </option>
+                          ))}
+                      </select>
+                      {metalOptions[p.id] && !readOnly && (
+                        <button type="button" className={s.textBtn} onClick={() => clearMetalOption(p.id)}>
+                          Reset
+                        </button>
+                      )}
+                    </span>
+                  </td>
                   <td>
                     <Switch on={merch.hot.includes(p.id)} label={`Hot this week: ${p.name}`} disabled={readOnly} onChange={() => toggleHot(p.id)} />
                   </td>

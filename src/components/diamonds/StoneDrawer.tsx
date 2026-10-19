@@ -22,6 +22,7 @@ import { useDealer } from "@/lib/dealer";
 import { requestMemo, useUnavailable } from "@/lib/memo";
 import { m2oHref, EMPTY } from "./query";
 import s from "./diamonds.module.css";
+import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, stonePrice } from "@/lib/pricing";
 
 export interface StoneDrawerProps {
   stone: Stone | null;
@@ -143,8 +144,10 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
 
               <div className={s.priceBox}>
                 <span>
-                  <strong>{dealer ? "On your dealer price list" : "Dealer price"}</strong>
-                  {dealer ? "Confirmed when Surreal accepts your order. Short-term memo pricing by phone." : "Log in to see your price and availability."}
+                  <strong className={dealer ? "tabular" : undefined}>{dealer ? formatUSD(stonePrice(stone)) : "Dealer price"}</strong>
+                  {dealer
+                    ? `Your dealer price, in US dollars, confirmed when Surreal accepts your order. Short-term memo pricing by phone.${PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}`
+                    : "Log in to see your price and availability."}
                 </span>
                 {!dealer && (
                   <Link href={loginHref} className={s.priceLink}>

@@ -177,7 +177,7 @@
 }
 .settingsTitle {
   margin: 16px 0 16px;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
   font-weight: 500;
   font-size: clamp(1.875rem, 2.6vw, 2.625rem);
   line-height: 1.08;

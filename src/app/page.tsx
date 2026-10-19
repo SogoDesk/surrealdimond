@@ -11,11 +11,8 @@ import Trade from "@/components/sections/Trade";
 import NineWays from "@/components/sections/NineWays";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import DealerHome from "@/components/home/DealerHome";
-import DivisionGrid from "@/components/home/DivisionGrid";
 import CollectionsBento from "@/components/home/CollectionsBento";
 import Featured from "@/components/home/Featured";
-import Benefits from "@/components/home/Benefits";
-import Assurance from "@/components/brand/Assurance";
 import Footer from "@/components/sections/Footer";
 import PromoPopup from "@/components/home/PromoPopup";
 
@@ -42,7 +39,6 @@ export default function Home() {
         <TimeCounter />
         <DealerHome />
         <Engagement />
-        <DivisionGrid />
         <CollectionsBento />
         <NineWays />
         <HeroCarousel />
@@ -50,8 +46,6 @@ export default function Home() {
         {/* Restored as they were in 9e31102. Lookbook holds while Foreveryone slides over it, so the two stay adjacent. */}
         <Lookbook />
         <Foreveryone />
-        <Benefits />
-        <Assurance />
         {/* Visit opens its sky circle over a light ground; Trade's seam hands straight to the footer reveal. */}
         <Visit />
         <Trade />

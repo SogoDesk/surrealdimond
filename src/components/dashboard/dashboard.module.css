@@ -20,7 +20,7 @@
 @media (prefers-reduced-motion: reduce) { .skeleton span { animation: none; } }
 @media (max-width: 1023px) { .skeleton { grid-template-columns: 1fr; grid-template-rows: 60px 1fr; } }
 .gate { max-width: 720px; margin: clamp(24px, 6vw, 80px) auto; padding: clamp(28px, 4vw, 48px); border-radius: var(--radius-lg); background: radial-gradient(90% 120% at 100% 0%, rgba(134, 223, 255, 0.22), rgba(134, 223, 255, 0) 60%), var(--white); box-shadow: var(--shadow-card); }
-.gateTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(2.5rem, 4.4vw, 3.75rem); line-height: 1.04; color: var(--ink); }
+.gateTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(2.5rem, 4.4vw, 3.75rem); line-height: 1.04; color: var(--ink); }
 .gateTitle em { font-style: italic; }
 .gateLine { margin: 14px 0 0; font-size: 1rem; line-height: 1.6; color: var(--graphite); }
 .gateDoors { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
@@ -65,7 +65,7 @@
 /* Home */
 .home { display: flex; flex-direction: column; gap: 18px; }
 .homeHead { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
-.homeTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(2.125rem, 3.6vw, 3.25rem); line-height: 1.05; color: var(--ink); }
+.homeTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(2.125rem, 3.6vw, 3.25rem); line-height: 1.05; color: var(--ink); }
 .homeTitle em { font-style: italic; }
 .quick { display: flex; flex-wrap: wrap; gap: 8px; }
 .quickDoor { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; color: var(--ink); transition: background-color 0.25s var(--ease-surreal), box-shadow 0.25s var(--ease-surreal); }
@@ -88,8 +88,8 @@
 .sideCol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 .panel { min-width: 0; padding: 20px 22px 22px; border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); scroll-margin-top: calc(var(--nav-h) + 20px); }
 .panelHead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.panelTitle { margin: 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.5rem; color: var(--ink); }
-.sectionTitle { margin: 12px 0 0; font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(1.75rem, 2.6vw, 2.25rem); color: var(--ink); }
+.panelTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 1.5rem; color: var(--ink); }
+.sectionTitle { margin: 12px 0 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(1.75rem, 2.6vw, 2.25rem); color: var(--ink); }
 .sectionTitle em { font-style: italic; }
 .notice { margin: 0 0 12px; padding: 10px 14px; border-radius: 12px; background: var(--mist); font-size: 0.8125rem; color: var(--ink); }
 .empty { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 18px; border-radius: var(--radius-md); background: var(--porcelain); font-size: 0.875rem; line-height: 1.55; color: var(--graphite); }
@@ -141,7 +141,7 @@
 .search { position: relative; flex: 0 1 420px; min-width: 260px; }
 @media (max-width: 599px) { .search { flex-basis: 100%; min-width: 0; } }
 .searchIcon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--stone); pointer-events: none; }
-.searchInput { width: 100%; height: 48px; padding: 0 16px 0 42px; border: 0; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font: 400 0.9375rem var(--font-ui), "Jost", sans-serif; color: var(--ink); }
+.searchInput { width: 100%; height: 48px; padding: 0 16px 0 42px; border: 0; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font: 400 0.9375rem var(--font-ui), "Urbanist", sans-serif; color: var(--ink); }
 .searchInput::placeholder { color: #a9b2ba; }
 .searchInput:focus { outline: none; box-shadow: inset 0 0 0 1px var(--ink), 0 0 0 4px var(--mist); }
 .results { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 20; max-height: 420px; overflow-y: auto; margin: 0; padding: 8px; list-style: none; border-radius: var(--radius-md); background: var(--white); box-shadow: var(--shadow-lift); }

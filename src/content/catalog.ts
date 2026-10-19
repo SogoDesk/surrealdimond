@@ -36,6 +36,8 @@ export interface Product {
   shape?: Shape;
   /** The metal the piece opens in (BRD R-13: Surreal curates which pieces default to yellow gold, input C-02). Falls back to the first metal it exists in. */
   defaultMetal?: Metal;
+  /** The metals offered, as set in the admin console (src/lib/metals.ts); when absent, the metals the imagery shows. */
+  metalOptions?: Metal[];
 }
 
 export const renderSrc = (slug: string) => `/media/renders/${slug}.webp`;
@@ -187,8 +189,13 @@ products.push(
   { id: "oval-bezel-pendant-silver", name: "Oval Bezel Pendant", category: "sterling-silver", detail: "Sterling silver, oval cut diamond", image: "jbii247sil-2638" },
 );
 
-/** The metals a piece exists in (BRD R-12, B-02): its variants, else inferred from the render slug. Nothing offers any other metal. */
+/** The metals a piece offers (BRD R-12, B-02): the admin console's choice when set, else the metals its imagery shows. Nothing offers any other metal. */
 export function productMetals(p: Product): Metal[] {
+  return p.metalOptions?.length ? p.metalOptions : imageMetals(p);
+}
+
+/** The metals the piece has a render in: its variants, else inferred from the render slug. */
+export function imageMetals(p: Product): Metal[] {
   if (p.variants) return (Object.keys(p.variants) as Metal[]).filter((m) => p.variants?.[m]);
   if (p.category === "sterling-silver") return ["wg"];
   if (/yg|yellow|-y$/.test(p.image)) return ["yg"];

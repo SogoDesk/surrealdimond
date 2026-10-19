@@ -26,6 +26,7 @@ import { useWishlist } from "./useWishlist";
 import { useDealer } from "@/lib/dealer";
 import { addToCart } from "@/lib/cart";
 import s from "./store.module.css";
+import { formatUSD, jewelryPrice } from "@/lib/pricing";
 
 const SIZES = "(min-width: 1600px) 16vw, (min-width: 1280px) 19vw, (min-width: 1024px) 24vw, (min-width: 768px) 31vw, 46vw";
 
@@ -111,6 +112,8 @@ export default function StoreCard({ product, preferredMetal, priority = false, o
         </Link>
         <span className={s.detail}>{product.detail}</span>
         {dealer ? (
+          <span className={s.priceRow}>
+          <span className={`${s.priceFigure} tabular`}>{formatUSD(jewelryPrice(product, selection.metal, selection.carat))}</span>
           <button type="button" className={s.price} onClick={() => addToCart({ productId: product.id, metal: selection.metal, carat: selection.carat, size: null, qty: 1, note: "" })}>
             <svg aria-hidden viewBox="0 0 18 18" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               <path d="M2.5 5.5h13l-.9 10.5H3.4z" />
@@ -118,6 +121,7 @@ export default function StoreCard({ product, preferredMetal, priority = false, o
             </svg>
             Add to cart
           </button>
+          </span>
         ) : (
           <Link href={account.login} className={s.price}>
             <svg aria-hidden viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">

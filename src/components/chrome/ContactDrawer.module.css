@@ -51,7 +51,7 @@
 .title {
   margin: 0;
   padding-top: 6px;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
   font-weight: 500;
   font-size: 2rem;
   line-height: 1.1;
@@ -104,7 +104,7 @@
   border-radius: 0;
   background: transparent;
   color: var(--ink);
-  font-family: var(--font-ui), "Jost", sans-serif;
+  font-family: var(--font-ui), "Urbanist", sans-serif;
   font-weight: 400;
   font-size: 1rem;
   line-height: 1.5;
@@ -133,7 +133,7 @@
   margin: 0;
   pointer-events: none;
   color: var(--stone);
-  font-family: var(--font-ui), "Jost", sans-serif;
+  font-family: var(--font-ui), "Urbanist", sans-serif;
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5;
@@ -199,7 +199,7 @@
 .thanksTitle {
   margin: 0;
   outline: none;
-  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif;
   font-weight: 500;
   font-size: clamp(2.5rem, 4.6vw, 3.5rem);
   line-height: 1.04;

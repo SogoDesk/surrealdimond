@@ -28,6 +28,7 @@ import { useDealer } from "@/lib/dealer";
 import { useNow } from "@/lib/useNow";
 import { sendMemoReport, useMemoReports, useMemos, type MemoReport as Report } from "@/lib/memo";
 import s from "./pages.module.css";
+import { formatUSD, jewelryPrice, stonePrice } from "@/lib/pricing";
 
 interface MemoLine {
   id: string;
@@ -43,6 +44,8 @@ interface MemoLine {
   clarity?: string;
   sample: boolean;
   href?: string;
+  /** Dealer price in US dollars, when known */
+  price: number | null;
 }
 
 type Kind = "all" | "stone" | "jewelry";
@@ -83,6 +86,7 @@ export default function MemoReport() {
         clarity: st?.clarity,
         sample: false,
         href: `/diamonds?stone=${m.stoneId}`,
+        price: st ? stonePrice(st) : null,
       };
     });
     const samples: MemoLine[] = dealer?.demo
@@ -102,6 +106,7 @@ export default function MemoReport() {
             clarity: x.clarity,
             sample: true,
             href: p ? productHref(p) : undefined,
+            price: x.kind === "jewelry" ? (p && x.metal ? jewelryPrice(p, x.metal, x.carat) : null) : x.color && x.clarity ? stonePrice({ carat: x.carat, color: x.color, clarity: x.clarity }) : null,
           };
         })
       : [];
@@ -296,7 +301,7 @@ export default function MemoReport() {
                       <td>{l.cut ?? "N/A"}</td>
                       <td>{l.color ?? "N/A"}</td>
                       <td>{l.clarity ?? "N/A"}</td>
-                      <td className={s.price}>On price list</td>
+                      <td className={`${s.price} tabular`}>{l.price === null ? "On price list" : formatUSD(l.price)}</td>
                       <td>
                         <span className={s.age} data-band={band(days)}>
                           {days}

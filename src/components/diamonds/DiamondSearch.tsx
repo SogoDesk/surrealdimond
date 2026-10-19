@@ -42,6 +42,7 @@ import StoneDrawer from "./StoneDrawer";
 import DiamondStory from "./DiamondStory";
 import { scrollToTarget } from "@/lib/scroll";
 import s from "./diamonds.module.css";
+import { formatUSD, stonePrice } from "@/lib/pricing";
 
 const PAGE = 50;
 const CARAT_PRESETS: [string, number, number | null][] = [
@@ -428,7 +429,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                         </td>
                         <td className={s.nowrap}>
                           {dealer ? (
-                            <span className={s.priceCell}>On price list</span>
+                            <span className={`${s.priceCell} tabular`}>{formatUSD(stonePrice(st))}</span>
                           ) : (
                             <Link href={loginFor(st)} className={s.priceLock} onClick={(e) => e.stopPropagation()}>
                               Log in

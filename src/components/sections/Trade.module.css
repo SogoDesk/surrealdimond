@@ -38,18 +38,44 @@
 }
 
 .copy {
-  grid-column: 5 / 10;
+  grid-column: 4 / 10;
 }
 .eyebrow {
   margin-bottom: 16px;
 }
 .headline {
   margin: 0 0 32px;
-  max-width: 16ch;
+  max-width: 20ch;
 }
 .body {
-  margin: 0 0 40px;
+  margin: 0 0 28px;
+  max-width: 52ch;
   color: var(--fg-soft);
+}
+
+/* The dealer program, twelve parts in two columns */
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--col-gap);
+  margin: 0 0 40px;
+  padding: 0;
+  list-style: none;
+}
+.benefits li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid rgba(11, 31, 42, 0.12);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: var(--fg);
+}
+.bullet {
+  flex: none;
+  color: var(--ink);
+  opacity: 0.55;
 }
 .ctas {
   display: flex;

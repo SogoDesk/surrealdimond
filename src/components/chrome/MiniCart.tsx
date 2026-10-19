@@ -20,6 +20,7 @@ import { groundStyle } from "@/content/grounds";
 import { stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
 import ShapeIcon from "@/components/brand/ShapeIcon";
 import styles from "./chrome.module.css";
+import { PRICES_ARE_SAMPLE, SAMPLE_NOTE, formatUSD, linePrice, linesTotal } from "@/lib/pricing";
 
 function BagIcon() {
   return (
@@ -144,7 +145,9 @@ export default function MiniCart() {
                           {metal}, {formatCarat(l.carat)}
                           {l.size ? `, size ${l.size}` : ""}
                         </span>
-                        <span className={styles.miniMeta}>Qty {l.qty}</span>
+                        <span className={styles.miniMeta}>
+                          Qty {l.qty}, <span className="tabular">{formatUSD(linePrice(l) ?? 0)}</span>
+                        </span>
                       </span>
                       <button type="button" className={styles.miniRemove} onClick={() => removeLine(l.key)} aria-label={`Remove ${p.name}`}>
                         <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
@@ -159,7 +162,13 @@ export default function MiniCart() {
                 <span>Total carat weight</span>
                 <span className="tabular">{formatCarat(caratTotal(lines))}</span>
               </div>
-              <p className={styles.miniNote}>Dealer prices are confirmed when Surreal accepts your order.</p>
+              <div className={styles.miniTotals}>
+                <span>Subtotal</span>
+                <span className="tabular">{formatUSD(linesTotal(lines))}</span>
+              </div>
+              <p className={styles.miniNote}>
+                Dealer prices in US dollars, confirmed when Surreal accepts your order.{PRICES_ARE_SAMPLE ? ` ${SAMPLE_NOTE}` : ""}
+              </p>
               <div className={styles.miniDoors}>
                 <Link href={account.cart} className={styles.miniSecondary} onClick={() => setOpen(false)}>
                   View cart

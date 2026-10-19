@@ -67,6 +67,7 @@ export const account = {
   apply: "/apply",
   dashboard: "/dashboard",
   cart: "/cart",
+  checkout: "/checkout",
   appointment: "/contact?type=appointment",
   search: "/search",
 } as const;
