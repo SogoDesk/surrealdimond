@@ -8,11 +8,11 @@ import Lookbook from "@/components/sections/Lookbook";
 import Foreveryone from "@/components/sections/Foreveryone";
 import Visit from "@/components/sections/Visit";
 import Trade from "@/components/sections/Trade";
+import NineWays from "@/components/sections/NineWays";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import DealerHome from "@/components/home/DealerHome";
 import DivisionGrid from "@/components/home/DivisionGrid";
 import CollectionsBento from "@/components/home/CollectionsBento";
-import Programs from "@/components/home/Programs";
 import Featured from "@/components/home/Featured";
 import Benefits from "@/components/home/Benefits";
 import Assurance from "@/components/brand/Assurance";
@@ -44,7 +44,7 @@ export default function Home() {
         <Engagement />
         <DivisionGrid />
         <CollectionsBento />
-        <Programs />
+        <NineWays />
         <HeroCarousel />
         <Featured />
         {/* Restored as they were in 9e31102. Lookbook holds while Foreveryone slides over it, so the two stay adjacent. */}

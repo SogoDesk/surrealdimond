@@ -287,11 +287,10 @@ export default function Engagement() {
         return { x: left + host.offsetWidth / 2, y: top + host.offsetHeight / 2 };
       };
 
-      // Copy stack (eyebrow rule, label, body, buttons); the headline tween lives in useSplitLines.
+      // Copy stack (eyebrow, body, buttons); the headline tween lives in useSplitLines.
       const copyTl = gsap.timeline({ paused: true });
       copyTl
-        .fromTo(copy.querySelector(".eyebrow-rule"), { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.8, ease: "surreal" }, 0)
-        .fromTo(copy.querySelector("[data-eyebrow] > span:last-child"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 0.2)
+        .fromTo(copy.querySelector("[data-eyebrow] > span:last-child"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 0)
         .fromTo(copy.querySelector("p"), { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1.2, ease: "surreal" }, 0.5)
         .fromTo(copy.querySelectorAll("[data-ctas] > *"), { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1, ease: "surreal", stagger: 0.1 }, 0.7);
 

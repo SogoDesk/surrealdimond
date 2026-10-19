@@ -260,7 +260,7 @@ export default function DiamondStory({ onApply }: { onApply: (patch: Partial<Dia
         <div className={s.wrap}>
           <header className={s.head}>
             <span data-rise>
-              <Eyebrow rule={false}>Four truths</Eyebrow>
+              <Eyebrow>Four truths</Eyebrow>
             </span>
             <h2 id="story-truths" className={s.title} data-rise>
               What makes a diamond <em>Surreal</em>
@@ -313,7 +313,7 @@ export default function DiamondStory({ onApply }: { onApply: (patch: Partial<Dia
         <div className={s.wrap}>
           <header className={s.head}>
             <span data-rise>
-              <Eyebrow rule={false}>The four Cs</Eyebrow>
+              <Eyebrow>The four Cs</Eyebrow>
             </span>
             <h2 id="story-cs" className={s.title} data-rise>
               Grading, <em>as your clients ask about it</em>
@@ -411,7 +411,7 @@ export default function DiamondStory({ onApply }: { onApply: (patch: Partial<Dia
         <div className={s.wrap}>
           <header className={s.head}>
             <span data-rise>
-              <Eyebrow rule={false}>Lab grown and mined</Eyebrow>
+              <Eyebrow>Lab grown and mined</Eyebrow>
             </span>
             <h2 id="story-compare" className={s.title} data-rise>
               Completely identical, <em>grown in weeks</em>
@@ -444,7 +444,7 @@ export default function DiamondStory({ onApply }: { onApply: (patch: Partial<Dia
         <div className={s.wrap}>
           <header className={s.head}>
             <span data-rise>
-              <Eyebrow rule={false}>Dealer voices</Eyebrow>
+              <Eyebrow>Dealer voices</Eyebrow>
             </span>
             <h2 id="story-voices" className={s.title} data-rise>
               From the stores <em>we grow for</em>

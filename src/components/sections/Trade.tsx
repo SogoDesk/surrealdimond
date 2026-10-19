@@ -94,8 +94,7 @@ export default function Trade({ className = "" }: TradeProps) {
 
       const inkPaths = Array.from(svg.querySelectorAll<SVGPathElement>('[data-layer="ink"] path'));
       const linePaths = Array.from(svg.querySelectorAll<SVGPathElement>('[data-layer="sky"] path'));
-      const eyebrowRule = copy.querySelector<HTMLElement>(".eyebrow-rule");
-      const eyebrowLabel = (eyebrowRule?.nextElementSibling as HTMLElement | null) ?? null;
+      const eyebrowLabel = copy.querySelector<HTMLElement>("[data-eyebrow] > span:last-child");
       const body = copy.querySelector<HTMLElement>("[data-body]");
       const ctas = copy.querySelector<HTMLElement>("[data-ctas]");
       const caption = card.querySelector<HTMLElement>("[data-caption]");
@@ -116,7 +115,6 @@ export default function Trade({ className = "" }: TradeProps) {
 
       /* ----- start states ----- */
       gsap.set([...inkPaths, ...linePaths], { drawSVG: "0%" });
-      if (eyebrowRule) gsap.set(eyebrowRule, { scaleX: 0, transformOrigin: "0% 50%" });
       if (eyebrowLabel) gsap.set(eyebrowLabel, { autoAlpha: 0, x: -8 });
       if (body) gsap.set(body, { autoAlpha: 0, y: 40 });
       if (ctas) gsap.set(ctas, { autoAlpha: 0, y: 24 });
@@ -152,7 +150,6 @@ export default function Trade({ className = "" }: TradeProps) {
         copyStarted.current = true;
         headlineTween.current?.play();
       }, 0.3);
-      if (eyebrowRule) tl.to(eyebrowRule, { scaleX: 1, duration: 1, ease: "surreal" }, 0.3);
       if (eyebrowLabel) tl.to(eyebrowLabel, { autoAlpha: 1, x: 0, duration: 1, ease: "surreal" }, 0.45);
       if (body) tl.to(body, { autoAlpha: 1, y: 0, duration: 1.2, ease: "surreal" }, 0.7);
       if (ctas) tl.to(ctas, { autoAlpha: 1, y: 0, duration: 1.1, ease: "surreal" }, 0.9);

@@ -117,7 +117,7 @@ export default function Foreveryone() {
     { enabled: !reduced },
   );
 
-  /* Eyebrow rule, image reveals, captions and the three parallax ratios. */
+  /* Image reveals, captions and the three parallax ratios. */
   useGSAP(
     () => {
       registerGsap();
@@ -133,12 +133,6 @@ export default function Foreveryone() {
         );
         return;
       }
-
-      gsap.fromTo(
-        root.querySelectorAll(".eyebrow-rule"),
-        { scaleX: 0, transformOrigin: "left center" },
-        { scaleX: 1, duration: 1, ease: "surreal", scrollTrigger: { trigger: copyRef.current ?? root, start: "top 80%", once: true } },
-      );
 
       const spread = desktop ? 0.8 : 0.5;
       figures.forEach((fig) => {

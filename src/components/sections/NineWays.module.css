@@ -1,0 +1,276 @@
+/* Nine ways to begin: header row above a drifting carousel of category cards (see NineWays.tsx). */
+
+.root {
+  /* Narrower than the 9e31102 cards (34vw) so more of the nine sit in view. */
+  --card-w: clamp(210px, 16.5vw, 280px);
+  --panel-h: calc(var(--card-w) * 1.3);
+  --panel-gap: 20px;
+  position: relative;
+  background: var(--paper);
+  overflow-x: clip;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(72px, 8vw, 128px) 0 clamp(40px, 4.5vw, 72px);
+}
+
+/* Header: heading left, body and Shop all right, on one baseline */
+.header {
+  /* Tailwind's container utility caps the width at each breakpoint; the header runs to the gutter like the chapters. */
+  max-width: none;
+  row-gap: 24px;
+  align-items: end;
+  padding-bottom: clamp(36px, 4vw, 56px);
+}
+.headingCol {
+  grid-column: 1 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.headline {
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 4.6vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.headline em {
+  font-style: italic;
+  font-weight: 300;
+}
+.bodyCol {
+  grid-column: 8 / span 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.body {
+  margin: 0;
+  max-width: 44ch;
+  white-space: normal;
+}
+
+/* Carousel */
+.rail {
+  position: relative;
+}
+.carousel {
+  padding: 8px 0 16px;
+}
+.carousel a {
+  -webkit-user-drag: none;
+}
+.viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0 16px;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+.viewport .track {
+  padding: 0 var(--gutter);
+}
+.track {
+  display: flex;
+  align-items: center;
+  gap: var(--panel-gap);
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card,
+.interlude {
+  flex: 0 0 auto;
+  height: var(--panel-h);
+  scroll-snap-align: start;
+}
+.card {
+  width: var(--card-w);
+}
+.interlude {
+  width: calc(var(--panel-h) * 0.86);
+}
+
+/* Paper card */
+.cardLink {
+  position: relative;
+  display: block;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  color: var(--fg);
+  transition: transform 1s var(--ease-surreal), box-shadow 1s var(--ease-surreal);
+}
+.cardLink:hover,
+.cardLink:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(11, 31, 42, 0.08);
+}
+.cardLink:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+.index {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  color: var(--fg-muted);
+}
+.renderWell {
+  position: absolute;
+  inset: 0 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.render {
+  width: 72%;
+  height: auto;
+  transition: transform 1s var(--ease-surreal);
+}
+.cardLink:hover .render {
+  transform: scale(1.06);
+}
+.title {
+  position: absolute;
+  left: 16px;
+  right: 48px;
+  bottom: 16px;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 1.5vw, 1.5rem);
+  line-height: 1.1;
+  color: var(--fg);
+}
+.arrow {
+  position: absolute;
+  right: 16px;
+  bottom: 20px;
+  color: var(--fg);
+  transition: transform 0.6s var(--ease-surreal);
+}
+.cardLink:hover .arrow {
+  transform: translateX(6px);
+}
+
+/* Loose diamonds: plan view of a round brilliant */
+.brilliantWell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 58%;
+  color: var(--ink);
+}
+.brilliant {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.brilliantSpin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: brilliantSpin 40s linear infinite;
+}
+@keyframes brilliantSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.brilliantLabel {
+  color: var(--fg-muted);
+  text-align: center;
+}
+
+/* Lifestyle interlude */
+.interludeFrame {
+  position: relative;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--studio);
+}
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s var(--ease-surreal);
+}
+.interludeFrame:hover .photo {
+  transform: scale(1.04);
+}
+.scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(10, 11, 12, 0.4), rgba(10, 11, 12, 0));
+  pointer-events: none;
+}
+.caption {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  margin: 0;
+  font-family: var(--font-editorial), "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.375rem, 1.7vw, 1.75rem);
+  line-height: 1.1;
+  color: var(--porcelain);
+}
+
+@media (max-width: 1023px) {
+  .headingCol,
+  .bodyCol {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .root {
+    --card-w: 44vw;
+    --panel-gap: 12px;
+  }
+  .interlude {
+    width: 60vw;
+  }
+  .title {
+    left: 12px;
+    right: 36px;
+    bottom: 12px;
+    font-size: 1.125rem;
+  }
+  .arrow {
+    right: 12px;
+    bottom: 14px;
+  }
+  .index {
+    top: 12px;
+    left: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brilliantSpin {
+    animation: none;
+  }
+  .cardLink:hover,
+  .cardLink:focus-visible,
+  .cardLink:hover .render,
+  .cardLink:hover .arrow,
+  .interludeFrame:hover .photo {
+    transform: none;
+  }
+}

@@ -167,15 +167,6 @@ export default function Lookbook() {
         return;
       }
 
-      // The eyebrow hairline draws in with the section.
-      const rule = root.querySelector<HTMLElement>(".eyebrow-rule");
-      if (rule) {
-        gsap.fromTo(
-          rule,
-          { scaleX: 0, transformOrigin: "left center" },
-          { scaleX: 1, duration: 1.1, ease: "surreal", scrollTrigger: { trigger: rule, start: "top 90%", once: true } },
-        );
-      }
 
       // Clip-path reveals from alternating sides, the image settling from 1.12 to 1.
       prints.forEach((print) => {

@@ -82,7 +82,6 @@ export default function Visit({ className = "" }: VisitProps) {
       const reduce = prefersReducedMotion();
       const mobile = window.matchMedia(MOBILE).matches;
 
-      const rule = copy.querySelector<HTMLElement>(".eyebrow-rule");
       const eyebrowLabel = copy.querySelector<HTMLElement>("[data-eyebrow] > span:last-child");
       const body = copy.querySelector<HTMLElement>("[data-body]");
       const rows = Array.from(address.querySelectorAll<HTMLElement>("[data-row]"));
@@ -94,7 +93,7 @@ export default function Visit({ className = "" }: VisitProps) {
       /* Reduced motion: solid sky at rest, 0.3s fades only. */
       if (reduce) {
         sky.dataset.open = "";
-        const items = [rule, eyebrowLabel, body, ...rows, ...ctas, cardWrap, socialLink].filter(Boolean) as HTMLElement[];
+        const items = [eyebrowLabel, body, ...rows, ...ctas, cardWrap, socialLink].filter(Boolean) as HTMLElement[];
         gsap.fromTo(
           items,
           { autoAlpha: 0 },
@@ -152,11 +151,10 @@ export default function Visit({ className = "" }: VisitProps) {
         apply();
       }
 
-      /* Copy stack: eyebrow rule, label, body, address rows typed in by character, CTAs, the social link. */
+      /* Copy stack: eyebrow label, body, address rows typed in by character, CTAs, the social link. */
       gsap.set(rows, { autoAlpha: 0 });
       const buildCopy = () => {
         const tl = gsap.timeline({ scrollTrigger: { trigger: copy, start: "top 78%", once: true } });
-        if (rule) tl.fromTo(rule, { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.8, ease: "surreal" }, 0);
         if (eyebrowLabel) tl.fromTo(eyebrowLabel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 0.2);
         if (body) tl.fromTo(body, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1.2, ease: "surreal" }, 0.5);
         tl.fromTo(rules, { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.9, ease: "surreal", stagger: 0.06 }, 0.8);

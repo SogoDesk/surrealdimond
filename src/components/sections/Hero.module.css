@@ -132,9 +132,6 @@
   top: calc(var(--header-full) + 24px);
   left: var(--gutter);
 }
-.eyebrow :global(.eyebrow-rule) {
-  transform-origin: 0 50%;
-}
 
 .bottom {
   position: absolute;

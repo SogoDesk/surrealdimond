@@ -61,7 +61,6 @@ export default function Hero() {
       const photoImg = q<HTMLElement>("[data-hero=photo-img]")[0];
       const overlay = q<HTMLElement>("[data-hero=overlay]")[0];
       const wordmark = q<HTMLElement>("[data-hero=wordmark]")[0];
-      const rule = q<HTMLElement>("[data-eyebrow] .eyebrow-rule")[0];
       const eyebrowLabel = q<HTMLElement>("[data-eyebrow] > span:last-child")[0];
       const body = q<HTMLElement>("[data-hero=body]")[0];
       const ctas = q<HTMLElement>("[data-hero=ctas] > *");
@@ -70,7 +69,7 @@ export default function Hero() {
       const beam = q<HTMLElement>("[data-hero=beam]")[0];
       // The entrance animates the inner elements; the scrubbed exit animates
       // their wrappers, so the two never record start values from each other.
-      const entranceCopy = [rule, eyebrowLabel, body, ...ctas].filter(Boolean);
+      const entranceCopy = [eyebrowLabel, body, ...ctas].filter(Boolean);
       const exitWraps = q<HTMLElement>("[data-hero=eyebrow], [data-hero=copy]");
 
       let chars: HTMLElement[] = [];
@@ -92,7 +91,6 @@ export default function Hero() {
       /* Initial states, set here so nothing stays hidden if an effect fails. */
       gsap.set(photoImg, { scale: 1.06 });
       gsap.set(overlay, { opacity: 0 });
-      if (rule) gsap.set(rule, { scaleX: 0 });
       gsap.set([eyebrowLabel, body, ...ctas, ...scrollParts], { opacity: 0, y: 24 });
       // Hidden only until the display face has loaded and the characters are masked.
       gsap.set(wordmark, { opacity: 0 });
@@ -107,7 +105,6 @@ export default function Hero() {
         const tl = gsap.timeline({ defaults: { ease: "surreal" } });
         tl.to(photoImg, { scale: 1, duration: 2.4, ease: "power2.out" }, 0);
         if (chars.length) tl.to(chars, { yPercent: 0, duration: 1.2, stagger: { each: 0.04, from: "start" } }, 0.2);
-        if (rule) tl.to(rule, { scaleX: 1, duration: 0.8 }, 0.9);
         tl.to(eyebrowLabel, { opacity: 1, y: 0, duration: 1 }, 1.0);
         tl.to(body, { opacity: 1, y: 0, duration: 1.2 }, 1.2);
         tl.to(ctas, { opacity: 1, y: 0, duration: 1.2, stagger: 0.08 }, 1.35);
@@ -199,7 +196,7 @@ export default function Hero() {
           <div className={styles.scrim} aria-hidden />
 
           <div className={styles.eyebrow} data-hero="eyebrow">
-            <Eyebrow rule={false}>Largest lab diamond grower in the world</Eyebrow>
+            <Eyebrow>Largest lab diamond grower in the world</Eyebrow>
           </div>
 
           <h1 className={`${styles.wordmark} t-display`} data-hero="wordmark">
