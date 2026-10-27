@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Italiana, Urbanist } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "@/components/providers/SmoothScroll";
 
 const display = Italiana({
   variable: "--font-display",
@@ -54,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${display.variable} ${editorial.variable} ${ui.variable}`}>
       {/* Browser extensions add attributes to body before hydration; those are not ours to reconcile. */}
       <body suppressHydrationWarning>
-        <SmoothScroll>{children}</SmoothScroll>
+        {children}
       </body>
     </html>
   );

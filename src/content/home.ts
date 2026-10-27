@@ -6,31 +6,34 @@
 
 import { account, brand } from "./site";
 
+/**
+ * A homepage hero photograph (client feedback F-A1: a full-width moving
+ * carousel behind the fixed headline and buttons). Campaign photography
+ * only: the web banners carry their own text and logo, which would clash
+ * with the headline over them.
+ */
 export interface HeroSlide {
   id: string;
-  /** 3:1 web banner, logo in the artwork */
+  /** Wide photograph for tablets and desktops. */
   desktop: string;
-  /** Square image for phones */
+  /** Photograph for phones; the same file is fine, framed by focusMobile. */
   mobile: string;
+  /** object-position for each crop, so the jewelry stays clear of the headline on the left. */
+  focus?: string;
+  focusMobile?: string;
+  /** Where the slide's caption leads. */
   href: string;
+  /** What the photograph shows: the screen reader text and the caption. */
   label: string;
 }
 
 export const heroSlides: HeroSlide[] = [
-  { id: "dream", desktop: "/media/banners/web-2.webp", mobile: "/media/photos/sb-4091-sm.webp", href: "/jewelry/engagement", label: "Engagement rings" },
-  { id: "hands", desktop: "/media/banners/web-1.webp", mobile: "/media/banners/social-3.webp", href: "/jewelry/rings", label: "Rings" },
-  { id: "trio", desktop: "/media/banners/web-3.webp", mobile: "/media/banners/social-c.webp", href: "/jewelry/pendants", label: "Pendants and earrings" },
-  { id: "lines", desktop: "/media/banners/web-4.webp", mobile: "/media/banners/social-2.webp", href: "/jewelry/rings", label: "Rings and huggies" },
-  { id: "circle", desktop: "/media/banners/web-5.webp", mobile: "/media/banners/social-a.webp", href: "/jewelry/pendants", label: "Pendants" },
-  { id: "bud", desktop: "/media/banners/web-7.webp", mobile: "/media/banners/social-1.webp", href: "/jewelry/engagement", label: "Three stone emerald cut" },
-  { id: "spot", desktop: "/media/banners/web-8.webp", mobile: "/media/banners/social-6.webp", href: "/diamonds/made-to-order", label: "Made to Order diamonds" },
-];
-
-export const growerProof = [
-  { figure: "No. 1", label: "The largest CVD grower on planet Earth" },
-  { figure: "Own", label: "Machines we manufacture, and a growing recipe we created" },
-  { figure: "DEF", label: "Color, VVS clarity: what we primarily grow" },
-  { figure: "15 ct", label: "Larger stones are our specialty, up to fifteen carats" },
+  { id: "beam", desktop: "/media/photos/hero-3984-wide.webp", mobile: "/media/photos/hero-3984-tall.webp", focus: "50% 56%", focusMobile: "50% 60%", href: "/jewelry/engagement", label: "Halo engagement ring under a single beam of light" },
+  { id: "hands", desktop: "/media/photos/sb-3594.webp", mobile: "/media/photos/sb-3594.webp", focus: "62% 30%", focusMobile: "55% 30%", href: "/jewelry/rings", label: "Diamond rings and bracelets, worn" },
+  { id: "bands", desktop: "/media/photos/sb-3999-copy.webp", mobile: "/media/photos/sb-3999-copy.webp", focus: "62% 50%", focusMobile: "70% 50%", href: "/jewelry/wedding-bands", label: "Diamond bands stacked on black" },
+  { id: "hair", desktop: "/media/photos/sb-3750.webp", mobile: "/media/photos/sb-3750.webp", focus: "66% 40%", focusMobile: "60% 40%", href: "/jewelry/rings", label: "Gold and diamond rings, worn" },
+  { id: "circle", desktop: "/media/photos/sb-4038.webp", mobile: "/media/photos/sb-4038.webp", focus: "60% 50%", focusMobile: "48% 50%", href: "/jewelry/pendants", label: "Circle pendant on a fine chain" },
+  { id: "drops", desktop: "/media/photos/sb-3462.webp", mobile: "/media/photos/sb-3462.webp", focus: "62% 50%", focusMobile: "55% 50%", href: "/jewelry/earrings", label: "Diamond drop earrings" },
 ];
 
 export interface Program {

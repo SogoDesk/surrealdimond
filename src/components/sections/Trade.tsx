@@ -33,7 +33,8 @@ import { useSplitLines } from "@/components/motion/SplitReveal";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
 import { dealerBenefits } from "@/content/site";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
-import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
+import { isTouchDevice } from "@/hooks/useMedia";
+import { calmChapters } from "@/lib/motion";
 import styles from "./Trade.module.css";
 
 /** Window event the contact drawer listens on; re-exported so callers can share one name. */
@@ -79,7 +80,7 @@ export default function Trade({ className = "" }: TradeProps) {
       if (copyStarted.current) tween.play();
       return tween;
     },
-    { enabled: !prefersReducedMotion() },
+    { enabled: !calmChapters() },
   );
 
   useGSAP(
@@ -103,7 +104,7 @@ export default function Trade({ className = "" }: TradeProps) {
       const ctas = copy.querySelector<HTMLElement>("[data-ctas]");
       const benefits = Array.from(copy.querySelectorAll<HTMLElement>("[data-benefits] > li"));
       const caption = card.querySelector<HTMLElement>("[data-caption]");
-      const reduced = prefersReducedMotion();
+      const reduced = calmChapters();
 
       gsap.set(inkPaths, { opacity: INK_REST });
       gsap.set(linePaths, { opacity: LINE_REST });

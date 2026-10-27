@@ -60,7 +60,7 @@ export default function FilterDrawer({ open, category, query, showShapes, onAppl
   const count = useMemo(() => configured.filter((p) => matchesQuery(p, draft, showShapes)).length, [configured, draft, showShapes]);
 
   return (
-    <div ref={rootRef} className={s.drawerRoot} inert={!open} aria-hidden={!open} onKeyDown={onKeyDown} data-lenis-prevent>
+    <div ref={rootRef} className={s.drawerRoot} inert={!open} aria-hidden={!open} onKeyDown={onKeyDown}>
       <div ref={backdropRef} className={s.drawerBackdrop} onClick={onClose} />
       <div ref={panelRef} className={s.drawer} role="dialog" aria-modal="true" aria-label="Filters" tabIndex={-1} onKeyDown={(e) => trapTab(e, panelRef.current)}>
         <header className={s.drawerHead}>

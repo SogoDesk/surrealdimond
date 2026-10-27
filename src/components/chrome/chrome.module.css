@@ -177,7 +177,7 @@
   line-height: 1;
 }
 
-/* Second row: the primary links. Folds away once the page scrolls. */
+/* Second row: the primary links, always in reach (client feedback F-A4: it used to fold away once the page scrolled). */
 .row {
   position: relative;
   z-index: 1;
@@ -188,7 +188,6 @@
   transition: height 0.5s var(--ease-surreal), opacity 0.4s var(--ease-surreal), border-color 0.4s var(--ease-surreal);
 }
 @media (min-width: 1024px) { .row { display: block; } }
-.header[data-condensed="true"] .row { height: 0; opacity: 0; border-color: transparent; }
 .rowList {
   list-style: none;
   margin: 0 auto;
@@ -652,7 +651,7 @@ a.accountItem:hover, button.accountItem:hover { background: var(--porcelain); co
 .dashPill:hover { background: var(--outline-hover, rgba(11, 31, 42, 0.06)); }
 .dashPill:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
 .dashPill svg { width: 16px; height: 16px; flex: 0 0 auto; }
-@media (max-width: 599px) { .dashPill span { display: none; } .dashPill { width: 40px; padding: 0; justify-content: center; } }
+@media (max-width: 599px) { .dashPill span { display: none; } .dashPill { flex: 0 0 40px; width: 40px; padding: 0; justify-content: center; } }
 
 /* Site search suggestions (F-B5) */
 .searchWrap { position: relative; width: 100%; max-width: 560px; }

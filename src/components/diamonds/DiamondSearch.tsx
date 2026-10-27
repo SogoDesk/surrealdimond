@@ -579,7 +579,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
       )}
 
       {comparing && (
-        <div className={s.compareRoot} role="dialog" aria-modal="true" aria-label="Compare stones" data-lenis-prevent onKeyDown={(e) => e.key === "Escape" && setComparing(false)}>
+        <div className={s.compareRoot} role="dialog" aria-modal="true" aria-label="Compare stones" onKeyDown={(e) => e.key === "Escape" && setComparing(false)}>
           <div className={s.compareBackdrop} onClick={() => setComparing(false)} />
           <div className={s.compare}>
             <header className={s.compareHead}>

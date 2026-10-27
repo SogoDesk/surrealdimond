@@ -130,7 +130,7 @@ export default function HorizontalScroll({
     >
       <div
         ref={viewportRef}
-        data-lenis-prevent={pinned ? undefined : ""}
+       
         className="snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-16 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:h-screen md:snap-none md:overflow-hidden md:pb-0"
         style={pinned ? undefined : { height: "auto", overflowX: "auto", scrollSnapType: "x mandatory", paddingBottom: "4rem" }}
       >

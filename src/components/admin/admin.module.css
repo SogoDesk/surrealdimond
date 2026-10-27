@@ -331,3 +331,7 @@
 .howList strong { font-weight: 600; color: var(--ink); }
 .table .wrapCell { white-space: normal; min-width: 240px; }
 .table .notesCell { white-space: normal; }
+
+/* Hero photographs: uniform crops in the picker and the list */
+.pickGrid .pickImg img, .bannerDesk img { aspect-ratio: 21 / 9; object-fit: cover; }
+.pickGridSquare .pickImg img, .bannerPhone img { aspect-ratio: 4 / 5; object-fit: cover; }

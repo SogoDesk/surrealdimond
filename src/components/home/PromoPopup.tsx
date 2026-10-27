@@ -147,7 +147,7 @@ export default function PromoPopup() {
   };
 
   return (
-    <div className={s.root} data-state={state} onKeyDown={onKeyDown} data-lenis-prevent>
+    <div className={s.root} data-state={state} onKeyDown={onKeyDown}>
       <div className={s.backdrop} onClick={close} aria-hidden />
       <div ref={panelRef} className={s.panel} role="dialog" aria-modal="true" aria-labelledby={headingId}>
         <PromoCard promo={promo} headingId={headingId} onClose={close} onFollow={() => rememberClosed(promo)} />

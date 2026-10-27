@@ -8,7 +8,10 @@
  * - pins: per page ("all" for the whole catalog, or a category id), the
  *   pieces featured to the top, in order.
  * - sorts: per page, the default sort; customers can still re-sort.
- * - banners: the homepage hero slides, in order, each on or off.
+ * - banners: the homepage hero photographs, in order, each on or off.
+ *   Settings saved before the hero became a photo carousel (27 October
+ *   2026) held the web banners, whose artwork carries its own text; those
+ *   are swapped for the photo set when read.
  *
  * Defaults come from src/content (featuring.ts, home.ts). In the preview the
  * console's changes are kept in this browser; the database takes over with
@@ -19,6 +22,7 @@ import { hotThisWeek } from "@/content/featuring";
 import { heroSlides, type HeroSlide } from "@/content/home";
 import type { Product } from "@/content/catalog";
 import type { Sort } from "@/components/shop/filters";
+import { useMemo } from "react";
 import { createLocalStore } from "./localStore";
 
 export interface Banner extends HeroSlide {
@@ -46,8 +50,15 @@ const isMerch = (v: unknown): v is Merch => {
 
 const store = createLocalStore<Merch>("surreal-merch", DEFAULT_MERCH, isMerch);
 
-export const useMerch = store.useStore;
-export const setMerch = (fn: (m: Merch) => Merch) => store.set(fn);
+/** Banner artwork from before the photo hero (text in the image) gives way to the default photographs. */
+const legacyBanners = (m: Merch) => m.banners.some((b) => b.desktop.startsWith("/media/banners/"));
+const current = (m: Merch): Merch => (legacyBanners(m) ? { ...m, banners: DEFAULT_MERCH.banners } : m);
+
+export function useMerch(): Merch {
+  const m = store.useStore();
+  return useMemo(() => current(m), [m]);
+}
+export const setMerch = (fn: (m: Merch) => Merch) => store.set((m) => fn(current(m)));
 export const resetMerch = () => store.set(DEFAULT_MERCH);
 
 /** The banners the homepage shows: the active ones in order, or every default if none is on. */

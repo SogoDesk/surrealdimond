@@ -3,15 +3,17 @@
 /**
  * Two-tier header on the Tanishq pattern (docs/CONTEXT.md, "Navigation").
  *
- * Top row: the live line mark and wordmark (#site-logo, the element the
- * preloader Flips its mark into), a wide search field with rotating prompts,
- * and the trade utilities: appointments, Log in, the Become a dealer pill and
- * the cart (signed in: the store's account menu and the mini cart). Second row (from 1024px): the primary links, with Jewelry opening
- * the mega menu on hover intent. Past 80px of scroll the second row folds
- * away and the bar keeps only the top row; it returns near the top of the
- * page. The bar is light on the commerce pages; the homepage passes
- * `chapters`, which mounts ThemeSync so the bar follows each chapter's
- * data-theme (light-on-dark glass over the dark chapters).
+ * Top row: the live line mark and wordmark (#site-logo), the site search
+ * (SiteSearch: suggestions from the catalog, the stone feed and the pages;
+ * a search icon on phones), and the trade utilities: appointments, the
+ * Retailer Dashboard pill, the Become a dealer pill and the cart (signed in:
+ * the dashboard pill, the store's account menu and the mini cart). Second
+ * row (from 1024px): the primary links, with Jewelry opening the mega menu
+ * on hover intent. Both rows stay while the page scrolls (client feedback
+ * F-A4); past 80px the bar only gains its shadow. The bar is light on the
+ * commerce pages; the homepage passes `chapters`, which mounts ThemeSync so
+ * the bar follows each chapter's data-theme (light-on-dark glass over the
+ * dark chapters).
  */
 
 import Link from "next/link";

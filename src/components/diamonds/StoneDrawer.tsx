@@ -73,7 +73,7 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
     : [];
 
   return (
-    <div ref={rootRef} className={s.drawerRoot} inert={!open} aria-hidden={!open} onKeyDown={onKeyDown} data-lenis-prevent>
+    <div ref={rootRef} className={s.drawerRoot} inert={!open} aria-hidden={!open} onKeyDown={onKeyDown}>
       <div ref={backdropRef} className={s.drawerBackdrop} onClick={onClose} />
       <div ref={panelRef} className={s.drawer} role="dialog" aria-modal="true" aria-label={stone ? stoneTitle(stone) : "Stone"} tabIndex={-1} onKeyDown={(e) => trapTab(e, panelRef.current)}>
         {stone && (

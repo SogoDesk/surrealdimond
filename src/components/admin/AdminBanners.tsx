@@ -1,11 +1,14 @@
 "use client";
 
 /**
- * Banners (BRD R-02, R-35): the homepage hero slides. Each row shows the
- * wide desktop artwork and the square phone image, the label (the image's
- * description for screen readers) and where the slide leads, a switch to
- * show or hide it, and up and down to set the order. Add a banner by picking
- * a desktop and a phone image from the media library, a label and a link.
+ * Banners (BRD R-02, R-35): the photographs that move behind the homepage
+ * headline (client feedback F-A1). Campaign photography only: the web
+ * banners carry their own text and logo, which would clash with the
+ * headline. Each row shows the wide photograph and the phone crop, the
+ * label (the caption, and the description for screen readers) and where the
+ * caption leads, a switch to show or hide it, and up and down to set the
+ * order. Add one by picking a wide and a phone photograph from the media
+ * library, a label and a link.
  * Added banners can be deleted; Surreal's own set can only be switched off.
  * At least one banner stays on. Changes show on the homepage at once.
  */
@@ -19,8 +22,9 @@ import { move, resetMerch, setMerch, useMerch, type Banner } from "@/lib/merch";
 import { useAdminAccess } from "./AdminShell";
 import s from "./admin.module.css";
 
-const DESKTOP = Array.from({ length: 8 }, (_, i) => `/media/banners/web-${i + 1}.webp`);
-const PHONE = [..."12345678", ..."abcdefghi"].map((c) => `/media/banners/social-${c}.webp`);
+/** Wide campaign photographs; any of them also works on phones, framed from the centre. */
+const DESKTOP = ["hero-3984-wide", "sb-3594", "sb-3999-copy", "sb-3750", "sb-4038", "sb-3462", "sb-3424", "sb-4002-copy", "sb-4024", "sb-3990", "sb-3996", "sb-3631", "sb-3666", "sb-4074"].map((n) => `/media/photos/${n}.webp`);
+const PHONE = ["hero-3984-tall", "sb-3594", "sb-3999-copy", "sb-3750", "sb-4038", "sb-3462", "sb-3602", "sb-3605", "sb-3592", "sb-4091", "sb-4117", "sb-3962"].map((n) => `/media/photos/${n}.webp`);
 const own = new Set(heroSlides.map((b) => b.id));
 
 export default function AdminBanners() {
@@ -40,7 +44,7 @@ export default function AdminBanners() {
   const add = (e: FormEvent) => {
     e.preventDefault();
     if (label.trim().length < 3) {
-      setError("Describe the banner in a few words; screen readers read it aloud.");
+      setError("Describe the photograph in a few words; it is the caption, and screen readers read it aloud.");
       return;
     }
     write([{ id: `b-${Date.now().toString(36)}`, desktop, mobile: phone, href, label: label.trim(), active: true }, ...banners]);
@@ -54,9 +58,9 @@ export default function AdminBanners() {
       <header className={s.pageHead}>
         <div>
           <p className={s.kicker}>Banners</p>
-          <h1 className={s.pageTitle}>Homepage hero slides</h1>
+          <h1 className={s.pageTitle}>Homepage hero photographs</h1>
           <p className={s.pageLine}>
-            {onCount} of {banners.length} on. They rotate at the top of the homepage in this order.
+            {onCount} of {banners.length} on. They move behind the homepage headline and buttons in this order, about six seconds each.
           </p>
         </div>
         <span className={s.cardTools}>
@@ -69,7 +73,7 @@ export default function AdminBanners() {
                 Reset all storefront settings
               </button>
               <button type="button" className={s.primary} onClick={() => setAdding((v) => !v)} aria-expanded={adding}>
-                {adding ? "Close" : "Add a banner"}
+                {adding ? "Close" : "Add a photograph"}
               </button>
             </>
           )}
@@ -78,23 +82,23 @@ export default function AdminBanners() {
 
       {adding && !readOnly && (
         <form className={s.card} onSubmit={add} noValidate>
-          <h2 className={s.cardTitle}>New banner</h2>
+          <h2 className={s.cardTitle}>New photograph</h2>
           <div className={s.field}>
-            <span className={s.label}>Desktop artwork, wide</span>
-            <div className={s.pickGrid} role="radiogroup" aria-label="Desktop artwork">
+            <span className={s.label}>Wide photograph</span>
+            <div className={s.pickGrid} role="radiogroup" aria-label="Wide photograph">
               {DESKTOP.map((src) => (
                 <button key={src} type="button" role="radio" aria-checked={desktop === src} className={s.pickImg} onClick={() => setDesktop(src)}>
-                  <Image src={src} alt="" width={240} height={80} sizes="160px" />
+                  <Image src={src} alt="" width={240} height={103} sizes="160px" />
                 </button>
               ))}
             </div>
           </div>
           <div className={s.field}>
-            <span className={s.label}>Phone image, square</span>
-            <div className={`${s.pickGrid} ${s.pickGridSquare}`} role="radiogroup" aria-label="Phone image">
+            <span className={s.label}>Phone photograph</span>
+            <div className={`${s.pickGrid} ${s.pickGridSquare}`} role="radiogroup" aria-label="Phone photograph">
               {PHONE.map((src) => (
                 <button key={src} type="button" role="radio" aria-checked={phone === src} className={s.pickImg} onClick={() => setPhone(src)}>
-                  <Image src={src} alt="" width={120} height={120} sizes="80px" />
+                  <Image src={src} alt="" width={120} height={150} sizes="80px" />
                 </button>
               ))}
             </div>
@@ -102,7 +106,7 @@ export default function AdminBanners() {
           <div className={s.formRow}>
             <label className={s.field}>
               <span className={s.label}>Label</span>
-              <input className={s.input} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="For example, Oval halo rings" aria-invalid={error ? true : undefined} />
+              <input className={s.input} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="For example, Oval halo ring on black" aria-invalid={error ? true : undefined} />
               {error && <span className={s.error}>{error}</span>}
             </label>
             <label className={s.field}>
@@ -116,7 +120,7 @@ export default function AdminBanners() {
               </select>
             </label>
           </div>
-          <p className={s.muted}>Images come from Surreal&apos;s banner library. Uploads arrive with file storage (M1).</p>
+          <p className={s.muted}>Photographs come from Surreal&apos;s campaign library. Uploads arrive with file storage (M1).</p>
           <div>
             <button type="submit" className={s.primary}>
               Add to the homepage
@@ -130,10 +134,10 @@ export default function AdminBanners() {
           <li key={b.id} className={s.banner} data-off={b.active ? undefined : ""}>
             <span className={s.orderIndex}>{i + 1}</span>
             <span className={s.bannerDesk}>
-              <Image src={b.desktop} alt="" width={360} height={120} sizes="240px" />
+              <Image src={b.desktop} alt="" width={360} height={154} sizes="240px" />
             </span>
             <span className={s.bannerPhone}>
-              <Image src={b.mobile} alt="" width={120} height={120} sizes="64px" />
+              <Image src={b.mobile} alt="" width={120} height={150} sizes="64px" />
             </span>
             <span className={s.bannerFields}>
               <input className={s.input} value={b.label} onChange={(e) => update(i, { label: e.target.value })} disabled={readOnly} aria-label={`Label for banner ${i + 1}`} />

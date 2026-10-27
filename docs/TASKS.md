@@ -79,7 +79,7 @@ The client asked for the 9e31102 homepage back (its chapters, motion and transit
 - [ ] Main Door (Q6); Legacy list, FAQ answers and a company timeline from Surreal (C-11)
 - [ ] Trade show calendar into `src/content/tradeShows.ts`, or time-slot booking if Q9 asks for it
 - [ ] Remaining dashboard sections in design (Q5) and console modules (Orders and payments, Memo, Requests, Content, Dealer resources)
-- [ ] Homepage: review Foreveryone's consumer-leaning copy with Surreal, and whether the PromoPopup should wait until past the opening chapters
+- [ ] Homepage: whether the PromoPopup should wait until past the hero (Foreveryone was removed on 27 October)
 
 ### E. Client feedback, 27 October 2026
 
@@ -118,10 +118,10 @@ The development action items from the meeting, worked in the client's priority o
 
 **A. Homepage and UI/UX (priority 5)**
 
-- [ ] F-A1 Hero as a full-width moving image carousel, the wordmark, copy and buttons fixed over it
-- [ ] F-A2 Hot this week directly under the hero
-- [ ] F-A3 Repetitive sections removed and animation cut back for performance
-- [ ] F-A4 Navigation stays visible while scrolling (the links row no longer collapses)
+- [x] F-A1 Hero as a full-width moving image carousel, the wordmark, copy and buttons fixed over it
+- [x] F-A2 Hot this week directly under the hero
+- [x] F-A3 Repetitive sections removed and animation cut back for performance
+- [x] F-A4 Navigation stays visible while scrolling (the links row no longer collapses)
 - [ ] F-A5 Light and dark themes for Surreal's review, brand blue kept as the secondary colour
 
 ## M1: scope lock and architecture baseline (end of build week 2)

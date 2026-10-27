@@ -6,12 +6,13 @@
  * The back cover on the brand navy. The chapter wrapper stays in normal flow
  * (it carries data-chapter and data-theme for the header) and clips a
  * position: fixed footer to its own box, so the trade section lifts away and
- * reveals the footer beneath it. Lenis scrolls the window natively, so fixed
+ * reveals the footer beneath it. The window scrolls natively, so fixed
  * positioning holds; the wrapper's height is kept equal to the footer's with
  * a ResizeObserver. When the footer is taller than the viewport it anchors to
  * the top instead and is released into normal flow once the wrapper's top
- * passes the top of the viewport, so every row stays reachable. Below 768px
- * and under reduced motion the footer is static.
+ * passes the top of the viewport, so every row stays reachable. Below 768px,
+ * under reduced motion and with calm chapters (src/lib/motion.ts) the footer
+ * is static.
  *
  * Rows: the newsletter (client side only, a thank-you line replaces the field
  * on submit), the link columns from src/content/site.ts plus the Visit column
@@ -34,6 +35,7 @@ import { WORDMARK_BYLINE, WORDMARK_TEXT } from "@/components/brand/Wordmark";
 import { brand, footerColumns, legal } from "@/content/site";
 import { registerGsap, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion, useBreakpoint } from "@/hooks/useMedia";
+import { calmChapters } from "@/lib/motion";
 import styles from "./Footer.module.css";
 
 const DRAW_STROKE = 0.9;
@@ -82,7 +84,7 @@ export default function Footer({ className = "" }: FooterProps) {
       const beam = beamRef.current;
       const wordmark = wordmarkRef.current;
       if (!footer || !wrap || !mark || !beam || !wordmark) return;
-      const reduced = prefersReducedMotion();
+      const reduced = calmChapters();
       const fixedMode = mdUp && !reduced;
       wrap.dataset.mode = fixedMode ? "fixed" : "static";
 
@@ -280,12 +282,6 @@ export default function Footer({ className = "" }: FooterProps) {
   };
 
   const backToTop = () => {
-    registerGsap();
-    const lenis = window.__lenis;
-    if (lenis) {
-      lenis.scrollTo(0, { duration: 1.8, easing: gsap.parseEase("surreal") as (t: number) => number });
-      return;
-    }
     window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
   };
 

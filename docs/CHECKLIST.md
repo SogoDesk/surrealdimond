@@ -10,8 +10,8 @@ Last reviewed: 27 October 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-01 | Keep the story feel, roughly half the old length | Partial | The client asked for the 9e31102 chapter homepage back (October 2026), re-voiced for dealers. It runs 15.6 screens at 1440 by 900 against 21.4 for the old one, with pins shortened and repeated sections merged; reaching half would mean dropping the Lookbook or Foreveryone, which the client keeps. Confirm the section list against C-01 |
-| R-02 | Rotating banners at the top | Done (moved) | Banner carousel of the client's web banners, square artwork on phones. Since the revival the old hero opens the page and the carousel sits mid-page, before Hot this week, by the client's choice |
+| R-01 | Keep the story feel, roughly half the old length | Done | After the 27 October feedback the homepage runs eight sections, about 9 screens at 1440 by 900 (it was 15.6): hero carousel, Hot this week, the dealer band when signed in, bridal, collections, nine ways to begin, the New York visit, the trade door |
+| R-02 | Rotating banners at the top | Done | The hero is now the carousel: campaign photographs crossfading full width behind the fixed headline and buttons, managed in the console (Banners); the separate banner carousel is gone (F-A1) |
 | R-03 | Featured "Hot this week" area, controlled from admin | Done (preview) | Hot this week on the homepage follows the console's Merchandising list and Inventory switches (`src/lib/merch.ts`, defaults in `src/content/featuring.ts`); empty hides the band. Settings are per browser until the database |
 | R-04 | One strong image per category | Done | The Nine ways to begin carousel shows one campaign photograph per type; the render on its story ground shows on hover. Stud Earrings borrows a worn-earrings photograph until Surreal supplies a studs image |
 | R-05 | Highlight Surreal's own photography | Done | Campaign photographs across home, store tiles and product galleries |
@@ -171,8 +171,8 @@ Action items from the meeting, in the client's priority order. Work plan in TASK
 | F-E3 | Role testing with dummy dealer and admin accounts | Done | Four dummy dealers (owner, associate, invited, not invited) and five named console staff, one per role, all on `.example` emails; test plan and results (all pass) and the live migration steps in TESTING.md |
 | F-E4 | RightClick sync approach with periodic refresh | Done (plan; connection waits on C-07) | RIGHTCLICK.md: one stored session, one queue capped at 20 calls a minute, bulk reads only, per-dealer calls only when a dealer opens Billing (cached 15 minutes), live check and hold before selling, last good data on failure. Console, RightClick sync (`/admin/sync`): connection status, schedule with editable intervals, on-demand estimates, live call budget |
 | F-E5 | Refresh interval feasibility | Done | Recommended plan about 1,500 calls a day (1.7 a minute in business hours, limit 30); every interval down to 1 minute fits, because the frequent calls are bulk calls. Heavy calls kept at 15 to 30 minutes at CFI's request. To confirm with CFI: per-call charges, session lifetime, allow-listing, movements call for all items |
-| F-A1 | Full-width moving hero carousel, text and buttons fixed | To do | |
-| F-A2 | Hot this week under the hero | To do | |
-| F-A3 | Repetitive sections removed, fewer animations | To do | |
-| F-A4 | Navigation stays accessible while scrolling | To do | |
+| F-A1 | Full-width moving hero carousel, text and buttons fixed | Done | Six campaign photographs (no baked-in text) crossfade with a slow settle, about 6.5 s each; eyebrow, SURREAL, the trade line and both buttons stay fixed. Caption with the category link, progress bars, previous, pause, next, arrow keys and swipe; pauses on hover and focus; no autoplay under reduced motion. On phones the photograph sits above the headline. Console Banners now picks the photographs |
+| F-A2 | Hot this week under the hero | Done | Directly after the hero |
+| F-A3 | Repetitive sections removed, fewer animations | Done | Removed: the mid-page banner carousel, the lookbook, the Foreveryone collage and the time counter, with the preloader. Bridal lost its pinned 96 frame scroll turntable (a still render now). Smooth scrolling (Lenis) is gone site-wide; scroll-driven pins, scrubs, parallax and hand-offs are off (`src/lib/motion.ts`, one switch), leaving short one-time fades. Page height down from about 14,000 to 8,200 px at 1440 |
+| F-A4 | Navigation stays accessible while scrolling | Done | The links row no longer folds away past 80 px; both rows stay, and sticky bars sit under the full header |
 | F-A5 | Light and dark themes, brand blue secondary | To do | |

@@ -24,6 +24,7 @@ import Parallax from "@/components/motion/Parallax";
 import { useSplitLines } from "@/components/motion/SplitReveal";
 import { registerGsap, gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
+import { calmChapters } from "@/lib/motion";
 import { brand } from "@/content/site";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
 import styles from "./Visit.module.css";
@@ -65,7 +66,7 @@ export default function Visit({ className = "" }: VisitProps) {
           scrollTrigger: { trigger: headRef.current, start: "top 80%", once: true },
         },
       ),
-    { enabled: !prefersReducedMotion() },
+    { enabled: !calmChapters() },
   );
 
   const { contextSafe: safe } = useGSAP(
@@ -79,7 +80,7 @@ export default function Visit({ className = "" }: VisitProps) {
       const cardWrap = cardWrapRef.current;
       if (!root || !sky || !copy || !address || !card || !cardWrap) return;
       const section = root.closest<HTMLElement>("[data-chapter]");
-      const reduce = prefersReducedMotion();
+      const reduce = calmChapters();
       const mobile = window.matchMedia(MOBILE).matches;
 
       const eyebrowLabel = copy.querySelector<HTMLElement>("[data-eyebrow] > span:last-child");

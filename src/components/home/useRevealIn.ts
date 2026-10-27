@@ -3,6 +3,7 @@
 import type { RefObject } from "react";
 import { registerGsap, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
+import { calmChapters } from "@/lib/motion";
 
 /**
  * Shared homepage motion, set up once per section, in the vocabulary of the
@@ -19,7 +20,10 @@ import { prefersReducedMotion } from "@/hooks/useMedia";
  *   the next section reads as sliding up over it (scrubbed). The next section
  *   must be positioned with an opaque ground. Opt in with handoff: true;
  *   pages outside the homepage keep their sections still.
- * Reduced motion: nothing is hidden and nothing moves.
+ * Reduced motion: nothing is hidden and nothing moves. Calm chapters
+ * (src/lib/motion.ts, on since the 27 October feedback): only the [data-rise]
+ * fade-ins and [data-draw] strokes run, once each; no split headlines, no
+ * image clip reveals, no scrubbed hand-off.
  */
 export function useRevealIn(scope: RefObject<HTMLElement | null>, { handoff = false }: { handoff?: boolean } = {}) {
   useGSAP(
@@ -27,8 +31,9 @@ export function useRevealIn(scope: RefObject<HTMLElement | null>, { handoff = fa
       registerGsap();
       const root = scope.current;
       if (!root || prefersReducedMotion()) return;
+      const calm = calmChapters();
 
-      const splits = gsap.utils.toArray<HTMLElement>("[data-split]", root).map((el) =>
+      const splits = (calm ? [] : gsap.utils.toArray<HTMLElement>("[data-split]", root)).map((el) =>
         SplitText.create(el, {
           type: "lines,words",
           mask: "lines",
@@ -58,7 +63,7 @@ export function useRevealIn(scope: RefObject<HTMLElement | null>, { handoff = fa
         left: "inset(0% 100% 0% 0%)",
         right: "inset(0% 0% 0% 100%)",
       };
-      gsap.utils.toArray<HTMLElement>("[data-reveal-img]", root).forEach((frame) => {
+      (calm ? [] : gsap.utils.toArray<HTMLElement>("[data-reveal-img]", root)).forEach((frame) => {
         const img = frame.querySelector("img");
         const from = CLIP_FROM[frame.dataset.revealImg ?? ""] ?? CLIP_FROM.bottom;
         const delay = Number(frame.dataset.revealDelay ?? 0);
@@ -78,7 +83,7 @@ export function useRevealIn(scope: RefObject<HTMLElement | null>, { handoff = fa
       }
 
       const body = root.querySelector<HTMLElement>("[data-handoff]") ?? (root.firstElementChild as HTMLElement | null);
-      if (handoff && body) {
+      if (handoff && body && !calm) {
         gsap.fromTo(
           body,
           { y: 0, scale: 1, autoAlpha: 1 },

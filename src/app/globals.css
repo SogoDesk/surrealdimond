@@ -43,7 +43,7 @@
   --ease-inout: cubic-bezier(0.76, 0, 0.24, 1);
   --gutter: clamp(1.5rem, 4.4vw, 4rem);
   --col-gap: clamp(1rem, 2.8vw, 2.5rem);
-  /* Header: the top row alone (--nav-h, what stays when the header condenses) and both rows (--header-full). */
+  /* Header height: --header-full, both rows; --nav-h, what stays on screen while scrolling (the same, since the links row stays). */
   --nav-h: 76px;
   --header-full: 76px;
   --radius-sm: 6px;
@@ -52,7 +52,7 @@
   --shadow-card: 0 1px 2px rgba(11, 31, 42, 0.04), 0 18px 40px -24px rgba(11, 31, 42, 0.28);
   --shadow-lift: 0 2px 4px rgba(11, 31, 42, 0.05), 0 28px 60px -28px rgba(11, 31, 42, 0.38);
 }
-@media (min-width: 1024px) { :root { --header-full: 123px; } }
+@media (min-width: 1024px) { :root { --header-full: 123px; --nav-h: 123px; } }
 @media (max-width: 767px) { :root { --nav-h: 60px; --header-full: 60px; } }
 
 [data-theme="dark"] {
@@ -152,10 +152,6 @@ html {
 /* The homepage's dark chapters paint the root too, so overscroll never flashes porcelain (ThemeSync sets this). */
 html[data-page-theme="dark"] { background: var(--studio); }
 html[data-page-theme="navy"] { background: var(--ink); }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: hidden; }
 
 body {
   margin: 0;

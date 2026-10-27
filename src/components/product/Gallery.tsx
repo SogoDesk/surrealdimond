@@ -67,7 +67,7 @@ function Lightbox({ views, at, onClose, onGo }: { views: View[]; at: number; onC
   };
 
   return (
-    <div ref={ref} className={s.lightbox} role="dialog" aria-modal="true" aria-label="Gallery" tabIndex={-1} data-lenis-prevent>
+    <div ref={ref} className={s.lightbox} role="dialog" aria-modal="true" aria-label="Gallery" tabIndex={-1}>
       <div className={s.lbTop}>
         <span className="tabular">
           {at + 1} / {n}

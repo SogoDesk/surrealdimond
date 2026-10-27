@@ -150,7 +150,7 @@ export default function Featured() {
           </div>
         </div>
       </div>
-      <ul ref={railRef} className={s.rail} aria-label="Hot this week" data-lenis-prevent-wheel>
+      <ul ref={railRef} className={s.rail} aria-label="Hot this week">
         {items.map((p) => (
           <li key={p.id} className={s.item} data-rise>
             <Card p={p} />

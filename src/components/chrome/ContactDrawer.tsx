@@ -172,7 +172,6 @@ export default function ContactDrawer() {
         aria-modal="true"
         aria-labelledby={titleId}
         data-theme="light"
-        data-lenis-prevent
         tabIndex={-1}
       >
         <div className={styles.head}>

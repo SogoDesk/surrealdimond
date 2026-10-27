@@ -108,7 +108,7 @@ export default function MiniCart() {
             </div>
           ) : (
             <>
-              <ul className={styles.miniLines} data-lenis-prevent>
+              <ul className={styles.miniLines}>
                 {lines.map((l) => {
                   const st = l.stoneId ? stoneById(l.stoneId) : undefined;
                   if (st)

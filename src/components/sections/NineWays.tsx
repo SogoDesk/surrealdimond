@@ -23,7 +23,8 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import Marquee from "@/components/motion/Marquee";
 import { useRevealIn } from "@/components/home/useRevealIn";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
-import { useReducedMotion, prefersReducedMotion } from "@/hooks/useMedia";
+import { useReducedMotion } from "@/hooks/useMedia";
+import { calmChapters } from "@/lib/motion";
 import { divisions, divisionTypes } from "@/content/divisions";
 import type { Category } from "@/content/catalog";
 import { groundStyle } from "@/content/grounds";
@@ -54,7 +55,7 @@ export default function NineWays() {
     () => {
       registerGsap();
       const rail = ref.current?.querySelector<HTMLElement>("[data-rail]");
-      if (!rail || prefersReducedMotion()) return;
+      if (!rail || calmChapters()) return;
       gsap.fromTo(
         rail,
         { x: () => innerWidth * 0.3, autoAlpha: 0 },
@@ -103,7 +104,7 @@ export default function NineWays() {
 
         <div data-rail className={s.rail}>
           {reduced ? (
-            <div className={s.viewport} data-lenis-prevent="">
+            <div className={s.viewport}>
               {panels}
             </div>
           ) : (

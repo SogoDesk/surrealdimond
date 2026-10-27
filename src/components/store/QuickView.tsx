@@ -71,7 +71,7 @@ function Drawer({ product, selection, opening, open, position, total, onClose, o
   const { onKeyDown } = useDrawer({ open, onClose, rootRef, panelRef, backdropRef, axis: "x" });
 
   return (
-    <div ref={rootRef} className={s.root} inert={!open} aria-hidden={!open} onKeyDown={onKeyDown} data-lenis-prevent>
+    <div ref={rootRef} className={s.root} inert={!open} aria-hidden={!open} onKeyDown={onKeyDown}>
       <div ref={backdropRef} className={s.backdrop} onClick={onClose} />
       <div ref={panelRef} className={s.panel} role="dialog" aria-modal="true" aria-label={product ? `Quick view: ${product.name}` : "Quick view"} tabIndex={-1} onKeyDown={(e) => trapTab(e, panelRef.current)}>
         <header className={s.head}>

@@ -24,7 +24,7 @@ import { useUnavailable } from "@/lib/memo";
 import { POPULAR, searchSite } from "@/lib/siteSearch";
 import styles from "./chrome.module.css";
 
-const PROMPTS = ["engagement rings", "oval diamonds", "2ct round D VVS1", "a style number", "tennis bracelets", "a stock ID"];
+const PROMPTS = ["engagement rings", "oval diamonds", "1-2ct oval DEF", "a style number", "tennis bracelets", "a stock ID"];
 
 interface Option {
   id: string;

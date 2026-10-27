@@ -201,7 +201,6 @@ export default function MobileMenu({ open, onClose, links, secondary, visitHref 
       aria-label="Menu"
       aria-hidden={!open}
       inert={!open}
-      data-lenis-prevent
     >
       <div className={styles.sheetInner}>
         <nav aria-label="Primary">
