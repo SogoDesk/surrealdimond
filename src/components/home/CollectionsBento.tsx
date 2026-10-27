@@ -7,7 +7,8 @@
  * shows its real render. Constellation takes the tall tile. Lines draw in on
  * entry and the stars twinkle on a slow loop (CSS); on hover the motif drifts
  * larger and the arrow fills. Constellation opens from its bottom edge, the
- * others wipe in from alternating sides.
+ * others wipe in from alternating sides. Each tile keeps its own ground in
+ * the dark theme too, so it keeps the brand palette (data-palette="brand").
  */
 
 import Image from "next/image";
@@ -32,7 +33,7 @@ const TONE: Record<string, "dark" | "light"> = {
 
 function Tile({ d, featured = false }: { d: Division; featured?: boolean }) {
   return (
-    <Link href={d.href} className={s.tile} data-tone={TONE[d.id] ?? "light"} data-featured={featured ? "true" : undefined} data-id={d.id}>
+    <Link href={d.href} className={s.tile} data-tone={TONE[d.id] ?? "light"} data-featured={featured ? "true" : undefined} data-id={d.id} data-palette="brand">
       <span className={s.art} aria-hidden>
         {d.motif && !d.image && <DivisionMotif motif={d.motif} className={s.motif} />}
         {d.image && (

@@ -54,7 +54,11 @@ function Card({ p }: { p: Product }) {
         <span className={s.well} style={groundStyle(p.category)}>
           <Image src={renderSrc(p.image)} alt="" width={600} height={600} sizes="300px" className={`${s.render} ${alt ? s.renderBase : ""}`} />
           {alt && <Image src={renderSrc(alt)} alt="" width={600} height={600} sizes="300px" className={`${s.render} ${s.renderAlt}`} loading="lazy" />}
-          {p.video && <span className={s.tag}>360</span>}
+          {p.video && (
+            <span className={s.tag} data-palette="brand">
+              360
+            </span>
+          )}
         </span>
         <span className={s.meta}>
           <span className={s.name}>{p.name}</span>

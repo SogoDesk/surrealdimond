@@ -191,7 +191,7 @@ function CVisual({ k }: { k: CKey }) {
   const on = k === "color" ? [0, 2] : [2, 3];
   return (
     <div className={s.gradeScale}>
-      <div className={`${s.gradeBar} ${k === "color" ? s.gradeBarColor : s.gradeBarClarity}`}>
+      <div className={`${s.gradeBar} ${k === "color" ? s.gradeBarColor : s.gradeBarClarity}`} data-palette={k === "color" ? "brand" : undefined}>
         {scale.map((g, i) => (
           <span key={g} className={s.gradeCell} data-on={i >= on[0] && i <= on[1] ? "" : undefined}>
             {g}

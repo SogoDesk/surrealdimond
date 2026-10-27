@@ -32,7 +32,7 @@ function Arrow({ className }: { className?: string }) {
 export function CategoryCard({ number, label, href, photo, render, ground }: { number: number; label: string; href: string; photo: string; render?: string; ground: CSSProperties }) {
   return (
     <li className={s.card}>
-      <Link href={href} className={`${s.cardLink} ${s.photoCard}`} aria-label={`${label}, shop the category`} draggable={false}>
+      <Link href={href} className={`${s.cardLink} ${s.photoCard}`} aria-label={`${label}, shop the category`} draggable={false} data-palette="brand">
         <span className={s.ground} style={ground} aria-hidden>
           {render && <Image src={renderSrc(render)} alt="" width={600} height={600} sizes={RENDER_SIZES} draggable={false} className={`render-multiply ${s.render}`} />}
         </span>
@@ -50,7 +50,7 @@ export function CategoryCard({ number, label, href, photo, render, ground }: { n
 export function AllDivisionsCard({ count, href }: { count: number; href: string }) {
   return (
     <li className={s.card}>
-      <Link href={href} className={`${s.cardLink} ${s.allCard}`} draggable={false}>
+      <Link href={href} className={`${s.cardLink} ${s.allCard}`} draggable={false} data-palette="brand">
         <span className={s.allFigure}>{count}</span>
         <span className={s.allText}>divisions, from engagement rings to the seasonal catalogs</span>
         <span className={`t-nav ${s.allCta}`}>

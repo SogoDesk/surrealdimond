@@ -343,7 +343,7 @@ export function CompleteLook({ product }: { product: Product }) {
         <div className={s.look}>
           <figure className={s.lookPhoto}>
             <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 40vw, 100vw" />
-            <figcaption className={s.lookCaption}>
+            <figcaption className={s.lookCaption} data-palette="brand">
               <span>Campaign</span>
               {photo.caption}
             </figcaption>
