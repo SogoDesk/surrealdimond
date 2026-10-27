@@ -11,7 +11,8 @@
  * on. The slides come from the console (Banners, lib/merch.ts), in order.
  * Timing lives in CSS: the active progress bar fills over the interval and
  * its animationend advances the carousel, so pausing (the pause button,
- * hover, keyboard focus inside, a hidden tab) is animation-play-state.
+ * keyboard focus inside, a hidden tab) is animation-play-state. Hovering
+ * does not pause it, nor does clicking prev or next.
  * Prev and next, the bars, the arrow keys and a swipe move it by hand; the
  * caption names the photograph and leads to its category. Only the slide on
  * screen and the next one load their images. Reduced motion: no autoplay
@@ -96,9 +97,7 @@ function Carousel({ slides }: { slides: HeroSlide[] }) {
         aria-roledescription="carousel"
         aria-label="Surreal photography"
         onKeyDown={onKeyDown}
-        onPointerEnter={() => setHeld(true)}
-        onPointerLeave={() => setHeld(false)}
-        onFocus={() => setHeld(true)}
+        onFocus={(e) => setHeld(e.target.matches(":focus-visible"))}
         onBlur={(e) => {
           if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setHeld(false);
         }}
