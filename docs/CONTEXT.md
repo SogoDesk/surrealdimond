@@ -43,7 +43,7 @@ There is no approval step for orders: what a person can do is set by their role 
 - **Ordering from Quick View (R-10):** set aside for now by decision (30 Sept 2026). Ordering stays on the product page and the card's Add to cart.
 - **Metals (R-12, B-02, R-13):** only the metals an article exists in are offered, one default image per article, and a `defaultMetal` per article for Surreal's yellow gold picks (C-02). Done 30 Sept 2026.
 - **Payment (B-05):** card, ACH and wire only at checkout; check and Zelle stay offline on the dashboard's Payment Methods page. Done 30 Sept 2026.
-- **RightClick is Phase 1:** the provider can supply stock, memo and invoicing data, most likely as an Excel export; the call is being scheduled (C-07).
+- **RightClick is Phase 1:** the provider supplies stock, memo and invoicing data through the RightClick API (CFI's reference, 15 July 2026, confidential). The sync approach and interval feasibility are in RIGHTCLICK.md; access for the site (API user, key, serial, allow-listed address) is still to come (C-07).
 - **Homepage:** a "Hot this week" featured area controlled from admin (R-03), one strong image per category (R-04), and a personalized homepage for signed-in dealers with greeting, recent items and quick reorder in the WB Mason style (R-08).
 - **Diamond page:** one line per stone in the Nivoda style dealers already like (R-14), with Quick View, quick filters and columns from Surreal's lists (C-03, C-04).
 - **Custom Portal:** the custom diamond request form (R-22), plus a proposed live diamond preview that is included only if its demo is approved (R-23, A5).

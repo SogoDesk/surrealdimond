@@ -11,6 +11,7 @@ export default function AdminIcon({ id, className = "" }: { id: Id; className?: 
       {id === "banners" && <path d="M3 5h18v12H3ZM3 14l5-4 4 3 3-2 6 4M8 20h8" {...p} />}
       {id === "promo" && <path d="M4 4h7.5L21 13.5 13.5 21 4 11.5ZM8 8h.01" {...p} />}
       {id === "dealers" && <path d="M4 10h16M5 10l2-5h10l2 5M6 10v10h12V10M10 20v-5h4v5" {...p} />}
+      {id === "sync" && <path d="M20 8a8 8 0 0 0-14.6-2M4 4v4h4M4 16a8 8 0 0 0 14.6 2M20 20v-4h-4" {...p} />}
       {id === "orders" && <path d="M6 3h12v18l-3-2-3 2-3-2-3 2ZM9 8h6M9 12h6" {...p} />}
       {id === "memo" && <path d="M7 3h8l4 4v14H7ZM15 3v4h4M10 12h6M10 16h6" {...p} />}
       {id === "requests" && <path d="M3 6h18v12H3ZM3 7l9 6 9-6" {...p} />}

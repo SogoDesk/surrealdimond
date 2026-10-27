@@ -15,7 +15,7 @@ Scope and requirements: [CONTEXT.md](CONTEXT.md), [CHECKLIST.md](CHECKLIST.md). 
 | Email | **Resend** (Vercel Marketplace) | Order, inquiry and request emails from Surreal's own domain | R-24, C-14 |
 | Content pages | **Sanity** (Vercel Marketplace) | Legacy, Main Door, About and dealer resources edited without a developer | R-20, A7 |
 | Commerce and payment | **Decision D1**, see section 3.6 | Shopify is the standard platform choice; the BRD's payment rule decides whether it fits | B-05, Q2, Q3, C-10 |
-| Inventory feeds | Scheduled jobs on Vercel, import in the console | RightClick (likely an Excel export) and supplier feeds about every 30 minutes | R-18, B-01, C-07 |
+| Inventory feeds | Scheduled jobs on Vercel through one rate-limited queue | RightClick's API (bulk reads, a few minutes to 30 minutes, under its 30 calls a minute; RIGHTCLICK.md) and supplier feeds about every 30 minutes | R-18, B-01, C-07 |
 | Search | Surreal's existing search in the dashboard; Postgres search for the catalog | No extra vendor until volume needs one | R-29, C-06 |
 | Monitoring | **Sentry** (Vercel Marketplace), Vercel Analytics and Speed Insights | Errors with context, real-user performance | M3 |
 
@@ -84,7 +84,7 @@ The platform guidance for a store with a catalog is **Shopify** (catalog, cart, 
 
 ### 3.7 Inventory: RightClick and supplier feeds
 
-- **RightClick** (C-07, the provider call): the likely path is an Excel export. A staff member uploads it in the console (Inventory, Import); the file goes to the private Blob store; the import updates stones, memo lines and prices, and reports what changed. If RightClick offers an API or a scheduled export, the same import runs on a schedule instead.
+- **RightClick** (C-07): through its API, on the plan in [RIGHTCLICK.md](RIGHTCLICK.md): one stored session, one queue capped at 20 calls a minute (RightClick blocks above 30), bulk reads only (stock movements every 5 minutes, the full stone list every 30, every customer's open invoices every 15), per-dealer balance and statement only when a dealer opens Billing, and a live check plus a hold before an order or memo is confirmed. Calls leave from one fixed address, since RightClick ties sessions to it. The console's RightClick sync page shows the schedule and the call budget. An Excel upload in the console stays as the fallback.
 - **Supplier feeds**: a scheduled job about every 30 minutes fetches each feed, adds and updates stones, and marks missing ones unavailable.
 - Every stone keeps its source (Surreal or the supplier) and its last-seen time; the diamond page shows only available stones.
 

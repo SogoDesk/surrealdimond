@@ -27,7 +27,7 @@ export const ROLE_LINE: Record<Role, string> = {
 
 export type Access = "edit" | "view" | "none";
 
-export type AdminIcon = "overview" | "inventory" | "merch" | "banners" | "promo" | "dealers" | "orders" | "memo" | "requests" | "content" | "marketing" | "staff";
+export type AdminIcon = "overview" | "inventory" | "merch" | "banners" | "promo" | "dealers" | "sync" | "orders" | "memo" | "requests" | "content" | "marketing" | "staff";
 
 export interface AdminModule {
   id: string;
@@ -89,6 +89,15 @@ export const adminModules: AdminModule[] = [
     status: "live",
     access: { administrator: "edit", finance: "view", hr: "none", sales: "edit", manager: "edit" },
     holds: ["Dealer applications and approval", "Pricing groups and territories"],
+  },
+  {
+    id: "sync",
+    label: "RightClick sync",
+    line: "What the site pulls, how often, and the call budget",
+    href: "/admin/sync",
+    icon: "sync",
+    status: "live",
+    access: { administrator: "edit", finance: "view", hr: "none", sales: "view", manager: "edit" },
   },
   {
     id: "orders",

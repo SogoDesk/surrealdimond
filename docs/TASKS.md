@@ -113,8 +113,8 @@ The development action items from the meeting, worked in the client's priority o
 - [x] F-E1 Customer import from Excel or CSV in the console: template, column matching, validation, preview, import
 - [x] F-E2 Password setup for existing customers: invitation link, set password with strength rules, link expiry, first sign-in
 - [x] F-E3 Dummy dealer and admin accounts for role testing, with a written test plan and results (docs/TESTING.md)
-- [ ] F-E4 RightClick sync approach: what is pulled, how often, how many calls; a sync status page in the console
-- [ ] F-E5 Refresh interval feasibility against RightClick's limit of 30 calls a minute
+- [x] F-E4 RightClick sync approach: what is pulled, how often, how many calls; a sync status page in the console (docs/RIGHTCLICK.md, /admin/sync)
+- [x] F-E5 Refresh interval feasibility against RightClick's limit of 30 calls a minute
 
 **A. Homepage and UI/UX (priority 5)**
 
