@@ -38,11 +38,11 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
   const hydrated = useHydrated();
   const mod = adminModule(moduleId);
 
-  if (!hydrated) return <div className={s.boot} aria-busy="true" aria-label="Loading the console" />;
+  if (!hydrated) return <div className={s.boot} aria-busy="true" aria-label="Loading the console" data-console />;
 
   if (!staff) {
     return (
-      <main className={s.signin}>
+      <main className={s.signin} data-console>
         <div className={s.signinCard}>
           <p className={s.wordmark}>
             SURREAL <span>Console</span>
@@ -73,7 +73,7 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
   const access: Access = mod ? mod.access[staff.role] : "none";
 
   return (
-    <div className={s.console}>
+    <div className={s.console} data-console>
       <aside className={s.sidebar} aria-label="Console">
         <Link href="/admin" className={s.brand}>
           SURREAL <span>Console</span>

@@ -204,7 +204,7 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 40px;
-  background: radial-gradient(90% 80% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0.55) 38%, rgba(255, 255, 255, 0) 72%), var(--ground, var(--white));
+  background: radial-gradient(90% 80% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0.55) 38%, rgba(255, 255, 255, 0) 72%), var(--ground, var(--well));
 }
 .photo {
   object-fit: cover;

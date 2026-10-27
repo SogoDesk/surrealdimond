@@ -188,3 +188,16 @@
     gap: 10px;
   }
 }
+
+/* Dark theme: the render multiplies onto a lit disc, since the page ground is now dark. */
+:global(html[data-mode="dark"]) .turntable {
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 48%, var(--well) 0%, var(--well) 58%, rgba(238, 241, 244, 0.85) 70%);
+  mix-blend-mode: normal;
+}
+:global(html[data-mode="dark"]) .still {
+  mix-blend-mode: multiply;
+}
+

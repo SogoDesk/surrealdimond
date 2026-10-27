@@ -114,7 +114,7 @@
 }
 .cardLink { display: flex; flex-direction: column; flex: 1 1 auto; }
 .cardLink:focus-visible { outline: 2px solid var(--sky); outline-offset: -2px; border-radius: var(--radius-md); }
-.well { position: relative; display: block; aspect-ratio: 1; background: radial-gradient(90% 80% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0.55) 38%, rgba(255, 255, 255, 0) 72%), var(--ground, var(--white)); }
+.well { position: relative; display: block; aspect-ratio: 1; background: radial-gradient(90% 80% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0.55) 38%, rgba(255, 255, 255, 0) 72%), var(--ground, var(--well)); }
 .render {
   position: absolute;
   inset: 9%;

@@ -33,6 +33,7 @@ import ThemeSync from "./ThemeSync";
 import MiniCart from "./MiniCart";
 import AccountMenu from "./AccountMenu";
 import { useDealer } from "@/lib/dealer";
+import { setMode, useMode, useModeSync } from "@/lib/theme";
 import { MenuButton } from "./MobileMenu";
 import styles from "./chrome.module.css";
 
@@ -74,8 +75,6 @@ export interface HeaderProps {
   headerRef?: RefObject<HTMLElement | null>;
   /** Follow the homepage chapters' themes (ThemeSync). */
   chapters?: boolean;
-  /** A fixed theme for pages on a dark base (the onyx store and product page); it also paints the root for overscroll. */
-  tone?: "light" | "dark";
 }
 
 function MagnifierIcon() {
@@ -106,6 +105,27 @@ function UserIcon() {
   );
 }
 
+/** Light or dark theme (F-A5, for Surreal's review); remembered in this browser. */
+function ThemeToggle() {
+  useModeSync();
+  const mode = useMode();
+  const dark = mode === "dark";
+  return (
+    <button type="button" className={`${styles.iconLink} ${styles.themeToggle}`} onClick={() => setMode(dark ? "light" : "dark")} aria-label={dark ? "Switch to the light theme" : "Switch to the dark theme"} title={dark ? "Light theme" : "Dark theme"}>
+      <svg aria-hidden viewBox="0 0 18 18" className={styles.icon} fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+        {dark ? (
+          <>
+            <circle cx="9" cy="9" r="3.25" />
+            <path d="M9 1.75v1.5M9 14.75v1.5M1.75 9h1.5M14.75 9h1.5M3.9 3.9l1.05 1.05M13.05 13.05l1.05 1.05M3.9 14.1l1.05-1.05M13.05 4.95l1.05-1.05" />
+          </>
+        ) : (
+          <path d="M14.75 10.9A6.25 6.25 0 0 1 7.1 3.25a6.25 6.25 0 1 0 7.65 7.65Z" />
+        )}
+      </svg>
+    </button>
+  );
+}
+
 function Chevron() {
   return (
     <svg aria-hidden viewBox="0 0 10 10" className={styles.chevron} fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
@@ -114,15 +134,7 @@ function Chevron() {
   );
 }
 
-export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = false, tone = "light" }: HeaderProps) {
-  useEffect(() => {
-    if (tone !== "dark") return;
-    const root = document.documentElement;
-    root.dataset.pageTheme = "dark";
-    return () => {
-      delete root.dataset.pageTheme;
-    };
-  }, [tone]);
+export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = false }: HeaderProps) {
   const localRef = useRef<HTMLElement | null>(null);
   const ref = headerRef ?? localRef;
   const logoRef = useRef<HTMLAnchorElement>(null);
@@ -215,7 +227,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
     <header
       ref={ref}
       className={styles.header}
-      data-theme={tone}
+      data-theme="light"
       data-site-header
       data-condensed={condensed && !shopOpen ? "true" : undefined}
       data-menu-open={menuOpen ? "true" : "false"}
@@ -264,6 +276,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
           <Link href={account.search} className={styles.searchIconLink} aria-label="Search">
             <MagnifierIcon />
           </Link>
+          <ThemeToggle />
           <MiniCart />
           <MenuButton open={menuOpen} onToggle={onMenuToggle} />
         </div>

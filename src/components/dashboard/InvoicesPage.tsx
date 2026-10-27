@@ -152,7 +152,7 @@ export default function InvoicesPage() {
 
       <section className={s.summary} aria-label="Account summary">
         <dl className={s.figures}>
-          <div className={s.figureMain}>
+          <div className={s.figureMain} data-palette="brand">
             <dt>Balance due</dt>
             <dd className="tabular">{formatMoney(summary.balance)}</dd>
             <span>

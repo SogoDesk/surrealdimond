@@ -177,7 +177,7 @@
 .door strong { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 1.875rem; line-height: 1.1; color: var(--ink); }
 .door strong::after { content: " \2192"; font-family: var(--font-ui), "Urbanist", sans-serif; font-size: 1.125rem; color: var(--line); }
 .doorKicker { font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
-.doorInk { background: var(--ink); color: rgba(242, 244, 246, 0.78); }
+.doorInk { --porcelain: #f2f4f6; --ink: #0b1f2a; background: var(--navy); color: rgba(242, 244, 246, 0.78); }
 .doorInk strong { color: var(--porcelain); }
 .doorInk strong::after { color: var(--sky); }
 .doorInk .doorKicker { color: rgba(242, 244, 246, 0.55); }

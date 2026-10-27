@@ -122,7 +122,7 @@ export default function Featured() {
   return (
     <section ref={ref} id="featured" className={`${h.section} ${s.section}`} aria-labelledby="featured-title" data-chapter="featured" hidden={items.length === 0}>
       <div className={h.wrap}>
-        <div className={s.band}>
+        <div className={s.band} data-palette="brand">
           <Image src="/media/photos/sb-3594.webp" alt="" fill sizes="(min-width: 900px) 70vw, 100vw" className={s.bandImage} />
           <div className={s.bandCopy}>
             <span data-rise>

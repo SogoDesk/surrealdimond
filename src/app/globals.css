@@ -21,6 +21,12 @@
   --beam: #e8f6ff;
   --white: #ffffff;
   --magenta: #b02078;
+  /* The lit tray under a jewelry render (multiply blends onto it); light in both themes. */
+  --well: #ffffff;
+  /* Hover for ink-filled buttons. */
+  --ink-hover: #163548;
+  /* The brand navy, fixed in both themes: badges and cards that carry their own light text or sky icon. */
+  --navy: #0b1f2a;
 
   /* Current chapter colours (overridden per data-theme) */
   --bg: var(--porcelain);
@@ -241,47 +247,66 @@ body {
 }
 
 /*
- * Onyx surface for the store and the product page (October 2026, the
- * client found white and light grey too common): the base layer is a warm
- * near-black, the light panels on it become raised dark surfaces, text and
- * controls flip to light, and the sky accent turns gold. Story grounds
- * behind the renders stay light (their wells reset the light tokens), so
- * the jewelry sits on its colored glow. Drawers and the mini cart render
- * outside <main> and keep the light palette.
+ * Dark theme (client feedback F-A5, for Surreal's review): the toggle in
+ * the header sets data-mode="dark" on <html> (remembered in this browser,
+ * applied before first paint by the script in layout.tsx). The page and
+ * its panels go to deep ink, text and controls to light, and the agreed
+ * brand blue stays the secondary colour: accents, focus rings and the
+ * hover on filled buttons. The chapters that are already their own
+ * contrast panels (dark, navy, sky, and the navy footer) keep the brand
+ * palette, and jewelry renders keep their lit trays (--well). The console
+ * and printed pages stay light.
  */
-[data-surface="onyx"] {
-  --deep: #070708;
-  --porcelain: #0e0e10;
-  --paper: #141416;
-  --white: #1c1c1f;
-  --mist: #2a2620;
-  --beam: #221f1a;
-  --hairline: rgba(242, 244, 246, 0.14);
-  --stone: #a9a39a;
-  --graphite: #d9d4cc;
-  --ink: #f6f3ee;
-  --carbon: rgba(242, 244, 246, 0.2);
-  --sky: #d8b878;
-  --line: #c9a96e;
-  --bg: var(--porcelain);
-  --fg: var(--ink);
-  --fg-soft: var(--graphite);
-  --fg-muted: var(--stone);
-  --rule: var(--hairline);
-  --surface: var(--paper);
-  --accent: var(--line);
-  --accent-strong: var(--sky);
-  --btn-fill: var(--ink);
-  --btn-fill-fg: var(--deep);
-  --btn-hover-fill: var(--deep);
-  --btn-hover-fg: var(--ink);
-  --outline-hover: rgba(242, 244, 246, 0.08);
-  --tabs-bg: rgba(242, 244, 246, 0.06);
-  --mark-a: var(--ink);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 40px -24px rgba(0, 0, 0, 0.7);
-  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 28px 60px -28px rgba(0, 0, 0, 0.8);
-  background: var(--porcelain);
-  color: var(--ink);
+@media screen {
+  html[data-mode="dark"]:not(:has([data-console])) {
+    color-scheme: dark;
+    --porcelain: #0c1014;
+    --paper: #11161b;
+    --white: #161d23;
+    --hairline: rgba(226, 235, 242, 0.12);
+    --stone: #94a1ab;
+    --graphite: #cdd5db;
+    --ink: #edf2f6;
+    --carbon: rgba(226, 235, 242, 0.2);
+    --mist: #12303d;
+    --beam: #0f2530;
+    --magenta: #ef7cbf;
+    --well: #eef1f4;
+    --ink-hover: var(--sky);
+    --bg: var(--porcelain);
+    --fg: var(--ink);
+    --fg-soft: var(--graphite);
+    --fg-muted: var(--stone);
+    --rule: var(--hairline);
+    --surface: var(--paper);
+    --accent: var(--sky);
+    --accent-strong: var(--sky);
+    --btn-fill: var(--ink);
+    --btn-fill-fg: #0c1014;
+    --btn-hover-fill: var(--sky);
+    --btn-hover-fg: #0b1f2a;
+    --outline-hover: rgba(134, 223, 255, 0.1);
+    --mark-a: var(--ink);
+    --mark-b: var(--line);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 18px 40px -24px rgba(0, 0, 0, 0.75);
+    --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.4), 0 28px 60px -28px rgba(0, 0, 0, 0.85);
+    background: var(--porcelain);
+  }
+  /* Contrast chapters, and panels marked data-palette="brand" (a photograph or an ink card with its own light text), keep the brand palette their colours were designed in. */
+  html[data-mode="dark"]:not(:has([data-console])) :is([data-theme="dark"], [data-theme="navy"], [data-theme="sky"], [data-palette="brand"]) {
+    --porcelain: #f2f4f6;
+    --paper: #fafbfc;
+    --white: #ffffff;
+    --hairline: #dce1e6;
+    --stone: #636e78;
+    --graphite: #3a3f44;
+    --ink: #0b1f2a;
+    --carbon: #1c2228;
+    --mist: #dceff7;
+    --beam: #e8f6ff;
+    --magenta: #b02078;
+    --ink-hover: #163548;
+  }
 }
 
 /* Printing an invoice or a statement: the page content only, on white. */

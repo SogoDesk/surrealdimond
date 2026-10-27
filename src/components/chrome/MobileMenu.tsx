@@ -24,6 +24,7 @@ import { lockScroll } from "@/lib/scroll";
 import type { ChromeLink } from "./Header";
 import styles from "./chrome.module.css";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
+import { setMode, useMode } from "@/lib/theme";
 
 const LINE_A = "M4 9 L20 9";
 const LINE_B = "M4 15 L20 15";
@@ -76,6 +77,7 @@ export interface MobileMenuProps {
 }
 
 export default function MobileMenu({ open, onClose, links, secondary, visitHref }: MobileMenuProps) {
+  const mode = useMode();
   const ref = useRef<HTMLDivElement>(null);
   const splitRef = useRef<SplitText | null>(null);
   const everOpened = useRef(false);
@@ -243,6 +245,11 @@ export default function MobileMenu({ open, onClose, links, secondary, visitHref 
               </li>
             );
           })}
+          <li data-sheet-secondary>
+            <button type="button" className="t-nav" onClick={() => setMode(mode === "dark" ? "light" : "dark")} aria-pressed={mode === "dark"}>
+              Dark theme {mode === "dark" ? "on" : "off"}
+            </button>
+          </li>
         </ul>
 
         <Link

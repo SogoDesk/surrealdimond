@@ -305,7 +305,7 @@ export default function LoginPage() {
               <Suspense fallback={<div className={s.card} />}>
                 <LoginForm />
               </Suspense>
-              <aside className={s.apply} aria-labelledby="apply-title">
+              <aside className={s.apply} aria-labelledby="apply-title" data-palette="brand">
                 <Image src="/media/photos/sb-3592-sm.webp" alt="" fill sizes="(min-width: 900px) 44vw, 100vw" className={s.applyImage} />
                 <div className={s.applyBody}>
                   <p className={s.eyebrowLight}>Apply</p>

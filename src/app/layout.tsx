@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Italiana, Urbanist } from "next/font/google";
 import "./globals.css";
+import { MODE_SCRIPT } from "@/lib/modeScript";
 
 const display = Italiana({
   variable: "--font-display",
@@ -50,7 +51,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${editorial.variable} ${ui.variable}`}>
+    <html lang="en" data-mode="light" className={`${display.variable} ${editorial.variable} ${ui.variable}`} suppressHydrationWarning>
+      <head>
+        {/* The stored light or dark theme, before the first paint (src/lib/modeScript.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: MODE_SCRIPT }} />
+      </head>
       {/* Browser extensions add attributes to body before hydration; those are not ours to reconcile. */}
       <body suppressHydrationWarning>
         {children}

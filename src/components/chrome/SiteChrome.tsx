@@ -17,7 +17,7 @@ import MobileMenu from "./MobileMenu";
 const SECONDARY_LINKS: ChromeLink[] = [LOGIN_LINK, APPLY_LINK, DASHBOARD_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
 const DEALER_LINKS: ChromeLink[] = [{ label: "Cart and checkout", href: account.cart }, DASHBOARD_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
 
-export default function SiteChrome({ chapters = false, tone = "light" }: { chapters?: boolean; tone?: "light" | "dark" }) {
+export default function SiteChrome({ chapters = false }: { chapters?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const dealer = useDealer();
   const pathname = usePathname();
@@ -34,7 +34,7 @@ export default function SiteChrome({ chapters = false, tone = "light" }: { chapt
 
   return (
     <>
-      <Header menuOpen={menuOpen} onMenuToggle={toggle} chapters={chapters} tone={tone} />
+      <Header menuOpen={menuOpen} onMenuToggle={toggle} chapters={chapters} />
       <MobileMenu open={menuOpen} onClose={close} links={PRIMARY_LINKS} secondary={dealer ? DEALER_LINKS : SECONDARY_LINKS} visitHref={APPOINTMENT_LINK.href} />
     </>
   );

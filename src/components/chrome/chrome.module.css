@@ -371,7 +371,7 @@
   color: var(--porcelain);
   transition: background-color 0.3s var(--ease-surreal);
 }
-.megaPromoCta:hover { background: #163548; }
+.megaPromoCta:hover { background: var(--ink-hover); }
 .megaCard {
   position: relative;
   display: flex;
@@ -463,7 +463,9 @@
   flex-wrap: wrap;
   gap: 14px 28px;
 }
-.sheetSecondary a { color: var(--graphite); display: inline-flex; align-items: center; gap: 8px; }
+.sheetSecondary a, .sheetSecondary button { color: var(--graphite); display: inline-flex; align-items: center; gap: 8px; }
+.themeToggle { display: inline-flex; }
+@media (max-width: 767px) { .themeToggle { display: none; } }
 .tile {
   position: relative;
   display: block;
@@ -540,7 +542,7 @@ a.accountItem:hover, button.accountItem:hover { background: var(--porcelain); co
 .miniLines { list-style: none; margin: 0; padding: 6px 10px; max-height: 300px; overflow-y: auto; }
 .miniLine { display: flex; align-items: center; gap: 12px; padding: 10px 8px; border-radius: 10px; transition: background-color 0.6s var(--ease-surreal); }
 .miniLine[data-flash] { background: var(--mist); }
-.miniThumb { width: 56px; height: 56px; flex: 0 0 auto; border-radius: 10px; background: radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255, 255, 255, 0) 70%), var(--ground, var(--white)); box-shadow: inset 0 0 0 1px var(--hairline); display: inline-flex; align-items: center; justify-content: center; overflow: hidden; }
+.miniThumb { width: 56px; height: 56px; flex: 0 0 auto; border-radius: 10px; background: radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255, 255, 255, 0) 70%), var(--ground, var(--well)); box-shadow: inset 0 0 0 1px var(--hairline); display: inline-flex; align-items: center; justify-content: center; overflow: hidden; }
 .miniThumb img { width: 86%; height: 86%; object-fit: contain; mix-blend-mode: multiply; }
 .miniText { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .miniName { font-family: var(--font-editorial), "Urbanist", serif; font-size: 1.0625rem; line-height: 1.2; }
@@ -552,7 +554,7 @@ a.accountItem:hover, button.accountItem:hover { background: var(--porcelain); co
 .miniDoors { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 18px 18px; }
 .miniPrimary, .miniSecondary { display: inline-flex; align-items: center; justify-content: center; height: 44px; border-radius: 999px; font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; }
 .miniPrimary { background: var(--ink); color: var(--porcelain); padding: 0 20px; }
-.miniPrimary:hover { background: #163548; }
+.miniPrimary:hover { background: var(--ink-hover); }
 .miniSecondary { box-shadow: inset 0 0 0 1px var(--ink); color: var(--ink); }
 .miniSecondary:hover { background: var(--mist); }
 .miniEmpty { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 18px; font-size: 0.875rem; color: var(--graphite); }
@@ -678,3 +680,10 @@ a.accountItem:hover, button.accountItem:hover { background: var(--porcelain); co
 .searchIconLink { display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; color: inherit; }
 @media (max-width: 767px) { .searchIconLink { display: inline-flex; } }
 .searchIconLink:hover { background: var(--outline-hover); }
+/* Small phones: the wordmark, the dashboard and search icons, the cart and the menu share 390px. */
+@media (max-width: 479px) {
+  .bar { column-gap: 10px; }
+  .right { gap: 6px; }
+  .dashPill { flex-basis: 36px; width: 36px; height: 36px; }
+  .searchIconLink { width: 36px; height: 36px; }
+}

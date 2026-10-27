@@ -122,7 +122,7 @@ The development action items from the meeting, worked in the client's priority o
 - [x] F-A2 Hot this week directly under the hero
 - [x] F-A3 Repetitive sections removed and animation cut back for performance
 - [x] F-A4 Navigation stays visible while scrolling (the links row no longer collapses)
-- [ ] F-A5 Light and dark themes for Surreal's review, brand blue kept as the secondary colour
+- [x] F-A5 Light and dark themes for Surreal's review, brand blue kept as the secondary colour
 
 ## M1: scope lock and architecture baseline (end of build week 2)
 

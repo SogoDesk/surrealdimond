@@ -38,7 +38,7 @@
 .error { font-size: 0.8125rem; color: var(--magenta); }
 .doors { display: flex; flex-wrap: wrap; gap: 10px; }
 .primary { display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 28px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
-.primary:hover { background: #163548; }
+.primary:hover { background: var(--ink-hover); }
 .secondary { display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 24px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ink); color: var(--ink); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
 .secondary:hover { background: var(--mist); }
 .primary:focus-visible, .secondary:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
@@ -53,7 +53,7 @@
 .facts svg { color: var(--line); flex: 0 0 auto; }
 .sent { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: clamp(22px, 3vw, 36px); border-radius: var(--radius-lg); background: radial-gradient(90% 120% at 100% 0%, rgba(134, 223, 255, 0.25), rgba(134, 223, 255, 0) 60%), var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.9375rem; line-height: 1.6; color: var(--graphite); }
 .sent p { margin: 0; }
-.tick { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; background: var(--ink); color: var(--sky); }
+.tick { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; background: var(--navy); color: var(--sky); }
 .sentNumber { font-family: var(--font-display), "Italiana", serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--ink); }
 .previewNote { font-size: 0.75rem; color: var(--stone); }
 .legacy { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; line-height: 1.5; color: var(--graphite); transition: box-shadow 0.3s var(--ease-surreal); }

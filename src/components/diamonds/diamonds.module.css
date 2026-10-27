@@ -71,7 +71,7 @@
 @media (max-width: 599px) { .sort > span { display: none; } }
 .barRight { display: flex; align-items: center; gap: 10px; }
 .m2oBtn { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.08em; white-space: nowrap; transition: background-color 0.2s var(--ease-surreal); }
-.m2oBtn:hover { background: #163548; }
+.m2oBtn:hover { background: var(--ink-hover); }
 .m2oBtn:focus-visible, .nextDayBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .m2oBtnIcon { width: 20px; height: 20px; color: var(--sky); }
 @media (max-width: 599px) { .barRight { gap: 6px; } .m2oBtn { padding: 0 10px; font-size: 0; gap: 0; } .m2oBtn::after { content: "M2O"; font-size: 0.75rem; margin-left: 6px; } }
@@ -126,7 +126,7 @@
 .view { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; color: var(--graphite); box-shadow: inset 0 0 0 1px var(--hairline); }
 .view:hover { color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
 .add { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 14px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; }
-.add:hover:not(:disabled) { background: #163548; }
+.add:hover:not(:disabled) { background: var(--ink-hover); }
 .add:disabled { background: var(--mist); color: var(--ink); cursor: default; }
 .view:focus-visible, .add:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 
@@ -164,7 +164,7 @@
 
 /* Buttons */
 .primary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 48px; padding: 0 24px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; transition: background-color 0.3s var(--ease-surreal), opacity 0.3s; }
-.primary:hover:not(:disabled) { background: #163548; }
+.primary:hover:not(:disabled) { background: var(--ink-hover); }
 .primary:disabled { opacity: 0.45; cursor: default; }
 .secondary { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 22px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ink); color: var(--ink); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
 .secondary:hover:not(:disabled) { background: var(--mist); }

@@ -2,7 +2,7 @@
 
 /* Chapter wrapper: stays in flow, clips the fixed footer to its own box */
 .wrap {
-  /* The brand palette, fixed: the footer stays navy on the onyx store and product page, which flip the page tokens. */
+  /* The brand palette, fixed: the footer stays navy in the dark theme too, which flips the page tokens. */
   --ink: #0b1f2a; --porcelain: #f2f4f6; --paper: #fafbfc; --white: #ffffff; --graphite: #3a3f44; --stone: #636e78; --hairline: #dce1e6; --mist: #dceff7; --sky: #86dfff; --line: #70c0e0;
   min-height: 90vh;
 }

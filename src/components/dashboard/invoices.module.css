@@ -10,11 +10,12 @@
 .figures > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 14px 16px; border-radius: var(--radius-md); background: var(--porcelain); font-size: 0.75rem; color: var(--stone); }
 .figures dt { font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
 .figures dd { margin: 2px 0 0; font-size: 1.625rem; font-weight: 600; line-height: 1.1; color: var(--ink); }
-.figureMain { background: var(--ink) !important; color: rgba(242, 244, 246, 0.72) !important; }
+.figureMain { --porcelain: #f2f4f6; --ink: #0b1f2a; background: var(--navy) !important; color: rgba(242, 244, 246, 0.72) !important; }
 .figureMain dt { color: rgba(242, 244, 246, 0.6); }
 .figureMain dd { color: #f2f4f6 !important; font-size: 2rem !important; }
 .figures > div[data-alert] { background: rgba(179, 65, 58, 0.08); box-shadow: inset 0 0 0 1px rgba(179, 65, 58, 0.25); }
 .figures > div[data-alert] dd { color: #a8352f; }
+:global(html[data-mode="dark"]) .figures > div[data-alert] dd { color: #ff8f86; }
 
 /* Aging */
 .aging { display: flex; flex-direction: column; gap: 10px; }
@@ -61,7 +62,7 @@
 .invLink { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .rowDoors { display: flex; align-items: center; justify-content: flex-end; gap: 12px; white-space: nowrap; }
 .payOne { height: 30px; padding: 0 14px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
-.payOne:hover { background: #163548; }
+.payOne:hover { background: var(--ink-hover); }
 .payOne:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .subtotalRow td { background: var(--porcelain); font-weight: 500; color: var(--ink) !important; }
 .toolbarEnd { display: inline-flex; gap: 16px; margin-left: auto; }

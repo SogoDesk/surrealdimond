@@ -215,7 +215,7 @@ export default function SetupPage() {
               <Suspense fallback={<div className={s.card} />}>
                 <SetupForm />
               </Suspense>
-              <aside className={s.apply} aria-labelledby="coming-title">
+              <aside className={s.apply} aria-labelledby="coming-title" data-palette="brand">
                 <Image src="/media/photos/sb-3592-sm.webp" alt="" fill sizes="(min-width: 900px) 44vw, 100vw" className={s.applyImage} />
                 <div className={s.applyBody}>
                   <p className={s.eyebrowLight}>Your account moves with you</p>
