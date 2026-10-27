@@ -1,6 +1,6 @@
 # Surreal Diamond, Phase 1 task list
 
-The work plan for Phase 1 of the BRD (v1.1, 18 September 2026), organised by its four milestones. Requirement status lives in [CHECKLIST.md](CHECKLIST.md); scope and background in [CONTEXT.md](CONTEXT.md). Phase 2 (Enterprise Level Integration, the invoicing and payment portal) is not planned here. Mark items `[x]` when built, verified in the browser at desktop and phone widths, and committed.
+The work plan for Phase 1 of the BRD (v1.1, 18 September 2026), organised by its four milestones. Requirement status lives in [CHECKLIST.md](CHECKLIST.md); scope and background in [CONTEXT.md](CONTEXT.md). Phase 2 (Enterprise Level Integration) is not planned here; the invoicing and payment portal moved into Phase 1 at the client's request (27 October 2026). Mark items `[x]` when built, verified in the browser at desktop and phone widths, and committed.
 
 Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` waiting on a client input or answer.
 
@@ -80,6 +80,49 @@ The client asked for the 9e31102 homepage back (its chapters, motion and transit
 - [ ] Trade show calendar into `src/content/tradeShows.ts`, or time-slot booking if Q9 asks for it
 - [ ] Remaining dashboard sections in design (Q5) and console modules (Dealers, Orders and payments, Memo, Requests, Content, Dealer resources)
 - [ ] Homepage: review Foreveryone's consumer-leaning copy with Surreal, and whether the PromoPopup should wait until past the opening chapters
+
+### E. Client feedback, 27 October 2026
+
+The development action items from the meeting, worked in the client's priority order: 1 Retailer Dashboard (invoices, payments, reconciliation), 2 Diamond Search, 3 existing customer migration, 4 RightClick sync, 5 homepage and UI/UX. Where Surreal said a reference would follow (the Measurements filter reference, the M2O field specification, the shipment wording, invoice templates and customer data), the build uses a clearly labelled placeholder that their material replaces. Requirement-level status is in CHECKLIST.md section 10.
+
+**D. Retailer Dashboard (priority 1)**
+
+- [x] F-D1 A prominent Retailer Dashboard button in the header, for dealers and visitors (visitors go through log in)
+- [x] F-D2 Open invoices, outstanding payments and invoice and memo reconciliation, on sample invoices shaped like RightClick's (balance, aging, open invoices, statement)
+- [x] F-D3 Dashboard pages and fields trimmed to what dealers use; the remaining holding sections taken out of the navigation
+- [x] F-D4 Invoicing moved from Phase 2 into Phase 1 in the docs, with the feasibility notes (RightClick reads balances and open invoices; it has no call to record a payment, so payments post back through finance)
+- [~] F-D5 Sample customer and invoice data and a placeholder invoice template, swapped for Surreal's when provided
+
+**B. Diamond Search (priority 2)**
+
+- [ ] F-B1 Measurements filter (length, width, depth in millimetres), placeholder until Surreal's reference
+- [ ] F-B2 Sorting cut to the essential options; the list table cut to the essential columns
+- [ ] F-B3 Every specification removed from the table stays in Quick View
+- [ ] F-B4 Shipment information made prominent in the list and Quick View, with a Ships next day filter
+- [ ] F-B5 The header search bar searches the real catalog and the stone feed, with suggestions and a results page
+
+**C. M2O, Legacy and Custom**
+
+- [ ] F-C1 An always visible Request M2O action on the diamond search page
+- [ ] F-C2 M2O fields and placeholders reviewed, placeholder wording until Surreal's specification
+- [ ] F-C3 Legacy reachable from the header, the mega menu, the diamond page, the dashboard and the footer
+- [ ] F-C4 Custom Jewelry links to the existing custom order portal instead of our rebuilt form
+
+**E. Customer migration and RightClick (priorities 3 and 4)**
+
+- [ ] F-E1 Customer import from Excel or CSV in the console: template, column matching, validation, preview, import
+- [ ] F-E2 Password setup for existing customers: invitation link, set password with strength rules, link expiry, first sign-in
+- [ ] F-E3 Dummy dealer and admin accounts for role testing, with a written test plan and results
+- [ ] F-E4 RightClick sync approach: what is pulled, how often, how many calls; a sync status page in the console
+- [ ] F-E5 Refresh interval feasibility against RightClick's limit of 30 calls a minute
+
+**A. Homepage and UI/UX (priority 5)**
+
+- [ ] F-A1 Hero as a full-width moving image carousel, the wordmark, copy and buttons fixed over it
+- [ ] F-A2 Hot this week directly under the hero
+- [ ] F-A3 Repetitive sections removed and animation cut back for performance
+- [ ] F-A4 Navigation stays visible while scrolling (the links row no longer collapses)
+- [ ] F-A5 Light and dark themes for Surreal's review, brand blue kept as the secondary colour
 
 ## M1: scope lock and architecture baseline (end of build week 2)
 

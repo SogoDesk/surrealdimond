@@ -15,6 +15,14 @@ export interface DealerSession {
   store: string;
   contact: string;
   demo: boolean;
+  /**
+   * owner: the store's account holder (ordering, billing, payment methods);
+   * associate: orders and sees orders and memo, but not invoices or payments.
+   * Sessions from before roles default to owner.
+   */
+  role?: "owner" | "associate";
+  /** The RightClick customer code, for accounts imported from Excel (F-E1). */
+  account?: string;
 }
 
 const isSession = (v: unknown): v is DealerSession | null =>

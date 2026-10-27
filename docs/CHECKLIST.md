@@ -4,7 +4,7 @@ Every numbered item in the BRD (v1.1 draft for sign-off, 18 September 2026) with
 
 Status: **Done** built and checked in the browser · **In progress** being built now · **Partial** built in part or on preview data · **To do** not started · **Waiting** blocked on a client input (C-) or answer (Q-) · **Conflict** built differently from the BRD, needs a change · **Set aside** not pursued for now by decision.
 
-Last reviewed: 19 October 2026.
+Last reviewed: 27 October 2026.
 
 ## 5.1 Homepage
 
@@ -138,5 +138,41 @@ Last reviewed: 19 October 2026.
 | C-13 | Read access to the current site, export of dealer organizations and users | No |
 | C-14 | Domain, DNS and email-sending domain control | No |
 | C-15 | Two named testers for the final two weeks | No |
+| C-16 | Reference for the Measurements filter (27 October meeting) | No |
+| C-17 | M2O field specification and placeholder wording | No |
+| C-18 | Finalised shipment wording and lead times per stone source | No |
+| C-19 | Invoice template, sample customer data and invoice data | No |
+| C-20 | Address of the existing custom order portal to link (built against the current site's Custom Orders form) | No |
 
 The build-start clock begins when C-01 to C-05 arrive.
+
+## 10. Client feedback, 27 October 2026
+
+Action items from the meeting, in the client's priority order. Work plan in TASKS.md block E.
+
+| # | Item | Status | Where it stands, next action |
+|---|---|---|---|
+| F-D1 | Retailer Dashboard through a prominent navigation button | Done | A Retailer Dashboard pill in the header: filled when signed in; outlined for visitors, through log in to the dashboard |
+| F-D2 | Open invoices, outstanding payments, invoice and memo reconciliation | Done (sample data) | `/dashboard/invoices`: balance due, past due, due this week, credit available, aging bar (current to over 90 days); tabs for invoices (select and pay, pay all past due, full balance), payments, statement (running balance, CSV, print) and reconcile (match or flag each invoice, confirm the balance, RC number). Printable invoice at `/dashboard/invoices/[id]`. Memo items reported sold become invoices awaiting issue; wire orders become invoices due on receipt. Payments made here show "pending posting" (RightClick cannot record payments; finance posts them) |
+| F-D3 | Unnecessary dashboard fields and pages removed | Done (confirm with Surreal, Q5) | Navigation trimmed to Dashboard, Billing, Orders and memo, Order and Your account; the eight holding tiles (marketing, catalogs, social, training, website, SPIF, authorized users, policies) removed; the home loses recently viewed and the resource tiles and leads with the account |
+| F-D4 | Invoicing in Phase 1, subject to feasibility | Done (docs) | Moved from Phase 2 into Phase 1 in CONTEXT.md. Feasible on RightClick's reads (balance and aging, open invoices, statement); payments need the card processor (C-10) and a posting step by finance, since RightClick has no payment call |
+| F-D5 | Sample customer data and invoice templates | Partial (C-19) | Seeded sample invoices per dealer and a placeholder invoice template; replaced by Surreal's template and data |
+| F-B1 | Measurements filter | To do (C-16) | |
+| F-B2 | Fewer sort options, simpler diamond table | To do | |
+| F-B3 | Full specifications in Quick View | To do | |
+| F-B4 | Shipment information more visible | To do (C-18) | |
+| F-B5 | Site search on real inventory | To do | |
+| F-C1 | M2O request reachable from the diamond page | To do | |
+| F-C2 | M2O fields and placeholders | To do (C-17) | |
+| F-C3 | Navigation to Legacy | To do | |
+| F-C4 | Custom jewelry links to the existing portal | Partial (C-20) | Dashboard navigation and home link to the custom order portal; the /custom page and header next |
+| F-E1 | Excel customer import for administrators | To do | |
+| F-E2 | Password setup for existing customers | To do | |
+| F-E3 | Role testing with dummy dealer and admin accounts | To do | |
+| F-E4 | RightClick sync approach with periodic refresh | To do | |
+| F-E5 | Refresh interval feasibility | To do | |
+| F-A1 | Full-width moving hero carousel, text and buttons fixed | To do | |
+| F-A2 | Hot this week under the hero | To do | |
+| F-A3 | Repetitive sections removed, fewer animations | To do | |
+| F-A4 | Navigation stays accessible while scrolling | To do | |
+| F-A5 | Light and dark themes, brand blue secondary | To do | |

@@ -72,6 +72,8 @@ export interface HeaderProps {
   headerRef?: RefObject<HTMLElement | null>;
   /** Follow the homepage chapters' themes (ThemeSync). */
   chapters?: boolean;
+  /** A fixed theme for pages on a dark base (the onyx store and product page); it also paints the root for overscroll. */
+  tone?: "light" | "dark";
 }
 
 function MagnifierIcon() {
@@ -167,7 +169,15 @@ function SearchField() {
   );
 }
 
-export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = false }: HeaderProps) {
+export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = false, tone = "light" }: HeaderProps) {
+  useEffect(() => {
+    if (tone !== "dark") return;
+    const root = document.documentElement;
+    root.dataset.pageTheme = "dark";
+    return () => {
+      delete root.dataset.pageTheme;
+    };
+  }, [tone]);
   const localRef = useRef<HTMLElement | null>(null);
   const ref = headerRef ?? localRef;
   const logoRef = useRef<HTMLAnchorElement>(null);
@@ -258,7 +268,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
     <header
       ref={ref}
       className={styles.header}
-      data-theme="light"
+      data-theme={tone}
       data-site-header
       data-condensed={condensed && !shopOpen ? "true" : undefined}
       data-menu-open={menuOpen ? "true" : "false"}
@@ -281,13 +291,21 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
             <CalendarIcon />
             <span className={styles.utilLabel}>Appointments</span>
           </button>
+          {/* The Retailer Dashboard is always one prominent click away (client feedback, 27 October 2026); signed out it goes through log in. */}
           {dealer ? (
-            <AccountMenu dealer={dealer} />
+            <>
+              <span className={styles.pillWrap}>
+                <Button variant="primary" href={DASHBOARD_LINK.href} className={styles.pill}>
+                  {DASHBOARD_LINK.label}
+                </Button>
+              </span>
+              <AccountMenu dealer={dealer} />
+            </>
           ) : (
             <>
-              <Link href={LOGIN_LINK.href} className={`${styles.util} ${styles.iconLink}`} data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
+              <Link href={`${LOGIN_LINK.href}?next=${encodeURIComponent(DASHBOARD_LINK.href)}`} className={styles.dashPill} aria-label="Retailer Dashboard, log in" data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
                 <UserIcon />
-                <span className={styles.utilLabel}>{LOGIN_LINK.label}</span>
+                <span>{DASHBOARD_LINK.label}</span>
               </Link>
               <span className={styles.pillWrap}>
                 <Button variant="primary" href={APPLY_LINK.href} className={styles.pill}>

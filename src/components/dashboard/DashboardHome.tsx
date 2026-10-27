@@ -1,43 +1,41 @@
 "use client";
 
 /**
- * The Retailer Dashboard home (BRD 5.7; R-25, R-29, R-30, B-03), inside the
- * dashboard shell. Everything on it is the signed-in dealer's own:
+ * The Retailer Dashboard home (BRD 5.7; R-25, R-29, R-30, B-03), trimmed
+ * after the client's feedback of 27 October 2026 to put the account first.
+ * Everything on it is the signed-in dealer's own:
  *
- * 1. Greeting with the store name and New York time of day, today's date,
- *    and the dashboard search (R-29).
- * 2. Quick doors: shop the catalog, diamond search, Made to Order, custom
- *    request, schedule an appointment.
- * 3. Four figures: orders placed, stones on memo, the cart, and the next day
- *    delivery countdown.
- * 4. Recent orders with Reorder (R-25: an exact previous order back in the
- *    cart in one click; loose stones are one of a kind and stay out).
- * 5. On memo, and your requests (M2O and Custom) with their numbers.
- * 6. Recently viewed pieces.
- * 7. Resources: the Grow your store and Your account sections as tiles.
- * 8. The feedback line to We Want to Hear From You.
+ * 1. Greeting with the store name and New York time of day, and the
+ *    dashboard search (R-29).
+ * 2. The account (owner): balance due with its aging, past due, the next due
+ *    date and credit available, with Pay invoices and Statement. Associates,
+ *    who do not see billing, get their orders and memo figures instead.
+ * 3. Open invoices beside recent orders with Reorder (R-25: an exact
+ *    previous order back in the cart in one click; loose stones stay out).
+ * 4. On memo, and the dealer's M2O and custom requests with their numbers.
+ * 5. Quick doors and the next day delivery countdown.
+ *
+ * Recently viewed and the resource tiles are gone with the trimmed
+ * navigation (docs/TASKS.md, F-D3).
  */
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
+import { CUSTOM_PORTAL_URL } from "@/content/dashboard";
 import DeliveryCountdown from "@/components/product/DeliveryCountdown";
-import { productById, productHref, renderSrc, type Product } from "@/content/catalog";
-import { dashSections } from "@/content/dashboard";
 import { stoneById, stoneTitle } from "@/content/diamonds";
-import { groundStyle } from "@/content/grounds";
 import { account } from "@/content/site";
-import { addToCart, caratTotal, pieceCount, useCart, useOrders, type PlacedOrder } from "@/lib/cart";
+import { addToCart, pieceCount, useOrders, type PlacedOrder } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { useMemos } from "@/lib/memo";
-import { useRecent } from "@/lib/recent";
+import { AGING_ORDER, canSeeBilling, formatMoney, useAccount } from "@/lib/invoices";
 import { useCustomRequests, useM2ORequests } from "@/lib/requests";
-import DashIcon from "./DashIcon";
 import DashSearch from "./DashSearch";
 import s from "./dashboard.module.css";
 
 const PAYMENT: Record<PlacedOrder["payment"], string> = { card: "Card", ach: "ACH", wire: "Wire" };
+const AGING_TONE = { current: "#2e9e6b", d30: "#c08a1e", d60: "#d0702a", d90: "#c2503a", d90plus: "#8f2626" } as const;
 const shortDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
 function nyGreeting() {
@@ -48,30 +46,26 @@ function nyGreeting() {
 export default function DashboardHome() {
   const dealer = useDealer();
   const orders = useOrders();
-  const cart = useCart();
   const memos = useMemos();
-  const recent = useRecent();
+  const acct = useAccount();
   const m2o = useM2ORequests();
   const custom = useCustomRequests();
   const [reordered, setReordered] = useState<string | null>(null);
   if (!dealer) return null;
 
-  const inCart = pieceCount(cart);
+  const billing = canSeeBilling(dealer) && acct;
+  const openInvoices = acct ? acct.invoices.filter((i) => i.state === "open").sort((a, b) => b.overdue - a.overdue || a.due.localeCompare(b.due)) : [];
+  const agingTotal = acct ? AGING_ORDER.reduce((sum, b) => sum + acct.summary.aging[b], 0) : 0;
   const reorder = (o: PlacedOrder) => {
     o.lines.filter((l) => !l.stoneId).forEach((l) => addToCart({ productId: l.productId, metal: l.metal, carat: l.carat, size: l.size, qty: l.qty, note: l.note }));
     setReordered(o.number);
   };
-  const viewed = recent
-    .map((id) => productById(id))
-    .filter((p): p is Product => Boolean(p))
-    .slice(0, 6);
   const requests = [
     ...m2o.map((r) => ({ number: r.number, what: `Made to Order, ${Number(r.size).toFixed(2)} ct ${r.shape === "other" ? "stone" : r.shape}`, at: r.sentAt, href: "/diamonds/made-to-order" })),
     ...custom.map((r) => ({ number: r.number, what: `Custom ${r.item.toLowerCase()}, ${r.carat} ${r.shape.toLowerCase()}`, at: r.sentAt, href: "/custom" })),
   ]
     .sort((a, b) => b.at.localeCompare(a.at))
     .slice(0, 4);
-  const resources = dashSections.filter((d) => d.group === "Grow your store" || d.group === "Your account");
   const today = new Date().toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "long", month: "long", day: "numeric" });
 
   return (
@@ -86,47 +80,113 @@ export default function DashboardHome() {
         <DashSearch />
       </header>
 
-      <nav className={s.quick} aria-label="Quick doors">
-        <Link href="/jewelry" className={s.quickDoor}>
-          Shop the catalog
-        </Link>
-        <Link href="/diamonds" className={s.quickDoor}>
-          Diamond search
-        </Link>
-        <Link href="/diamonds/made-to-order" className={s.quickDoor}>
-          Made to Order
-        </Link>
-        <Link href="/custom" className={s.quickDoor}>
-          Custom request
-        </Link>
-        <button type="button" className={s.quickDoor} onClick={() => openContactDrawer("appointment", "visit")}>
-          Schedule an appointment
-        </button>
-      </nav>
+      {billing && acct ? (
+        <section className={s.accountBand} aria-labelledby="dash-account">
+          <dl className={s.balanceCard}>
+            <div>
+              <dt id="dash-account">Balance due</dt>
+              <dd className="tabular">{formatMoney(acct.summary.balance)}</dd>
+            </div>
+            <div className={s.miniAging} aria-hidden>
+              {AGING_ORDER.filter((b) => acct.summary.aging[b] > 0).map((b) => (
+                <span key={b} style={{ flexGrow: agingTotal ? acct.summary.aging[b] / agingTotal : 0, background: AGING_TONE[b] }} />
+              ))}
+            </div>
+            <div className={s.balanceMeta}>
+              <span data-alert={acct.summary.pastDue > 0 ? "" : undefined}>
+                Past due <strong className="tabular">{formatMoney(acct.summary.pastDue)}</strong>
+              </span>
+              <span>
+                {acct.summary.openCount} open {acct.summary.openCount === 1 ? "invoice" : "invoices"}
+              </span>
+              {acct.summary.nextDue && <span>Next due {shortDate(acct.summary.nextDue)}</span>}
+            </div>
+            <div className={s.balanceDoors}>
+              <Link href="/dashboard/invoices" className={s.primaryLight}>
+                Pay invoices
+              </Link>
+              <Link href="/dashboard/invoices?tab=statement" className={s.ghostLight}>
+                Statement
+              </Link>
+            </div>
+          </dl>
+          <dl className={s.sideStats}>
+            <div className={s.stat}>
+              <dt>Credit available</dt>
+              <dd className="tabular">{formatMoney(acct.summary.available)}</dd>
+              <span>Of {formatMoney(acct.summary.creditLimit)}</span>
+            </div>
+            <div className={s.stat}>
+              <dt>On memo</dt>
+              <dd className="tabular">{formatMoney(acct.summary.memoBalance)}</dd>
+              <Link href="/dashboard/memo">Open memo items</Link>
+            </div>
+            <div className={s.stat}>
+              <dt>Last payment</dt>
+              <dd className="tabular">{acct.summary.lastPayment ? formatMoney(acct.summary.lastPayment.amount) : "None"}</dd>
+              <span>{acct.summary.lastPayment ? `${shortDate(acct.summary.lastPayment.date)}${acct.summary.lastPayment.pending ? ", pending posting" : ""}` : "No payments yet"}</span>
+            </div>
+            <div className={`${s.stat} ${s.statDelivery}`}>
+              <dt>Next day delivery</dt>
+              <DeliveryCountdown />
+            </div>
+          </dl>
+        </section>
+      ) : (
+        <dl className={s.stats}>
+          <div className={s.stat}>
+            <dt>Orders placed</dt>
+            <dd className="tabular">{orders.length}</dd>
+            <span>{orders[0] ? `Last on ${shortDate(orders[0].placedAt)}` : "None yet"}</span>
+          </div>
+          <div className={s.stat}>
+            <dt>Stones on memo</dt>
+            <dd className="tabular">{memos.length}</dd>
+            <Link href="/dashboard/memo">Open memo items</Link>
+          </div>
+          <div className={s.stat}>
+            <dt>Your login</dt>
+            <dd className={s.statWord}>Associate</dd>
+            <span>Billing is with your account owner</span>
+          </div>
+          <div className={`${s.stat} ${s.statDelivery}`}>
+            <dt>Next day delivery</dt>
+            <DeliveryCountdown />
+          </div>
+        </dl>
+      )}
 
-      <dl className={s.stats}>
-        <div className={s.stat}>
-          <dt>Orders placed</dt>
-          <dd className="tabular">{orders.length}</dd>
-          <span>{orders[0] ? `Last on ${shortDate(orders[0].placedAt)}` : "None yet"}</span>
-        </div>
-        <div className={s.stat}>
-          <dt>Stones on memo</dt>
-          <dd className="tabular">{memos.length}</dd>
-          <Link href="/dashboard/memo">Open memo items</Link>
-        </div>
-        <div className={s.stat}>
-          <dt>In your cart</dt>
-          <dd className="tabular">{inCart}</dd>
-          {inCart ? <Link href={account.cart}>{caratTotal(cart)} ct total, check out</Link> : <span>Empty</span>}
-        </div>
-        <div className={`${s.stat} ${s.statDelivery}`}>
-          <dt>Next day delivery</dt>
-          <DeliveryCountdown />
-        </div>
-      </dl>
-
-      <div className={s.cols}>
+      <div className={s.cols} data-billing={billing ? "" : undefined}>
+        {billing && (
+          <section className={s.panel} aria-labelledby="dash-invoices">
+            <div className={s.panelHead}>
+              <h2 id="dash-invoices" className={s.panelTitle}>
+                Open invoices
+              </h2>
+              <Link href="/dashboard/invoices" className={s.textLink}>
+                All invoices
+              </Link>
+            </div>
+            {openInvoices.length === 0 ? (
+              <div className={s.empty}>
+                <p>No open invoices. Your account is up to date.</p>
+              </div>
+            ) : (
+              <ul className={s.invoiceList}>
+                {openInvoices.slice(0, 5).map((inv) => (
+                  <li key={inv.id}>
+                    <Link href={`/dashboard/invoices/${inv.id}`}>Invoice {inv.number}</Link>
+                    <strong className="tabular">{formatMoney(inv.balance)}</strong>
+                    <span className={s.invoiceDue} data-late={inv.overdue > 0 ? "" : undefined}>
+                      <span>{inv.po || inv.reference}</span>
+                      <span>{inv.overdue > 0 ? `${inv.overdue} days past due` : `Due ${shortDate(inv.due)}`}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
         <section className={s.panel} id="reorder" aria-labelledby="dash-orders">
           <div className={s.panelHead}>
             <h2 id="dash-orders" className={s.panelTitle}>
@@ -250,9 +310,9 @@ export default function DashboardHome() {
                   <Link href="/diamonds/made-to-order" className={s.textLink}>
                     Made to Order
                   </Link>
-                  <Link href="/custom" className={s.textLink}>
-                    Custom Portal
-                  </Link>
+                  <a href={CUSTOM_PORTAL_URL} className={s.textLink} target="_blank" rel="noreferrer">
+                    Custom portal
+                  </a>
                 </span>
               </div>
             ) : (
@@ -276,58 +336,26 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      <section className={s.panel} aria-labelledby="dash-viewed">
-        <div className={s.panelHead}>
-          <h2 id="dash-viewed" className={s.panelTitle}>
-            Recently viewed
-          </h2>
-          <Link href="/jewelry" className={s.textLink}>
-            Catalog
-          </Link>
-        </div>
-        {viewed.length === 0 ? (
-          <div className={s.empty}>
-            <p>Pieces you open appear here, so you can get back to them quickly.</p>
-          </div>
-        ) : (
-          <ul className={s.viewed}>
-            {viewed.map((p) => (
-              <li key={p.id}>
-                <Link href={productHref(p)} className={s.viewedLink}>
-                  <span className={s.viewedWell} style={groundStyle(p.category)}>
-                    <Image src={renderSrc(p.image)} alt="" width={300} height={300} sizes="140px" />
-                  </span>
-                  <span className={s.viewedName}>{p.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section aria-labelledby="dash-resources">
-        <div className={s.panelHead}>
-          <h2 id="dash-resources" className={s.sectionTitle}>
-            Resources for <em>your store</em>
-          </h2>
-        </div>
-        <ul className={s.tiles}>
-          {resources.map((d) => (
-            <li key={d.id}>
-              <Link href={d.href} className={s.tile}>
-                <span className={s.tileIcon}>
-                  <DashIcon id={d.icon} />
-                </span>
-                <span className={s.tileText}>
-                  <strong>{d.label}</strong>
-                  {d.line}
-                </span>
-                {d.status !== "live" && <span className={s.tileTag}>{d.status === "next" ? "Next" : "Soon"}</span>}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <nav className={s.quick} aria-label="Quick doors">
+        <Link href="/jewelry" className={s.quickDoor}>
+          Shop the catalog
+        </Link>
+        <Link href="/diamonds" className={s.quickDoor}>
+          Diamond search
+        </Link>
+        <Link href="/diamonds/made-to-order" className={s.quickDoor}>
+          Made to Order
+        </Link>
+        <Link href="/legacy" className={s.quickDoor}>
+          Diamond Legacy
+        </Link>
+        <a href={CUSTOM_PORTAL_URL} className={s.quickDoor} target="_blank" rel="noreferrer">
+          Custom jewelry portal
+        </a>
+        <button type="button" className={s.quickDoor} onClick={() => openContactDrawer("appointment", "visit")}>
+          Schedule an appointment
+        </button>
+      </nav>
 
       <p className={s.feedback}>
         How are we doing?{" "}

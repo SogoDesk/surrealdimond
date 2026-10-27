@@ -21,6 +21,7 @@ import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
 import { dashGroups, dashSections } from "@/content/dashboard";
+import { canSeeBilling } from "@/lib/invoices";
 import { account, brand } from "@/content/site";
 import { signOut, useDealer } from "@/lib/dealer";
 import DashIcon from "./DashIcon";
@@ -59,7 +60,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
       <h1 className={s.gateTitle}>
         Everything for <em>your store</em>
       </h1>
-      <p className={s.gateLine}>Orders and reorder, open memo items, marketing programs, training, trade shows and your account, in one place. Log in with your dealer account to open it.</p>
+      <p className={s.gateLine}>Invoices and payments, orders and reorder, open memo items and your account, in one place. Log in with your dealer account to open it.</p>
       <div className={s.gateDoors}>
         <Link href={`${account.login}?next=${encodeURIComponent(pathname)}`} className={s.primary}>
           Dealer log in
@@ -71,7 +72,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     </div>
   ) : (
     <div className={s.frame}>
-      <aside className={s.sidebar} aria-label="Dashboard">
+      <aside className={s.sidebar} aria-label="Dashboard" data-dashboard-sidebar>
         <div className={s.storeCard}>
           <span className={s.avatar} aria-hidden>
             {initials(dealer.store)}
@@ -88,16 +89,33 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
               <p className={s.navGroupTitle}>{g}</p>
               <ul>
                 {dashSections
-                  .filter((d) => d.group === g)
+                  .filter((d) => d.group === g && (!d.billing || canSeeBilling(dealer)))
                   .map((d) => {
-                    const active = pathname === d.href;
+                    const active = d.href === "/dashboard" ? pathname === d.href : d.id === "invoices" ? pathname.startsWith("/dashboard/invoices") : pathname === d.href;
+                    const inner = (
+                      <>
+                        <DashIcon id={d.icon} className={s.navIcon} />
+                        <span>{d.label}</span>
+                        {d.fresh && <span className={s.navTag}>New</span>}
+                        {d.external && (
+                          <svg aria-hidden viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className={s.navExternal}>
+                            <path d="M6 3H3v10h10v-3M9 3h4v4M13 3 7 9" />
+                          </svg>
+                        )}
+                      </>
+                    );
                     return (
                       <li key={d.id}>
-                        <Link href={d.href} className={s.navLink} aria-current={active ? "page" : undefined}>
-                          <DashIcon id={d.icon} className={s.navIcon} />
-                          <span>{d.label}</span>
-                          {d.status !== "live" && <span className={s.navTag}>{d.status === "next" ? "Next" : "Soon"}</span>}
-                        </Link>
+                        {d.external ? (
+                          <a href={d.href} className={s.navLink} target="_blank" rel="noreferrer">
+                            {inner}
+                            <span className={s.srOnly}> (opens the custom order portal in a new tab)</span>
+                          </a>
+                        ) : (
+                          <Link href={d.href} className={s.navLink} aria-current={active ? "page" : undefined}>
+                            {inner}
+                          </Link>
+                        )}
                       </li>
                     );
                   })}

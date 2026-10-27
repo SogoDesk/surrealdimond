@@ -38,7 +38,7 @@
 .nav { display: flex; flex-direction: column; gap: 6px; }
 .navGroup ul { margin: 0; padding: 0; list-style: none; }
 .navGroupTitle { margin: 4px 10px 2px; font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
-.navLink { display: flex; align-items: center; gap: 10px; min-height: 33px; padding: 0 10px; border-radius: 10px; font-size: 0.875rem; color: var(--graphite); transition: background-color 0.2s var(--ease-surreal), color 0.2s var(--ease-surreal); }
+.navLink { position: relative; display: flex; align-items: center; gap: 10px; min-height: 33px; padding: 0 10px; border-radius: 10px; font-size: 0.875rem; color: var(--graphite); transition: background-color 0.2s var(--ease-surreal), color 0.2s var(--ease-surreal); }
 .navLink:hover { background: var(--porcelain); color: var(--ink); }
 .navLink[aria-current="page"] { background: var(--beam); color: var(--ink); font-weight: 600; }
 .navLink[aria-current="page"] .navIcon { color: var(--ink); }
@@ -166,3 +166,35 @@
 .holds svg { flex: 0 0 auto; margin-top: 7px; color: var(--line); }
 .holdingDoors { display: flex; flex-wrap: wrap; gap: 10px; }
 .frame > * { min-width: 0; }
+.navExternal { flex: 0 0 auto; margin-left: auto; color: var(--stone); }
+
+/* Home: the account band (owner) */
+.accountBand { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: stretch; }
+@media (max-width: 1099px) { .accountBand { grid-template-columns: 1fr; } }
+.balanceCard { display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 22px 24px; border-radius: var(--radius-lg); background: #0b1f2a; color: rgba(242, 244, 246, 0.74); }
+.balanceCard dt { font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(242, 244, 246, 0.6); }
+.balanceCard dd { margin: 4px 0 0; font-size: clamp(2rem, 3.4vw, 2.75rem); font-weight: 600; line-height: 1.05; color: #f2f4f6; }
+.balanceMeta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.8125rem; }
+.balanceMeta strong { color: #f2f4f6; font-weight: 600; }
+.balanceMeta [data-alert] { color: #ffb4a6; }
+.balanceDoors { display: flex; flex-wrap: wrap; gap: 10px; }
+.balanceDoors .primaryLight { display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 999px; background: #86dfff; color: #0b1f2a; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.balanceDoors .ghostLight { display: inline-flex; align-items: center; height: 44px; padding: 0 20px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(242, 244, 246, 0.35); color: #f2f4f6; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+.balanceDoors a:focus-visible { outline: 2px solid #86dfff; outline-offset: 3px; }
+.miniAging { display: flex; height: 8px; overflow: hidden; border-radius: 999px; background: rgba(242, 244, 246, 0.12); gap: 2px; }
+.miniAging span { display: block; min-width: 3px; }
+.sideStats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.sideStats .stat dd { font-size: 1.625rem; }
+.invoiceList { margin: 0; padding: 0; list-style: none; }
+.invoiceList li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 11px 0; border-top: 1px solid var(--hairline); font-size: 0.8125rem; color: var(--graphite); }
+.invoiceList li:first-child { border-top: 0; padding-top: 0; }
+.invoiceList a { font-weight: 600; color: var(--ink); }
+.invoiceList strong { font-weight: 600; color: var(--ink); text-align: right; }
+.invoiceDue { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 8px; font-size: 0.75rem; color: var(--stone); }
+.invoiceDue[data-late] { color: #b3413a; }
+.statWord { margin: 2px 0 0; font-size: 1.375rem !important; font-weight: 600; color: var(--ink); }
+.cols[data-billing] { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); }
+.cols[data-billing] > .sideCol { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 1199px) { .cols[data-billing] { grid-template-columns: 1fr; } .cols[data-billing] > .sideCol { grid-template-columns: 1fr; } }
+/* Money reads in the UI face, not the display face */
+.sideStats .stat dd { font-family: var(--font-ui), sans-serif; font-weight: 600; font-size: 1.5rem; letter-spacing: -0.01em; }
