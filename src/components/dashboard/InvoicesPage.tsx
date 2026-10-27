@@ -441,6 +441,7 @@ function OpenInvoices({
 
 function PayDialog({ invoices, onClose, onPaid }: { invoices: InvoiceView[]; onClose: () => void; onPaid: (p: Payment) => void }) {
   const { methods, defaultId } = usePaymentMethods();
+  const payer = useDealer()?.store;
   const [choice, setChoice] = useState<string>(defaultId ?? methods[0]?.id ?? "wire");
   const [wireSent, setWireSent] = useState(false);
   const [error, setError] = useState("");
@@ -453,7 +454,7 @@ function PayDialog({ invoices, onClose, onPaid }: { invoices: InvoiceView[]; onC
     if (choice === "wire" && !wireSent) return setError("Tick the box once the wire has been sent.");
     if (choice !== "wire" && !method) return setError("Choose how to pay.");
     setError("");
-    const payment = method ? payInvoices(payable, method.kind === "card" ? "card" : "ach", methodLabel(method)) : payInvoices(payable, "wire", "Wire transfer");
+    const payment = method ? payInvoices(payable, method.kind === "card" ? "card" : "ach", methodLabel(method), payer) : payInvoices(payable, "wire", "Wire transfer", payer);
     onPaid(payment);
   };
 

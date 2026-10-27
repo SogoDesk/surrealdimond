@@ -47,7 +47,7 @@ Blocks A to C are done. Block D is what remains on our side before the client in
 - [x] Open memo report (R-28) and order history with Reorder (R-25): `/dashboard/orders` with frequently reordered, search, date filters, CSV, per-line and whole-order Reorder, status steps and order details; `/dashboard/memo` with the live columns, days on memo by age, filters, CSV and the reconciliation (sold, confirm, discrepancy note, RC number). The demo account shows labelled sample memo lines
 - [ ] Order status beyond Received, and the real memo with daily prices, from the order system and RightClick (C-07)
 - [x] Admin console shell at `/admin`: sign in by role, access matrix locking modules (proposed until C-05), Overview, Inventory (jewelry and diamonds, Hot this week and featured switches, CSV), Merchandising (Hot this week order, featured pieces and default sort per page), Banners (on or off, order, add from the library), Staff and roles; holding pages for Dealers, Orders and payments, Memo, Requests, Content, Dealer resources. The storefront reads the console's settings (Hot this week, pins, default sort, hero banners)
-- [ ] Console modules still in design: Dealers, Orders and payments, Memo, Requests and inbox, Content pages (R-20), Dealer resources
+- [ ] Console modules still in design: Memo, Requests and inbox, Content pages (R-20), Dealer resources (Dealers, RightClick sync and Orders and payments are live)
 - [?] Main Door page (Q6)
 
 ### C. Homepage revival and the October follow-up (done)
@@ -78,7 +78,7 @@ The client asked for the 9e31102 homepage back (its chapters, motion and transit
 - [ ] Shop the Set on matching-piece data once C-08 arrives (Complete the look shows category pairs today)
 - [ ] Main Door (Q6); Legacy list, FAQ answers and a company timeline from Surreal (C-11)
 - [ ] Trade show calendar into `src/content/tradeShows.ts`, or time-slot booking if Q9 asks for it
-- [ ] Remaining dashboard sections in design (Q5) and console modules (Orders and payments, Memo, Requests, Content, Dealer resources)
+- [ ] Remaining dashboard sections in design (Q5) and console modules (Memo, Requests, Content, Dealer resources)
 - [ ] Homepage: whether the PromoPopup should wait until past the hero (Foreveryone was removed on 27 October)
 
 ### E. Client feedback, 27 October 2026
@@ -129,6 +129,7 @@ The development action items from the meeting, worked in the client's priority o
 - [x] Hero opens on the circle pendant in a line of light (sb-3424), framed right of the headline; the second circle pendant swapped for a worn lifestyle shot
 - [x] Log in test panel: Use fills in the account's email and password, ready to log in; the note pointing to the test plan is gone
 - [x] Console overview: Your modules removed; headline figures (stones in stock, receivables, past due, active logins, orders, open requests) and charts (stones by shape and by carat, receivables by age with the most past due accounts, dealer logins by status, catalog by category) beside the latest activity; each chart has a table view
+- [x] Console, Orders and payments (`/admin/orders`): every order from checkout to delivery (confirm with a staff note, ship with carrier and tracking, mark delivered, cancel with a reason) and every payment from collection to posting (charge a card authorization, settle ACH, record a wire with reference and amount, mark posted in RightClick; invoice payments from the dashboard post here too). The dealer's Orders page shows the status steps, tracking link, payment state and dealer-visible timeline; cancelled orders drop off the invoices and release their loose stones; a recorded wire pays the order's invoice. Sample orders from the test accounts can be shown or hidden
 
 ## M1: scope lock and architecture baseline (end of build week 2)
 

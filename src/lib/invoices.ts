@@ -35,6 +35,7 @@ import { useMemoReports } from "./memo";
 import { useMemoLines, type MemoLine } from "./memoLines";
 import { jewelryPrice, linePrice, stonePrice } from "./pricing";
 import { useNow } from "./useNow";
+import { useOrderWorkMap, workOf, type OrderWork } from "./orderStatus";
 
 /* Types */
 
@@ -101,6 +102,10 @@ export interface Payment {
   /** Received on the site and waiting for finance to post it in RightClick. */
   pending: boolean;
   sample: boolean;
+  /** The store that paid, for the console. */
+  payer?: string;
+  /** When finance posted it in RightClick (the console's Orders and payments). */
+  postedAt?: string;
 }
 
 export interface Credit {
@@ -170,7 +175,7 @@ export const useInvoicePayments = paymentsStore.useStore;
 export const useInvoiceReconciliations = reconStore.useStore;
 
 /** Record a payment made on the site against invoices (full balances). */
-export function payInvoices(invoices: InvoiceView[], kind: PayKind, method: string): Payment {
+export function payInvoices(invoices: InvoiceView[], kind: PayKind, method: string, payer?: string): Payment {
   const now = new Date();
   const allocations = invoices.filter((i) => i.state === "open" && i.balance > 0).map((i) => ({ invoiceId: i.id, amount: i.balance }));
   const payment: Payment = {
@@ -182,9 +187,16 @@ export function payInvoices(invoices: InvoiceView[], kind: PayKind, method: stri
     allocations,
     pending: true,
     sample: false,
+    payer,
   };
   paymentsStore.set((list) => [payment, ...list]);
   return payment;
+}
+
+/** Finance has recorded the payment in RightClick: the dealer's invoices stop showing "pending posting". */
+export function postInvoicePayment(id: string) {
+  const at = new Date().toISOString();
+  paymentsStore.set((list) => list.map((p) => (p.id === id ? { ...p, pending: false, postedAt: at } : p)));
 }
 
 export function sendInvoiceReconciliation(r: Omit<InvoiceReconciliation, "number" | "sentAt">): InvoiceReconciliation {
@@ -332,8 +344,9 @@ function memoInvoices(lines: MemoLine[], reports: ReturnType<typeof useMemoRepor
     });
 }
 
-function orderInvoices(orders: PlacedOrder[]): Invoice[] {
-  return orders.map((o) => {
+/** Orders placed on the site, as invoices: cancelled orders drop out, and a wire order is paid once finance records the wire (lib/orderStatus.ts). */
+function orderInvoices(orders: PlacedOrder[], work: Record<string, OrderWork>): Invoice[] {
+  return orders.filter((o) => workOf(work, o).status !== "cancelled").map((o) => {
     const lines: InvoiceLine[] = o.lines.map((l) => ({
       description: l.stoneId ? `Loose diamond, stock ${l.stoneId}` : `${productById(l.productId)?.name ?? l.productId}, ${metalLabel(l.metal)}, ${l.carat} ct${l.size ? `, size ${l.size}` : ""}`,
       ref: l.stoneId ?? (productById(l.productId) ? (styleRef(productById(l.productId)!) ?? undefined) : undefined),
@@ -355,7 +368,7 @@ function orderInvoices(orders: PlacedOrder[]): Invoice[] {
       shipping: 0,
       tax: 0,
       total,
-      applied: o.payment === "wire" ? 0 : total,
+      applied: o.payment === "wire" ? (workOf(work, o).pay === "received" ? total : 0) : total,
       sample: false,
     };
   });
@@ -426,6 +439,7 @@ export function useAccount(): Account | null {
   const dealer = useDealer();
   const now = useNow();
   const orders = useOrders();
+  const orderWork = useOrderWorkMap();
   const memoLines = useMemoLines();
   const memoReports = useMemoReports();
   const sitePayments = useInvoicePayments();
@@ -434,7 +448,7 @@ export function useAccount(): Account | null {
   return useMemo(() => {
     if (!dealer || !now) return null;
     const sample = sampleAccount(dealer, now);
-    const all: Invoice[] = [...sample.invoices, ...orderInvoices(orders), ...memoInvoices(memoLines, memoReports)];
+    const all: Invoice[] = [...sample.invoices, ...orderInvoices(orders, orderWork), ...memoInvoices(memoLines, memoReports)];
 
     const paidHere = new Map<string, number>();
     sitePayments.forEach((p) => p.allocations.forEach((a) => paidHere.set(a.invoiceId, cents((paidHere.get(a.invoiceId) ?? 0) + a.amount))));
@@ -501,7 +515,7 @@ export function useAccount(): Account | null {
         lastPayment: paymentsAll[0] ?? null,
       },
     };
-  }, [dealer, now, orders, memoLines, memoReports, sitePayments, reconciliations]);
+  }, [dealer, now, orders, orderWork, memoLines, memoReports, sitePayments, reconciliations]);
 }
 
 /** Owners see billing; associates order and see orders and memo (E3 role tests). */

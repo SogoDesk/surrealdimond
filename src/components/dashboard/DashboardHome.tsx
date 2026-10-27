@@ -27,6 +27,7 @@ import DeliveryCountdown from "@/components/product/DeliveryCountdown";
 import { stoneById, stoneTitle } from "@/content/diamonds";
 import { account } from "@/content/site";
 import { addToCart, pieceCount, useOrders, type PlacedOrder } from "@/lib/cart";
+import { STATUS_LABEL, useOrderWorkMap, workOf } from "@/lib/orderStatus";
 import { useDealer } from "@/lib/dealer";
 import { useMemos } from "@/lib/memo";
 import { AGING_ORDER, canSeeBilling, formatMoney, useAccount } from "@/lib/invoices";
@@ -46,6 +47,7 @@ function nyGreeting() {
 export default function DashboardHome() {
   const dealer = useDealer();
   const orders = useOrders();
+  const orderWork = useOrderWorkMap();
   const memos = useMemos();
   const acct = useAccount();
   const m2o = useM2ORequests();
@@ -242,7 +244,9 @@ export default function DashboardHome() {
                         </td>
                         <td>{PAYMENT[o.payment]}</td>
                         <td>
-                          <span className={s.status}>Received</span>
+                          <span className={s.status} data-status={workOf(orderWork, o).status}>
+                            {STATUS_LABEL[workOf(orderWork, o).status]}
+                          </span>
                         </td>
                         <td className={s.cellAction}>
                           <button type="button" className={s.reorder} disabled={jewelry.length === 0} onClick={() => reorder(o)} title={jewelry.length === 0 ? "Loose stones are one of a kind" : undefined}>

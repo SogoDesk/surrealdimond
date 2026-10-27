@@ -9,6 +9,7 @@
 
 import { createLocalStore } from "./localStore";
 import { useOrders } from "./cart";
+import { useOrderWorkMap, workOf } from "./orderStatus";
 
 export interface MemoRequest {
   number: string;
@@ -28,12 +29,13 @@ export function requestMemo(stoneId: string): MemoRequest {
   return memo;
 }
 
-/** Stones no longer available: on a placed order or on memo. */
+/** Stones no longer available: on a placed order (a cancelled order releases its stones) or on memo. */
 export function useUnavailable(): Set<string> {
   const orders = useOrders();
+  const work = useOrderWorkMap();
   const memos = useMemos();
   const ids = new Set<string>();
-  orders.forEach((o) => o.lines.forEach((l) => l.stoneId && ids.add(l.stoneId)));
+  orders.filter((o) => workOf(work, o).status !== "cancelled").forEach((o) => o.lines.forEach((l) => l.stoneId && ids.add(l.stoneId)));
   memos.forEach((m) => ids.add(m.stoneId));
   return ids;
 }

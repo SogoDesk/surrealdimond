@@ -89,7 +89,7 @@ Last reviewed: 27 October 2026.
 | B-02 | An article never shows a metal color it does not exist in | Done | With R-12 |
 | B-03 | Each dealer's logged-in experience reflects their own account and history | Partial | Homepage band, dashboard, cart, checkout and forms use the dealer's store, orders, memo and requests; preview session until real accounts with the auth service |
 | B-04 | Access by roles, no approval step | Partial | The console enforces a proposed access matrix per staff role (edit, view, none); confirm with C-05; dealer associate permissions with real accounts |
-| B-05 | Card, ACH and wire, through Surreal's existing card processor | Partial / Waiting (Q2, Q3, C-10) | Checkout offers credit or debit card, ACH and wire only; the dashboard's Payment methods page keeps cards and bank accounts, with check and Zelle through finance; the processor connects once named |
+| B-05 | Card, ACH and wire, through Surreal's existing card processor | Partial / Waiting (Q2, Q3, C-10) | Checkout offers credit or debit card, ACH and wire only; the dashboard's Payment methods page keeps cards and bank accounts, with check and Zelle through finance; the processor connects once named. The console's Orders and payments tracks each payment by method (card authorized then charged on confirmation, ACH initiated then settled, wire awaited then recorded with its reference), refunds or voids on cancellation, and posting in RightClick |
 | B-06 | Out-of-stock display rule | Waiting (Q1) | Not built; can be prepared behind a console switch so either answer is quick |
 
 ## 4. Roles

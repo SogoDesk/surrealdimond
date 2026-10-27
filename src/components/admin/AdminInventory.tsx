@@ -31,6 +31,7 @@ import { downloadCsv } from "@/lib/csv";
 import { setMerch, useMerch } from "@/lib/merch";
 import { clearMetalOption, setMetalOption, useMetalOptions, withMetals } from "@/lib/metals";
 import { useMemos } from "@/lib/memo";
+import { useOrderWorkMap, workOf } from "@/lib/orderStatus";
 import { useAdminAccess } from "./AdminShell";
 import s from "./admin.module.css";
 
@@ -62,7 +63,8 @@ export default function AdminInventory() {
   const [status, setStatus] = useState<StoneStatus | "all">("all");
   const [shown, setShown] = useState(PAGE);
 
-  const ordered = useMemo(() => new Set(orders.flatMap((o) => o.lines.map((l) => l.stoneId).filter(Boolean) as string[])), [orders]);
+  const orderWork = useOrderWorkMap();
+  const ordered = useMemo(() => new Set(orders.filter((o) => workOf(orderWork, o).status !== "cancelled").flatMap((o) => o.lines.map((l) => l.stoneId).filter(Boolean) as string[])), [orders, orderWork]);
   const onMemo = useMemo(() => new Set(memos.map((m) => m.stoneId)), [memos]);
   const stoneStatus = (id: string): StoneStatus => (ordered.has(id) ? "ordered" : onMemo.has(id) ? "memo" : "available");
 

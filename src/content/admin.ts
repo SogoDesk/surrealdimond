@@ -102,10 +102,10 @@ export const adminModules: AdminModule[] = [
   {
     id: "orders",
     label: "Orders and payments",
-    line: "Orders, card, ACH and wire payments",
+    line: "Confirm, ship and deliver orders; collect and post payments",
     href: "/admin/orders",
     icon: "orders",
-    status: "design",
+    status: "live",
     access: { administrator: "edit", finance: "edit", hr: "none", sales: "view", manager: "edit" },
     holds: ["Every dealer order with its lines, status and payment", "Card, ACH and wire payments through Surreal's processor (C-10)", "Status updates that dealers see on their Orders page"],
   },

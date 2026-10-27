@@ -14,8 +14,9 @@
  *   details the order was placed with. Loose stones are one of a kind (B-01),
  *   so their lines offer the diamond search instead.
  *
- * Orders come from this browser's checkout until the order system connects;
- * status beyond Received arrives with it.
+ * Orders come from this browser's checkout until the order system connects.
+ * Their status, tracking, payment and timeline are what Surreal sets in the
+ * console's Orders and payments (lib/orderStatus.ts); staff notes stay there.
  */
 
 import Image from "next/image";
@@ -28,12 +29,12 @@ import { groundStyle } from "@/content/grounds";
 import { account } from "@/content/site";
 import { addToCart, caratTotal, pieceCount, useOrders, type CartLine, type PlacedOrder } from "@/lib/cart";
 import { downloadCsv } from "@/lib/csv";
+import { PAY_LABEL, STATUS_LABEL, STATUS_STEPS, trackingUrl, useOrderWorkMap, workOf } from "@/lib/orderStatus";
 import { useNow } from "@/lib/useNow";
 import s from "./pages.module.css";
 import { formatUSD, linesTotal } from "@/lib/pricing";
 
 const PAYMENT: Record<PlacedOrder["payment"], string> = { card: "Credit or debit card", ach: "ACH", wire: "Wire transfer" };
-const STEPS = ["Received", "Confirmed", "Shipped", "Delivered"];
 const RANGES = [
   { id: "all", label: "All time" },
   { id: "30", label: "Last 30 days" },
@@ -72,6 +73,7 @@ function lineName(l: CartLine): { name: string; meta: string; product?: Product 
 
 export default function OrdersPage() {
   const orders = useOrders();
+  const orderWork = useOrderWorkMap();
   const now = useNow();
   const [q, setQ] = useState("");
   const [range, setRange] = useState<Range>("all");
@@ -243,6 +245,10 @@ export default function OrdersPage() {
                 const isOpen = open.has(o.number);
                 const jewelry = o.lines.filter((l) => !l.stoneId);
                 const d = o.details;
+                const work = workOf(orderWork, o);
+                const reached = STATUS_STEPS.indexOf(work.status);
+                const track = trackingUrl(work.carrier, work.tracking);
+                const timeline = work.events.filter((e) => e.dealer);
                 return (
                   <li key={o.number} className={s.order} data-open={isOpen ? "" : undefined}>
                     <div className={s.orderHead}>
@@ -255,24 +261,64 @@ export default function OrdersPage() {
                           <path d="M2 4.5l4 4 4-4" />
                         </svg>
                       </button>
-                      <span className={s.status}>Received</span>
+                      <span className={s.status} data-status={work.status}>
+                        {STATUS_LABEL[work.status]}
+                      </span>
                       <button type="button" className={s.reorderAll} disabled={jewelry.length === 0} onClick={() => reorderAll(o)}>
                         Reorder all
                       </button>
                     </div>
 
                     <div id={`order-${o.number}`} className={s.orderBody} hidden={!isOpen}>
-                      <ol className={s.steps} aria-label="Order status">
-                        {STEPS.map((step, i) => (
-                          <li key={step} data-done={i === 0 ? "" : undefined}>
-                            <span className={s.stepDot} aria-hidden />
-                            {step}
+                      {work.status === "cancelled" ? (
+                        <p className={s.cancelled} role="status">
+                          <strong>Cancelled</strong>
+                          {work.cancelReason ? `: ${work.cancelReason}.` : "."} {work.pay === "refunded" ? "The payment is refunded to the original method." : "Nothing was charged."}
+                        </p>
+                      ) : (
+                        <ol className={s.steps} aria-label="Order status">
+                          {STATUS_STEPS.map((step, i) => (
+                            <li key={step} data-done={i <= reached ? "" : undefined} aria-current={i === reached ? "step" : undefined}>
+                              <span className={s.stepDot} aria-hidden />
+                              {STATUS_LABEL[step]}
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                      <div className={s.orderFacts}>
+                        {work.status === "shipped" || work.status === "delivered" ? (
+                          <p>
+                            <strong>{work.status === "delivered" ? "Delivered" : "On its way"}</strong>
+                            {work.carrier ? ` by ${work.carrier}` : ""}
+                            {work.tracking && (
+                              <>
+                                {", tracking "}
+                                {track ? (
+                                  <a href={track} className={s.textLink} target="_blank" rel="noreferrer">
+                                    {work.tracking}
+                                  </a>
+                                ) : (
+                                  work.tracking
+                                )}
+                              </>
+                            )}
+                          </p>
+                        ) : work.status !== "cancelled" ? (
+                          <p>{o.beforeCutoff ? "Placed before the 4:00pm EST cutoff for next day delivery." : "Placed after the 4:00pm EST cutoff."}</p>
+                        ) : null}
+                        <p>
+                          <strong>Payment</strong> {PAYMENT[o.payment]}, {PAY_LABEL[work.pay].toLowerCase()}
+                          {work.pay === "awaiting" && " (send the wire with your order number as the reference)"}
+                        </p>
+                      </div>
+                      <ol className={s.timeline} aria-label="Order history">
+                        {[...timeline].reverse().map((e, i) => (
+                          <li key={`${e.at}-${i}`}>
+                            <time dateTime={e.at}>{new Date(e.at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</time>
+                            {e.text}
                           </li>
                         ))}
                       </ol>
-                      <p className={s.stepNote}>
-                        {o.beforeCutoff ? "Placed before the 4:00pm EST cutoff for next day delivery. " : ""}Status updates connect with the order system.
-                      </p>
 
                       <ul className={s.lines}>
                         {o.lines.map((l) => {

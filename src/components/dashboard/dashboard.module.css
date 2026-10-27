@@ -198,3 +198,7 @@
 @media (max-width: 1199px) { .cols[data-billing] { grid-template-columns: 1fr; } .cols[data-billing] > .sideCol { grid-template-columns: 1fr; } }
 /* Money reads in the UI face, not the display face */
 .sideStats .stat dd { font-family: var(--font-ui), sans-serif; font-weight: 600; font-size: 1.5rem; letter-spacing: -0.01em; }
+.status[data-status="confirmed"] { background: var(--beam); box-shadow: inset 0 0 0 1px #c9e6f2; }
+.status[data-status="shipped"] { background: rgba(47, 127, 166, 0.14); color: #1d5f80; }
+.status[data-status="delivered"] { background: rgba(46, 158, 107, 0.14); color: #1f7a52; }
+.status[data-status="cancelled"] { background: var(--porcelain); color: var(--stone); box-shadow: inset 0 0 0 1px var(--hairline); }
