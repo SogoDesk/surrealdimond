@@ -6,7 +6,7 @@ Status key: `[ ]` to do, `[~]` in progress, `[x]` done, `[?]` waiting on a clien
 
 ## Next up
 
-In order. Block A (the BRD fixes to built screens) is done. Block B completes the ten key screens for M2 while the client inputs arrive: nine are built; Main Door waits on Q6. Next: M1 architecture choices (vendors to approve) and the client inputs.
+Blocks A to C are done. Block D is what remains on our side before the client inputs land; everything marked `[?]` waits on Surreal. Next: M1 architecture choices (vendors to approve) and the client inputs.
 
 ### A. Bring built screens in line with the BRD
 
@@ -17,7 +17,7 @@ In order. Block A (the BRD fixes to built screens) is done. Block B completes th
 - [x] R-03: Hot this week, fed from `src/content/featuring.ts`, the list the admin console will own
 - [x] R-04: one campaign photograph per category in Shop by category, render on hover
 - [x] R-08 / R-30: dealer homepage band: greeting, quick doors, quick reorder, recently viewed, account card
-- R-10 (Quick View as the ordering point): set aside by decision, 30 Sept 2026
+- [x] R-10: Quick View is the ordering point after all (October 2026): Add to cart and Buy now in the drawer, on the store grid and the product and cart pages' card rows
 
 ### B. Complete the ten key screens (M2, end of build week 4)
 
@@ -32,7 +32,7 @@ In order. Block A (the BRD fixes to built screens) is done. Block B completes th
 | 7 | Orders with Reorder, and the open memo items report | [x] |
 | 8 | Cart and checkout | [x] |
 | 9 | Log in and Main Door | [~] log in done; Main Door waits on Q6 |
-| 10 | Admin console: inventory, featuring, banners | [x] shell with four working modules |
+| 10 | Admin console: inventory, featuring, banners, metal options | [x] shell with five working modules |
 
 - [x] Diamond page on a sample feed shaped like the live search: one line per stone (shape, carat, color, clarity, cut, polish, symmetry, fluorescence, measurements, ratio, table, depth, lab and certificate, stock ID, shipment, price slot, Quick View, Add), quick filters and More filters, sort, compare up to four, cards on phones; stones leave the list once ordered or on memo
 - [x] M2O request prefilled from the diamond search or a stone (R-19): shape, exact size, ratio, girdle inscription, customer name for the booklet, notes, dealer details
@@ -47,9 +47,39 @@ In order. Block A (the BRD fixes to built screens) is done. Block B completes th
 - [x] Open memo report (R-28) and order history with Reorder (R-25): `/dashboard/orders` with frequently reordered, search, date filters, CSV, per-line and whole-order Reorder, status steps and order details; `/dashboard/memo` with the live columns, days on memo by age, filters, CSV and the reconciliation (sold, confirm, discrepancy note, RC number). The demo account shows labelled sample memo lines
 - [ ] Order status beyond Received, and the real memo with daily prices, from the order system and RightClick (C-07)
 - [x] Admin console shell at `/admin`: sign in by role, access matrix locking modules (proposed until C-05), Overview, Inventory (jewelry and diamonds, Hot this week and featured switches, CSV), Merchandising (Hot this week order, featured pieces and default sort per page), Banners (on or off, order, add from the library), Staff and roles; holding pages for Dealers, Orders and payments, Memo, Requests, Content, Dealer resources. The storefront reads the console's settings (Hot this week, pins, default sort, hero banners)
-- [ ] Console modules still in design: Dealers, Orders and payments, Memo, Requests and inbox, Content pages (R-20), Dealer resources; metal color options per article editable (R-12, C-02)
+- [ ] Console modules still in design: Dealers, Orders and payments, Memo, Requests and inbox, Content pages (R-20), Dealer resources
 - [?] Main Door page (Q6)
-- [?] Trade show appointments (Q9)
+
+### C. Homepage revival and the October follow-up (done)
+
+The client asked for the 9e31102 homepage back (its chapters, motion and transitions), aimed at dealers, with fewer scrolls between sections. Then the meeting follow-up list was checked item by item against the build.
+
+- [x] Old hero opens the page; dealer copy and doors (Search diamonds and Retailer Dashboard when signed in, Dealer log in and Become a dealer otherwise)
+- [x] Time chapter: the 3D stone replaced by a drawn CVD growth sequence (seed, layers, cut) with the grower proof figures; pinned length cut by more than half
+- [x] Engagement chapter: circle opens before the pin, shorter spin; shapes show live stock and carat range from the diamond feed and open the search on that shape; solitaire settings row with an intro column
+- [x] Chapter header theming (the header follows each chapter's dark, navy, sky or light ground)
+- [x] Lookbook, Foreveryone (copy beside the collage), Visit and Trade restored as they were
+- [x] Middle sections restyled to the chapters' type and motion: masked line reveals, side wipes, and a scrubbed hand-off where each section sinks as the next slides over
+- [x] Nine ways to begin restored in place of the programs cards, merged with Shop by category (one campaign photograph per type, render on hover), loose diamonds and all divisions at the end
+- [x] Benefits and Assurance folded into Trade as the twelve-point dealer program list; homepage 15.6 screens, from 18.7 (the old one ran 21.4)
+- [x] Section labels lose their leading hairline across the site
+- [x] Product page order: Complete the look above the jewelry details
+- [x] Buy now in Quick View; Quick View from the product and cart pages' card rows
+- [x] Metal options per piece editable in the console's Inventory (R-12, R-35); the storefront follows
+- [x] About and Diamond Legacy as short content pages (R-20); Payment methods (R-27) and Trade show appointments (R-26) in the dashboard
+- [x] Dealer prices in US dollars once signed in: cards, Quick View, product page, Hot this week, diamond list and drawer, mini cart, cart, checkout, order history, memo report. Sample price list in `src/lib/pricing.ts` until Surreal's arrives
+- [x] Urbanist as the primary font (headings, item names and body); Italiana kept for large display figures and the wordmark
+
+### D. Remaining on our side
+
+- [ ] Payment portal design for Phase 2 (WB Mason model: total and current due, aging colors, current invoices, pay one or pay all, history), design only
+- [ ] Out-of-stock lead time prepared behind a console switch (Q1 decides whether it shows)
+- [ ] Replace the sample price list with Surreal's (Q8 answered: dealers only, US dollars); the swap is `jewelryPrice` and `stonePrice`
+- [ ] Shop the Set on matching-piece data once C-08 arrives (Complete the look shows category pairs today)
+- [ ] Main Door (Q6); Legacy list, FAQ answers and a company timeline from Surreal (C-11)
+- [ ] Trade show calendar into `src/content/tradeShows.ts`, or time-slot booking if Q9 asks for it
+- [ ] Remaining dashboard sections in design (Q5) and console modules (Dealers, Orders and payments, Memo, Requests, Content, Dealer resources)
+- [ ] Homepage: review Foreveryone's consumer-leaning copy with Surreal, and whether the PromoPopup should wait until past the opening chapters
 
 ## M1: scope lock and architecture baseline (end of build week 2)
 
@@ -76,9 +106,9 @@ The proposal is in [ARCHITECTURE.md](ARCHITECTURE.md); decisions D1 to D8 wait o
 - [ ] Prices: dealer price list and visibility rule (Q8)
 - [ ] Payment through Surreal's existing processor (B-05, Q2, Q3)
 - [ ] Order and inquiry emails from Surreal's sending domain (C-14)
-- [ ] Remaining dashboard subpages (Q5): payment methods (R-27), trade shows (R-26), dashboard search (R-29)
-- [ ] Content pages editable in admin (R-20): Legacy, Main Door, About
-- [ ] Admin: users and roles, banners, featured area, metal color options, content (R-35)
+- [ ] Remaining dashboard subpages (Q5); dashboard search on Surreal's search (R-29, C-06)
+- [ ] Content pages editable in admin (R-20): Legacy and About are built as pages, Main Door waits on Q6
+- [ ] Admin: named users and roles, content pages (R-35); banners, featured area and metal options are built
 - [ ] Think Space content and dealer export migrated (C-13)
 - [ ] Accessibility and performance pass before UAT
 - [ ] Monitoring in place
@@ -103,7 +133,7 @@ Design and groundwork
 Homepage
 
 - [x] Two-row header with search, mega menu (group rail, thumbnails, promo strip, editorial card), account menu and mini cart when signed in
-- [x] Hero banner carousel, grower strip, shop by category, collections bento, programs, featured rail, turntable stories, dealer benefits, experience grid, the Surreal Assurance, footer
+- [x] First commerce homepage (banner carousel, grower strip, shop by category, collections bento, programs, featured rail, turntable stories, dealer benefits, experience grid, Assurance), since replaced by the chapter homepage in block C
 
 Store and product
 

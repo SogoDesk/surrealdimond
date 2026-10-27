@@ -4,18 +4,18 @@ Every numbered item in the BRD (v1.1 draft for sign-off, 18 September 2026) with
 
 Status: **Done** built and checked in the browser · **In progress** being built now · **Partial** built in part or on preview data · **To do** not started · **Waiting** blocked on a client input (C-) or answer (Q-) · **Conflict** built differently from the BRD, needs a change · **Set aside** not pursued for now by decision.
 
-Last reviewed: 30 September 2026.
+Last reviewed: 19 October 2026.
 
 ## 5.1 Homepage
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-01 | Keep the story feel, roughly half the old length | Partial | Ten compact sections replace the thirteen-chapter concept; confirm the section list against C-01 |
-| R-02 | Rotating banners at the top | Done | Hero carousel of the client's web banners, square artwork on phones |
+| R-01 | Keep the story feel, roughly half the old length | Partial | The client asked for the 9e31102 chapter homepage back (October 2026), re-voiced for dealers. It runs 15.6 screens at 1440 by 900 against 21.4 for the old one, with pins shortened and repeated sections merged; reaching half would mean dropping the Lookbook or Foreveryone, which the client keeps. Confirm the section list against C-01 |
+| R-02 | Rotating banners at the top | Done (moved) | Banner carousel of the client's web banners, square artwork on phones. Since the revival the old hero opens the page and the carousel sits mid-page, before Hot this week, by the client's choice |
 | R-03 | Featured "Hot this week" area, controlled from admin | Done (preview) | Hot this week on the homepage follows the console's Merchandising list and Inventory switches (`src/lib/merch.ts`, defaults in `src/content/featuring.ts`); empty hides the band. Settings are per browser until the database |
-| R-04 | One strong image per category | Done | Shop by category leads with one campaign photograph per type; the render on its colored ground shows on hover. Stud Earrings borrows a worn-earrings photograph until Surreal supplies a studs image |
+| R-04 | One strong image per category | Done | The Nine ways to begin carousel shows one campaign photograph per type; the render on its story ground shows on hover. Stud Earrings borrows a worn-earrings photograph until Surreal supplies a studs image |
 | R-05 | Highlight Surreal's own photography | Done | Campaign photographs across home, store tiles and product galleries |
-| R-06 | Remove the cursor shade / trailing effect | Done | Removed 30 Sept |
+| R-06 | Remove the cursor shade / trailing effect | Done | Removed 30 Sept; kept out of the homepage revival, as was the 3D stone |
 | R-07 | Remove the education section | Done | Removed from home, header, footer |
 | R-08 | Personalized homepage for logged-in dealers: greeting, recent items, quick reorder | Done (preview data) | Dealer band under the hero replaces the dealer pitch: greeting by store and time of day, quick doors, quick reorder from past orders (per line or the whole last order), recently viewed pieces, account card with the delivery countdown. Runs on the preview session and browser storage until real accounts |
 
@@ -24,16 +24,16 @@ Last reviewed: 30 September 2026.
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
 | R-09 | Five cards a row, rounded corners, colored or story backgrounds instead of grey, occasional large hero images | Done | Five a row, rounded, campaign photo tiles in the rows, and each category's story ground (`src/content/grounds.ts`) behind the renders on cards, galleries, cart and mini cart |
-| R-10 | Quick View is the ordering point: hover panel with Add to Cart and Buy Now; no separate product page required | Set aside | Not pursued for now by decision (30 Sept 2026): ordering stays on the product page and the card's Add to cart |
+| R-10 | Quick View is the ordering point: hover panel with Add to Cart and Buy Now; no separate product page required | Done | Clicking a card opens Quick View (a drawer) with metal, carat, size, quantity, Add to cart and Buy now (straight to checkout), on the store grid and on the card rows of the product and cart pages. The full product page stays, one click away |
 | R-11 | Shop the Set / Complete the Set from matching-piece data | Waiting (C-08) | "Complete the look" shows pairs by category today; switch to Surreal's matching-piece data |
-| R-12 | Only the metal colors an article exists in, as toggles, one default image each, set in admin | Done | Cards, product page, details and filters offer only the metals a piece exists in; the made to order placeholder now covers only carat sizes without a render. Admin configuration comes with the console |
-| R-13 | Surreal curates yellow gold defaults and supplies metal and color data per article | Partial (C-02) | `defaultMetal` field per article drives the opening metal everywhere; waiting on Surreal's yellow gold list and metal data |
+| R-12 | Only the metal colors an article exists in, as toggles, one default image each, set in admin | Done (preview) | Cards, Quick View, product page and filters offer only a piece's metals. Console Inventory toggles each metal per piece and sets the default; a metal switched on before its render exists shows the made to order placeholder. Settings are per browser until the database |
+| R-13 | Surreal curates yellow gold defaults and supplies metal and color data per article | Partial (C-02) | The default metal per piece is set in the console or by `defaultMetal`; waiting on Surreal's yellow gold list and metal data |
 
 ## 5.3 Diamond page
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-14 | One line per diamond, Nivoda style: specs, certificate number, stock ID, ratios, shipment details, price, Add to Cart inline | Partial (sample feed) | Built at `/diamonds` on a 260-stone sample feed (`src/content/diamonds.ts`): shape, carat, color, clarity, cut, polish, symmetry, fluorescence, measurements, ratio, table, depth, lab and certificate, stock ID, shipment, price slot, Quick View and Add inline; cards on phones. Prices wait on the price list (Q8); live stones wait on RightClick (C-07) |
+| R-14 | One line per diamond, Nivoda style: specs, certificate number, stock ID, ratios, shipment details, price, Add to Cart inline | Partial (sample feed) | Built at `/diamonds` on a 260-stone sample feed (`src/content/diamonds.ts`): shape, carat, color, clarity, cut, polish, symmetry, fluorescence, measurements, ratio, table, depth, lab and certificate, stock ID, shipment, price slot, Quick View and Add inline; cards on phones. Signed-in dealers see a price in US dollars from the sample price list (`src/lib/pricing.ts`) until Surreal's list arrives; live stones wait on RightClick (C-07) |
 | R-15 | Quick View opens further detail on any stone | Done | Drawer with the plan drawing and dimensions, every attribute, certificate, shipment, dealer price box, Add to cart, Request on memo, Grow one like it to order, previous and next |
 | R-16 | Quick filters above the list, Surreal's parameters | Partial (C-03) | Shape icons, carat range and presets, color and clarity ranges, cut, lab; More filters for polish, symmetry, fluorescence, ratio, source. Swap to Surreal's parameters when C-03 arrives |
 | R-17 | Columns follow Surreal's attribute list | Partial (C-04) | Columns follow the live dealer search plus the BRD fields; swap to Surreal's sheet when C-04 arrives |
@@ -44,8 +44,8 @@ Last reviewed: 30 September 2026.
 
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
-| R-20 | Short content pages, editable from admin without a developer | To do | Holding pages exist; build on the content system |
-| R-21 | Content and imagery from Surreal; Legacy and Main Door intent | Waiting (C-11, Q6) | |
+| R-20 | Short content pages, editable from admin without a developer | Partial | About (`/about`, Company History at `#history`) and Diamond Legacy (`/legacy`) are built as short pages from verified facts on a shared layout (`ContentPage`). Main Door waits on Q6; admin editing comes with the console's Content module |
+| R-21 | Content and imagery from Surreal; Legacy and Main Door intent | Waiting (C-11, Q6) | A company timeline for Company History, the Legacy FAQ answers and the Legacy list come from Surreal |
 
 ## 5.5 Custom Portal
 
@@ -65,12 +65,12 @@ Last reviewed: 30 September 2026.
 | # | Requirement | Status | Where it stands, next action |
 |---|---|---|---|
 | R-25 | Reorder an exact previous item in a couple of clicks | Done (preview data) | `/dashboard/orders`: frequently reordered pieces and every order line reorder in one click with the same metal, carat weight, size and quantity; Reorder all per order; Change and reorder opens the piece preset. Also on the dashboard home and the homepage band. Loose stones stay one of a kind |
-| R-26 | Trade show appointments | Waiting (Q9) | Dashboard section with a holding page (`/dashboard/trade-shows`) pointing to Schedule an appointment; request form or time-slot booking once Q9 is answered |
-| R-27 | Payment methods managed by the dealer (invoice payment in Phase 2) | To do | Dashboard section with a holding page (`/dashboard/payments`); build with the processor details (C-10) |
+| R-26 | Trade show appointments | Partial (Q9) | `/dashboard/trade-shows`: meeting request form (show, days, time of day, people, notes) with a TS number; the dealer's requests listed and withdrawable. The show list (`src/content/tradeShows.ts`) stays empty until Surreal sends its calendar; time-slot booking if Q9 asks for it |
+| R-27 | Payment methods managed by the dealer (invoice payment in Phase 2) | Partial (preview, C-10) | `/dashboard/payments`: cards and bank accounts on the account, a default for checkout, remove; only brand or bank, last four and expiry are kept. Wire, check and Zelle go through finance. The card processor holds the real methods once named |
 | R-28 | Open memo items report from existing data | Partial (waiting on C-07) | `/dashboard/memo`: the live columns plus days on memo colored by age, figures, filters, CSV, and the live reconciliation (tick sold, confirm the list, note a discrepancy, RC number). Reads the dealer's memo requests, plus labelled sample lines for the demo account; RightClick supplies the real memo and daily prices |
 | R-29 | Dashboard search integrates Surreal's existing search | Partial / Waiting (C-06) | Dashboard search built: sections, the dealer's orders, memo and requests by number, catalog by name or style, stones by stock ID; swap the source to Surreal's search when C-06 arrives |
-| R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer homepage band, dealer pricing notes, cart and checkout know the store; Retailer Dashboard home with the store's figures, orders, memo, requests and recently viewed |
-| R-31 | Remaining subpages (about 10) | Waiting (Q5) | Every live tile has a dashboard section; the ones in design open a holding page listing what they will hold (`src/content/dashboard.ts`) |
+| R-30 | Whole logged-in experience personalized, WB Mason style | Partial | Header account menu, dealer homepage band and hero doors, dealer prices in US dollars across store, Quick View, product page, Hot this week, diamonds, cart, checkout, orders and memo; Retailer Dashboard home with the store's figures, orders, memo, requests and recently viewed |
+| R-31 | Remaining subpages (about 10) | Waiting (Q5) | Every live tile has a dashboard section. Live: home, orders, memo, cart, diamond search, Made to Order, Custom Portal, trade shows, payment methods. The ones in design open a holding page listing what they will hold (`src/content/dashboard.ts`) |
 
 ## 5.8 Admin console
 
@@ -79,7 +79,7 @@ Last reviewed: 30 September 2026.
 | R-32 | Full inventory view | Partial (sample feed) | `/admin/inventory`: every piece (style, category, metals, default metal) and every stone (grades, lab and certificate, source, status available, on memo or ordered), search, filters, CSV. Stones are the sample feed until RightClick (C-07); pieces move to the database with bulk upload (A1) |
 | R-33 | Feature or toggle any product to the top of any page, including hot deal items | Done (preview) | Inventory switches and `/admin/merchandising`: Hot this week, and pieces featured to the top of All jewelry or any category, in order; the store pages follow |
 | R-34 | Admin-defined default sort per page; customers can still re-sort | Done (preview) | Default sort per jewelry page in Merchandising; the page opens in it, customers can re-sort, and featured pieces lead only the default order |
-| R-35 | Manage banners, featured area, metal color options, content pages, users and roles per the access matrix | Partial | Banners (on or off, order, labels, links, add from the library) and the featured area work; the access matrix locks modules per role (proposed until C-05); metal options are shown, editing them, content pages and named staff users come with the database and authentication |
+| R-35 | Manage banners, featured area, metal color options, content pages, users and roles per the access matrix | Partial | Banners (on or off, order, labels, links, add from the library) and the featured area work; the access matrix locks modules per role (proposed until C-05); metal options per piece are editable in Inventory; content pages and named staff users come with the database and authentication |
 
 ## 6. Rules across the site
 
@@ -89,8 +89,8 @@ Last reviewed: 30 September 2026.
 | B-02 | An article never shows a metal color it does not exist in | Done | With R-12 |
 | B-03 | Each dealer's logged-in experience reflects their own account and history | Partial | Homepage band, dashboard, cart, checkout and forms use the dealer's store, orders, memo and requests; preview session until real accounts with the auth service |
 | B-04 | Access by roles, no approval step | Partial | The console enforces a proposed access matrix per staff role (edit, view, none); confirm with C-05; dealer associate permissions with real accounts |
-| B-05 | Card, ACH and wire, through Surreal's existing card processor | Partial / Waiting (Q2, Q3, C-10) | Checkout offers credit or debit card, ACH and wire only; check and Zelle stay offline on the dashboard's Payment Methods page; the processor connects once named |
-| B-06 | Out-of-stock display rule | Waiting (Q1) | |
+| B-05 | Card, ACH and wire, through Surreal's existing card processor | Partial / Waiting (Q2, Q3, C-10) | Checkout offers credit or debit card, ACH and wire only; the dashboard's Payment methods page keeps cards and bank accounts, with check and Zelle through finance; the processor connects once named |
+| B-06 | Out-of-stock display rule | Waiting (Q1) | Not built; can be prepared behind a console switch so either answer is quick |
 
 ## 4. Roles
 
@@ -115,7 +115,7 @@ Last reviewed: 30 September 2026.
 | Milestone | Due | Status |
 |---|---|---|
 | M1 Scope lock and architecture baseline: screen list, data model, working environments | End of build week 2 | In progress: architecture proposal and data model in ARCHITECTURE.md, decisions D1 to D8 awaiting approval; screen list waits on C-05 |
-| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and nine of ten key screens built as working pages; Main Door waits on Q6 |
+| M2 Design approval: design system and ten key screens | End of build week 4 | Ahead: design system and nine of ten key screens built as working pages, plus About, Legacy, payment methods and trade shows; Main Door waits on Q6 |
 | M3 Feature complete on staging for UAT, code freeze | End of build week 10 | To do |
 | M4 Go-live, handover documentation, operations runbook | End of build week 12 | To do |
 

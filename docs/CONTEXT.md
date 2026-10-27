@@ -218,7 +218,7 @@ Footer columns: Jewelry; Diamonds (Diamond Search, Made to Order, Diamond Legacy
 
 ## UX reference: tanishq.co.in
 
-The reference for components and positioning (home, store, cart). Tanishq is a consumer store and Surreal is B2B, so we borrow its structure and commerce patterns for the dealer experience, not its audience or its look: everything is rendered in our design system (porcelain, ink, sky; Italiana, Cormorant Garamond, Jost; hairlines, pill buttons, white render tiles). Notes from the study on 30 Sept 2026:
+The reference for components and positioning (home, store, cart). Tanishq is a consumer store and Surreal is B2B, so we borrow its structure and commerce patterns for the dealer experience, not its audience or its look: everything is rendered in our design system (porcelain, ink, sky; Urbanist as the primary font since October 2026, Italiana for display figures; hairlines, pill buttons, white render tiles). Notes from the study on 30 Sept 2026:
 
 **Header.** Two tiers. Top row: logo left, a wide rounded search field centred with rotating placeholder text ("Search for diamond jewellery", "Search for engagement rings"), icons right (store, wishlist, account, cart with count badge). Second row: category links with small line icons, each opening a full-width mega panel with a left rail of facets (Category, Price, Occasion, Gender), a three-column grid of links with round thumbnails, a promo strip with a View All button, and an editorial image card on the right. Sticky; the second row collapses on scroll.
 
@@ -260,20 +260,21 @@ The reference for components and positioning (home, store, cart). Tanishq is a c
 
 ## Homepage plan
 
-Public by default, personalized for a signed-in dealer. Built in the design system with calm motion: Lenis stays, reveals and image wipes stay, no WebGL, no cursor effects, no long pinned stages.
+The chapter homepage of commit 9e31102, which the client asked to have back (October 2026), re-voiced for dealers who already know Surreal and joined to the commerce sections built since. Lenis smooth scroll, GSAP reveals and scrubbed hand-offs; no WebGL, no 3D stone, no cursor effects. The header follows each chapter's ground (ThemeSync). About 15.6 screens at 1440 by 900 (the old one ran 21.4).
 
-1. Hero banner carousel: the eight web banners, peeking neighbours, dots, autoplay. CTAs: Become a dealer, Log in (signed in: Shop new arrivals).
-2. Grower proof strip: largest CVD grower, own machines and recipe, DEF and VVS, up to 15 carats.
-3. Collections bento: Constellation, Enamour Enamel, Laser Pierced, Vermeil.
-4. Shop by division: square white render tiles, last tile View all. Signed out, tiles lead to Log in.
-5. Programs: Made to Order, Legacy, Custom (the three live homepage stories, redesigned).
-6. Featured items: the live homepage's featured earrings as product cards (no prices signed out).
-7. Turntable stories carousel.
-8. Why Surreal for your store: the dealer benefits as a badge grid, with Apply.
-9. Experience grid: Schedule an appointment, Talk to us, Custom Portal, Legacy, Retailer Dashboard, Our Story.
-10. Footer.
+1. Hero (dark): the SURREAL wordmark over the ring film; Search diamonds and Retailer Dashboard when signed in, Dealer log in and Become a dealer otherwise.
+2. Time (dark, short pin): the counter from 1.5 billion years to weeks beside a drawn CVD growth sequence, with the grower proof figures.
+3. Dealer band (signed in only): greeting, quick doors, quick reorder, recently viewed.
+4. Engagement: the circle opens into the turntable ring, shapes with live stock from the diamond feed, solitaire settings.
+5. Collections bento: Constellation, Enamour Enamel, Laser Pierced, Vermeil, Sterling Silver.
+6. Nine ways to begin: carousel of the nine types (one campaign photograph each, render on hover), loose diamonds, all divisions.
+7. Banner carousel: the client's web banners (managed in the console).
+8. Hot this week: the console's list, with dealer prices when signed in.
+9. Lookbook, held while Foreveryone (dark) rises over it.
+10. Visit New York.
+11. For the trade (sky): the pitch and the twelve-point dealer program, then the footer.
 
-Signed in, a dealer bar sits under the hero: greeting with the store name, open orders, memo count, saved searches, Reorder.
+Sections 5 to 7 sink and dim as the next slides over them. The console's pop-up banner opens over the page after a delay.
 
 ## Open questions for the client
 
@@ -286,7 +287,7 @@ From the BRD (section 10), to be answered with the sign-off or at the next meeti
 5. Q5: the final list of the roughly 10 Retailer Dashboard subpages, beyond the four confirmed features.
 6. Q6: what the Diamond Legacy and Main Door pages should each contain.
 7. Q7: does the made-to-order request live on the diamond page or as its own page?
-8. Q8: can visitors see prices before logging in, or are prices for dealers only?
+8. Q8: can visitors see prices before logging in, or are prices for dealers only? Answered (October 2026): dealers only, in US dollars. The figures are a sample list until Surreal's arrives.
 9. Q9: trade show appointments: a request form, or real time-slot booking?
 10. Q10: a named login per administrator instead of one shared login?
 11. Q11: resale or exemption paperwork stored per dealer for tax purposes?
@@ -296,7 +297,7 @@ Ours, not in the BRD:
 
 - The real Instagram handle (the live footer links to a placeholder account).
 - Whether the reference numbers shown on product pages (taken from the render file names, e.g. LE2004W442) are Surreal's style numbers.
-- Whether the product page stays alongside Quick View (R-10).
+- Whether the product page stays alongside Quick View (R-10). Settled: both stay; Quick View orders, the product page holds full details.
 
 ## Working rules
 
