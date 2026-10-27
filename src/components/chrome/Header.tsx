@@ -205,7 +205,9 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
     }
   };
 
-  const isRouteActive = (href: string) => pathname !== "/" && (pathname === href || pathname.startsWith(`${href}/`));
+  const under = (href: string) => pathname !== "/" && (pathname === href || pathname.startsWith(`${href}/`));
+  // The most specific link wins: on /diamonds/made-to-order, Made to Order rather than Diamonds.
+  const isRouteActive = (href: string) => under(href) && !PRIMARY_LINKS.some((l) => l.href !== href && l.href.startsWith(`${href}/`) && under(l.href));
 
   return (
     <header

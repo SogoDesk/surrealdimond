@@ -13,25 +13,9 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  Fragment,
-  useDeferredValue,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-  type FormEvent,
-  type KeyboardEvent,
-} from "react";
+import { Fragment, useDeferredValue, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from "react";
 import ShapeIcon from "@/components/brand/ShapeIcon";
-import {
-  categoryLabel,
-  productHref,
-  renderSrc,
-  styleRef,
-} from "@/content/catalog";
+import { categoryLabel, productHref, renderSrc, styleRef } from "@/content/catalog";
 import { stoneGrade, stoneTitle } from "@/content/diamonds";
 import { groundStyle } from "@/content/grounds";
 import { account } from "@/content/site";
@@ -40,14 +24,7 @@ import { useUnavailable } from "@/lib/memo";
 import { POPULAR, searchSite } from "@/lib/siteSearch";
 import styles from "./chrome.module.css";
 
-const PROMPTS = [
-  "engagement rings",
-  "oval diamonds",
-  "2ct round D VVS1",
-  "a style number",
-  "tennis bracelets",
-  "a stock ID",
-];
+const PROMPTS = ["engagement rings", "oval diamonds", "2ct round D VVS1", "a style number", "tennis bracelets", "a stock ID"];
 
 interface Option {
   id: string;
@@ -59,8 +36,7 @@ interface Option {
   shape?: Parameters<typeof ShapeIcon>[0]["shape"];
 }
 
-const resultsHref = (q: string) =>
-  q ? `${account.search}?q=${encodeURIComponent(q)}` : account.search;
+const resultsHref = (q: string) => (q ? `${account.search}?q=${encodeURIComponent(q)}` : account.search);
 
 export default function SiteSearch() {
   const router = useRouter();
@@ -76,10 +52,7 @@ export default function SiteSearch() {
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
-    const id = window.setInterval(
-      () => setPrompt((p) => (p + 1) % PROMPTS.length),
-      2800,
-    );
+    const id = window.setInterval(() => setPrompt((p) => (p + 1) % PROMPTS.length), 2800);
     return () => window.clearInterval(id);
   }, []);
 
@@ -95,18 +68,16 @@ export default function SiteSearch() {
       }));
     const r = searchSite(q, { gone, productLimit: 4, stoneLimit: 0 });
     const out: Option[] = [];
-    r.exact
-      .slice(0, 3)
-      .forEach((st) =>
-        out.push({
-          id: `st-${st.id}`,
-          group: "Diamonds",
-          label: `${st.id} · ${stoneTitle(st)}`,
-          meta: `${stoneGrade(st)}, ${st.lab} ${st.certificate}`,
-          href: `/diamonds?stone=${st.id}`,
-          shape: st.shape,
-        }),
-      );
+    r.exact.slice(0, 3).forEach((st) =>
+      out.push({
+        id: `st-${st.id}`,
+        group: "Diamonds",
+        label: `${st.id} · ${stoneTitle(st)}`,
+        meta: `${stoneGrade(st)}, ${st.lab} ${st.certificate}`,
+        href: `/diamonds?stone=${st.id}`,
+        shape: st.shape,
+      }),
+    );
     if (r.stoneFilter && r.stoneTotal > 0)
       out.push({
         id: "stones",
@@ -130,31 +101,25 @@ export default function SiteSearch() {
         id: `p-${p.id}`,
         group: "Jewelry",
         label: p.name,
-        meta: [categoryLabel(p.category), styleRef(p)]
-          .filter(Boolean)
-          .join(" · "),
+        meta: [categoryLabel(p.category), styleRef(p)].filter(Boolean).join(" · "),
         href: productHref(p),
         image: { src: renderSrc(p.image), ground: groundStyle(p.category) },
       }),
     );
-    r.pages
-      .slice(0, 3)
-      .forEach((pg) =>
-        out.push({
-          id: `pg-${pg.href}`,
-          group: "Pages",
-          label: pg.label,
-          meta: pg.line,
-          href: pg.href,
-        }),
-      );
+    r.pages.slice(0, 3).forEach((pg) =>
+      out.push({
+        id: `pg-${pg.href}`,
+        group: "Pages",
+        label: pg.label,
+        meta: pg.line,
+        href: pg.href,
+      }),
+    );
     out.push({
       id: "all",
       group: "",
       label: out.length ? `See all results for “${q}”` : `Search for “${q}”`,
-      meta: out.length
-        ? ""
-        : "Nothing suggested yet; the results page looks wider",
+      meta: out.length ? "" : "Nothing suggested yet; the results page looks wider",
       href: resultsHref(q),
     });
     return out;
@@ -203,21 +168,8 @@ export default function SiteSearch() {
         }
       }}
     >
-      <form
-        role="search"
-        className={styles.search}
-        onSubmit={submit}
-        data-focused={focused ? "true" : undefined}
-      >
-        <svg
-          aria-hidden
-          viewBox="0 0 16 16"
-          className={styles.icon}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-          strokeLinecap="round"
-        >
+      <form role="search" className={styles.search} onSubmit={submit} data-focused={focused ? "true" : undefined}>
+        <svg aria-hidden viewBox="0 0 16 16" className={styles.icon} fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
           <circle cx="6.75" cy="6.75" r="5.25" />
           <path d="M10.6 10.6 15 15" />
         </svg>
@@ -232,9 +184,7 @@ export default function SiteSearch() {
           aria-expanded={show}
           aria-controls={`${uid}-list`}
           aria-autocomplete="list"
-          aria-activedescendant={
-            show && active >= 0 ? `${uid}-o${active}` : undefined
-          }
+          aria-activedescendant={show && active >= 0 ? `${uid}-o${active}` : undefined}
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
@@ -255,39 +205,17 @@ export default function SiteSearch() {
             </span>
           </span>
         )}
-        <button
-          type="submit"
-          className={styles.searchSubmit}
-          aria-label="Search"
-        >
-          <svg
-            aria-hidden
-            viewBox="0 0 16 16"
-            width="14"
-            height="14"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+        <button type="submit" className={styles.searchSubmit} aria-label="Search">
+          <svg aria-hidden viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 8h11M9 4l4 4-4 4" />
           </svg>
         </button>
       </form>
 
       {show && (
-        <ul
-          id={`${uid}-list`}
-          role="listbox"
-          aria-label="Suggestions"
-          className={styles.suggest}
-        >
+        <ul id={`${uid}-list`} role="listbox" aria-label="Suggestions" className={styles.suggest}>
           {options.map((o, i) => {
-            const head =
-              o.group && (i === 0 || options[i - 1].group !== o.group)
-                ? o.group
-                : null;
+            const head = o.group && (i === 0 || options[i - 1].group !== o.group) ? o.group : null;
             const popular = o.group === "Popular searches";
             return (
               <Fragment key={o.id}>
@@ -296,23 +224,14 @@ export default function SiteSearch() {
                     {head}
                   </li>
                 )}
-                <li
-                  role="presentation"
-                  className={popular ? styles.suggestChipItem : undefined}
-                >
+                <li role="presentation" className={popular ? styles.suggestChipItem : undefined}>
                   <a
                     id={`${uid}-o${i}`}
                     role="option"
                     aria-selected={i === active}
                     href={o.href}
                     tabIndex={-1}
-                    className={
-                      popular
-                        ? styles.suggestChip
-                        : o.id === "all"
-                          ? styles.suggestAll
-                          : styles.suggestItem
-                    }
+                    className={popular ? styles.suggestChip : o.id === "all" ? styles.suggestAll : styles.suggestItem}
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={(e) => {
                       if (e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -322,24 +241,12 @@ export default function SiteSearch() {
                     onMouseEnter={() => setActive(i)}
                   >
                     {o.image ? (
-                      <span
-                        className={styles.suggestThumb}
-                        style={o.image.ground}
-                      >
-                        <Image
-                          src={o.image.src}
-                          alt=""
-                          width={80}
-                          height={80}
-                          sizes="40px"
-                        />
+                      <span className={styles.suggestThumb} style={o.image.ground}>
+                        <Image src={o.image.src} alt="" width={80} height={80} sizes="40px" />
                       </span>
                     ) : o.shape ? (
                       <span className={styles.suggestThumb} aria-hidden>
-                        <ShapeIcon
-                          shape={o.shape}
-                          className={styles.suggestShape}
-                        />
+                        <ShapeIcon shape={o.shape} className={styles.suggestShape} />
                       </span>
                     ) : null}
                     <span className={styles.suggestText}>

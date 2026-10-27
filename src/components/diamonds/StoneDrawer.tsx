@@ -7,10 +7,10 @@
  * the supplier's lead time; F-B4), every attribute in a grid (the list
  * keeps only the essentials, F-B3), the certificate and the source, then the
  * doors: Add to cart and Request on memo for a signed-in dealer (Log in
- * otherwise), and Grow one like it to order, which opens the M2O request
- * prefilled with this stone (R-19). Previous and next step through the
- * current results. Mechanics come from useDrawer (inert while closed, focus
- * trap, Escape, scroll lock).
+ * otherwise), Grow one like it to order, which opens the M2O request
+ * prefilled with this stone (R-19), and Diamond Legacy (F-C3). Previous
+ * and next step through the current results. Mechanics come from useDrawer
+ * (inert while closed, focus trap, Escape, scroll lock).
  */
 
 import Link from "next/link";
@@ -217,6 +217,15 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
                 <span>
                   <strong>Grow one like it to order</strong>
                   Made to Order: any shape, any carat weight, with an IGI certificate.
+                </span>
+                <svg aria-hidden viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 8h10M9 4l4 4-4 4" />
+                </svg>
+              </Link>
+              <Link href="/legacy" className={s.m2oLink}>
+                <span>
+                  <strong>Diamond Legacy</strong>
+                  A collection grown from one seed line, for every milestone to come.
                 </span>
                 <svg aria-hidden viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 8h10M9 4l4 4-4 4" />

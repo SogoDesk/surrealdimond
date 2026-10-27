@@ -290,6 +290,14 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                 CVD diamonds we grow, primarily DEF color and VVS clarity, up to 15 carats, with supplier stones alongside. All prices shown are for asset; for short-term memo
                 pricing, call {brand.office.phone}.
               </p>
+              <p className={s.storyLink}>
+                Programs:
+                <Link href="/diamonds/made-to-order">Made to Order</Link>
+                <span aria-hidden>·</span>
+                <Link href="/legacy">Diamond Legacy</Link>
+                <span aria-hidden>·</span>
+                <Link href="/custom">Custom jewelry</Link>
+              </p>
               {!dealer && (
                 <p className={s.storyLink}>
                   New to Surreal?{" "}

@@ -11,6 +11,8 @@
  * billing: shown to the store's account owner only, not to associates.
  */
 
+import { CUSTOM_PORTAL_URL } from "./site";
+
 export type DashIcon =
   | "home" | "orders" | "memo" | "cart" | "search" | "m2o" | "legacy" | "custom"
   | "invoices" | "shows" | "payments" | "account";
@@ -34,8 +36,7 @@ export interface DashSection {
 
 export const dashGroups: DashGroup[] = ["Overview", "Billing", "Orders and memo", "Order", "Your account"];
 
-/** The existing custom order portal on Surreal's current site (F-C4); confirm the address with Surreal before launch. */
-export const CUSTOM_PORTAL_URL = "https://surrealdiamond.com/custom-orders/";
+export { CUSTOM_PORTAL_URL };
 
 export const dashSections: DashSection[] = [
   { id: "home", label: "Dashboard", line: "Your store at a glance", href: "/dashboard", group: "Overview", icon: "home" },

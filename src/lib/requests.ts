@@ -11,8 +11,13 @@ export interface M2ORequest {
   number: string;
   shape: string;
   size: string;
+  /** Length by width in mm, when the stone is sized to a setting instead of (or as well as) a carat weight. */
+  dimensions?: string;
   sentAt: string;
 }
+
+/** "2.00 ct", or the dimensions when no carat size was given. */
+export const m2oSize = (r: Pick<M2ORequest, "size" | "dimensions">) => (Number(r.size) > 0 ? `${Number(r.size).toFixed(2)} ct` : r.dimensions ? `${r.dimensions} mm` : "size to confirm");
 
 export interface CustomRequest {
   number: string;

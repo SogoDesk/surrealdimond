@@ -30,7 +30,7 @@ import { addToCart, pieceCount, useOrders, type PlacedOrder } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { useMemos } from "@/lib/memo";
 import { AGING_ORDER, canSeeBilling, formatMoney, useAccount } from "@/lib/invoices";
-import { useCustomRequests, useM2ORequests } from "@/lib/requests";
+import { m2oSize, useCustomRequests, useM2ORequests } from "@/lib/requests";
 import DashSearch from "./DashSearch";
 import s from "./dashboard.module.css";
 
@@ -61,7 +61,7 @@ export default function DashboardHome() {
     setReordered(o.number);
   };
   const requests = [
-    ...m2o.map((r) => ({ number: r.number, what: `Made to Order, ${Number(r.size).toFixed(2)} ct ${r.shape === "other" ? "stone" : r.shape}`, at: r.sentAt, href: "/diamonds/made-to-order" })),
+    ...m2o.map((r) => ({ number: r.number, what: `Made to Order, ${m2oSize(r)} ${r.shape === "other" ? "stone" : r.shape}`, at: r.sentAt, href: "/diamonds/made-to-order" })),
     ...custom.map((r) => ({ number: r.number, what: `Custom ${r.item.toLowerCase()}, ${r.carat} ${r.shape.toLowerCase()}`, at: r.sentAt, href: "/custom" })),
   ]
     .sort((a, b) => b.at.localeCompare(a.at))

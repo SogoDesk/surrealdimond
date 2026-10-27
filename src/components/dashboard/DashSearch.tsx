@@ -17,7 +17,7 @@ import { stones, stoneTitle } from "@/content/diamonds";
 import { account } from "@/content/site";
 import { useOrders } from "@/lib/cart";
 import { useMemos } from "@/lib/memo";
-import { useCustomRequests, useM2ORequests } from "@/lib/requests";
+import { m2oSize, useCustomRequests, useM2ORequests } from "@/lib/requests";
 import s from "./dashboard.module.css";
 
 interface Hit {
@@ -48,7 +48,7 @@ export default function DashSearch() {
     dashSections.filter((d) => has(d.label, d.line)).forEach((d) => out.push({ group: "Dashboard", label: d.label, meta: d.line, href: d.href }));
     orders.filter((o) => has(o.number)).forEach((o) => out.push({ group: "Your orders and requests", label: o.number, meta: `Order, ${new Date(o.placedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`, href: "/dashboard/orders" }));
     memos.filter((m) => has(m.number, m.stoneId)).forEach((m) => out.push({ group: "Your orders and requests", label: m.number, meta: `Memo, stock ${m.stoneId}`, href: "/dashboard/memo" }));
-    m2o.filter((r) => has(r.number)).forEach((r) => out.push({ group: "Your orders and requests", label: r.number, meta: `Made to Order, ${r.size} ct`, href: "/diamonds/made-to-order" }));
+    m2o.filter((r) => has(r.number)).forEach((r) => out.push({ group: "Your orders and requests", label: r.number, meta: `Made to Order, ${m2oSize(r)}`, href: "/diamonds/made-to-order" }));
     custom.filter((r) => has(r.number)).forEach((r) => out.push({ group: "Your orders and requests", label: r.number, meta: `Custom, ${r.item}`, href: "/custom" }));
     products
       .filter((p) => has(p.name, styleRef(p), p.detail))

@@ -5,8 +5,11 @@
  * the search carried in: ?shape=&size=&ratio=&from=. The fields are the live
  * M2O form's (your name, company, customer name for the booklet, phone,
  * email, exact size, shape, length to width ratio, girdle inscription,
- * notes), prefilled from the search and the dealer session. Beside the form,
- * the program as the live site states it. A signed-in dealer sends the
+ * notes) plus dimensions, prefilled from the search and the dealer session.
+ * Labels and placeholders come from src/content/m2o.ts, which Surreal's
+ * specification replaces (C-17). A size or dimensions is required, and the
+ * grade promise for the size shows under it. Beside the form, the program
+ * as the live site states it, and Diamond Legacy. A signed-in dealer sends the
  * request (kept in this browser for the preview, with a request number); a
  * visitor is asked to log in first. Whether M2O stays a page of its own or
  * lives inside the diamond page is Q7.
@@ -22,25 +25,12 @@ import Footer from "@/components/sections/Footer";
 import ShapeIcon from "@/components/brand/ShapeIcon";
 import { SHAPE_LABEL, stoneById, stoneTitle, type StoneShape } from "@/content/diamonds";
 import { account, brand } from "@/content/site";
+import { M2O_FACTS, M2O_FIELDS, M2O_SHAPES, m2oGrade, type M2OField } from "@/content/m2o";
 import { useDealer } from "@/lib/dealer";
-import { m2oRequests as requests, type M2ORequest } from "@/lib/requests";
+import { m2oRequests as requests, m2oSize, type M2ORequest } from "@/lib/requests";
 import s from "./m2o.module.css";
 
-/** The shapes offered on the live M2O form. */
-const M2O_SHAPES: StoneShape[] = ["round", "radiant", "oval", "cushion", "emerald", "pear"];
-
-
-const FACTS = [
-  "Exclusively for Surreal dealers",
-  "Any shape, in any carat weight or dimensions",
-  "Under 4 ct: FG+ color, VS+ clarity",
-  "Over 4 ct: G+ color, VS+ clarity",
-  "Every diamond comes with an IGI grading certificate",
-  "A brochure with nine unique visual touchpoints for your client",
-  "A program fee plus the stone, confirmed with your order",
-];
-
-type Field = "name" | "company" | "customer" | "phone" | "email" | "size" | "shape" | "ratio" | "inscription" | "notes";
+type Field = M2OField;
 
 export default function MadeToOrderPage() {
   return (
@@ -77,6 +67,7 @@ function Request({ params }: { params: URLSearchParams | null }) {
     phone: "",
     email: dealer?.email ?? "",
     size: params?.get("size") ?? "",
+    dimensions: "",
     shape: qShape && M2O_SHAPES.includes(qShape) ? qShape : qShape ? "other" : "",
     ratio: params?.get("ratio") ?? "",
     inscription: "",
@@ -92,44 +83,54 @@ function Request({ params }: { params: URLSearchParams | null }) {
     if (!form.company.trim()) found.company = "Enter the company name.";
     if (form.phone.replace(/\D/g, "").length < 10) found.phone = "Enter a ten digit phone number.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email)) found.email = "Enter a valid email address.";
-    if (!(Number(form.size) > 0)) found.size = "Enter the exact size in carats.";
+    if (!(Number(form.size) > 0) && !/\d/.test(form.dimensions)) found.size = "Enter the exact size in carats, or the dimensions.";
     if (!form.shape) found.shape = "Choose a shape.";
     setErrors(found);
     if (Object.keys(found).length) {
       document.getElementById(`m-${Object.keys(found)[0]}`)?.focus();
       return;
     }
-    const request: M2ORequest = { number: `M2O-${String(Date.now()).slice(-6)}`, shape: form.shape, size: form.size, sentAt: new Date().toISOString() };
+    const request: M2ORequest = { number: `M2O-${String(Date.now()).slice(-6)}`, shape: form.shape, size: form.size, dimensions: form.dimensions.trim() || undefined, sentAt: new Date().toISOString() };
     requests.set((list) => [request, ...list]);
     setSent(request);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const input = (k: Field, label: string, opts: { type?: string; optional?: boolean; hint?: string; step?: string; wide?: boolean } = {}) => (
-    <label className={`${s.field} ${opts.wide ? s.wide : ""}`}>
-      <span className={s.label}>
-        {label}
-        {opts.optional && <span className={s.optional}> (optional)</span>}
-      </span>
-      <input
-        id={`m-${k}`}
-        className={s.input}
-        type={opts.type ?? "text"}
-        step={opts.step}
-        inputMode={opts.type === "number" ? "decimal" : undefined}
-        value={form[k]}
-        onChange={(e) => set(k, e.target.value)}
-        aria-invalid={Boolean(errors[k])}
-        aria-describedby={errors[k] ? `me-${k}` : undefined}
-      />
-      {opts.hint && !errors[k] && <span className={s.hint}>{opts.hint}</span>}
-      {errors[k] && (
-        <span id={`me-${k}`} className={s.error}>
-          {errors[k]}
+  const input = (k: Exclude<Field, "shape" | "notes">, extraHint?: string) => {
+    const opts = M2O_FIELDS[k];
+    const hint = extraHint ?? opts.hint;
+    return (
+      <label className={`${s.field} ${opts.wide ? s.wide : ""}`}>
+        <span className={s.label}>
+          {opts.label}
+          {opts.optional && <span className={s.optional}> (optional)</span>}
         </span>
-      )}
-    </label>
-  );
+        <input
+          id={`m-${k}`}
+          className={s.input}
+          type={opts.type ?? "text"}
+          step={opts.step}
+          placeholder={opts.placeholder}
+          autoComplete={opts.autoComplete}
+          inputMode={opts.type === "number" ? "decimal" : undefined}
+          value={form[k]}
+          onChange={(e) => set(k, e.target.value)}
+          aria-invalid={Boolean(errors[k])}
+          aria-describedby={errors[k] ? `me-${k}` : hint ? `mh-${k}` : undefined}
+        />
+        {hint && !errors[k] && (
+          <span id={`mh-${k}`} className={s.hint}>
+            {hint}
+          </span>
+        )}
+        {errors[k] && (
+          <span id={`me-${k}`} className={s.error}>
+            {errors[k]}
+          </span>
+        )}
+      </label>
+    );
+  };
 
   return (
     <section className={s.section} aria-labelledby="m2o-title">
@@ -159,7 +160,7 @@ function Request({ params }: { params: URLSearchParams | null }) {
                 </span>
                 <p className={s.sentNumber}>{sent.number}</p>
                 <p>
-                  Request sent for a {Number(sent.size).toFixed(2)} ct {sent.shape === "other" ? "stone" : SHAPE_LABEL[sent.shape as StoneShape].toLowerCase()}. Surreal confirms the specification,
+                  Request sent for a {m2oSize(sent)} {sent.shape === "other" ? "stone" : SHAPE_LABEL[sent.shape as StoneShape].toLowerCase()}. Surreal confirms the specification,
                   the program fee and timing with you. Questions: {brand.office.phone}.
                 </p>
                 <p className={s.previewNote}>Preview: the request is kept in this browser; request emails connect with the dealer platform.</p>
@@ -205,24 +206,26 @@ function Request({ params }: { params: URLSearchParams | null }) {
                   </div>
                   {errors.shape && <span className={s.error}>{errors.shape}</span>}
                   <div className={s.grid}>
-                    {input("size", "Exact size requested (ct)", { type: "number", step: "0.01" })}
-                    {input("ratio", "Length to width ratio", { optional: true, hint: "For fancy shapes, for example 1.40" })}
-                    {input("inscription", "Girdle inscription", { optional: true, wide: true, hint: "Text laser inscribed on the girdle" })}
+                    {input("size", Number(form.size) > 0 ? m2oGrade(Number(form.size)) : undefined)}
+                    {input("dimensions")}
+                    {input("ratio")}
+                    {input("inscription")}
                   </div>
                 </fieldset>
                 <fieldset className={s.group}>
                   <legend className={s.legend}>For the booklet and your store</legend>
                   <div className={s.grid}>
-                    {input("customer", "Customer name (for the booklet)", { optional: true, wide: true })}
-                    {input("name", "Your name")}
-                    {input("company", "Company name")}
-                    {input("phone", "Phone", { type: "tel" })}
-                    {input("email", "Email", { type: "email" })}
+                    {input("customer")}
+                    {input("name")}
+                    {input("company")}
+                    {input("phone")}
+                    {input("email")}
                     <label className={`${s.field} ${s.wide}`}>
                       <span className={s.label}>
-                        Notes<span className={s.optional}> (optional)</span>
+                        {M2O_FIELDS.notes.label}
+                        <span className={s.optional}> (optional)</span>
                       </span>
-                      <textarea className={s.textarea} rows={3} value={form.notes} onChange={(e) => set("notes", e.target.value)} />
+                      <textarea className={s.textarea} rows={3} placeholder={M2O_FIELDS.notes.placeholder} value={form.notes} onChange={(e) => set("notes", e.target.value)} />
                     </label>
                   </div>
                 </fieldset>
@@ -251,7 +254,7 @@ function Request({ params }: { params: URLSearchParams | null }) {
             <div className={s.facts}>
               <p className={s.factsTitle}>How it works</p>
               <ul>
-                {FACTS.map((f) => (
+                {M2O_FACTS.map((f) => (
                   <li key={f}>
                     <svg aria-hidden viewBox="0 0 10 10" width="9" height="9">
                       <path d="M5 0.5 9.5 5 5 9.5 0.5 5Z" fill="currentColor" />
@@ -261,6 +264,15 @@ function Request({ params }: { params: URLSearchParams | null }) {
                 ))}
               </ul>
             </div>
+            <Link href="/legacy" className={s.legacy}>
+              <span>
+                <strong>Diamond Legacy</strong>
+                Every diamond in a Legacy collection is grown from the same seed line, for each milestone to come.
+              </span>
+              <svg aria-hidden viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </Link>
           </aside>
         </div>
       </div>

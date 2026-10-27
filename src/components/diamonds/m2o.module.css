@@ -56,3 +56,8 @@
 .tick { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; background: var(--ink); color: var(--sky); }
 .sentNumber { font-family: var(--font-display), "Italiana", serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--ink); }
 .previewNote { font-size: 0.75rem; color: var(--stone); }
+.legacy { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; line-height: 1.5; color: var(--graphite); transition: box-shadow 0.3s var(--ease-surreal); }
+.legacy:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.legacy span { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; }
+.legacy strong { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: 1.25rem; color: var(--ink); }
+.legacy:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }

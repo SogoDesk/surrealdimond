@@ -104,9 +104,9 @@ The development action items from the meeting, worked in the client's priority o
 **C. M2O, Legacy and Custom**
 
 - [x] F-C1 An always visible Request M2O action on the diamond search page
-- [ ] F-C2 M2O fields and placeholders reviewed, placeholder wording until Surreal's specification
-- [ ] F-C3 Legacy reachable from the header, the mega menu, the diamond page, the dashboard and the footer
-- [ ] F-C4 Custom Jewelry links to the existing custom order portal instead of our rebuilt form
+- [x] F-C2 M2O fields and placeholders reviewed, placeholder wording until Surreal's specification
+- [x] F-C3 Legacy reachable from the header, the mega menu, the diamond page, the dashboard and the footer
+- [x] F-C4 Custom Jewelry links to the existing custom order portal instead of our rebuilt form
 
 **E. Customer migration and RightClick (priorities 3 and 4)**
 

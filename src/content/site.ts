@@ -62,6 +62,13 @@ export const team = [
 ] as const;
 
 /** Account routes (docs/CONTEXT.md, "Account and commerce pages"). */
+/**
+ * The existing custom order portal on Surreal's current dealer site (F-C4):
+ * Custom links here instead of a rebuilt form. It sits behind the current
+ * site's dealer log in. Confirm the address with Surreal before launch (C-20).
+ */
+export const CUSTOM_PORTAL_URL = "https://surrealdiamond.com/custom-orders/";
+
 export const account = {
   login: "/login",
   apply: "/apply",
@@ -111,7 +118,7 @@ export const footerColumns = [
     links: [
       { label: "About Us", href: "/about" },
       { label: "Company History", href: "/about#history" },
-      { label: "Custom Portal", href: "/custom" },
+      { label: "Custom Jewelry", href: "/custom" },
       { label: "Inquiries and Contact", href: "/contact" },
     ],
   },

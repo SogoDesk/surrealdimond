@@ -16,7 +16,7 @@ import { stones } from "@/content/diamonds";
 import { useOrders } from "@/lib/cart";
 import { useMerch } from "@/lib/merch";
 import { useMemoReports, useMemos, useUnavailable } from "@/lib/memo";
-import { useCustomRequests, useM2ORequests } from "@/lib/requests";
+import { m2oSize, useCustomRequests, useM2ORequests } from "@/lib/requests";
 import { useStaff } from "@/lib/staff";
 import { ROLE_LABEL } from "@/content/admin";
 import AdminIcon from "./AdminIcon";
@@ -39,7 +39,7 @@ export default function AdminOverview() {
     ...orders.map((o) => ({ at: o.placedAt, what: `Order ${o.number}`, detail: `${o.details.store}, ${o.lines.length} lines`, href: "/admin/orders" })),
     ...memos.map((m) => ({ at: m.requestedAt, what: `Memo request ${m.number}`, detail: `Stock ${m.stoneId}`, href: "/admin/memo" })),
     ...reports.map((r) => ({ at: r.sentAt, what: `Memo reconciliation ${r.number}`, detail: `${r.sold.length} sold${r.confirmed ? ", list confirmed" : ""}${r.note ? ", with a note" : ""}`, href: "/admin/memo" })),
-    ...m2o.map((r) => ({ at: r.sentAt, what: `M2O request ${r.number}`, detail: `${r.size} ct ${r.shape}`, href: "/admin/requests" })),
+    ...m2o.map((r) => ({ at: r.sentAt, what: `M2O request ${r.number}`, detail: `${m2oSize(r)} ${r.shape}`, href: "/admin/requests" })),
     ...custom.map((r) => ({ at: r.sentAt, what: `Custom request ${r.number}`, detail: `${r.item}, ${r.carat} ${r.shape}`, href: "/admin/requests" })),
   ]
     .sort((a, b) => b.at.localeCompare(a.at))
