@@ -83,12 +83,12 @@ export const adminModules: AdminModule[] = [
   {
     id: "dealers",
     label: "Dealers",
-    line: "Stores, users, pricing groups, territories",
+    line: "Customers, logins and the Excel import",
     href: "/admin/dealers",
     icon: "dealers",
-    status: "design",
+    status: "live",
     access: { administrator: "edit", finance: "view", hr: "none", sales: "edit", manager: "edit" },
-    holds: ["Dealer applications and approval", "Stores and their authorized users", "Pricing groups and territories", "Imported from the current site's dealer organizations and users (C-13)"],
+    holds: ["Dealer applications and approval", "Pricing groups and territories"],
   },
   {
     id: "orders",

@@ -7,15 +7,16 @@
  * the access matrix in src/content/admin.ts), and a top bar with the page's
  * breadcrumb, the role switcher, View the site and Sign out.
  *
- * Staff enter by role in the preview (named logins come with the
- * authentication service, Q10). A module the role cannot open shows a locked
+ * Staff enter as one of the named test accounts in the preview, one per
+ * role (F-E3); real named logins come with the authentication service (Q10). A module the role cannot open shows a locked
  * panel; a view-only role sees the page with its controls disabled, through
  * useAdminAccess().
  */
 
 import Link from "next/link";
 import { createContext, useContext, useSyncExternalStore, type ReactNode } from "react";
-import { ROLES, ROLE_LABEL, ROLE_LINE, adminModule, adminModules, type Access, type Role } from "@/content/admin";
+import { ROLE_LABEL, ROLE_LINE, adminModule, adminModules, type Access } from "@/content/admin";
+import { TEST_STAFF } from "@/content/testAccounts";
 import { signInStaff, signOutStaff, useStaff } from "@/lib/staff";
 import AdminIcon from "./AdminIcon";
 import s from "./admin.module.css";
@@ -47,18 +48,20 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
             SURREAL <span>Console</span>
           </p>
           <h1 className={s.signinTitle}>Staff sign in</h1>
-          <p className={s.signinLine}>Choose a role to preview the console. Each role sees the modules its access allows.</p>
+          <p className={s.signinLine}>Choose a test account to preview the console. Each has one role and sees the modules its access allows.</p>
           <ul className={s.roleList}>
-            {ROLES.map((r) => (
-              <li key={r}>
-                <button type="button" className={s.roleBtn} onClick={() => signInStaff(r)}>
-                  <strong>{ROLE_LABEL[r]}</strong>
-                  <span>{ROLE_LINE[r]}</span>
+            {TEST_STAFF.map((t) => (
+              <li key={t.email}>
+                <button type="button" className={s.roleBtn} onClick={() => signInStaff(t.role, t)}>
+                  <strong>
+                    {t.name} <em>{ROLE_LABEL[t.role]}</em>
+                  </strong>
+                  <span>{ROLE_LINE[t.role]}</span>
                 </button>
               </li>
             ))}
           </ul>
-          <p className={s.signinNote}>Preview: staff get named logins, one per person, when the authentication service is set up.</p>
+          <p className={s.signinNote}>Preview: these are dummy accounts for role testing (docs/TESTING.md). Staff get their own named logins when the authentication service is set up.</p>
           <Link href="/" className={s.backLink}>
             Back to the site
           </Link>
@@ -114,11 +117,17 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
           </p>
           <div className={s.topTools}>
             <label className={s.roleSwitch}>
-              <span>Viewing as</span>
-              <select value={staff.role} onChange={(e) => signInStaff(e.target.value as Role)}>
-                {ROLES.map((r) => (
-                  <option key={r} value={r}>
-                    {ROLE_LABEL[r]}
+              <span>Signed in as</span>
+              <select
+                value={TEST_STAFF.find((t) => t.email === staff.email)?.email ?? TEST_STAFF.find((t) => t.role === staff.role)?.email}
+                onChange={(e) => {
+                  const t = TEST_STAFF.find((x) => x.email === e.target.value);
+                  if (t) signInStaff(t.role, t);
+                }}
+              >
+                {TEST_STAFF.map((t) => (
+                  <option key={t.email} value={t.email}>
+                    {t.name}, {ROLE_LABEL[t.role]}
                   </option>
                 ))}
               </select>

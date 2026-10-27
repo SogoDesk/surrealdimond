@@ -78,7 +78,7 @@ The client asked for the 9e31102 homepage back (its chapters, motion and transit
 - [ ] Shop the Set on matching-piece data once C-08 arrives (Complete the look shows category pairs today)
 - [ ] Main Door (Q6); Legacy list, FAQ answers and a company timeline from Surreal (C-11)
 - [ ] Trade show calendar into `src/content/tradeShows.ts`, or time-slot booking if Q9 asks for it
-- [ ] Remaining dashboard sections in design (Q5) and console modules (Dealers, Orders and payments, Memo, Requests, Content, Dealer resources)
+- [ ] Remaining dashboard sections in design (Q5) and console modules (Orders and payments, Memo, Requests, Content, Dealer resources)
 - [ ] Homepage: review Foreveryone's consumer-leaning copy with Surreal, and whether the PromoPopup should wait until past the opening chapters
 
 ### E. Client feedback, 27 October 2026
@@ -110,9 +110,9 @@ The development action items from the meeting, worked in the client's priority o
 
 **E. Customer migration and RightClick (priorities 3 and 4)**
 
-- [ ] F-E1 Customer import from Excel or CSV in the console: template, column matching, validation, preview, import
-- [ ] F-E2 Password setup for existing customers: invitation link, set password with strength rules, link expiry, first sign-in
-- [ ] F-E3 Dummy dealer and admin accounts for role testing, with a written test plan and results
+- [x] F-E1 Customer import from Excel or CSV in the console: template, column matching, validation, preview, import
+- [x] F-E2 Password setup for existing customers: invitation link, set password with strength rules, link expiry, first sign-in
+- [x] F-E3 Dummy dealer and admin accounts for role testing, with a written test plan and results (docs/TESTING.md)
 - [ ] F-E4 RightClick sync approach: what is pulled, how often, how many calls; a sync status page in the console
 - [ ] F-E5 Refresh interval feasibility against RightClick's limit of 30 calls a minute
 

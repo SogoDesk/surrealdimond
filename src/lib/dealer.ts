@@ -4,8 +4,8 @@
  * The dealer session for the preview (docs/TASKS.md, "Mock auth"). Real
  * dealer accounts arrive with the dealer platform; until then a sign in
  * keeps the dealer's store name and email in this browser so the signed-in
- * experience (account menu, cart, checkout) can be reviewed end to end. No
- * password is ever stored.
+ * experience (account menu, cart, checkout) can be reviewed end to end. The
+ * session holds no password; passwords are checked in src/lib/auth.ts.
  */
 
 import { createLocalStore } from "./localStore";

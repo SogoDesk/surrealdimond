@@ -166,9 +166,9 @@ Action items from the meeting, in the client's priority order. Work plan in TASK
 | F-C2 | M2O fields and placeholders | To do (C-17) | |
 | F-C3 | Navigation to Legacy | To do | |
 | F-C4 | Custom jewelry links to the existing portal | Partial (C-20) | Dashboard navigation and home link to the custom order portal; the /custom page and header next |
-| F-E1 | Excel customer import for administrators | To do | |
-| F-E2 | Password setup for existing customers | To do | |
-| F-E3 | Role testing with dummy dealer and admin accounts | To do | |
+| F-E1 | Excel customer import for administrators | Done (preview) | Console, Dealers (`/admin/dealers`, live): customer list with status, search, CSV, per-customer setup link and remove. Import in four steps: upload (.xlsx or CSV, Excel template provided), match columns (recognises export names), check rows (new, update matched on email, skipped with the reason, skipped rows as CSV), done (optional setup links, import history). Administrator, Sales, Manager edit; Finance views; HR none |
+| F-E2 | Password setup for existing customers | Done (preview) | Log in checks email and password (hashed, 5 tries then a 15 minute lock). A migrated customer without a password is offered a setup link; Forgot password sends one without revealing whether the email exists. `/account/setup`: one-time link, 72 hours, password rules with a live checklist and strength, confirm, then straight into the dashboard. `/dashboard/account`: details, people on the account, change password. Emails wait on C-14; the preview shows the link |
+| F-E3 | Role testing with dummy dealer and admin accounts | Done | Four dummy dealers (owner, associate, invited, not invited) and five named console staff, one per role, all on `.example` emails; test plan and results (all pass) and the live migration steps in TESTING.md |
 | F-E4 | RightClick sync approach with periodic refresh | To do | |
 | F-E5 | Refresh interval feasibility | To do | |
 | F-A1 | Full-width moving hero carousel, text and buttons fixed | To do | |
