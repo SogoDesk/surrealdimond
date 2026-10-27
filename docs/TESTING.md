@@ -8,7 +8,7 @@ All accounts below are invented. Every email uses the reserved `.example` domain
 
 ### Dealers (storefront and Retailer Dashboard, at /login)
 
-Password for the active dealer accounts: `Surreal-Preview-2026` (a test value; it unlocks nothing outside the preview).
+On the log in page, Use beside an account fills in its email and password. Password for the active dealer accounts: `Surreal-Preview-2026` (a test value; it unlocks nothing outside the preview).
 
 | Person | Store, account code | Role | Starts as | Use it to test |
 |---|---|---|---|---|

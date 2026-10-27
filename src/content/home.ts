@@ -21,6 +21,8 @@ export interface HeroSlide {
   /** object-position for each crop, so the jewelry stays clear of the headline on the left. */
   focus?: string;
   focusMobile?: string;
+  /** Tablets and desktops: enlarge the photograph from its left edge (1.3 is 30 percent), moving a centred subject to the right of the headline. */
+  zoom?: number;
   /** Where the slide's caption leads. */
   href: string;
   /** What the photograph shows: the screen reader text and the caption. */
@@ -28,12 +30,12 @@ export interface HeroSlide {
 }
 
 export const heroSlides: HeroSlide[] = [
-  { id: "beam", desktop: "/media/photos/hero-3984-wide.webp", mobile: "/media/photos/hero-3984-tall.webp", focus: "50% 56%", focusMobile: "50% 60%", href: "/jewelry/engagement", label: "Halo engagement ring under a single beam of light" },
+  { id: "pendant", desktop: "/media/photos/sb-3424.webp", mobile: "/media/photos/sb-3424.webp", focus: "50% 55%", focusMobile: "48% 50%", zoom: 1.35, href: "/jewelry/pendants", label: "Circle pendant in a line of light" },
   { id: "hands", desktop: "/media/photos/sb-3594.webp", mobile: "/media/photos/sb-3594.webp", focus: "62% 30%", focusMobile: "55% 30%", href: "/jewelry/rings", label: "Diamond rings and bracelets, worn" },
   { id: "bands", desktop: "/media/photos/sb-3999-copy.webp", mobile: "/media/photos/sb-3999-copy.webp", focus: "62% 50%", focusMobile: "70% 50%", href: "/jewelry/wedding-bands", label: "Diamond bands stacked on black" },
   { id: "hair", desktop: "/media/photos/sb-3750.webp", mobile: "/media/photos/sb-3750.webp", focus: "66% 40%", focusMobile: "60% 40%", href: "/jewelry/rings", label: "Gold and diamond rings, worn" },
-  { id: "circle", desktop: "/media/photos/sb-4038.webp", mobile: "/media/photos/sb-4038.webp", focus: "60% 50%", focusMobile: "48% 50%", href: "/jewelry/pendants", label: "Circle pendant on a fine chain" },
   { id: "drops", desktop: "/media/photos/sb-3462.webp", mobile: "/media/photos/sb-3462.webp", focus: "62% 50%", focusMobile: "55% 50%", href: "/jewelry/earrings", label: "Diamond drop earrings" },
+  { id: "smile", desktop: "/media/photos/sb-3666.webp", mobile: "/media/photos/sb-3666.webp", focus: "55% 35%", focusMobile: "55% 30%", href: "/jewelry/earrings", label: "Gold rings and hoops, worn" },
 ];
 
 export interface Program {

@@ -13,7 +13,8 @@
  * - An email with no account is told so, with the Apply door.
  *
  * In the preview the setup email is not sent, so the link shows on the page,
- * and a panel lists the dummy accounts for role testing (docs/TESTING.md).
+ * and a panel lists the dummy accounts for role testing (docs/TESTING.md):
+ * Use fills in an account's email and password, ready to log in.
  * After sign in the visitor returns to ?next= (paths on this site only).
  */
 
@@ -27,7 +28,7 @@ import Footer from "@/components/sections/Footer";
 import { DEMO_DEALER, signIn, useDealer } from "@/lib/dealer";
 import { verifyPassword } from "@/lib/auth";
 import { INVITE_HOURS, createSetupLink, customerByEmail, ensureTestPasswords, type Customer, type SetupLink } from "@/lib/customers";
-import { TEST_DEALERS } from "@/content/testAccounts";
+import { TEST_DEALERS, TEST_DEALER_PASSWORD } from "@/content/testAccounts";
 import { account, brand } from "@/content/site";
 import s from "./account.module.css";
 
@@ -234,7 +235,7 @@ function LoginForm() {
       )}
 
       <div className={s.doors}>
-        <button type="submit" className={s.primary} disabled={busy}>
+        <button id="login-submit" type="submit" className={s.primary} disabled={busy}>
           {mode === "login" ? (busy ? "Checking" : "Log in") : busy ? "Sending" : "Send the link"}
           <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 8h10M9 4l4 4-4 4" />
@@ -249,7 +250,7 @@ function LoginForm() {
 
       <div className={s.preview}>
         <span className={s.previewTag}>Preview</span>
-        <p>Test accounts for trying each role before live customers move over. Their password is in the test plan (docs/TESTING.md).</p>
+        <p>Test accounts for trying each role before live customers move over. Use fills in the email and password; then log in.</p>
         <ul className={s.testList}>
           {TEST_DEALERS.map((t) => (
             <li key={t.email}>
@@ -260,15 +261,21 @@ function LoginForm() {
               <button
                 type="button"
                 className={s.linkBtn}
+                aria-pressed={email === t.email}
                 onClick={() => {
                   setMode("login");
                   setEmail(t.email);
-                  setPassword("");
+                  setPassword(TEST_DEALER_PASSWORD);
+                  setShow(true);
                   setErrors({});
-                  document.getElementById(t.status === "active" ? "login-password" : "login-email")?.focus();
+                  window.requestAnimationFrame(() => {
+                    const submit = document.getElementById("login-submit");
+                    submit?.scrollIntoView({ block: "center", behavior: "smooth" });
+                    submit?.focus({ preventScroll: true });
+                  });
                 }}
               >
-                Use
+                {email === t.email ? "Filled in" : "Use"}
               </button>
             </li>
           ))}

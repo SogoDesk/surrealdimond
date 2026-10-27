@@ -83,12 +83,6 @@
 .activity li > span { display: flex; flex-direction: column; gap: 2px; }
 .activity strong { font-weight: 600; color: var(--ink); }
 .activity time { flex: 0 0 auto; font-size: 0.75rem; color: var(--stone); }
-.moduleList { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.moduleLink { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; font-size: 0.75rem; color: var(--stone); transition: background-color 0.2s var(--ease-surreal); }
-.moduleLink:hover { background: var(--porcelain); }
-.moduleLink > span:nth-child(2) { display: flex; flex-direction: column; gap: 1px; flex: 1 1 auto; min-width: 0; }
-.moduleLink strong { font-weight: 600; font-size: 0.875rem; color: var(--ink); }
-.moduleIcon { flex: 0 0 auto; width: 36px; height: 36px; padding: 8px; border-radius: 10px; background: var(--beam); color: var(--ink); }
 .accessChip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.6875rem; white-space: nowrap; }
 .accessChip[data-access="edit"] { background: var(--ink); color: var(--porcelain); }
 .accessChip[data-access="view"] { background: var(--mist); color: var(--ink); }
@@ -335,3 +329,60 @@
 /* Hero photographs: uniform crops in the picker and the list */
 .pickGrid .pickImg img, .bannerDesk img { aspect-ratio: 21 / 9; object-fit: cover; }
 .pickGridSquare .pickImg img, .bannerPhone img { aspect-ratio: 4 / 5; object-fit: cover; }
+
+/* Overview charts (OverviewCharts.tsx). One hue for magnitude; ordered ramps for shares. */
+.vizGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+@media (max-width: 1099px) { .vizGrid { grid-template-columns: 1fr; } }
+.statFigure { font-family: var(--font-ui), "Urbanist", sans-serif !important; font-weight: 600; font-size: 1.75rem !important; letter-spacing: -0.01em; }
+.vizToggle { display: inline-flex; padding: 2px; border-radius: 999px; background: var(--porcelain); }
+.vizToggle button { height: 28px; padding: 0 12px; border-radius: 999px; font-size: 0.75rem; color: var(--stone); }
+.vizToggle button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--hairline); }
+.vizToggle button:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+.barPlot { position: relative; display: flex; flex-direction: column; gap: 2px; }
+.barRow { display: grid; grid-template-columns: minmax(96px, 30%) minmax(0, 1fr); align-items: center; gap: 12px; padding: 5px 6px; border-radius: 8px; outline: none; }
+.barRow[data-active] { background: var(--paper); }
+.barRow:focus-visible { box-shadow: inset 0 0 0 2px var(--sky); }
+.barLabel { display: inline-flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; font-size: 0.8125rem; color: var(--graphite); text-overflow: ellipsis; white-space: nowrap; }
+.barIcon { flex: 0 0 auto; width: 18px; height: 18px; color: var(--ink); }
+.barTrack { display: flex; align-items: center; gap: 8px; min-width: 0; height: 22px; border-left: 1px solid var(--hairline); }
+.barFill { display: block; min-width: 2px; height: 14px; border-radius: 0 4px 4px 0; background: #2f7fa6; transition: background-color 0.2s var(--ease-surreal); }
+.barRow[data-active] .barFill { background: #24688a; }
+.barValue { flex: 0 0 auto; font-size: 0.8125rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.vizTip { position: absolute; z-index: 5; display: flex; flex-direction: column; gap: 1px; padding: 8px 12px; border-radius: 10px; background: var(--white); box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--hairline); font-size: 0.75rem; color: var(--stone); white-space: nowrap; pointer-events: none; transform: translateY(calc(-100% - 4px)); }
+.vizTip strong { font-size: 0.875rem; font-weight: 600; color: var(--ink); }
+.vizTipCenter { transform: translate(-50%, calc(-100% - 8px)); }
+.vizTable { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.vizTable th, .vizTable td { padding: 8px 6px; border-top: 1px solid var(--hairline); text-align: left; font-weight: 500; color: var(--graphite); }
+.vizTable thead th { border-top: 0; font-size: 0.625rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone); }
+.vizTable tbody th { color: var(--ink); }
+.vizTable td { font-variant-numeric: tabular-nums; }
+.vizTable td:not(:first-child), .vizTable thead th:not(:first-child) { text-align: right; }
+.vizCaption { padding: 4px 0 6px; text-align: left; font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone); }
+.tableWrapPlain { overflow-x: auto; }
+.share { display: flex; flex-direction: column; gap: 12px; }
+.sharePlot { position: relative; padding-top: 4px; }
+.shareBar { display: flex; gap: 2px; height: 22px; overflow: visible; }
+.shareSeg { min-width: 4px; height: 100%; outline: none; transition: filter 0.2s var(--ease-surreal); }
+.shareSeg:first-child { border-radius: 4px 0 0 4px; }
+.shareSeg:last-child { border-radius: 0 4px 4px 0; }
+.shareSeg:only-child { border-radius: 4px; }
+.shareSeg[data-active] { filter: brightness(1.12); }
+.shareSeg:focus-visible { box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--sky); }
+.shareEmpty { flex: 1; border-radius: 4px; background: var(--porcelain); }
+.shareLegend { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.shareLegend th, .shareLegend td { padding: 7px 4px; border-top: 1px solid var(--hairline); text-align: left; font-weight: 500; color: var(--graphite); }
+.shareLegend tr:first-child th, .shareLegend tr:first-child td { border-top: 0; }
+.shareLegend th { color: var(--ink); }
+.legendKey { display: inline-flex; align-items: center; gap: 10px; }
+.shareLegend td { text-align: right; font-variant-numeric: tabular-nums; }
+.shareLegend td:last-child { width: 56px; color: var(--stone); }
+.swatch { flex: 0 0 auto; width: 12px; height: 12px; border-radius: 3px; }
+/* Aging: neutral current, then a rust ramp light to dark as invoices age. Logins: a blue ramp from imported to active. */
+:is(.shareSeg, .swatch)[data-tone="neutral"] { background: #b3bdc5; }
+:is(.shareSeg, .swatch)[data-tone="age1"] { background: #e9a37e; }
+:is(.shareSeg, .swatch)[data-tone="age2"] { background: #d4703f; }
+:is(.shareSeg, .swatch)[data-tone="age3"] { background: #a94622; }
+:is(.shareSeg, .swatch)[data-tone="age4"] { background: #6e2410; }
+:is(.shareSeg, .swatch)[data-tone="step1"] { background: #c4dde9; }
+:is(.shareSeg, .swatch)[data-tone="step2"] { background: #5ea6c8; }
+:is(.shareSeg, .swatch)[data-tone="step3"] { background: #1d5f80; }

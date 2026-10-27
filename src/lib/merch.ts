@@ -50,8 +50,9 @@ const isMerch = (v: unknown): v is Merch => {
 
 const store = createLocalStore<Merch>("surreal-merch", DEFAULT_MERCH, isMerch);
 
-/** Banner artwork from before the photo hero (text in the image) gives way to the default photographs. */
-const legacyBanners = (m: Merch) => m.banners.some((b) => b.desktop.startsWith("/media/banners/"));
+/** Banner artwork from before the photo hero (text in the image), and the retired opening photograph, give way to the default photographs. */
+const RETIRED = new Set(["beam", "circle"]);
+const legacyBanners = (m: Merch) => m.banners.some((b) => b.desktop.startsWith("/media/banners/") || RETIRED.has(b.id));
 const current = (m: Merch): Merch => (legacyBanners(m) ? { ...m, banners: DEFAULT_MERCH.banners } : m);
 
 export function useMerch(): Merch {

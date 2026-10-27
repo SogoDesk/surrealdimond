@@ -124,6 +124,12 @@ The development action items from the meeting, worked in the client's priority o
 - [x] F-A4 Navigation stays visible while scrolling (the links row no longer collapses)
 - [x] F-A5 Light and dark themes for Surreal's review, brand blue kept as the secondary colour
 
+**Follow-ups, 27 October 2026 (Ajay's review)**
+
+- [x] Hero opens on the circle pendant in a line of light (sb-3424), framed right of the headline; the second circle pendant swapped for a worn lifestyle shot
+- [x] Log in test panel: Use fills in the account's email and password, ready to log in; the note pointing to the test plan is gone
+- [x] Console overview: Your modules removed; headline figures (stones in stock, receivables, past due, active logins, orders, open requests) and charts (stones by shape and by carat, receivables by age with the most past due accounts, dealer logins by status, catalog by category) beside the latest activity; each chart has a table view
+
 ## M1: scope lock and architecture baseline (end of build week 2)
 
 The proposal is in [ARCHITECTURE.md](ARCHITECTURE.md); decisions D1 to D8 wait on approval.

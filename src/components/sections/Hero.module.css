@@ -44,6 +44,9 @@
   display: block;
   width: 100%;
   height: 100%;
+  /* A slide's zoom grows the photograph from its left edge, so a centred subject moves clear of the headline. */
+  transform: scale(var(--zoom, 1));
+  transform-origin: 0% 55%;
 }
 .photo {
   display: block;
@@ -54,6 +57,9 @@
   user-select: none;
 }
 @media (max-width: 767px) {
+  .picture {
+    transform: none;
+  }
   .photo {
     object-position: var(--focus-m, 50% 50%);
   }

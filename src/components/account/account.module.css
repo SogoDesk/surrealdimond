@@ -52,6 +52,8 @@
 .testList li:first-child { border-top: 0; }
 .testList strong { font-weight: 600; color: var(--ink); }
 .testMeta { display: block; font-size: 0.75rem; color: var(--stone); }
+.testList .linkBtn { flex: 0 0 auto; }
+.testList .linkBtn[aria-pressed="true"] { color: #2e9e6b; text-decoration-color: currentColor; }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .fine { margin: 0; font-size: 0.75rem; color: var(--stone); }
 .who { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 14px 16px; border-radius: 12px; background: var(--porcelain); }

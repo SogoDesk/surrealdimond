@@ -38,7 +38,7 @@ function SlidePicture({ slide, eager }: { slide: HeroSlide; eager: boolean }) {
   const shared = { alt: "", quality: 82, loading: eager ? "eager" : "lazy", fetchPriority: eager ? "high" : "auto" } as const;
   const { props: wide } = getImageProps({ ...shared, src: slide.desktop, width: 2400, height: 1600, sizes: "100vw" });
   const { props: tall } = getImageProps({ ...shared, src: slide.mobile, width: 1400, height: 1750, sizes: "100vw" });
-  const style = { "--focus": slide.focus ?? "50% 50%", "--focus-m": slide.focusMobile ?? slide.focus ?? "50% 50%" } as CSSProperties;
+  const style = { "--focus": slide.focus ?? "50% 50%", "--focus-m": slide.focusMobile ?? slide.focus ?? "50% 50%", "--zoom": slide.zoom ?? 1 } as CSSProperties;
   return (
     <picture className={styles.picture} style={style}>
       <source media="(max-width: 767px)" srcSet={tall.srcSet} sizes={tall.sizes} />

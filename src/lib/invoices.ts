@@ -380,6 +380,48 @@ function bucketOf(overdue: number, state: InvoiceState): AgingBucket {
   return "d90plus";
 }
 
+/** One dealer account's receivable, as the console sees it. */
+export interface Receivable {
+  account: string;
+  company: string;
+  balance: number;
+  pastDue: number;
+  aging: Record<AgingBucket, number>;
+  /** Days the oldest unpaid invoice is past due; 0 when nothing is. */
+  oldest: number;
+}
+
+/**
+ * Receivables across dealer accounts for the console overview: each
+ * account's sample ledger (the one its owner sees on the dashboard), open
+ * balances bucketed by age, credits netted off. RightClick's customer
+ * transactions replace the sample with one bulk call (docs/RIGHTCLICK.md).
+ */
+export function sampleReceivables(accounts: { email: string; company: string; account: string }[], now: number): Receivable[] {
+  const today = iso(now);
+  return accounts.map((a) => {
+    const { invoices, credits } = sampleAccount({ email: a.email, store: a.company, contact: "", demo: false }, now);
+    const aging = Object.fromEntries(AGING_ORDER.map((b) => [b, 0])) as Record<AgingBucket, number>;
+    let gross = 0;
+    let pastDue = 0;
+    let oldest = 0;
+    for (const inv of invoices) {
+      const open = cents(inv.total - inv.applied);
+      if (inv.number === null || open <= 0) continue;
+      const overdue = inv.due < today ? Math.floor((now - new Date(inv.due + "T12:00:00").getTime()) / DAY) : 0;
+      const bucket = bucketOf(overdue, "open");
+      aging[bucket] = cents(aging[bucket] + open);
+      gross = cents(gross + open);
+      if (overdue > 0) {
+        pastDue = cents(pastDue + open);
+        oldest = Math.max(oldest, overdue);
+      }
+    }
+    const credit = cents(credits.reduce((s, c) => s + c.amount, 0));
+    return { account: a.account, company: a.company, balance: cents(Math.max(0, gross - credit)), pastDue, aging, oldest };
+  });
+}
+
 export function useAccount(): Account | null {
   const dealer = useDealer();
   const now = useNow();
