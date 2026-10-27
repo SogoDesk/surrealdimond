@@ -3,7 +3,9 @@
 /**
  * Quick View for a stone (BRD R-15): a drawer from the right with the shape
  * drawn large in plan view and its length and width marked, the grade chips,
- * every attribute in a grid, the certificate and the shipment, then the
+ * delivery (next day with the time left before the 4:00pm EST cutoff, or
+ * the supplier's lead time; F-B4), every attribute in a grid (the list
+ * keeps only the essentials, F-B3), the certificate and the source, then the
  * doors: Add to cart and Request on memo for a signed-in dealer (Log in
  * otherwise), and Grow one like it to order, which opens the M2O request
  * prefilled with this stone (R-19). Previous and next step through the
@@ -15,7 +17,8 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import ShapeIcon from "@/components/brand/ShapeIcon";
 import { trapTab, useDrawer } from "@/components/shop/useDrawer";
-import { SHAPE_LABEL, measurements, shipment, stoneGrade, stoneTitle, type Stone } from "@/content/diamonds";
+import { SHAPE_LABEL, measurements, shipment, shipmentNote, shipsNextDay, stoneGrade, stoneTitle, type Stone } from "@/content/diamonds";
+import { CUTOFF_LABEL, formatLeft, useCutoffMinutes } from "@/lib/cutoff";
 import { account, brand } from "@/content/site";
 import { addStone, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
@@ -41,6 +44,7 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
   const dealer = useDealer();
   const cart = useCart();
   const [memoFor, setMemoFor] = useState<string | null>(null);
+  const left = useCutoffMinutes();
 
   const gone = useUnavailable();
   const inCart = stone ? cart.some((l) => l.stoneId === stone.id) : false;
@@ -61,8 +65,10 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
         ["Ratio", stone.ratio.toFixed(2)],
         ["Table", `${stone.tablePct.toFixed(1)}%`],
         ["Depth", `${stone.depthPct.toFixed(1)}%`],
+        ["Lab", stone.lab],
         ["Growth", "Lab grown, CVD"],
         ["Stock ID", stone.id],
+        ["Delivery", shipment(stone)],
       ]
     : [];
 
@@ -118,6 +124,28 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
                 </div>
               </div>
 
+              <div className={s.delivery} data-next={shipsNextDay(stone) || undefined}>
+                <svg aria-hidden viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7" />
+                  <circle cx="7" cy="17.5" r="1.6" />
+                  <circle cx="17" cy="17.5" r="1.6" />
+                </svg>
+                <span>
+                  <strong>{shipment(stone)}</strong>
+                  <span>
+                    {shipsNextDay(stone) && left !== null ? (
+                      <>
+                        Order within <span className="tabular">{formatLeft(left)}</span> to receive it tomorrow.
+                      </>
+                    ) : shipsNextDay(stone) ? (
+                      `For orders placed before ${CUTOFF_LABEL}.`
+                    ) : (
+                      shipmentNote(stone)
+                    )}
+                  </span>
+                </span>
+              </div>
+
               <dl className={s.specGrid}>
                 {specs.map(([k, v]) => (
                   <div key={k}>
@@ -136,9 +164,9 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
                   <span>Sample number. Live stones link to the lab report.</span>
                 </div>
                 <div className={s.infoCard}>
-                  <span className={s.infoLabel}>Shipment</span>
-                  <strong>{shipment(stone)}</strong>
-                  <span>{stone.source === "surreal" ? "For orders placed before 4:00pm EST." : "Shipped by the supplier; timing confirmed with the order."}</span>
+                  <span className={s.infoLabel}>Source</span>
+                  <strong>{stone.source === "surreal" ? "Grown by Surreal" : "Supplier stone"}</strong>
+                  <span>{stone.source === "surreal" ? "Lab grown by Surreal, CVD." : "Listed by a supplier, alongside Surreal's stones."}</span>
                 </div>
               </div>
 

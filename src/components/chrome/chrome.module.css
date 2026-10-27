@@ -653,3 +653,29 @@ a.accountItem:hover, button.accountItem:hover { background: var(--porcelain); co
 .dashPill:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
 .dashPill svg { width: 16px; height: 16px; flex: 0 0 auto; }
 @media (max-width: 599px) { .dashPill span { display: none; } .dashPill { width: 40px; padding: 0; justify-content: center; } }
+
+/* Site search suggestions (F-B5) */
+.searchWrap { position: relative; width: 100%; max-width: 560px; }
+.searchWrap .search { max-width: none; }
+.suggest { position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 70; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0 6px; max-height: min(70vh, 560px); overflow-y: auto; margin: 0; padding: 8px; list-style: none; border-radius: 18px; background: var(--white); box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--hairline); color: var(--ink); text-align: left; animation: suggestIn 0.25s var(--ease-surreal); }
+@keyframes suggestIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .suggest { animation: none; } }
+.suggest > li { flex: 1 1 100%; min-width: 0; }
+.suggest > li.suggestChipItem { flex: 0 0 auto; }
+.suggest > li.suggestGroup { flex: 1 1 100%; }
+.suggestGroup { display: block; padding: 10px 10px 4px; font-size: 0.625rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone); }
+.suggestItem, .suggestAll { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 12px; color: var(--ink); }
+.suggestItem[aria-selected="true"], .suggestAll[aria-selected="true"], .suggestChip[aria-selected="true"] { background: var(--beam); }
+.suggestAll { justify-content: center; margin-top: 6px; border-top: 1px solid var(--hairline); border-radius: 0 0 12px 12px; padding: 12px 10px; font-size: 0.8125rem; }
+.suggestAll .suggestText { align-items: center; text-align: center; }
+.suggestThumb { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 40px; height: 40px; overflow: hidden; border-radius: 10px; background: radial-gradient(90% 80% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0.55) 38%, rgba(255, 255, 255, 0) 72%), var(--ground, var(--mist)); }
+.suggestThumb img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.suggestShape { width: 24px; height: 24px; color: var(--ink); }
+.suggestText { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.suggestText strong { overflow: hidden; font-weight: 500; font-size: 0.875rem; text-overflow: ellipsis; white-space: nowrap; }
+.suggestText > span { overflow: hidden; font-size: 0.75rem; color: var(--stone); text-overflow: ellipsis; white-space: nowrap; }
+.suggestChip { display: inline-flex; align-items: center; height: 32px; margin: 4px 0; padding: 0 12px; border-radius: 999px; background: var(--porcelain); font-size: 0.8125rem; color: var(--ink); }
+.suggestChip .suggestText strong { font-size: 0.8125rem; }
+.searchIconLink { display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; color: inherit; }
+@media (max-width: 767px) { .searchIconLink { display: inline-flex; } }
+.searchIconLink:hover { background: var(--outline-hover); }

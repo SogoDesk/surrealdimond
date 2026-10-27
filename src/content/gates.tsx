@@ -18,14 +18,6 @@ export const gates = {
     crumbs: [{ label: "Cart" }],
     image: "/media/photos/sb-3614.webp",
   },
-  search: {
-    kind: "dealer",
-    eyebrow: "Search",
-    title: <>Search the <em>catalog</em></>,
-    line: "Search results show dealer pricing and availability, so they open once you log in.",
-    crumbs: [{ label: "Search" }],
-    image: "/media/photos/sb-3605.webp",
-  },
   apply: {
     kind: "building",
     eyebrow: "Apply for an account",

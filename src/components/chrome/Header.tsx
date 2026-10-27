@@ -15,8 +15,8 @@
  */
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type FocusEvent, type FormEvent, type KeyboardEvent, type PointerEvent, type RefObject } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type FocusEvent, type KeyboardEvent, type PointerEvent, type RefObject } from "react";
 import LineMark from "@/components/brand/LineMark";
 import Wordmark from "@/components/brand/Wordmark";
 import Button from "@/components/ui/Button";
@@ -26,6 +26,7 @@ import { LINE_MARK_ASPECT } from "@/components/brand/lineMarkPaths";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import MegaMenu from "./MegaMenu";
+import SiteSearch from "./SiteSearch";
 import ThemeSync from "./ThemeSync";
 import MiniCart from "./MiniCart";
 import AccountMenu from "./AccountMenu";
@@ -56,7 +57,6 @@ export const APPLY_LINK: ChromeLink = { label: "Become a dealer", href: account.
 export const APPOINTMENT_LINK: ChromeLink = { label: "Schedule an appointment", href: account.appointment };
 export const DASHBOARD_LINK: ChromeLink = { label: "Retailer Dashboard", href: account.dashboard };
 
-const PROMPTS = ["engagement rings", "oval diamonds", "a style number", "tennis bracelets", "stud earrings", "the Constellation Collection"];
 const CONDENSE_AT = 80;
 
 const subscribeScroll = (onChange: () => void) => {
@@ -109,63 +109,6 @@ function Chevron() {
     <svg aria-hidden viewBox="0 0 10 10" className={styles.chevron} fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 3.75 5 6.75l3-3" />
     </svg>
-  );
-}
-
-/** The search field: a native input with an animated prompt layered over it while it is empty. */
-function SearchField() {
-  const router = useRouter();
-  const [value, setValue] = useState("");
-  const [focused, setFocused] = useState(false);
-  const [prompt, setPrompt] = useState(0);
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    const id = window.setInterval(() => setPrompt((p) => (p + 1) % PROMPTS.length), 2800);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const q = value.trim();
-    router.push(q ? `${account.search}?q=${encodeURIComponent(q)}` : account.search);
-  };
-
-  const showPrompt = value.length === 0;
-
-  return (
-    <form role="search" className={styles.search} onSubmit={submit} data-focused={focused ? "true" : undefined}>
-      <MagnifierIcon />
-      <label htmlFor="site-search" className={styles.srOnly}>
-        Search the Surreal catalog
-      </label>
-      <input
-        id="site-search"
-        type="search"
-        name="q"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        autoComplete="off"
-        className={styles.searchInput}
-      />
-      {showPrompt && (
-        <span className={styles.searchPrompt} aria-hidden>
-          <span>Search for&nbsp;</span>
-          <span className={styles.promptWindow}>
-            <span key={prompt} className={styles.promptWord}>
-              {PROMPTS[prompt]}
-            </span>
-          </span>
-        </span>
-      )}
-      <button type="submit" className={styles.searchSubmit} aria-label="Search">
-        <svg aria-hidden viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M2 8h11M9 4l4 4-4 4" />
-        </svg>
-      </button>
-    </form>
   );
 }
 
@@ -283,7 +226,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
         </Link>
 
         <div className={styles.searchSlot}>
-          <SearchField />
+          <SiteSearch />
         </div>
 
         <div className={styles.right}>
@@ -314,6 +257,9 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
               </span>
             </>
           )}
+          <Link href={account.search} className={styles.searchIconLink} aria-label="Search">
+            <MagnifierIcon />
+          </Link>
           <MiniCart />
           <MenuButton open={menuOpen} onToggle={onMenuToggle} />
         </div>

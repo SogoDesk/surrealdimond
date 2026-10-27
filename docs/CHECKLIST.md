@@ -35,8 +35,8 @@ Last reviewed: 27 October 2026.
 |---|---|---|---|
 | R-14 | One line per diamond, Nivoda style: specs, certificate number, stock ID, ratios, shipment details, price, Add to Cart inline | Partial (sample feed) | Built at `/diamonds` on a 260-stone sample feed (`src/content/diamonds.ts`): shape, carat, color, clarity, cut, polish, symmetry, fluorescence, measurements, ratio, table, depth, lab and certificate, stock ID, shipment, price slot, Quick View and Add inline; cards on phones. Signed-in dealers see a price in US dollars from the sample price list (`src/lib/pricing.ts`) until Surreal's list arrives; live stones wait on RightClick (C-07) |
 | R-15 | Quick View opens further detail on any stone | Done | Drawer with the plan drawing and dimensions, every attribute, certificate, shipment, dealer price box, Add to cart, Request on memo, Grow one like it to order, previous and next |
-| R-16 | Quick filters above the list, Surreal's parameters | Partial (C-03) | Shape icons, carat range and presets, color and clarity ranges, cut, lab; More filters for polish, symmetry, fluorescence, ratio, source. Swap to Surreal's parameters when C-03 arrives |
-| R-17 | Columns follow Surreal's attribute list | Partial (C-04) | Columns follow the live dealer search plus the BRD fields; swap to Surreal's sheet when C-04 arrives |
+| R-16 | Quick filters above the list, Surreal's parameters | Partial (C-03) | Shape icons, carat range and presets, color and clarity ranges, measurements (length, width, depth in mm), cut, Next day delivery in the bar; More filters for lab, polish, symmetry, fluorescence, ratio, source. Swap to Surreal's parameters when C-03 arrives |
+| R-17 | Columns follow Surreal's attribute list | Partial (C-04) | Trimmed to the essentials after the 27 October feedback: shape, carat, color, clarity, cut, measurements, lab, delivery, price; every other attribute in Quick View. Swap to Surreal's sheet when C-04 arrives |
 | R-18 | A stone leaves available inventory the moment a purchase or memo order completes | Partial (preview) | Stones on a placed order or a memo request leave the list at once; the inventory service makes it hold across dealers |
 | R-19 | Made to order entry on this page, M2O request prefilled from the search | Done (Q7 open) | Entry banner above the list and in Quick View; `/diamonds/made-to-order` has the live M2O fields prefilled with shape, size, ratio, the source stone and the dealer. Whether it stays its own page is Q7 |
 
@@ -157,12 +157,12 @@ Action items from the meeting, in the client's priority order. Work plan in TASK
 | F-D3 | Unnecessary dashboard fields and pages removed | Done (confirm with Surreal, Q5) | Navigation trimmed to Dashboard, Billing, Orders and memo, Order and Your account; the eight holding tiles (marketing, catalogs, social, training, website, SPIF, authorized users, policies) removed; the home loses recently viewed and the resource tiles and leads with the account |
 | F-D4 | Invoicing in Phase 1, subject to feasibility | Done (docs) | Moved from Phase 2 into Phase 1 in CONTEXT.md. Feasible on RightClick's reads (balance and aging, open invoices, statement); payments need the card processor (C-10) and a posting step by finance, since RightClick has no payment call |
 | F-D5 | Sample customer data and invoice templates | Partial (C-19) | Seeded sample invoices per dealer and a placeholder invoice template; replaced by Surreal's template and data |
-| F-B1 | Measurements filter | To do (C-16) | |
-| F-B2 | Fewer sort options, simpler diamond table | To do | |
-| F-B3 | Full specifications in Quick View | To do | |
-| F-B4 | Shipment information more visible | To do (C-18) | |
-| F-B5 | Site search on real inventory | To do | |
-| F-C1 | M2O request reachable from the diamond page | To do | |
+| F-B1 | Measurements filter | Done (layout to confirm, C-16) | Length, width and depth ranges in mm among the quick filters, also readable from the address; Surreal's reference may change the layout (for example a single size range) |
+| F-B2 | Fewer sort options, simpler diamond table | Done | Sort cut from seven to Next day delivery first and carat both ways, plus price both ways for signed-in dealers; table from seventeen columns to nine (shape, carat, color, clarity, cut, measurements, lab, delivery, price) |
+| F-B3 | Full specifications in Quick View | Done | Quick View keeps every attribute (polish, symmetry, fluorescence, ratio, table, depth, lab and certificate, growth, stock ID, delivery); a line above the list says so |
+| F-B4 | Shipment information more visible | Done (wording to confirm, C-18) | Delivery column as a chip (Next day delivery, Supplier lead time); the cutoff rule with a live countdown above the list and in Quick View; Next day delivery filter in the sticky bar; sort puts next day stones first. Wording and per-source lead times from C-18 |
+| F-B5 | Site search on real inventory | Done | Header search suggests as you type from the catalog, the stone feed and the pages; reads stone words (shape, carat, color, clarity, lab, next day, stock ID, certificate) into Diamond Search filters. `/search` results page open to everyone, prices behind log in; phones get a search icon in the header |
+| F-C1 | M2O request reachable from the diamond page | Done | Request Made to Order in the sticky results bar (always in reach) and the banner above the list, both carrying the search; Quick View offers Grow one like it; no stone found in site search offers it too |
 | F-C2 | M2O fields and placeholders | To do (C-17) | |
 | F-C3 | Navigation to Legacy | To do | |
 | F-C4 | Custom jewelry links to the existing portal | Partial (C-20) | Dashboard navigation and home link to the custom order portal; the /custom page and header next |

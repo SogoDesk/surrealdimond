@@ -95,15 +95,15 @@ The development action items from the meeting, worked in the client's priority o
 
 **B. Diamond Search (priority 2)**
 
-- [ ] F-B1 Measurements filter (length, width, depth in millimetres), placeholder until Surreal's reference
-- [ ] F-B2 Sorting cut to the essential options; the list table cut to the essential columns
-- [ ] F-B3 Every specification removed from the table stays in Quick View
-- [ ] F-B4 Shipment information made prominent in the list and Quick View, with a Ships next day filter
-- [ ] F-B5 The header search bar searches the real catalog and the stone feed, with suggestions and a results page
+- [x] F-B1 Measurements filter (length, width, depth in millimetres), placeholder until Surreal's reference
+- [x] F-B2 Sorting cut to the essential options; the list table cut to the essential columns
+- [x] F-B3 Every specification removed from the table stays in Quick View
+- [x] F-B4 Shipment information made prominent in the list and Quick View, with a Ships next day filter
+- [x] F-B5 The header search bar searches the real catalog and the stone feed, with suggestions and a results page
 
 **C. M2O, Legacy and Custom**
 
-- [ ] F-C1 An always visible Request M2O action on the diamond search page
+- [x] F-C1 An always visible Request M2O action on the diamond search page
 - [ ] F-C2 M2O fields and placeholders reviewed, placeholder wording until Surreal's specification
 - [ ] F-C3 Legacy reachable from the header, the mega menu, the diamond page, the dashboard and the footer
 - [ ] F-C4 Custom Jewelry links to the existing custom order portal instead of our rebuilt form

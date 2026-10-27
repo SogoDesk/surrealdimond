@@ -2,23 +2,26 @@
 
 /**
  * The diamond page (BRD 5.3), one line per stone in the Nivoda manner dealers
- * already like (R-14).
+ * already like (R-14), simplified after the client's feedback of 27 October
+ * 2026 (F-B1 to F-B4, F-C1).
  *
  * Top: breadcrumb, title with the stone count, the dealer site's pricing note
  * and the sample feed notice. Then the quick filters (R-16): ten shape icons,
  * carat from and to with presets, color and clarity as ranges picked on
- * their scales, cut and lab; More filters opens polish, symmetry,
- * fluorescence, ratio and source. The results bar holds the count, Clear and
- * Sort. The list (R-17 columns until Surreal's attribute sheet arrives):
- * compare, shape, carat, color, clarity, cut, polish, symmetry,
- * fluorescence, measurements, ratio, table, depth, lab and certificate,
- * stock ID, shipment, price and the row doors (Quick View, Add to cart). On
- * phones each stone becomes a compact card. A row opens Quick View (R-15).
+ * their scales, measurements (length, width, depth in mm) and cut; More
+ * filters opens lab, polish, symmetry, fluorescence, ratio and source. The
+ * sticky results bar holds the count, Next day delivery only, More filters,
+ * Clear, Request Made to Order (always in reach) and a short Sort. The list
+ * keeps the essentials: compare, shape, carat, color, clarity, cut,
+ * measurements, lab, delivery, price and the row doors (Quick View, Add to
+ * cart); every other specification is in Quick View. On phones each stone
+ * becomes a compact card. A row opens Quick View (R-15).
  *
  * Stones on a placed order or on memo leave the list at once (R-18, B-01).
- * The Made to Order entry (R-19) sits above the list and again after it,
+ * The Made to Order entry (R-19) sits above the list and in the bar,
  * carrying the search into the M2O request. Up to four stones can be
- * compared side by side. ?stone= opens a stone's Quick View directly.
+ * compared side by side. ?stone= opens a stone's Quick View directly, and
+ * the filters can arrive in the address (query.ts, fromParams).
  *
  * Below the list, the story (DiamondStory) for retailers who are not dealers
  * yet; a signed-out visitor gets a line under the lead that jumps to it.
@@ -32,17 +35,18 @@ import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
 import Assurance from "@/components/brand/Assurance";
 import ShapeIcon from "@/components/brand/ShapeIcon";
-import { CLARITIES, COLORS, FLUORESCENCE, GRADES, LABS, SHAPES, SHAPE_LABEL, measurements, shipment, stoneById, stones, type Grade, type Stone } from "@/content/diamonds";
+import { CLARITIES, COLORS, FLUORESCENCE, GRADES, LABS, SHAPES, SHAPE_LABEL, measurements, shipment, shipsNextDay, stoneById, stones, type Grade, type Stone } from "@/content/diamonds";
 import { account, brand } from "@/content/site";
 import { addStone, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { useUnavailable } from "@/lib/memo";
-import { EMPTY, SORT_LABEL, activeCount, describe, m2oHref, matches, sortStones, type DiamondQuery, type SortKey } from "./query";
+import { EMPTY, PRICE_SORTS, SORT_LABEL, activeCount, describe, fromParams, hasMeasurements, m2oHref, matches, sortStones, type DiamondQuery, type SortKey } from "./query";
 import StoneDrawer from "./StoneDrawer";
 import DiamondStory from "./DiamondStory";
 import { scrollToTarget } from "@/lib/scroll";
 import s from "./diamonds.module.css";
 import { formatUSD, stonePrice } from "@/lib/pricing";
+import { CUTOFF_LABEL, formatLeft, useCutoffMinutes } from "@/lib/cutoff";
 
 const PAGE = 50;
 const CARAT_PRESETS: [string, number, number | null][] = [
@@ -147,6 +151,48 @@ function Range({ label, min, max, step, onChange, unit }: { label: string; min: 
   );
 }
 
+const MEASURES = [
+  ["Length", "lengthMin", "lengthMax"],
+  ["Width", "widthMin", "widthMax"],
+  ["Depth", "depthMin", "depthMax"],
+] as const;
+
+/** Length, width and depth ranges in millimetres (F-B1; layout until Surreal's reference, C-16). */
+function Measurements({ q, onChange }: { q: DiamondQuery; onChange: (patch: Partial<DiamondQuery>) => void }) {
+  const num = (v: string) => (v === "" ? null : Number(v));
+  return (
+    <div className={s.filter}>
+      <span className={s.filterLabel}>
+        Measurements, mm
+        {hasMeasurements(q) && (
+          <button type="button" className={s.filterClear} onClick={() => onChange({ lengthMin: null, lengthMax: null, widthMin: null, widthMax: null, depthMin: null, depthMax: null })}>
+            Any
+          </button>
+        )}
+      </span>
+      <div className={s.measure}>
+        {MEASURES.map(([label, lo, hi]) => (
+          <div key={label} className={s.measureRow}>
+            <span>{label}</span>
+            <input type="number" inputMode="decimal" step={0.1} min={0} placeholder="From" value={q[lo] ?? ""} onChange={(e) => onChange({ [lo]: num(e.target.value) })} aria-label={`${label} from, mm`} />
+            <input type="number" inputMode="decimal" step={0.1} min={0} placeholder="To" value={q[hi] ?? ""} onChange={(e) => onChange({ [hi]: num(e.target.value) })} aria-label={`${label} to, mm`} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TruckIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7" />
+      <circle cx="7" cy="17.5" r="1.6" />
+      <circle cx="17" cy="17.5" r="1.6" />
+    </svg>
+  );
+}
+
 function SearchView({ params }: { params: URLSearchParams | null }) {
   const dealer = useDealer();
   const cart = useCart();
@@ -168,13 +214,13 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
     setDrawerOpen(true);
   }
 
-  // ?shape= (the homepage shape strip) preselects that shape once.
-  const linkedShape = params?.get("shape") ?? null;
-  const [seenShape, setSeenShape] = useState<string | null>(null);
-  if (linkedShape && linkedShape !== seenShape) {
-    setSeenShape(linkedShape);
-    const shape = SHAPES.find((sh) => sh === linkedShape);
-    if (shape) setQ((prev) => ({ ...prev, shapes: [shape] }));
+  // Filters in the address (the homepage shape strip, the site search) apply once per address.
+  const linkedKey = params ? ["shape", "cmin", "cmax", "color", "clarity", "lab", "next"].map((k) => params.get(k) ?? "").join("|") : "";
+  const [seenKey, setSeenKey] = useState("");
+  if (linkedKey !== seenKey) {
+    setSeenKey(linkedKey);
+    const patch = fromParams(params);
+    if (patch) setQ({ ...EMPTY, ...patch });
   }
 
   const update = (patch: Partial<DiamondQuery>) => {
@@ -182,8 +228,13 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
     setShown(PAGE);
   };
 
+  // Price sorts need a price: without a dealer the list falls back to the default order.
+  const sort: SortKey = !dealer && PRICE_SORTS.includes(q.sort) ? "featured" : q.sort;
+  const sorts = (Object.keys(SORT_LABEL) as SortKey[]).filter((k) => dealer || !PRICE_SORTS.includes(k));
+  const left = useCutoffMinutes();
+
   const available = useMemo(() => stones.filter((st) => !gone.has(st.id)), [gone]);
-  const results = useMemo(() => sortStones(available.filter((st) => matches(st, q)), q.sort), [available, q]);
+  const results = useMemo(() => sortStones(available.filter((st) => matches(st, q)), sort), [available, q, sort]);
   const counts = activeCount(q);
   const inCart = new Set(cart.map((l) => l.stoneId).filter(Boolean));
   const openStone = openId ? stoneById(openId) ?? null : null;
@@ -277,8 +328,8 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
             </div>
             <ScaleRange label="Color" scale={COLORS} value={q.color} onChange={(v) => update({ color: v })} />
             <ScaleRange label="Clarity" scale={CLARITIES} value={q.clarity} onChange={(v) => update({ clarity: v })} />
+            <Measurements q={q} onChange={update} />
             <Chips label="Cut (round)" options={["Ideal", "Excellent", "Very Good"] as const} value={q.cut.filter((c): c is "Ideal" | "Excellent" | "Very Good" => c !== "Good")} onChange={(v) => update({ cut: v })} />
-            <Chips label="Lab" options={LABS} value={q.lab} onChange={(v) => update({ lab: v })} />
           </div>
 
           {more && (
@@ -303,6 +354,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                   ))}
                 </div>
               </div>
+              <Chips label="Lab" options={LABS} value={q.lab} onChange={(v) => update({ lab: v })} />
               <Chips label="Fluorescence" options={FLUORESCENCE} value={q.fluorescence} onChange={(v) => update({ fluorescence: v })} />
               <Range label="Ratio" min={q.ratioMin} max={q.ratioMax} step={0.01} onChange={(lo, hi) => update({ ratioMin: lo, ratioMax: hi })} />
               <div className={s.filter}>
@@ -326,6 +378,10 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
             <span className={`${s.count} tabular`} aria-live="polite">
               {results.length} {results.length === 1 ? "stone" : "stones"}
             </span>
+            <button type="button" className={s.nextDayBtn} aria-pressed={q.nextDay} onClick={() => update({ nextDay: !q.nextDay })}>
+              <TruckIcon />
+              Next day delivery
+            </button>
             <button type="button" className={s.moreBtn} aria-expanded={more} onClick={() => setMore((m) => !m)}>
               {more ? "Fewer filters" : "More filters"}
               {counts.more > 0 && <span className={s.badge}>{counts.more}</span>}
@@ -336,20 +392,43 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
               </button>
             )}
           </div>
-          <label className={s.sort}>
-            <span>Sort by</span>
-            <select value={q.sort} onChange={(e) => update({ sort: e.target.value as SortKey })}>
-              {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-                <option key={k} value={k}>
-                  {SORT_LABEL[k]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div className={s.barRight}>
+            <Link href={m2oHref(q)} className={s.m2oBtn}>
+              <ShapeIcon shape={q.shapes[0] ?? "oval"} className={s.m2oBtnIcon} />
+              Request Made to Order
+            </Link>
+            <label className={s.sort}>
+              <span>Sort by</span>
+              <select value={sort} onChange={(e) => update({ sort: e.target.value as SortKey })}>
+                {sorts.map((k) => (
+                  <option key={k} value={k}>
+                    {SORT_LABEL[k]}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
         </div>
 
         <div className={s.wrap}>
           {m2oBanner}
+          <div className={s.listNote}>
+            <span className={s.deliveryLine}>
+              <span className={s.shipChip} data-next>
+                <TruckIcon />
+                Next day delivery
+              </span>
+              {left !== null ? (
+                <span>
+                  Order within <strong className="tabular">{formatLeft(left)}</strong> to receive it tomorrow.
+                </span>
+              ) : (
+                <span>On stones marked so, for orders placed before {CUTOFF_LABEL}.</span>
+              )}
+              <span className={s.deliveryOther}>Supplier stones: lead time confirmed with your order.</span>
+            </span>
+            <span className={s.specHint}>Select a stone for every specification: polish, symmetry, fluorescence, ratio, table, depth and certificate.</span>
+          </div>
           {results.length === 0 ? (
             <div className={s.empty}>
               <p className={s.emptyTitle}>No stones match these filters.</p>
@@ -371,17 +450,10 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                     <th scope="col">Color</th>
                     <th scope="col">Clarity</th>
                     <th scope="col">Cut</th>
-                    <th scope="col">Pol</th>
-                    <th scope="col">Sym</th>
-                    <th scope="col">Fluor</th>
-                    <th scope="col">Measurements</th>
-                    <th scope="col" className={s.num}>Ratio</th>
-                    <th scope="col" className={s.num}>Table</th>
-                    <th scope="col" className={s.num}>Depth</th>
-                    <th scope="col">Lab, certificate</th>
-                    <th scope="col">Stock ID</th>
-                    <th scope="col">Shipment</th>
-                    <th scope="col">Price</th>
+                    <th scope="col">Measurements, mm</th>
+                    <th scope="col">Lab</th>
+                    <th scope="col">Delivery</th>
+                    <th scope="col" className={s.num}>Price</th>
                     <th scope="col">
                       <span className={s.srOnly}>Actions</span>
                     </th>
@@ -392,7 +464,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                     const carted = inCart.has(st.id);
                     return (
                       <tr key={st.id} data-open={openId === st.id && drawerOpen ? "true" : undefined} onClick={() => open(st.id)}>
-                        <td className={s.colCheck} onClick={(e) => e.stopPropagation()}>
+                        <td className={`${s.colCheck} ${s.cCheck}`} onClick={(e) => e.stopPropagation()}>
                           <input
                             type="checkbox"
                             checked={compare.includes(st.id)}
@@ -401,7 +473,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                             aria-label={`Compare ${st.carat} ct ${SHAPE_LABEL[st.shape]}`}
                           />
                         </td>
-                        <td>
+                        <td className={s.cShape}>
                           <span className={s.shapeCell} data-summary={` · ${st.carat.toFixed(2)} ct · ${st.color} ${st.clarity}`}>
                             <ShapeIcon shape={st.shape} className={s.rowIcon} />
                             {SHAPE_LABEL[st.shape]}
@@ -410,24 +482,20 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                         <td className={`${s.num} ${s.strong}`}>{st.carat.toFixed(2)}</td>
                         <td className={s.strong}>{st.color}</td>
                         <td className={s.strong}>{st.clarity}</td>
-                        <td>{short(st.cut)}</td>
-                        <td>{short(st.polish)}</td>
-                        <td>{short(st.symmetry)}</td>
-                        <td>{st.fluorescence}</td>
-                        <td className={s.nowrap}>{measurements(st)}</td>
-                        <td className={s.num}>{st.ratio.toFixed(2)}</td>
-                        <td className={s.num}>{st.tablePct.toFixed(1)}%</td>
-                        <td className={s.num}>{st.depthPct.toFixed(1)}%</td>
-                        <td className={s.nowrap}>
-                          <span className={s.lab}>{st.lab}</span> {st.certificate}
+                        <td className={st.cut ? undefined : s.muted}>{short(st.cut)}</td>
+                        <td className={`${s.nowrap} ${s.cMeasure}`}>
+                          {st.length.toFixed(2)} × {st.width.toFixed(2)} × {st.depth.toFixed(2)}
                         </td>
-                        <td className={s.nowrap}>{st.id}</td>
                         <td>
-                          <span className={s.ship} data-source={st.source}>
+                          <span className={s.lab}>{st.lab}</span>
+                        </td>
+                        <td className={s.cShip}>
+                          <span className={s.shipChip} data-next={shipsNextDay(st) || undefined}>
+                            {shipsNextDay(st) && <TruckIcon />}
                             {shipment(st)}
                           </span>
                         </td>
-                        <td className={s.nowrap}>
+                        <td className={`${s.nowrap} ${s.num} ${s.cPrice}`}>
                           {dealer ? (
                             <span className={`${s.priceCell} tabular`}>{formatUSD(stonePrice(st))}</span>
                           ) : (
@@ -436,7 +504,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                             </Link>
                           )}
                         </td>
-                        <td className={s.actions} onClick={(e) => e.stopPropagation()}>
+                        <td className={`${s.actions} ${s.cActions}`} onClick={(e) => e.stopPropagation()}>
                           <button type="button" className={s.view} onClick={() => open(st.id)} aria-label={`Quick view, ${st.carat} ct ${SHAPE_LABEL[st.shape]}`}>
                             <svg aria-hidden viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
                               <path d="M1.5 10S5 4 10 4s8.5 6 8.5 6-3.5 6-8.5 6-8.5-6-8.5-6Z" />
