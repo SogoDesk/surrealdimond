@@ -11,6 +11,13 @@
  * on its category's story ground (hovering crossfades to the piece's second
  * view or metal), the name and design line, the metals it comes in, and the
  * dealer price door.
+ *
+ * Surreal blue (client feedback, 28 October 2026: the page read as white,
+ * grey and black): the band's copy side washes in the brand tint, the count
+ * chip is blue, hovering a card rings it in blue, and a blue thumb under the
+ * row tracks where the row is scrolled to. The cards slide in once from the
+ * right, the way the row scrolls (a short arrival, in keeping with the calm
+ * chapters); reduced motion keeps them in place.
  */
 
 import Image from "next/image";
@@ -22,6 +29,8 @@ import { useMerch } from "@/lib/merch";
 import { account } from "@/content/site";
 import { groundStyle } from "@/content/grounds";
 import { useRevealIn } from "./useRevealIn";
+import { registerGsap, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { prefersReducedMotion } from "@/hooks/useMedia";
 import h from "./home.module.css";
 import s from "./Featured.module.css";
 import { useWithMetalsList } from "@/lib/metals";
@@ -89,6 +98,7 @@ function Card({ p }: { p: Product }) {
 export default function Featured() {
   const ref = useRef<HTMLElement>(null);
   const railRef = useRef<HTMLUListElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [edge, setEdge] = useState({ start: true, end: false });
   const { hot } = useMerch();
   const dealer = useDealer();
@@ -100,7 +110,30 @@ export default function Featured() {
     const el = railRef.current;
     if (!el) return;
     setEdge({ start: el.scrollLeft < 8, end: el.scrollLeft + el.clientWidth > el.scrollWidth - 8 });
+    // The thumb's width is the share of the row on screen; its position, how far the row is scrolled.
+    const room = el.scrollWidth - el.clientWidth;
+    trackRef.current?.style.setProperty("--w", `${Math.min(100, (el.clientWidth / el.scrollWidth) * 100)}%`);
+    trackRef.current?.style.setProperty("--p", String(room > 0 ? el.scrollLeft / room : 0));
   }, []);
+
+  // The cards arrive once, sliding in from the right as the row comes into view.
+  useGSAP(
+    () => {
+      registerGsap();
+      const rail = railRef.current;
+      if (!rail || prefersReducedMotion()) return;
+      const cards = gsap.utils.toArray<HTMLElement>("[data-slide]", rail);
+      if (!cards.length) return;
+      gsap.set(cards, { autoAlpha: 0, x: 56 });
+      ScrollTrigger.create({
+        trigger: rail,
+        start: "top 85%",
+        once: true,
+        onEnter: () => gsap.to(cards, { autoAlpha: 1, x: 0, duration: 1, ease: "surreal", stagger: 0.07, clearProps: "transform,opacity,visibility" }),
+      });
+    },
+    { scope: railRef, dependencies: [items.length] },
+  );
 
   useEffect(() => {
     const el = railRef.current;
@@ -156,13 +189,16 @@ export default function Featured() {
       </div>
       <ul ref={railRef} className={s.rail} aria-label="Hot this week">
         {items.map((p) => (
-          <li key={p.id} className={s.item} data-rise>
+          <li key={p.id} className={s.item} data-slide>
             <Card p={p} />
           </li>
         ))}
       </ul>
       <div className={h.wrap}>
         <div className={s.after} data-rise>
+          <div ref={trackRef} className={s.track} aria-hidden>
+            <span className={s.thumb} />
+          </div>
           <Link href="/jewelry" className={`t-nav ${s.viewAll}`}>
             View the full catalog
           </Link>
