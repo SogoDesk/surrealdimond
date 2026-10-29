@@ -13,7 +13,7 @@
  * sticky results bar holds the count, Next day delivery only, More filters,
  * Clear, Request Made to Order (always in reach) and a short Sort. The list
  * keeps the essentials: compare, shape, carat, color, clarity, cut,
- * measurements, lab, delivery, price and the row doors (Quick View, Add to
+ * measurements, lab, price and the row doors (Quick View, Add to
  * cart); every other specification is in Quick View. On phones each stone
  * becomes a compact card. A row opens Quick View (R-15).
  *
@@ -35,7 +35,7 @@ import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
 import Assurance from "@/components/brand/Assurance";
 import ShapeIcon from "@/components/brand/ShapeIcon";
-import { CLARITIES, COLORS, FLUORESCENCE, GRADES, LABS, SHAPES, SHAPE_LABEL, measurements, shipment, shipsNextDay, stoneById, stones, type Grade, type Stone } from "@/content/diamonds";
+import { CLARITIES, COLORS, FLUORESCENCE, GRADES, LABS, SHAPES, SHAPE_LABEL, measurements, shipment, stoneById, stones, type Grade, type Stone } from "@/content/diamonds";
 import { account, brand } from "@/content/site";
 import { addStone, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
@@ -460,7 +460,6 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                     <th scope="col">Cut</th>
                     <th scope="col">Measurements, mm</th>
                     <th scope="col">Lab</th>
-                    <th scope="col">Delivery</th>
                     <th scope="col" className={s.num}>Price</th>
                     <th scope="col">
                       <span className={s.srOnly}>Actions</span>
@@ -496,12 +495,6 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                         </td>
                         <td>
                           <span className={s.lab}>{st.lab}</span>
-                        </td>
-                        <td className={s.cShip}>
-                          <span className={s.shipChip} data-next={shipsNextDay(st) || undefined}>
-                            {shipsNextDay(st) && <TruckIcon />}
-                            {shipment(st)}
-                          </span>
                         </td>
                         <td className={`${s.nowrap} ${s.num} ${s.cPrice}`}>
                           {dealer ? (

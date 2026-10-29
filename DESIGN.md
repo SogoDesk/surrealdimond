@@ -35,9 +35,11 @@ A cool porcelain lookbook, opened and closed by the client's own hard-light stud
 - `--studio` #0A0B0C: Ground of the dark chapters (hero, time, the start of engagement, foreveryone, legacy). Kept a shade above pure black so the photographs' true blacks read deeper than the UI.
 - `--carbon` #1C2228: Hairlines, card borders and rails on the dark chapters; the mobile menu tile border.
 - `--sky` #86DFFF: Brand accent: the Visit and Trade panel ground, the word weeks, focus rings, cursor on dark, hover underline, the light stroke family of the line mark.
-- `--line` #70C0E0: Second stroke colour of the line mark on light, link underlines, the education light ray, the mark's strokes on navy.
-- `--mist` #DCEFF7: Pale sky tint for hover fills, selected shape tiles, the education row wash.
-- `--beam` #E8F6FF: The preloader beam line, the diamond's specular and key light, the caustic disc on the hero floor, the traveling strand highlight.
+- Tints of `--sky` (client brand colour, 28 October 2026): `--sky-80` #9EE5FF, `--sky-60` #B6ECFF, `--sky-40` #CFF2FF, `--sky-20` #E7F9FF. `--sky-deep` #00698F is the same hue for blue text on light (5.9:1); it is `--sky` itself in the dark theme. #86DFFF is a fill, never text on light (1.4:1); navy on it reads at 11:1.
+- Hover is where the blue shows: primary links in the header, sidebars, the mega menu and the account menu fill a `--sky` box behind the label with navy text (no underline); every filled button rises to `--sky` with navy text (`--btn-hover-fill`, `--ink-hover`). Selected filters, pills and tabs stay navy. The signed-in Retailer Dashboard button is a solid `--sky` pill.
+- `--line`: now `--sky`. Second stroke colour of the line mark, link underlines, the education light ray.
+- `--mist`: now `--sky-40`. Pale sky tint for the current page in the header and sidebars, selected shape tiles, the education row wash.
+- `--beam` (now `--sky-20`): The preloader beam line, the diamond's specular and key light, the caustic disc on the hero floor, the traveling strand highlight.
 - `--white` #FFFFFF: Render tiles, the turntable canvas ground and the white portrait cards on sky, because every product render and video is on pure white.
 
 ## Typography

@@ -6,8 +6,9 @@
  * Top row: the live line mark and wordmark (#site-logo), the site search
  * (SiteSearch: suggestions from the catalog, the stone feed and the pages;
  * a search icon on phones), and the trade utilities: appointments, the
- * Retailer Dashboard pill, the Become a dealer pill and the cart (signed in:
- * the dashboard pill, the store's account menu and the mini cart). Second
+ * Log in and Become a dealer pills, the theme switch and the cart (signed in:
+ * the Retailer Dashboard in Surreal blue, the store's account menu and the
+ * mini cart). Second
  * row (from 1024px): the primary links, with Jewelry opening the mega menu
  * on hover intent. Both rows stay while the page scrolls (client feedback
  * F-A4); past 80px the bar only gains its shadow. The bar is light on the
@@ -33,7 +34,7 @@ import ThemeSync from "./ThemeSync";
 import MiniCart from "./MiniCart";
 import AccountMenu from "./AccountMenu";
 import { useDealer } from "@/lib/dealer";
-import { setMode, useMode, useModeSync } from "@/lib/theme";
+import ThemeSwitch from "./ThemeSwitch";
 import { MenuButton } from "./MobileMenu";
 import styles from "./chrome.module.css";
 
@@ -102,27 +103,6 @@ function UserIcon() {
       <circle cx="9" cy="6.25" r="3.25" />
       <path d="M2.75 16c.8-3.1 3.2-4.75 6.25-4.75S14.45 12.9 15.25 16" />
     </svg>
-  );
-}
-
-/** Light or dark theme (F-A5, for Surreal's review); remembered in this browser. */
-function ThemeToggle() {
-  useModeSync();
-  const mode = useMode();
-  const dark = mode === "dark";
-  return (
-    <button type="button" className={`${styles.iconLink} ${styles.themeToggle}`} onClick={() => setMode(dark ? "light" : "dark")} aria-label={dark ? "Switch to the light theme" : "Switch to the dark theme"} title={dark ? "Light theme" : "Dark theme"}>
-      <svg aria-hidden viewBox="0 0 18 18" className={styles.icon} fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-        {dark ? (
-          <>
-            <circle cx="9" cy="9" r="3.25" />
-            <path d="M9 1.75v1.5M9 14.75v1.5M1.75 9h1.5M14.75 9h1.5M3.9 3.9l1.05 1.05M13.05 13.05l1.05 1.05M3.9 14.1l1.05-1.05M13.05 4.95l1.05-1.05" />
-          </>
-        ) : (
-          <path d="M14.75 10.9A6.25 6.25 0 0 1 7.1 3.25a6.25 6.25 0 1 0 7.65 7.65Z" />
-        )}
-      </svg>
-    </button>
   );
 }
 
@@ -250,11 +230,11 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
             <CalendarIcon />
             <span className={styles.utilLabel}>Appointments</span>
           </button>
-          {/* The Retailer Dashboard is always one prominent click away (client feedback, 27 October 2026); signed out it goes through log in. */}
+          {/* Signed out: Log in and Become a dealer. Signed in, both give way to the Retailer Dashboard (in Surreal blue) and the store's account menu (client feedback, 28 October 2026). */}
           {dealer ? (
             <>
               <span className={styles.pillWrap}>
-                <Button variant="primary" href={DASHBOARD_LINK.href} className={styles.pill}>
+                <Button variant="primary" href={DASHBOARD_LINK.href} className={`${styles.pill} ${styles.pillSky}`}>
                   {DASHBOARD_LINK.label}
                 </Button>
               </span>
@@ -262,9 +242,9 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
             </>
           ) : (
             <>
-              <Link href={`${LOGIN_LINK.href}?next=${encodeURIComponent(DASHBOARD_LINK.href)}`} className={styles.dashPill} aria-label="Retailer Dashboard, log in" data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
+              <Link href={pathname === "/" || pathname === LOGIN_LINK.href ? LOGIN_LINK.href : `${LOGIN_LINK.href}?next=${encodeURIComponent(pathname)}`} className={styles.dashPill} data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
                 <UserIcon />
-                <span>{DASHBOARD_LINK.label}</span>
+                <span>{LOGIN_LINK.label}</span>
               </Link>
               <span className={styles.pillWrap}>
                 <Button variant="primary" href={APPLY_LINK.href} className={styles.pill}>
@@ -276,7 +256,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
           <Link href={account.search} className={styles.searchIconLink} aria-label="Search">
             <MagnifierIcon />
           </Link>
-          <ThemeToggle />
+          <ThemeSwitch className={styles.modeBar} />
           <MiniCart />
           <MenuButton open={menuOpen} onToggle={onMenuToggle} />
         </div>

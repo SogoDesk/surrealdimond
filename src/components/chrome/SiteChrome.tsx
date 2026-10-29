@@ -14,7 +14,7 @@ import { useDealer } from "@/lib/dealer";
 import Header, { APPLY_LINK, APPOINTMENT_LINK, DASHBOARD_LINK, LOGIN_LINK, PRIMARY_LINKS, type ChromeLink } from "./Header";
 import MobileMenu from "./MobileMenu";
 
-const SECONDARY_LINKS: ChromeLink[] = [LOGIN_LINK, APPLY_LINK, DASHBOARD_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
+const SECONDARY_LINKS: ChromeLink[] = [LOGIN_LINK, APPLY_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
 const DEALER_LINKS: ChromeLink[] = [{ label: "Cart and checkout", href: account.cart }, DASHBOARD_LINK, APPOINTMENT_LINK, { label: "Instagram", href: brand.social.instagram }];
 
 export default function SiteChrome({ chapters = false }: { chapters?: boolean }) {

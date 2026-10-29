@@ -15,18 +15,28 @@
   --ink: #0b1f2a;
   --studio: #0a0b0c;
   --carbon: #1c2228;
+  /* Surreal blue (#86DFFF) and its tints. It is a fill, never text on light: navy on it reads at 11:1. --sky-deep is the same hue for blue text on light (5.9:1). */
   --sky: #86dfff;
-  --line: #70c0e0;
-  --mist: #dceff7;
-  --beam: #e8f6ff;
+  --sky-80: #9ee5ff;
+  --sky-60: #b6ecff;
+  --sky-40: #cff2ff;
+  --sky-20: #e7f9ff;
+  --sky-deep: #00698f;
+  --line: var(--sky);
+  --mist: var(--sky-40);
+  --beam: var(--sky-20);
   --white: #ffffff;
   --magenta: #b02078;
   /* The lit tray under a jewelry render (multiply blends onto it); light in both themes. */
   --well: #ffffff;
-  /* Hover for ink-filled buttons. */
-  --ink-hover: #163548;
+  /* Hover for ink-filled buttons: Surreal blue with navy text, in both themes (client feedback, 28 October 2026). */
+  --ink-hover: var(--sky);
+  --ink-hover-fg: var(--navy);
   /* The brand navy, fixed in both themes: badges and cards that carry their own light text or sky icon. */
   --navy: #0b1f2a;
+  /* Solid light text for the dark and navy panels (client feedback, 28 October 2026: no see-through writing on dark). Soft reads at 13:1 on navy, muted at 9:1. */
+  --on-dark-soft: #dde3e8;
+  --on-dark-muted: #b4c0c9;
 
   /* Current chapter colours (overridden per data-theme) */
   --bg: var(--porcelain);
@@ -39,8 +49,9 @@
   --accent-strong: var(--sky);
   --btn-fill: var(--ink);
   --btn-fill-fg: var(--porcelain);
-  --btn-hover-fill: var(--porcelain);
-  --btn-hover-fg: var(--ink);
+  /* Filled buttons rise to Surreal blue on hover, in every theme. */
+  --btn-hover-fill: var(--sky);
+  --btn-hover-fg: var(--navy);
   --outline-hover: var(--mist);
   --mark-a: var(--ink);
   --mark-b: var(--line);
@@ -64,26 +75,25 @@
 [data-theme="dark"] {
   --bg: var(--studio);
   --fg: var(--porcelain);
-  --fg-soft: rgba(242, 244, 246, 0.78);
-  /* The lighter grey: on the dark studio ground it reads at about 7:1, where --stone would be too dark. */
-  --fg-muted: #8f9aa3;
+  --fg-soft: var(--on-dark-soft);
+  --fg-muted: var(--on-dark-muted);
   --rule: var(--carbon);
   --surface: #111417;
   --accent: var(--sky);
   --accent-strong: var(--sky);
   --btn-fill: var(--porcelain);
   --btn-fill-fg: var(--ink);
-  --btn-hover-fill: var(--ink);
-  --btn-hover-fg: var(--porcelain);
-  --outline-hover: rgba(242, 244, 246, 0.12);
+  --btn-hover-fill: var(--sky);
+  --btn-hover-fg: var(--navy);
+  --outline-hover: rgba(134, 223, 255, 0.14);
   --mark-a: var(--porcelain);
   --mark-b: var(--sky);
 }
 [data-theme="navy"] {
   --bg: var(--ink);
   --fg: var(--porcelain);
-  --fg-soft: rgba(242, 244, 246, 0.78);
-  --fg-muted: rgba(242, 244, 246, 0.5);
+  --fg-soft: var(--on-dark-soft);
+  --fg-muted: var(--on-dark-muted);
   --rule: rgba(242, 244, 246, 0.14);
   --surface: #12283a;
   --accent: var(--sky);
@@ -107,7 +117,7 @@
   --accent-strong: var(--ink);
   --btn-fill: var(--ink);
   --btn-fill-fg: var(--sky);
-  --btn-hover-fill: var(--sky);
+  --btn-hover-fill: var(--white);
   --btn-hover-fg: var(--ink);
   --outline-hover: rgba(11, 31, 42, 0.08);
   --mark-a: var(--ink);
@@ -132,6 +142,7 @@
   --color-studio: var(--studio);
   --color-carbon: var(--carbon);
   --color-sky: var(--sky);
+  --color-sky-deep: var(--sky-deep);
   --color-line: var(--line);
   --color-mist: var(--mist);
   --color-beam: var(--beam);
@@ -264,12 +275,13 @@ body {
     --paper: #11161b;
     --white: #161d23;
     --hairline: rgba(226, 235, 242, 0.12);
-    --stone: #94a1ab;
-    --graphite: #cdd5db;
+    --stone: #a9b5be;
+    --graphite: #d8dfe4;
     --ink: #edf2f6;
     --carbon: rgba(226, 235, 242, 0.2);
     --mist: #12303d;
     --beam: #0f2530;
+    --sky-deep: var(--sky);
     --magenta: #ef7cbf;
     --well: #eef1f4;
     --ink-hover: var(--sky);
@@ -302,10 +314,10 @@ body {
     --graphite: #3a3f44;
     --ink: #0b1f2a;
     --carbon: #1c2228;
-    --mist: #dceff7;
-    --beam: #e8f6ff;
+    --mist: #cff2ff;
+    --beam: #e7f9ff;
+    --sky-deep: #00698f;
     --magenta: #b02078;
-    --ink-hover: #163548;
   }
 }
 

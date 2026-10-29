@@ -36,6 +36,7 @@ import { applyPins, pageSort, useMerch } from "@/lib/merch";
 import { useWithMetalsList } from "@/lib/metals";
 import { divisions } from "@/content/divisions";
 import { account } from "@/content/site";
+import { useDealer } from "@/lib/dealer";
 import StoreToolbar, { type Density } from "./StoreToolbar";
 import StoreGrid from "./StoreGrid";
 import FilterDrawer from "./FilterDrawer";
@@ -97,6 +98,7 @@ function StoreView({ category, params }: StorePageProps & { params: URLSearchPar
   const router = useRouter();
   const pathname = usePathname();
   const merch = useMerch();
+  const dealer = useDealer();
   const page = category ?? "all";
   const defaultSort = pageSort(merch, page);
   const pinned = merch.pins[page];
@@ -157,19 +159,22 @@ function StoreView({ category, params }: StorePageProps & { params: URLSearchPar
               </h1>
               <p className={s.blurb}>{meta?.blurb ?? "Every piece in the catalog, set with lab grown diamonds we grow ourselves."}</p>
             </div>
-            <div className={s.dealerNote}>
-              <span className={s.dealerNoteText}>
-                <strong>Dealer pricing</strong> and ordering open once you log in.
-              </span>
-              <span className={s.dealerNoteDoors}>
-                <Link href={account.login} className={s.dealerLogin}>
-                  Log in
-                </Link>
-                <Link href={account.apply} className={s.dealerApply}>
-                  Become a dealer
-                </Link>
-              </span>
-            </div>
+            {/* Visitors only: a signed-in dealer already has prices, so no second Log in or Become a dealer (client feedback, 28 October 2026). */}
+            {!dealer && (
+              <div className={s.dealerNote}>
+                <span className={s.dealerNoteText}>
+                  <strong>Dealer pricing</strong> and ordering open once you log in.
+                </span>
+                <span className={s.dealerNoteDoors}>
+                  <Link href={account.login} className={s.dealerLogin}>
+                    Log in
+                  </Link>
+                  <Link href={account.apply} className={s.dealerApply}>
+                    Become a dealer
+                  </Link>
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <DivisionRail active={category} />

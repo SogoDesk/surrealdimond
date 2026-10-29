@@ -63,7 +63,7 @@ video.media { padding: 0; }
 @media (max-width: 459px) { .doors { grid-template-columns: 1fr; } }
 .primary, .secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 50px; padding: 0 18px; border-radius: 999px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; }
 .primary { background: var(--ink); color: var(--porcelain); }
-.primary:hover { background: var(--ink-hover); }
+.primary:hover { background: var(--ink-hover); color: var(--ink-hover-fg); }
 .secondary { box-shadow: inset 0 0 0 1px var(--ink); color: var(--ink); }
 .secondary:hover { background: var(--mist); }
 .buy { display: inline-flex; align-items: center; justify-content: center; height: 50px; padding: 0 18px; border-radius: 999px; background: var(--sky); color: var(--ink); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; transition: filter 0.3s var(--ease-surreal); }

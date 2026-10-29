@@ -5,7 +5,7 @@
 .kicker { margin: 0 0 8px; font-size: 0.6875rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--stone); }
 
 .primary { display: inline-flex; align-items: center; justify-content: center; height: 50px; padding: 0 28px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; transition: background-color 0.3s var(--ease-surreal); }
-.primary:hover { background: var(--ink-hover); }
+.primary:hover { background: var(--ink-hover); color: var(--ink-hover-fg); }
 .secondary { display: inline-flex; align-items: center; justify-content: center; height: 46px; padding: 0 22px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ink); color: var(--ink); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
 .secondary:hover { background: var(--mist); }
 .primary:focus-visible, .secondary:focus-visible, .quickDoor:focus-visible, .reorder:focus-visible, .tile:focus-visible, .navLink:focus-visible, .logout:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
@@ -31,7 +31,7 @@
 .sidebar { position: sticky; top: calc(var(--nav-h) + 16px); display: flex; flex-direction: column; gap: 14px; max-height: calc(100vh - var(--nav-h) - 32px); overflow-y: auto; scrollbar-width: thin; padding: 14px; border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); }
 .storeCard { --porcelain: #f2f4f6; --ink: #0b1f2a; position: relative; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-md); background: var(--navy); color: var(--porcelain); }
 .avatar { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%; background: rgba(134, 223, 255, 0.16); color: var(--sky); font-family: var(--font-display), "Italiana", serif; font-size: 1.125rem; letter-spacing: 0.04em; }
-.storeText { display: flex; flex-direction: column; min-width: 0; font-size: 0.75rem; color: rgba(242, 244, 246, 0.6); }
+.storeText { display: flex; flex-direction: column; min-width: 0; font-size: 0.75rem; color: var(--on-dark-muted); }
 .storeText strong { font-weight: 600; font-size: 0.9375rem; color: var(--porcelain); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .storeText span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .demoTag { position: absolute; top: 8px; right: 8px; padding: 2px 7px; border-radius: 999px; background: rgba(134, 223, 255, 0.16); font-size: 0.5625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sky); }
@@ -39,7 +39,8 @@
 .navGroup ul { margin: 0; padding: 0; list-style: none; }
 .navGroupTitle { margin: 4px 10px 2px; font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
 .navLink { position: relative; display: flex; align-items: center; gap: 10px; min-height: 33px; padding: 0 10px; border-radius: 10px; font-size: 0.875rem; color: var(--graphite); transition: background-color 0.2s var(--ease-surreal), color 0.2s var(--ease-surreal); }
-.navLink:hover { background: var(--porcelain); color: var(--ink); }
+.navLink:hover { background: var(--sky); color: var(--navy); }
+.navLink:hover .navIcon { color: var(--navy); }
 .navLink[aria-current="page"] { background: var(--beam); color: var(--ink); font-weight: 600; }
 .navLink[aria-current="page"] .navIcon { color: var(--ink); }
 .navIcon { flex: 0 0 auto; width: 18px; height: 18px; color: var(--stone); }
@@ -78,8 +79,8 @@
 .stat dt { font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone); }
 .stat dd { margin: 2px 0 0; font-family: var(--font-display), "Italiana", serif; font-size: 2.5rem; line-height: 1; color: var(--ink); }
 .stat a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
-.statDelivery { --porcelain: #f2f4f6; --ink: #0b1f2a; background: var(--navy); box-shadow: none; color: rgba(242, 244, 246, 0.8); }
-.statDelivery dt { color: rgba(242, 244, 246, 0.55); }
+.statDelivery { --porcelain: #f2f4f6; --ink: #0b1f2a; background: var(--navy); box-shadow: none; color: var(--on-dark-soft); }
+.statDelivery dt { color: var(--on-dark-muted); }
 .statDelivery > :last-child { margin: 6px 0 0; padding: 0; background: none; box-shadow: none; color: var(--porcelain); }
 .statDelivery > :last-child * { color: inherit; }
 
@@ -106,7 +107,7 @@
 .cellAction { text-align: right !important; padding-right: 0 !important; }
 .status { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--mist); font-size: 0.6875rem; color: var(--ink); }
 .reorder { height: 32px; padding: 0 14px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; }
-.reorder:hover:not(:disabled) { background: var(--ink-hover); }
+.reorder:hover:not(:disabled) { background: var(--ink-hover); color: var(--ink-hover-fg); }
 .reorder:disabled { background: var(--hairline); color: var(--stone); cursor: not-allowed; }
 
 .list { margin: 0; padding: 0; list-style: none; }
@@ -171,8 +172,8 @@
 /* Home: the account band (owner) */
 .accountBand { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: stretch; }
 @media (max-width: 1099px) { .accountBand { grid-template-columns: 1fr; } }
-.balanceCard { display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 22px 24px; border-radius: var(--radius-lg); background: #0b1f2a; color: rgba(242, 244, 246, 0.74); }
-.balanceCard dt { font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(242, 244, 246, 0.6); }
+.balanceCard { display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 22px 24px; border-radius: var(--radius-lg); background: #0b1f2a; color: var(--on-dark-soft); }
+.balanceCard dt { font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-muted); }
 .balanceCard dd { margin: 4px 0 0; font-size: clamp(2rem, 3.4vw, 2.75rem); font-weight: 600; line-height: 1.05; color: #f2f4f6; }
 .balanceMeta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.8125rem; }
 .balanceMeta strong { color: #f2f4f6; font-weight: 600; }

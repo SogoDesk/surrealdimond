@@ -21,6 +21,7 @@ import { account } from "@/content/site";
 import { renderSrc } from "@/content/catalog";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
+import { useDealer } from "@/lib/dealer";
 import styles from "./chrome.module.css";
 
 type GroupId = "types" | "collections" | "programs";
@@ -90,6 +91,7 @@ function Thumb({ item }: { item: Division }) {
 
 export default function MegaMenu({ open, onIntent, onClose }: MegaMenuProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const dealer = useDealer();
   const everOpened = useRef(false);
   const [groupId, setGroupId] = useState<GroupId>("types");
 
@@ -234,17 +236,27 @@ export default function MegaMenu({ open, onIntent, onClose }: MegaMenuProps) {
           </span>
         </Link>
       </div>
-      <p className={styles.megaFoot} data-mega-item>
-        Prices and ordering are for Surreal dealers.{" "}
-        <Link href={account.login} onClick={onClose}>
-          Log in
-        </Link>{" "}
-        or{" "}
-        <Link href={account.apply} onClick={onClose}>
-          apply for an account
-        </Link>
-        .
-      </p>
+      {dealer ? (
+        <p className={styles.megaFoot} data-mega-item>
+          Your dealer prices show on every piece. Orders, invoices and memo are in your{" "}
+          <Link href={account.dashboard} onClick={onClose}>
+            Retailer Dashboard
+          </Link>
+          .
+        </p>
+      ) : (
+        <p className={styles.megaFoot} data-mega-item>
+          Prices and ordering are for Surreal dealers.{" "}
+          <Link href={account.login} onClick={onClose}>
+            Log in
+          </Link>{" "}
+          or{" "}
+          <Link href={account.apply} onClick={onClose}>
+            apply for an account
+          </Link>
+          .
+        </p>
+      )}
     </div>
   );
 }

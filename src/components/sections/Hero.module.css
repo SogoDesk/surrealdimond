@@ -130,7 +130,7 @@
 }
 .copy p {
   margin: 0;
-  color: rgba(242, 244, 246, 0.86);
+  color: var(--on-dark-soft);
 }
 .ctas {
   display: flex;
@@ -158,7 +158,7 @@
   min-width: 0;
   justify-self: start;
   font-size: 0.8125rem;
-  color: rgba(242, 244, 246, 0.86);
+  color: var(--on-dark-soft);
 }
 .caption:hover .captionText {
   text-decoration: underline;

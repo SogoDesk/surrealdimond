@@ -25,6 +25,7 @@
  */
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState, type FormEvent } from "react";
 import { brand } from "@/content/site";
 import { methodLabel, usePaymentMethods } from "@/lib/account";
@@ -69,8 +70,8 @@ const FILTERS: { id: Filter; label: string }[] = [
 
 const longDate = (d: string) => new Date(d.length === 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-function initialTab(): Tab {
-  const t = new URLSearchParams(window.location.search).get("tab");
+/** The tab comes from ?tab=, so the sidebar's Reconciliation link opens it even from this page. */
+function tabFrom(t: string | null): Tab {
   return TABS.some((x) => x.id === t) ? (t as Tab) : "open";
 }
 
@@ -85,7 +86,7 @@ export function StatusChip({ inv }: { inv: InvoiceView }) {
 export default function InvoicesPage() {
   const dealer = useDealer();
   const account = useAccount();
-  const [tab, setTab] = useState<Tab>(initialTab);
+  const tab = tabFrom(useSearchParams().get("tab"));
   const [filter, setFilter] = useState<Filter>("open");
   const [bucket, setBucket] = useState<AgingBucket | null>(null);
   const [q, setQ] = useState("");
@@ -114,7 +115,6 @@ export default function InvoicesPage() {
   const { summary, invoices } = account;
   const open = invoices.filter((i) => i.state === "open");
   const switchTab = (t: Tab) => {
-    setTab(t);
     setReceipt(null);
     window.history.replaceState(null, "", t === "open" ? window.location.pathname : `?tab=${t}`);
   };

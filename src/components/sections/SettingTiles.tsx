@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Settings row: three paper tiles holding turntable videos on white with
+ * Settings row: three tiles holding turntable videos on the lit tray (--well,
+ * white in both themes, so the rings still show in the dark theme) with
  * mix-blend-mode multiply, captioned by setting and linking to engagement rings.
  *
  * Fine pointers: hovering scrubs currentTime with the pointer's x across the
@@ -145,7 +146,7 @@ export default function SettingTiles({ className = "" }: { className?: string })
               className="group block outline-none focus-visible:[&>div]:outline focus-visible:[&>div]:outline-2 focus-visible:[&>div]:outline-offset-4 focus-visible:[&>div]:outline-[var(--accent-strong)]"
               aria-label={`${setting.caption}, view setting`}
             >
-              <div className="relative aspect-square overflow-hidden bg-[var(--surface)] shadow-[0_0_0_1px_var(--rule)] transition-[transform,box-shadow] duration-700 ease-[var(--ease-surreal)] group-hover:-translate-y-1.5 group-hover:shadow-[0_24px_24px_-8px_rgba(11,31,42,0.08),0_0_0_1px_var(--rule)]">
+              <div className="relative aspect-square overflow-hidden bg-[var(--well)] shadow-[0_0_0_1px_var(--rule)] transition-[transform,box-shadow] duration-700 ease-[var(--ease-surreal)] group-hover:-translate-y-1.5 group-hover:shadow-[0_24px_24px_-8px_rgba(11,31,42,0.08),0_0_0_1px_var(--rule)]">
                 <video
                   className="h-full w-full object-contain transition-transform duration-1000 ease-[var(--ease-surreal)] group-hover:scale-[1.04]"
                   style={{ mixBlendMode: "multiply" }}

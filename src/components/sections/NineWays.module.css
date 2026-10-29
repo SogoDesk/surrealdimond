@@ -280,7 +280,7 @@
   margin-top: auto;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: rgba(242, 244, 246, 0.8);
+  color: var(--on-dark-soft);
   max-width: 20ch;
 }
 .allCta {

@@ -141,7 +141,7 @@
 }
 .meta { display: flex; flex-direction: column; gap: 4px; padding: 4px 18px 14px; }
 .name { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-size: 1.375rem; line-height: 1.15; color: var(--ink); }
-.detail { font-size: 0.8125rem; line-height: 1.45; color: var(--stone); }
+.detail { font-size: 0.8125rem; line-height: 1.45; color: var(--graphite); }
 .foot {
   display: flex;
   align-items: center;
