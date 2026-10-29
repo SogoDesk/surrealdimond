@@ -138,6 +138,11 @@
   gap: 14px;
   margin-top: clamp(24px, 4vh, 40px);
 }
+/* The first door is Surreal blue at rest, with no hover motion (client feedback, 29 October 2026). */
+.primarySky.primarySky { --btn-fill: var(--sky); --btn-fill-fg: var(--navy); }
+.primarySky :global(.btn-fill),
+.primarySky :global(.btn-label-dup) { display: none; }
+.primarySky :global(.btn-label) { transform: none !important; }
 
 /* Controls: caption, progress bars, prev, pause, next */
 .controls {
@@ -200,7 +205,7 @@
 }
 .bar[data-done]::before,
 .bar[aria-current="true"]:not(:has(.fill[data-auto]))::before {
-  background: rgba(242, 244, 246, 0.85);
+  background: var(--sky);
 }
 .fill {
   position: absolute;
@@ -209,7 +214,7 @@
   height: 2px;
   margin-top: -1px;
   border-radius: 1px;
-  background: var(--porcelain);
+  background: var(--sky);
   width: 100%;
   transform-origin: 0 50%;
 }

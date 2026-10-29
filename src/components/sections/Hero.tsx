@@ -131,7 +131,7 @@ function Carousel({ slides }: { slides: HeroSlide[] }) {
               The New Forever, for your counter. DEF color, VVS clarity lab grown diamonds and handcrafted jewelry, direct from the grower. Trade only, always.
             </p>
             <div className={styles.ctas}>
-              <Button href={dealer ? "/diamonds" : account.login} variant="primary">
+              <Button href={dealer ? "/diamonds" : account.login} variant="primary" magnetic={false} className={styles.primarySky}>
                 {dealer ? "Search diamonds" : "Dealer log in"}
               </Button>
               <Button href={dealer ? account.dashboard : account.apply} variant="secondary">

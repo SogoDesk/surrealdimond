@@ -7,8 +7,7 @@
  * (SiteSearch: suggestions from the catalog, the stone feed and the pages;
  * a search icon on phones), and the trade utilities: appointments, the
  * Log in and Become a dealer pills, the theme switch and the cart (signed in:
- * the Retailer Dashboard in Surreal blue, the store's account menu and the
- * mini cart). Second
+ * the Retailer Dashboard in Surreal blue and the mini cart). Second
  * row (from 1024px): the primary links, with Jewelry opening the mega menu
  * on hover intent. Both rows stay while the page scrolls (client feedback
  * F-A4); past 80px the bar only gains its shadow. The bar is light on the
@@ -32,7 +31,6 @@ import MegaMenu from "./MegaMenu";
 import SiteSearch from "./SiteSearch";
 import ThemeSync from "./ThemeSync";
 import MiniCart from "./MiniCart";
-import AccountMenu from "./AccountMenu";
 import { useDealer } from "@/lib/dealer";
 import ThemeSwitch from "./ThemeSwitch";
 import { MenuButton } from "./MobileMenu";
@@ -230,16 +228,13 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
             <CalendarIcon />
             <span className={styles.utilLabel}>Appointments</span>
           </button>
-          {/* Signed out: Log in and Become a dealer. Signed in, both give way to the Retailer Dashboard (in Surreal blue) and the store's account menu (client feedback, 28 October 2026). */}
+          {/* Signed out: Log in and Become a dealer. Signed in, both give way to the Retailer Dashboard alone, in Surreal blue (client feedback, 28 and 29 October 2026); the store's account and log out live in the dashboard. */}
           {dealer ? (
-            <>
-              <span className={styles.pillWrap}>
-                <Button variant="primary" href={DASHBOARD_LINK.href} className={`${styles.pill} ${styles.pillSky}`}>
-                  {DASHBOARD_LINK.label}
-                </Button>
-              </span>
-              <AccountMenu dealer={dealer} />
-            </>
+            <span className={styles.pillWrap}>
+              <Button variant="primary" href={DASHBOARD_LINK.href} className={`${styles.pill} ${styles.pillSky}`}>
+                {DASHBOARD_LINK.label}
+              </Button>
+            </span>
           ) : (
             <>
               <Link href={pathname === "/" || pathname === LOGIN_LINK.href ? LOGIN_LINK.href : `${LOGIN_LINK.href}?next=${encodeURIComponent(pathname)}`} className={styles.dashPill} data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
