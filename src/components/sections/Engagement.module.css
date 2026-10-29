@@ -3,6 +3,22 @@
 .section {
   position: relative;
 }
+/* A sky chapter whose blue arrives as a splash: the section itself stays clear, the blue is the splash layer behind the content. */
+.section.section {
+  background: transparent;
+  /* Keylines that would vanish in sky blue draw in navy here. */
+  --line: var(--navy);
+}
+.inner {
+  position: relative;
+  isolation: isolate;
+}
+.splash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--sky);
+}
 
 
 .stage {
@@ -13,7 +29,6 @@
   flex-direction: column;
   overflow: hidden;
   isolation: isolate;
-  background: var(--porcelain);
 }
 
 
@@ -26,24 +41,6 @@
   flex-direction: column;
   padding-top: var(--header-full);
   clip-path: circle(0px at 50% 50%);
-  /* Light chapter tokens, restated because the section is still dark when this layer opens. */
-  --bg: var(--porcelain);
-  --fg: var(--ink);
-  --fg-soft: var(--graphite);
-  --fg-muted: var(--stone);
-  --rule: var(--hairline);
-  --surface: var(--paper);
-  --accent: var(--line);
-  --accent-strong: var(--sky);
-  --btn-fill: var(--ink);
-  --btn-fill-fg: var(--porcelain);
-  --btn-hover-fill: var(--sky);
-  --btn-hover-fg: var(--navy);
-  --outline-hover: var(--mist);
-  --mark-a: var(--ink);
-  --mark-b: var(--line);
-  background: var(--porcelain);
-  color: var(--ink);
 }
 .porcelain[data-open] {
   clip-path: none;
@@ -84,11 +81,14 @@
   min-height: 0;
 }
 
+/* The ring sits in a pool of white light on the blue; the render multiplies onto the white, so its metal stays true. */
 .turntable {
   position: relative;
   width: min(58svh, 40vw);
   aspect-ratio: 1;
-  mix-blend-mode: multiply;
+  isolation: isolate;
+  /* Opaque to the edge (white into the chapter's blue), so the render's white corners melt into the ground. */
+  background: radial-gradient(circle at 50% 50%, #ffffff 0%, #ffffff 40%, var(--sky-80) 58%, var(--sky) 70%);
 }
 .shadow {
   position: absolute;
@@ -108,6 +108,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  mix-blend-mode: multiply;
 }
 
 .strip {
@@ -190,23 +191,3 @@
     gap: 10px;
   }
 }
-
-/* Dark theme: the render multiplies onto a lit tray, the same rounded card as the product renders, since the page ground is now dark. */
-:global(html[data-mode="dark"]) .turntable {
-  isolation: isolate;
-  overflow: hidden;
-  width: min(52svh, 36vw);
-  border-radius: var(--radius-lg);
-  background: var(--well);
-  box-shadow: var(--shadow-card);
-  mix-blend-mode: normal;
-}
-@media (max-width: 767px) {
-  :global(html[data-mode="dark"]) .turntable { width: min(72vw, 42svh); }
-}
-:global(html[data-mode="dark"]) .still {
-  mix-blend-mode: multiply;
-}
-
-/* Dark theme: the shape outlines draw in Surreal blue so they read on the dark ground. */
-:global(html[data-mode="dark"]) .strip svg g { stroke: var(--sky); }

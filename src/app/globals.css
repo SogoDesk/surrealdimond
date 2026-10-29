@@ -109,8 +109,9 @@
 [data-theme="sky"] {
   --bg: var(--sky);
   --fg: var(--ink);
-  --fg-soft: rgba(11, 31, 42, 0.82);
-  --fg-muted: rgba(11, 31, 42, 0.6);
+  /* Solid navy shades, no see-through text: 8:1 and 6.4:1 on the blue. */
+  --fg-soft: #163a4b;
+  --fg-muted: #1d4a5c;
   --rule: rgba(11, 31, 42, 0.18);
   --surface: var(--white);
   --accent: var(--ink);
@@ -318,6 +319,7 @@ body {
     --beam: #e7f9ff;
     --sky-deep: #00698f;
     --magenta: #b02078;
+    --well: #ffffff;
   }
 }
 
