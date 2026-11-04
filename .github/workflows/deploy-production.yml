@@ -1,0 +1,34 @@
+name: Deploy Surreal Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: surreal-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy Surreal
+    runs-on: [self-hosted, Windows, X64, surreal-prod]
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Deploy
+        shell: powershell
+        env:
+          PM2_HOME: 'C:\Users\Tetriq Solutions\.pm2'
+        run: |
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
+          & "C:\deploy\Surreal\deploy.ps1"
