@@ -5,12 +5,14 @@
  *
  * Top row: the live line mark and wordmark (#site-logo), the site search
  * (SiteSearch: suggestions from the catalog, the stone feed and the pages;
- * a search icon on phones), and the trade utilities: appointments, the
- * Log in and Become a dealer pills, the theme switch and the cart (signed in:
- * the Retailer Dashboard in Surreal blue and the mini cart). Second
- * row (from 1024px): the primary links, with Jewelry opening the mega menu
- * on hover intent. Both rows stay while the page scrolls (client feedback
- * F-A4); past 80px the bar only gains its shadow. The bar is light on the
+ * a search icon on phones), and the trade utilities. Signed out: Log in and
+ * Become a dealer only. Signed in: appointments, Dealer Options (a trimmed
+ * menu), the Retailer Dashboard in Surreal blue and the mini cart. The
+ * labelled Light / Dark switch sits in the right corner (client change
+ * request, November 2026). Second row (from 1024px): the primary links;
+ * Jewelry opens the mega menu on hover intent, click or tap. Both rows stay
+ * in place; while the page scrolls the bar fades out, and it comes back on
+ * hover, on focus, or as soon as the scrolling stops. The bar is light on the
  * commerce pages; the homepage passes `chapters`, which mounts ThemeSync so
  * the bar follows each chapter's data-theme (light-on-dark glass over the
  * dark chapters).
@@ -31,6 +33,7 @@ import MegaMenu from "./MegaMenu";
 import SiteSearch from "./SiteSearch";
 import ThemeSync from "./ThemeSync";
 import MiniCart from "./MiniCart";
+import DealerMenu from "./DealerMenu";
 import { useDealer } from "@/lib/dealer";
 import ThemeSwitch from "./ThemeSwitch";
 import { MenuButton } from "./MobileMenu";
@@ -60,6 +63,8 @@ export const APPOINTMENT_LINK: ChromeLink = { label: "Schedule an appointment", 
 export const DASHBOARD_LINK: ChromeLink = { label: "Retailer Dashboard", href: account.dashboard };
 
 const CONDENSE_AT = 80;
+/** The bar fades while the page scrolls, and is back this long after the scrolling stops. */
+const FADE_IDLE = 250;
 
 const subscribeScroll = (onChange: () => void) => {
   window.addEventListener("scroll", onChange, { passive: true });
@@ -116,7 +121,7 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
   const localRef = useRef<HTMLElement | null>(null);
   const ref = headerRef ?? localRef;
   const logoRef = useRef<HTMLAnchorElement>(null);
-  const shopRef = useRef<HTMLAnchorElement>(null);
+  const shopRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const [shopOpen, setShopOpen] = useState(false);
   const condensed = useSyncExternalStore(subscribeScroll, pastCondense, notPast);
@@ -136,6 +141,26 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
   }, []);
 
   useEffect(() => () => window.clearTimeout(intentTimer.current), []);
+
+  /* Past the first 80px, scrolling fades the bar out; it returns when the scrolling stops (and on hover or focus, in CSS). */
+  useEffect(() => {
+    const header = ref.current;
+    if (!header) return;
+    let timer = 0;
+    const onScroll = () => {
+      window.clearTimeout(timer);
+      if (window.scrollY > CONDENSE_AT) header.dataset.scrolling = "true";
+      timer = window.setTimeout(() => {
+        delete header.dataset.scrolling;
+      }, FADE_IDLE);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(timer);
+      delete header.dataset.scrolling;
+    };
+  }, [ref]);
 
   useEffect(() => {
     if (!shopOpen) return;
@@ -215,8 +240,8 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
     >
       <div className={styles.bar}>
         <Link ref={logoRef} href="/" id="site-logo" className={styles.logo} aria-label="Surreal, home" onPointerEnter={redraw} onFocus={redraw}>
-          <LineMark navy="var(--mark-a)" sky="var(--mark-b)" alternating strokeCount={12} strokeScale={6} style={{ height: 30, width: 30 * LINE_MARK_ASPECT }} />
-          <Wordmark size={20} withTm className={styles.wordmark} />
+          <LineMark navy="var(--mark-a)" sky="var(--mark-b)" alternating strokeCount={12} strokeScale={6} style={{ height: 36, width: 36 * LINE_MARK_ASPECT }} />
+          <Wordmark size={24} withTm className={styles.wordmark} />
         </Link>
 
         <div className={styles.searchSlot}>
@@ -224,17 +249,20 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
         </div>
 
         <div className={styles.right}>
-          <button type="button" className={`${styles.util} ${styles.iconLink}`} onClick={() => openContactDrawer("other", "visit")}>
-            <CalendarIcon />
-            <span className={styles.utilLabel}>Appointments</span>
-          </button>
-          {/* Signed out: Log in and Become a dealer. Signed in, both give way to the Retailer Dashboard alone, in Surreal blue (client feedback, 28 and 29 October 2026); the store's account and log out live in the dashboard. */}
+          {/* Signed out: Log in and Become a dealer only. Signed in: appointments, Dealer Options, the Retailer Dashboard in Surreal blue and the cart (client change request, November 2026). */}
           {dealer ? (
-            <span className={styles.pillWrap}>
-              <Button variant="primary" href={DASHBOARD_LINK.href} className={`${styles.pill} ${styles.pillSky}`}>
-                {DASHBOARD_LINK.label}
-              </Button>
-            </span>
+            <>
+              <button type="button" className={`${styles.util} ${styles.iconLink}`} onClick={() => openContactDrawer("other", "visit")}>
+                <CalendarIcon />
+                <span className={styles.utilLabel}>Appointments</span>
+              </button>
+              <DealerMenu dealer={dealer} />
+              <span className={styles.pillWrap}>
+                <Button variant="primary" href={DASHBOARD_LINK.href} className={`${styles.pill} ${styles.pillSky}`}>
+                  {DASHBOARD_LINK.label}
+                </Button>
+              </span>
+            </>
           ) : (
             <>
               <Link href={pathname === "/" || pathname === LOGIN_LINK.href ? LOGIN_LINK.href : `${LOGIN_LINK.href}?next=${encodeURIComponent(pathname)}`} className={styles.dashPill} data-active={isRouteActive(LOGIN_LINK.href) ? "true" : undefined}>
@@ -251,8 +279,8 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
           <Link href={account.search} className={styles.searchIconLink} aria-label="Search">
             <MagnifierIcon />
           </Link>
+          {dealer && <MiniCart />}
           <ThemeSwitch className={styles.modeBar} />
-          <MiniCart />
           <MenuButton open={menuOpen} onToggle={onMenuToggle} />
         </div>
       </div>
@@ -262,37 +290,34 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
           {PRIMARY_LINKS.map((item) => {
             const isShop = item.label === "Jewelry";
             const active = isRouteActive(item.href);
-            const link = (
-              <Link
-                ref={isShop ? shopRef : undefined}
-                href={item.href}
-                className={`${styles.link} t-nav`}
-                data-active={active ? "true" : undefined}
-                aria-current={active ? "page" : undefined}
-                aria-haspopup={isShop ? "true" : undefined}
-                aria-expanded={isShop ? shopOpen : undefined}
-                aria-controls={isShop ? "shop-menu" : undefined}
-                onKeyDown={isShop ? onShopKey : undefined}
-              >
-                <span>{item.label}</span>
-                {isShop && <Chevron />}
-              </Link>
-            );
-            if (!isShop) return <li key={item.label}>{link}</li>;
+            if (!isShop)
+              return (
+                <li key={item.label}>
+                  <Link href={item.href} className={`${styles.link} t-nav`} data-active={active ? "true" : undefined} aria-current={active ? "page" : undefined}>
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              );
+            /* Jewelry is the mega menu's trigger: hover intent opens it, and so does a click or a tap (with a mouse a click only opens it, so hovering then clicking never closes it). View all inside goes to the store. */
             return (
               <li key={item.label} className={styles.shopItem} onPointerEnter={() => intend(true)} onPointerLeave={onShopLeave}>
-                {link}
                 <button
+                  ref={shopRef}
                   type="button"
-                  className={styles.srOnly}
+                  className={`${styles.link} t-nav`}
+                  data-active={active ? "true" : undefined}
+                  aria-haspopup="true"
                   aria-expanded={shopOpen}
                   aria-controls="shop-menu"
-                  onClick={() => {
+                  onKeyDown={onShopKey}
+                  onClick={(e) => {
                     window.clearTimeout(intentTimer.current);
-                    setShopOpen((o) => !o);
+                    const mouse = (e.nativeEvent as globalThis.PointerEvent).pointerType === "mouse";
+                    setShopOpen((o) => (mouse ? true : !o));
                   }}
                 >
-                  {shopOpen ? "Close the Jewelry menu" : "Open the Jewelry menu"}
+                  <span>{item.label}</span>
+                  <Chevron />
                 </button>
               </li>
             );

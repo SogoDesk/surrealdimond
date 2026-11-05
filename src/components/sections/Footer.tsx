@@ -36,6 +36,7 @@ import { brand, footerColumns, legal } from "@/content/site";
 import { registerGsap, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion, useBreakpoint } from "@/hooks/useMedia";
 import { calmChapters } from "@/lib/motion";
+import { useDealer } from "@/lib/dealer";
 import styles from "./Footer.module.css";
 
 const DRAW_STROKE = 0.9;
@@ -56,6 +57,7 @@ export interface FooterProps {
 }
 
 export default function Footer({ className = "" }: FooterProps) {
+  const dealer = useDealer();
   const footerRef = useRef<HTMLElement>(null);
   const markRef = useRef<HTMLDivElement>(null);
   const beamRef = useRef<SVGPathElement>(null);
@@ -289,7 +291,8 @@ export default function Footer({ className = "" }: FooterProps) {
     <div key={col.title} className={styles.col} data-col>
       <h3 className={styles.colTitle}>{col.title}</h3>
       <ul className={styles.list}>
-        {col.links.map((l) => (
+        {/* A signed-in dealer is already a retailer: Become a Retailer gives way to the Retailer Dashboard beside it. */}
+        {col.links.filter((l) => !(dealer && l.href.startsWith("/contact?type=dealer"))).map((l) => (
           <li key={l.href + l.label}>
             <Link href={l.href} className={`t-nav ${styles.link}`} data-cursor="link">
               {l.label}

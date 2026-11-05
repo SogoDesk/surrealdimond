@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ContentPage, { Band, Facts } from "@/components/pages/ContentPage";
 import s from "@/components/pages/ContentPage.module.css";
 import Button from "@/components/ui/Button";
+import TradeDoor from "@/components/pages/TradeDoor";
 import { account, brand, team } from "@/content/site";
 
 export const metadata: Metadata = { title: "About | Surreal Diamond" };
@@ -27,9 +28,7 @@ export default function Page() {
       imageAlt="Diamond jewelry worn in the Surreal studio"
       doors={
         <>
-          <Button href={account.apply} variant="primary" arrow>
-            Become a dealer
-          </Button>
+          <TradeDoor variant="primary" arrow />
           <Button href={account.appointment} variant="secondary">
             Visit New York
           </Button>

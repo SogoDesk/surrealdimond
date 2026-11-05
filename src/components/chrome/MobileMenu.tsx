@@ -18,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { account, brand } from "@/content/site";
+import { divisionCollections, divisionTypes } from "@/content/divisions";
 import { registerGsap, gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import { lockScroll } from "@/lib/scroll";
@@ -212,6 +213,28 @@ export default function MobileMenu({ open, onClose, links, secondary, visitHref 
                 <Link href={item.href} className={styles.sheetLink} data-sheet-link data-cursor="link" onClick={onClose}>
                   {item.label}
                 </Link>
+                {/* The mega menu's contents for tablets and phones: categories, then collections. */}
+                {item.label === "Jewelry" && (
+                  <div className={styles.sheetSub} data-sheet-secondary>
+                    {[
+                      { title: "Jewelry", items: divisionTypes },
+                      { title: "Collections", items: divisionCollections },
+                    ].map((g) => (
+                      <div key={g.title}>
+                        <p className={styles.sheetSubTitle}>{g.title}</p>
+                        <ul className={styles.sheetSubList}>
+                          {g.items.map((d) => (
+                            <li key={d.id}>
+                              <Link href={d.href} onClick={onClose}>
+                                {d.label.replace(" Collection", "")}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
