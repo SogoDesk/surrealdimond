@@ -212,7 +212,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
   }
 
   // Filters in the address (the homepage shape strip, the site search) apply once per address.
-  const linkedKey = params ? ["shape", "cmin", "cmax", "color", "clarity", "lab"].map((k) => params.get(k) ?? "").join("|") : "";
+  const linkedKey = params ? ["shape", "cmin", "cmax", "color", "clarity", "lab", "legacy"].map((k) => params.get(k) ?? "").join("|") : "";
   const [seenKey, setSeenKey] = useState("");
   if (linkedKey !== seenKey) {
     setSeenKey(linkedKey);
@@ -376,6 +376,10 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
             <span className={`${s.count} tabular`} aria-live="polite">
               {results.length} {results.length === 1 ? "stone" : "stones"}
             </span>
+            {/* Diamond Legacy: the Legacy stones in the one inventory (Start a Legacy lands here with it on). */}
+            <button type="button" className={s.legacyBtn} aria-pressed={q.legacy} onClick={() => update({ legacy: !q.legacy })}>
+              Legacy stones
+            </button>
             <button type="button" className={s.moreBtn} aria-expanded={more} onClick={() => setMore((m) => !m)}>
               {more ? "Fewer filters" : "More filters"}
               {counts.more > 0 && <span className={s.badge}>{counts.more}</span>}
@@ -457,7 +461,10 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
                             <ShapeIcon shape={st.shape} className={s.rowIcon} />
                             <span className={s.shapeName}>
                               {SHAPE_LABEL[st.shape]}
-                              <span className={s.stoneType}>{STONE_TYPE}</span>
+                              <span className={s.stoneType}>
+                                {STONE_TYPE}
+                                {st.legacy ? " · Legacy" : ""}
+                              </span>
                             </span>
                           </span>
                         </td>

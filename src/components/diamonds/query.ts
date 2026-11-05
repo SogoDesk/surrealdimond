@@ -52,6 +52,8 @@ export interface DiamondQuery {
   fluorescence: Fluorescence[];
   ratioMin: number | null;
   ratioMax: number | null;
+  /** Diamond Legacy stones only (Start a Legacy opens the search with it). */
+  legacy: boolean;
   sort: SortKey;
 }
 
@@ -78,6 +80,7 @@ export const EMPTY: DiamondQuery = {
   fluorescence: [],
   ratioMin: null,
   ratioMax: null,
+  legacy: false,
   sort: "carat-asc",
 };
 
@@ -96,6 +99,7 @@ export function matches(s: Stone, q: DiamondQuery): boolean {
   if (!gradeAtLeast(s.polish, q.polish) || !gradeAtLeast(s.symmetry, q.symmetry)) return false;
   if (q.fluorescence.length && !q.fluorescence.includes(s.fluorescence)) return false;
   if (!inRange(s.ratio, q.ratioMin, q.ratioMax)) return false;
+  if (q.legacy && !s.legacy) return false;
   return true;
 }
 
@@ -114,7 +118,7 @@ export const hasMeasurements = (q: DiamondQuery) => [q.lengthMin, q.lengthMax, q
 
 /** How many filters are on, for the Clear button and the More filters badge. */
 export function activeCount(q: DiamondQuery): { quick: number; more: number } {
-  const quick = [q.shapes.length > 0, q.caratMin !== null || q.caratMax !== null, q.color !== null, q.clarity !== null, q.cut.length > 0, hasMeasurements(q)].filter(Boolean).length;
+  const quick = [q.shapes.length > 0, q.caratMin !== null || q.caratMax !== null, q.color !== null, q.clarity !== null, q.cut.length > 0, hasMeasurements(q), q.legacy].filter(Boolean).length;
   const more = [
     q.lab.length > 0,
     q.polish !== null,
@@ -190,8 +194,9 @@ function scaleRange(scale: readonly string[], v: string | null): [number, number
 
 /**
  * Filters from the address: shape (one or more, comma separated), cmin and
- * cmax (carat), color and clarity (a grade or a range, D-F, VVS1-VS1), lab.
- * Unknown values are ignored; null when the address has none.
+ * cmax (carat), color and clarity (a grade or a range, D-F, VVS1-VS1), lab,
+ * legacy=1 (the Legacy stones). Unknown values are ignored; null when the
+ * address has none.
  */
 export function fromParams(params: URLSearchParams | null): Partial<DiamondQuery> | null {
   if (!params) return null;
@@ -208,6 +213,7 @@ export function fromParams(params: URLSearchParams | null): Partial<DiamondQuery
   if (clarity) out.clarity = clarity;
   const lab = (params.get("lab") ?? "").toUpperCase().split(",").filter((x): x is Lab => (LABS as readonly string[]).includes(x));
   if (lab.length) out.lab = lab;
+  if (params.get("legacy") === "1") out.legacy = true;
   return Object.keys(out).length ? out : null;
 }
 
@@ -220,5 +226,6 @@ export function toParams(q: Partial<DiamondQuery>): string {
   if (q.color) p.set("color", q.color[0] === q.color[1] ? COLORS[q.color[0]] : `${COLORS[q.color[0]]}-${COLORS[q.color[1]]}`);
   if (q.clarity) p.set("clarity", q.clarity[0] === q.clarity[1] ? CLARITIES[q.clarity[0]] : `${CLARITIES[q.clarity[0]]}-${CLARITIES[q.clarity[1]]}`);
   if (q.lab?.length) p.set("lab", q.lab.join(","));
+  if (q.legacy) p.set("legacy", "1");
   return p.toString();
 }

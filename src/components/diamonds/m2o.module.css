@@ -21,6 +21,11 @@
 .shapeBtn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 10px; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.75rem; color: var(--graphite); background: var(--white); transition: background-color 0.25s var(--ease-surreal), color 0.25s var(--ease-surreal); }
 .shapeBtn:hover { color: var(--ink); box-shadow: inset 0 0 0 1px #b9c2ca; }
 .shapeBtn[aria-checked="true"] { background: var(--ink); color: var(--porcelain); box-shadow: none; }
+/* Order by: carat size or dimensions, one or the other */
+.sizeBy { display: inline-flex; gap: 4px; width: fit-content; padding: 4px; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); }
+.sizeByBtn { height: 38px; padding: 0 20px; border-radius: 999px; font-size: 0.8125rem; color: var(--graphite); transition: background-color 0.25s var(--ease-surreal), color 0.25s var(--ease-surreal); }
+.sizeByBtn[aria-checked="true"] { background: var(--ink); color: var(--porcelain); }
+.sizeByBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .shapeBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .shapeIcon { width: 30px; height: 30px; }
 .otherIcon { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 400; }

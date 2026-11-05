@@ -1,14 +1,16 @@
 /**
  * The Made to Order request's fields (BRD R-19; client feedback F-C2). The
  * fields are the live M2O form's, plus dimensions (the program grows "any
- * carat weight or dimensions"). Labels, placeholders and hints live here so
+ * carat weight or dimensions"), asked as one or the other, and a text box
+ * for a shape outside the list (client change request, November 2026).
+ * Labels, placeholders and hints live here so
  * Surreal's M2O specification (C-17) replaces this file and nothing else;
  * until it arrives the wording below is ours.
  */
 
 import type { StoneShape } from "./diamonds";
 
-export type M2OField = "name" | "company" | "customer" | "phone" | "email" | "size" | "dimensions" | "shape" | "ratio" | "inscription" | "notes";
+export type M2OField = "name" | "company" | "customer" | "phone" | "email" | "size" | "dimensions" | "shape" | "otherShape" | "ratio" | "inscription" | "notes";
 
 export interface M2OFieldSpec {
   label: string;
@@ -22,8 +24,9 @@ export interface M2OFieldSpec {
 }
 
 export const M2O_FIELDS: Record<Exclude<M2OField, "shape" | "notes">, M2OFieldSpec> & { notes: M2OFieldSpec } = {
-  size: { label: "Exact size requested (ct)", placeholder: "2.00", type: "number", step: "0.01", hint: "Or give dimensions instead" },
-  dimensions: { label: "Dimensions (mm)", placeholder: "9.00 x 6.50", optional: true, hint: "Length by width, for a stone sized to a setting" },
+  otherShape: { label: "Which shape?", placeholder: "Marquise, heart, a cut of your own", wide: true },
+  size: { label: "Exact size requested (ct)", placeholder: "2.00", type: "number", step: "0.01" },
+  dimensions: { label: "Dimensions (mm)", placeholder: "9.00 x 6.50", hint: "Length by width, for a stone sized to a setting" },
   ratio: { label: "Length to width ratio", placeholder: "1.40", optional: true, hint: "For fancy shapes" },
   inscription: { label: "Girdle inscription", placeholder: "Initials, a date or a short message", optional: true, wide: true, hint: "Laser inscribed on the girdle" },
   customer: { label: "Customer name (for the booklet)", placeholder: "As it should appear in your client's booklet", optional: true, wide: true },

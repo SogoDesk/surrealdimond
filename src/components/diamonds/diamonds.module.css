@@ -73,6 +73,11 @@
 .m2oBtn { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.08em; white-space: nowrap; transition: background-color 0.2s var(--ease-surreal); }
 .m2oBtn:hover { background: var(--ink-hover); color: var(--ink-hover-fg); }
 .m2oBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+/* The Legacy stones filter in the bar */
+.legacyBtn { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; color: var(--ink); white-space: nowrap; transition: background-color 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal); }
+.legacyBtn:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.legacyBtn[aria-pressed="true"] { background: var(--sky); color: var(--navy); box-shadow: none; }
+.legacyBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .m2oBtnIcon { width: 20px; height: 20px; color: var(--sky); }
 @media (max-width: 599px) { .barRight { gap: 6px; } .m2oBtn { padding: 0 10px; font-size: 0; gap: 0; } .m2oBtn::after { content: "M2O"; font-size: 0.75rem; margin-left: 6px; } }
 .sort select { height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font: 500 0.8125rem var(--font-ui), "Urbanist", sans-serif; color: var(--ink); }

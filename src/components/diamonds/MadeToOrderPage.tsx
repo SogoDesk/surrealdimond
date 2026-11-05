@@ -57,6 +57,8 @@ function Request({ params }: { params: URLSearchParams | null }) {
   const from = params?.get("from") ? stoneById(params.get("from") as string) : undefined;
   const qShape = params?.get("shape") as StoneShape | null;
   const [values, setValues] = useState<Record<Field, string> | null>(null);
+  /* The size is asked one way or the other: an exact carat weight, or the dimensions (client change request, November 2026). */
+  const [sizeBy, setSizeBy] = useState<"carat" | "dimensions">("carat");
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const [sent, setSent] = useState<M2ORequest | null>(null);
 
@@ -69,9 +71,10 @@ function Request({ params }: { params: URLSearchParams | null }) {
     size: params?.get("size") ?? "",
     dimensions: "",
     shape: qShape && M2O_SHAPES.includes(qShape) ? qShape : qShape ? "other" : "",
+    otherShape: qShape && !M2O_SHAPES.includes(qShape) ? (SHAPE_LABEL[qShape] ?? "") : "",
     ratio: params?.get("ratio") ?? "",
     inscription: "",
-    notes: qShape && !M2O_SHAPES.includes(qShape) ? `Shape: ${SHAPE_LABEL[qShape]}` : from ? `Like stock ${from.id}, ${stoneTitle(from)}` : "",
+    notes: from ? `Like stock ${from.id}, ${stoneTitle(from)}` : "",
   };
   const set = (k: Field, v: string) => setValues({ ...form, [k]: v });
   const shapeForIcon = (M2O_SHAPES.includes(form.shape as StoneShape) ? form.shape : qShape ?? "oval") as StoneShape;
@@ -83,14 +86,22 @@ function Request({ params }: { params: URLSearchParams | null }) {
     if (!form.company.trim()) found.company = "Enter the company name.";
     if (form.phone.replace(/\D/g, "").length < 10) found.phone = "Enter a ten digit phone number.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email)) found.email = "Enter a valid email address.";
-    if (!(Number(form.size) > 0) && !/\d/.test(form.dimensions)) found.size = "Enter the exact size in carats, or the dimensions.";
+    if (sizeBy === "carat" && !(Number(form.size) > 0)) found.size = "Enter the exact size in carats.";
+    if (sizeBy === "dimensions" && !/\d/.test(form.dimensions)) found.dimensions = "Enter the dimensions in millimetres.";
     if (!form.shape) found.shape = "Choose a shape.";
+    if (form.shape === "other" && !form.otherShape.trim()) found.otherShape = "Name the shape.";
     setErrors(found);
     if (Object.keys(found).length) {
       document.getElementById(`m-${Object.keys(found)[0]}`)?.focus();
       return;
     }
-    const request: M2ORequest = { number: `M2O-${String(Date.now()).slice(-6)}`, shape: form.shape, size: form.size, dimensions: form.dimensions.trim() || undefined, sentAt: new Date().toISOString() };
+    const request: M2ORequest = {
+      number: `M2O-${String(Date.now()).slice(-6)}`,
+      shape: form.shape === "other" ? form.otherShape.trim() : form.shape,
+      size: sizeBy === "carat" ? form.size : "",
+      dimensions: sizeBy === "dimensions" ? form.dimensions.trim() : undefined,
+      sentAt: new Date().toISOString(),
+    };
     requests.set((list) => [request, ...list]);
     setSent(request);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -160,7 +171,7 @@ function Request({ params }: { params: URLSearchParams | null }) {
                 </span>
                 <p className={s.sentNumber}>{sent.number}</p>
                 <p>
-                  Request sent for a {m2oSize(sent)} {sent.shape === "other" ? "stone" : SHAPE_LABEL[sent.shape as StoneShape].toLowerCase()}. Surreal confirms the specification,
+                  Request sent for a {m2oSize(sent)} {(SHAPE_LABEL[sent.shape as StoneShape] ?? sent.shape).toLowerCase()}. Surreal confirms the specification,
                   the program fee and timing with you. Questions: {brand.office.phone}.
                 </p>
                 <p className={s.previewNote}>Preview: the request is kept in this browser; request emails connect with the dealer platform.</p>
@@ -174,6 +185,7 @@ function Request({ params }: { params: URLSearchParams | null }) {
                     onClick={() => {
                       setSent(null);
                       setValues(null);
+                      setSizeBy("carat");
                     }}
                   >
                     Another request
@@ -206,8 +218,37 @@ function Request({ params }: { params: URLSearchParams | null }) {
                   </div>
                   {errors.shape && <span className={s.error}>{errors.shape}</span>}
                   <div className={s.grid}>
-                    {input("size", Number(form.size) > 0 ? m2oGrade(Number(form.size)) : undefined)}
-                    {input("dimensions")}
+                    {form.shape === "other" && input("otherShape")}
+                    <div className={`${s.field} ${s.wide}`}>
+                      <span className={s.label} id="m-size-by">
+                        Order by
+                      </span>
+                      <div className={s.sizeBy} role="radiogroup" aria-labelledby="m-size-by">
+                        {(
+                          [
+                            ["carat", "Carat size"],
+                            ["dimensions", "Dimensions"],
+                          ] as const
+                        ).map(([id, label]) => (
+                          <button
+                            key={id}
+                            type="button"
+                            role="radio"
+                            aria-checked={sizeBy === id}
+                            className={s.sizeByBtn}
+                            onClick={() => {
+                              setSizeBy(id);
+                              // One or the other: the field set aside is cleared, with its error.
+                              setValues({ ...form, [id === "carat" ? "dimensions" : "size"]: "" });
+                              setErrors((e) => ({ ...e, size: undefined, dimensions: undefined }));
+                            }}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {sizeBy === "carat" ? input("size", Number(form.size) > 0 ? m2oGrade(Number(form.size)) : undefined) : input("dimensions")}
                     {input("ratio")}
                     {input("inscription")}
                   </div>

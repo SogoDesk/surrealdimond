@@ -58,6 +58,8 @@ export interface Stone {
   lab: Lab;
   certificate: string;
   source: Source;
+  /** A Diamond Legacy stone: Legacy stones are part of the one inventory, flagged in the feed (client change request, November 2026). */
+  legacy: boolean;
 }
 
 /* Deterministic generator (mulberry32) so the sample feed is stable. */
@@ -151,6 +153,8 @@ function generate(count: number): Stone[] {
       lab,
       certificate: lab === "IGI" ? `LG${Math.floor(600000000 + r() * 99999999)}` : `${Math.floor(20000000 + r() * 9999999)}`,
       source: r() < 0.82 ? "surreal" : "supplier",
+      // The sample flags one stone in eight as Legacy, without drawing on the generator, so every other attribute stays as it was.
+      legacy: i % 8 === 3,
     });
   }
   return stones;

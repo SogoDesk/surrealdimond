@@ -7,13 +7,15 @@ import { brand } from "@/content/site";
 export const metadata: Metadata = { title: "Diamond Legacy | Surreal Diamond" };
 
 const ASK = "/contact?type=programs";
+/** The Legacy stones are part of the one inventory: Start a Legacy opens the diamond search filtered to them. */
+const LEGACY_STONES = "/diamonds?legacy=1";
 
 /**
- * Diamond Legacy (BRD R-20): short and mostly content, from the live Legacy
- * page as recorded in docs/CONTEXT.md. The list of Legacy diamonds and the
- * order form move onto the dealer site later (Q6); until then the doors are
- * the program inquiry and the office phone. The FAQ topics are listed as
- * things to ask, since their answers wait on Surreal.
+ * Diamond Legacy (BRD R-20): an information page (client change request,
+ * November 2026), from the live Legacy page as recorded in docs/CONTEXT.md.
+ * Start a Legacy opens the diamond search filtered to the Legacy stones, so
+ * the dealer picks and orders a Legacy stone like any other. The FAQ topics
+ * are listed as things to ask, since their answers wait on Surreal.
  */
 export default function Page() {
   const { office } = brand;
@@ -31,7 +33,7 @@ export default function Page() {
       imageAlt="Three stone emerald cut ring resting in a green flower bud"
       doors={
         <>
-          <Button href={ASK} variant="primary" arrow>
+          <Button href={LEGACY_STONES} variant="primary" arrow>
             Start a Legacy
           </Button>
           <Button href={office.phoneHref} variant="secondary">
@@ -50,8 +52,8 @@ export default function Page() {
       >
         <Steps
           items={[
-            { title: "Choose from the Legacy list", line: "Start from the list of Legacy diamonds with your client." },
-            { title: "Call us or send the order", line: `Call ${office.phone} or send a Legacy request, and we confirm the details with you.` },
+            { title: "Choose a Legacy stone", line: "Start a Legacy opens the diamond search on the Legacy stones. Pick one with your client." },
+            { title: "Order it like any stone", line: `Purchase it or take it on memo from the search, or call ${office.phone}, and we confirm the details with you.` },
             { title: "Grown from the same seed line", line: "Each diamond in the collection comes from that one seed line, ready for the next milestone." },
           ]}
         />

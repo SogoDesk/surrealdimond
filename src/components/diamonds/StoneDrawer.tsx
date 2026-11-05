@@ -64,6 +64,7 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
         ["Depth", `${stone.depthPct.toFixed(1)}%`],
         ["Lab", stone.lab],
         ["Type", STONE_TYPE],
+        ...(stone.legacy ? ([["Program", "Diamond Legacy"]] as [string, string][]) : []),
         ["Stock ID", stone.id],
       ]
     : [];
