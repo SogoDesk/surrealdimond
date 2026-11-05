@@ -209,4 +209,5 @@
 .status[data-status="confirmed"] { background: var(--beam); box-shadow: inset 0 0 0 1px #b6ecff; }
 .status[data-status="shipped"] { background: var(--sky); color: var(--navy); }
 .status[data-status="delivered"] { background: rgba(46, 158, 107, 0.14); color: #1f7a52; }
+:global(html[data-mode="dark"]) .status[data-status="delivered"] { background: rgba(110, 215, 160, 0.16); color: #8fe3b6; }
 .status[data-status="cancelled"] { background: var(--porcelain); color: var(--stone); box-shadow: inset 0 0 0 1px var(--hairline); }
