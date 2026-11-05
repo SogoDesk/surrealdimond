@@ -29,7 +29,7 @@ const BASE: Record<Category, number> = {
   bracelets: 2400,
   "sterling-silver": 240,
 };
-const METAL: Record<Metal, number> = { wg: 1, yg: 1, rg: 1.02 };
+const METAL: Record<Metal, number> = { wg: 1, yg: 1 };
 
 const round5 = (n: number) => Math.round(n / 5) * 5;
 

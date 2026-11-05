@@ -16,7 +16,7 @@ export type Category =
 
 export type Shape = "round" | "oval" | "emerald" | "radiant" | "princess" | "pear";
 
-export type Metal = "wg" | "yg" | "rg";
+export type Metal = "wg" | "yg";
 
 export interface Product {
   id: string;
@@ -85,7 +85,6 @@ export const formatCarat = (ct: number) => `${ct % 1 === 0 ? ct.toFixed(0) : ct}
 export const metals: { id: Metal; label: string; swatch: string }[] = [
   { id: "wg", label: "White gold", swatch: "#e6e8ea" },
   { id: "yg", label: "Yellow gold", swatch: "#e2c27a" },
-  { id: "rg", label: "Rose gold", swatch: "#e3b8a7" },
 ];
 
 export const products: Product[] = [
@@ -177,7 +176,7 @@ export const products: Product[] = [
   { id: "emerald-tennis-bracelet", name: "Emerald Tennis Bracelet", category: "bracelets", detail: "Step cuts, east west", image: "lgbd70166-em-14k-wg", variants: { wg: "lgbd70166-em-14k-wg", yg: "lgbd70166-em-14k-yg" } },
   { id: "oval-tennis-bracelet", name: "Oval Tennis Bracelet", category: "bracelets", detail: "Oval brilliants, shared prong", image: "lgbd70167-ov-14k-wg", variants: { wg: "lgbd70167-ov-14k-wg", yg: "lgbd70167-ov-14k-yg" } },
   { id: "bezel-tennis-bracelet", name: "Bezel Tennis Bracelet", category: "bracelets", detail: "Bezel set round brilliants", image: "lgbd70162-bz-wg" },
-  { id: "flexi-bangle", name: "Flexi Bangle", category: "bracelets", detail: "Flexible tennis bangle", image: "flexi-bangle-1", variants: { wg: "flexi-bangle-1", yg: "flexi-bangle-4", rg: "flexi-bangle-3" }, featured: true },
+  { id: "flexi-bangle", name: "Flexi Bangle", category: "bracelets", detail: "Flexible tennis bangle", image: "flexi-bangle-1", variants: { wg: "flexi-bangle-1", yg: "flexi-bangle-4" }, featured: true },
   { id: "pave-bangle", name: "Pave Bangle", category: "bracelets", detail: "Hinged, three rows of pave", image: "ca24ap0009-9113", variants: { wg: "ca24ap0009-9113", yg: "ca24ap0009-9114" } },
   { id: "lace-bangle", name: "Lace Bangle", category: "bracelets", detail: "Openwork pave, hinged", image: "ca24mr007-9157", variants: { wg: "ca24mr007-9157", yg: "ca24mr007-9156" } },
   { id: "oval-accent-tennis", name: "Oval Accent Tennis", category: "bracelets", detail: "Round line with an oval center", image: "ca24mr0083-2725" },

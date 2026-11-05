@@ -348,7 +348,7 @@ function memoInvoices(lines: MemoLine[], reports: ReturnType<typeof useMemoRepor
 function orderInvoices(orders: PlacedOrder[], work: Record<string, OrderWork>): Invoice[] {
   return orders.filter((o) => workOf(work, o).status !== "cancelled").map((o) => {
     const lines: InvoiceLine[] = o.lines.map((l) => ({
-      description: l.stoneId ? `Loose diamond, stock ${l.stoneId}` : `${productById(l.productId)?.name ?? l.productId}, ${metalLabel(l.metal)}, ${l.carat} ct${l.size ? `, size ${l.size}` : ""}`,
+      description: l.stoneId ? `Loose diamond, stock ${l.stoneId}` : `${productById(l.productId)?.name ?? l.productId}, ${metalLabel(l.metal)}, ${l.carat} ct`,
       ref: l.stoneId ?? (productById(l.productId) ? (styleRef(productById(l.productId)!) ?? undefined) : undefined),
       qty: l.qty,
       unit: cents((linePrice(l) ?? 0) / (l.stoneId ? 1 : l.qty)),

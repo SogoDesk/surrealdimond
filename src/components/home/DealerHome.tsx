@@ -125,8 +125,7 @@ export default function DealerHome() {
                           {p.name}
                         </Link>
                         <span className={s.rowMeta}>
-                          {metals.find((m) => m.id === l.metal)?.label}, {formatCarat(l.carat)}
-                          {l.size ? `, size ${l.size}` : ""}, qty {l.qty}
+                          {metals.find((m) => m.id === l.metal)?.label}, {formatCarat(l.carat)}, qty {l.qty}
                         </span>
                       </span>
                       <button type="button" className={s.reorder} onClick={() => reorder(l)}>

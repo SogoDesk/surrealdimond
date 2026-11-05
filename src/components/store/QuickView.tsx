@@ -8,12 +8,13 @@
  *
  * Inside: the views (the render in the chosen metal, the turntable, other
  * angles) with thumbnails; the category, name, design line and reference;
- * the dealer price box; metal (only the metals the piece exists in, BRD
- * R-12), total carat weight, ring size for rings, quantity; Add to cart and
+ * the price box; metal (only the metals the piece exists in, BRD R-12),
+ * total carat weight, quantity and special instructions; Add to cart and
  * Buy now (straight to checkout) for a signed-in dealer, Log in to order
- * otherwise, and the wishlist
- * heart; the next day delivery countdown and three facts; and View full
- * details, which opens the product page with the same metal and carat.
+ * otherwise, and the wishlist heart; Ask a question and View full details
+ * (the product page with the same metal and carat); the next day delivery
+ * countdown and Certificates on request. No ring size or other sizing, and
+ * no Grown by or Available in lines (client change request, November 2026).
  * Previous and next step through the store's current results. Mechanics
  * from useDrawer: inert while closed, focus held inside, Escape closes, the
  * page scroll locked while open.
@@ -34,7 +35,8 @@ import DeliveryCountdown from "@/components/product/DeliveryCountdown";
 import { caratOptions, categoryLabel, formatCarat, metals, productHref, productMetals, productViews, renderSrc, styleRef, videoSrc, type Product } from "@/content/catalog";
 import { groundStyle } from "@/content/grounds";
 import { account } from "@/content/site";
-import { addToCart, RING_SIZES, SIZED_CATEGORIES } from "@/lib/cart";
+import { addToCart } from "@/lib/cart";
+import { openContactDrawer } from "@/components/chrome/ContactDrawer";
 import { useDealer } from "@/lib/dealer";
 import { useWishlist } from "./useWishlist";
 import s from "./quickview.module.css";
@@ -113,13 +115,12 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
   const dealer = useDealer();
   const { has, toggle } = useWishlist();
   const [selection, setSelection] = useState(initial);
-  const [size, setSize] = useState("6.5");
   const [qty, setQty] = useState(1);
+  const [note, setNote] = useState("");
   const [at, setAt] = useState(0);
   const [added, setAdded] = useState(false);
   const router = useRouter();
 
-  const sized = SIZED_CATEGORIES.has(product.category);
   const primary = renderForSelection(product, selection);
   const video = product.video ? videoSrc(product.video) : null;
   const views: View[] = [
@@ -145,7 +146,7 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
     setAt(0);
     setAdded(false);
   };
-  const line = () => ({ productId: product.id, metal: selection.metal, carat: selection.carat, size: sized ? size : null, qty, note: "" });
+  const line = () => ({ productId: product.id, metal: selection.metal, carat: selection.carat, size: null, qty, note: note.trim() });
   const add = () => {
     addToCart(line());
     setAdded(true);
@@ -155,6 +156,11 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
     addToCart(line(), { quiet: true });
     onClose();
     router.push(account.checkout);
+  };
+  /** Ask a question: the drawer closes first, then the contact drawer opens. */
+  const ask = () => {
+    onClose();
+    window.setTimeout(() => openContactDrawer("other", "contact"), 350);
   };
 
   return (
@@ -246,18 +252,6 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
       </div>
 
       <div className={s.fieldRow}>
-        {sized && (
-          <label className={s.field}>
-            <span className={s.label}>Ring size</span>
-            <select className={s.select} value={size} onChange={(e) => setSize(e.target.value)}>
-              {RING_SIZES.map((x) => (
-                <option key={x} value={x}>
-                  US {x}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
         <div className={s.field}>
           <span className={s.label} id={`qv-qty-${product.id}`}>
             Quantity
@@ -276,6 +270,11 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
         </div>
       </div>
 
+      <label className={s.field}>
+        <span className={s.label}>Special instructions</span>
+        <textarea className={s.textarea} rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Engraving, delivery date, anything we should know" />
+      </label>
+
       <div className={s.doors}>
         {dealer ? (
           <>
@@ -291,7 +290,10 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
             Log in to order
           </Link>
         )}
-        <Link href={full} className={`${s.secondary} ${s.wide}`} onClick={onClose}>
+        <button type="button" className={s.secondary} onClick={ask}>
+          Ask a question
+        </button>
+        <Link href={full} className={s.secondary} onClick={onClose}>
           View full details
           <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 8h10M9 4l4 4-4 4" />
@@ -300,8 +302,7 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
       </div>
       {added && (
         <p className={s.notice} role="status">
-          {product.name}, {metalLabel.toLowerCase()}, {formatCarat(selection.carat)}
-          {sized ? `, size ${size}` : ""}, qty {qty} is in your cart.{" "}
+          {product.name}, {metalLabel.toLowerCase()}, {formatCarat(selection.carat)}, qty {qty} is in your cart.{" "}
           <Link href={account.cart} onClick={onClose}>
             Review the cart
           </Link>
@@ -311,10 +312,7 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
       <DeliveryCountdown />
       <ul className={s.facts}>
         <li>
-          <strong>Available in</strong> {metals.filter((m) => ownMetals.includes(m.id)).map((m) => m.label.toLowerCase()).join(", ")}
-        </li>
-        <li>
-          <strong>Made to order</strong> in other carat weights and sizes
+          <strong>Certificates</strong> can be provided on request
         </li>
       </ul>
     </div>

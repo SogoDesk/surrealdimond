@@ -103,7 +103,7 @@ function lineText(l: CartLine) {
     return { name: st ? `${stoneTitle(st)} loose diamond` : `Stone ${l.stoneId}`, meta: st ? `${st.color} ${st.clarity}, ${st.lab} ${st.certificate}, stock ${st.id}` : `Stock ${l.stoneId}`, href: `/diamonds?stone=${l.stoneId}`, shape: st?.shape };
   }
   const p = productById(l.productId);
-  return { name: p?.name ?? l.productId, meta: [metalLabel(l.metal), formatCarat(l.carat), l.size ? `size ${l.size}` : null].filter(Boolean).join(", "), href: p ? productHref(p) : undefined, shape: undefined };
+  return { name: p?.name ?? l.productId, meta: [metalLabel(l.metal), formatCarat(l.carat)].join(", "), href: p ? productHref(p) : undefined, shape: undefined };
 }
 
 function StatusChip({ status }: { status: OrderStatus }) {

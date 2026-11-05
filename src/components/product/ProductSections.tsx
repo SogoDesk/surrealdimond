@@ -20,6 +20,7 @@ import {
   categoryLabel,
   formatCarat,
   metals,
+  productById,
   productMetals,
   products,
   renderSrc,
@@ -33,6 +34,7 @@ import {
 import { editorial } from "@/content/editorial";
 import { groundStyle } from "@/content/grounds";
 import { brand } from "@/content/site";
+import { LOOK_MAX, useMerch } from "@/lib/merch";
 import s from "./product.module.css";
 
 const Arrow = () => (
@@ -43,28 +45,15 @@ const Arrow = () => (
 
 /* ---------- 2. Program banners ---------- */
 
-export function ProgramBanners({ product }: { product: Product }) {
-  const ring = product.category === "engagement";
+/** The Custom program, in place of the Made to Order banner on jewelry (client change request, November 2026). */
+export function ProgramBanners() {
   return (
     <section className={s.banners} aria-label="Programs">
       <div className={s.wrap}>
         <div className={s.bannerGrid}>
-          <Link href="/diamonds/made-to-order" className={`${s.banner} ${s.bannerDark}`}>
-            <span className={s.bannerMedia}>
-              <Image src="/media/photos/sb-3984-sm.webp" alt="" fill sizes="(min-width: 900px) 30vw, 60vw" />
-            </span>
-            <span className={s.bannerCopy}>
-              <span className={s.bannerEyebrow}>Made to Order (M2O)</span>
-              <span className={s.bannerTitle}>{ring ? "Grow the center stone to order" : "A diamond grown to order"}</span>
-              <span className={s.bannerLine}>Any shape, any carat weight. Under 4 ct FG+ color and VS+ clarity, with an IGI certificate.</span>
-              <span className={s.bannerCta}>
-                Start an M2O order <Arrow />
-              </span>
-            </span>
-          </Link>
           <Link href="/custom" className={`${s.banner} ${s.bannerLight}`}>
             <span className={s.bannerMedia}>
-              <Image src="/media/banners/social-8.webp" alt="" fill sizes="(min-width: 900px) 30vw, 60vw" />
+              <Image src="/media/banners/social-8.webp" alt="" fill sizes="(min-width: 900px) 40vw, 60vw" />
             </span>
             <span className={s.bannerCopy}>
               <span className={s.bannerEyebrow}>Custom jewelry</span>
@@ -116,13 +105,10 @@ const icon = (d: ReactNode) => (
   </svg>
 );
 
-export function Details({ product, selection, ringSize }: { product: Product; selection: PieceSelection; ringSize: string | null }) {
+export function Details({ product, selection }: { product: Product; selection: PieceSelection }) {
   const ref = styleRef(product);
   const shape = shapes.find((x) => x.id === product.shape)?.label;
   const metalLabel = metals.find((m) => m.id === selection.metal)?.label ?? "";
-  const pictured = productMetals(product)
-    .map((m) => metals.find((x) => x.id === m)?.label)
-    .join(", ");
   const cat = categories.find((c) => c.id === product.category);
   const image = renderForSelection(product, selection) ?? product.image;
 
@@ -140,8 +126,6 @@ export function Details({ product, selection, ringSize }: { product: Product; se
             <Accordion title="Metal details" open icon={icon(<><circle cx="10" cy="11" r="5.5" /><path d="M7.5 3.5h5l1.5 2-4 3-4-3Z" /></>)}>
               <div className={s.specGrid}>
                 <Spec label="Selected metal" value={metalLabel} />
-                <Spec label="Available in" value={pictured} />
-                {ringSize && <Spec label="Ring size" value={`US ${ringSize}`} />}
               </div>
             </Accordion>
             <Accordion title="Diamond details" icon={icon(<><path d="M6 3.5h8l3 4-7 9-7-9Z" /><path d="M3 7.5h14" /></>)}>
@@ -289,10 +273,16 @@ const PAIRS: Record<Category, Category[]> = {
   "sterling-silver": ["pendants", "earrings", "bracelets", "rings"],
 };
 
+/** The console's pairings for the piece (Merchandising, Complete the look); without them, a featured piece from each paired category. */
 export function CompleteLook({ product }: { product: Product }) {
-  const picks = PAIRS[product.category]
-    .map((c) => products.find((p) => p.category === c && p.featured) ?? products.find((p) => p.category === c))
-    .filter((p): p is Product => Boolean(p));
+  const { looks } = useMerch();
+  const chosen = (looks?.[product.id] ?? [])
+    .map((id) => productById(id))
+    .filter((p): p is Product => Boolean(p))
+    .slice(0, LOOK_MAX);
+  const picks = chosen.length
+    ? chosen
+    : PAIRS[product.category].map((c) => products.find((p) => p.category === c && p.featured) ?? products.find((p) => p.category === c)).filter((p): p is Product => Boolean(p));
   const photo = editorial[product.category].wide[0] ?? editorial[product.category].single[0];
   const quick = useQuickViewList(picks);
   return (

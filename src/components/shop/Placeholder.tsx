@@ -3,7 +3,7 @@
 /**
  * Stands in for a render the library does not have yet: on the same paper
  * ground, a small hairline plan-view brilliant in ink at 40 percent, then
- * "Made to order in rose gold, 2 ct." in Cormorant and a Jost note that a
+ * "Made to order in yellow gold, 2 ct." in Cormorant and a Jost note that a
  * render follows on enquiry. The card uses the 22px size, the quick view
  * stage the 28px one.
  */

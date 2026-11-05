@@ -28,7 +28,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer, { openContactDrawer } from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
@@ -47,8 +47,6 @@ import s from "./product.module.css";
 import { useMetalKey, useWithMetals } from "@/lib/metals";
 import { formatUSD, jewelryPrice } from "@/lib/pricing";
 
-const SIZED = new Set(["engagement", "wedding-bands", "rings"]);
-const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];
 
 export default function ProductPage({ productId }: { productId: string }) {
   const product = productById(productId);
@@ -92,7 +90,6 @@ function initialSelection(product: Product, params: URLSearchParams | null): Pie
 
 function ProductView({ product, params }: { product: Product; params: URLSearchParams | null }) {
   const [selection, setSelection] = useState<PieceSelection>(() => initialSelection(product, params));
-  const [size, setSize] = useState<string>("6.5");
   const [qty, setQty] = useState(1);
   const [notes, setNotes] = useState("");
   const [copied, setCopied] = useState(false);
@@ -100,13 +97,19 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
   const doorsRef = useRef<HTMLDivElement>(null);
   const { has, toggle } = useWishlist();
   const ref = styleRef(product);
-  const sized = SIZED.has(product.category);
   const next = `/jewelry/${product.category}/${product.id}?metal=${selection.metal}&ct=${selection.carat}`;
   const loginHref = `${account.login}?next=${encodeURIComponent(next)}`;
   const metalLabel = metals.find((m) => m.id === selection.metal)?.label ?? "";
   const saved = has(product.id);
   const dealer = useDealer();
-  const add = () => addToCart({ productId: product.id, metal: selection.metal, carat: selection.carat, size: sized ? size : null, qty, note: notes.trim() });
+  const router = useRouter();
+  const line = () => ({ productId: product.id, metal: selection.metal, carat: selection.carat, size: null, qty, note: notes.trim() });
+  const add = () => addToCart(line());
+  /** Buy now: the piece goes into the cart and the dealer straight to checkout (client change request, November 2026). */
+  const buyNow = () => {
+    addToCart(line(), { quiet: true });
+    router.push(account.checkout);
+  };
 
   /* The piece joins the dealer's recently viewed list (BRD R-08). */
   useEffect(() => {
@@ -248,20 +251,6 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                 </div>
 
                 <div className={s.fieldRow}>
-                  {sized && (
-                    <label className={s.field}>
-                      <span className={s.label}>Ring size</span>
-                      <span className={s.selectWrap}>
-                        <select className={s.select} value={size} onChange={(e) => setSize(e.target.value)}>
-                          {RING_SIZES.map((x) => (
-                            <option key={x} value={x}>
-                              US {x}
-                            </option>
-                          ))}
-                        </select>
-                      </span>
-                    </label>
-                  )}
                   <div className={s.field}>
                     <span className={s.label} id="qty-label">
                       Quantity
@@ -282,7 +271,7 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
 
                 <label className={s.field}>
                   <span className={s.label}>Special instructions</span>
-                  <textarea className={s.textarea} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Engraving, finger size notes, delivery date" />
+                  <textarea className={s.textarea} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Engraving, delivery date, anything we should know" />
                 </label>
 
                 <div ref={doorsRef} className={s.doors}>
@@ -302,7 +291,12 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                       </svg>
                     </Link>
                   )}
-                  <button type="button" className={s.secondary} onClick={() => openContactDrawer("other", "contact")}>
+                  {dealer && (
+                    <button type="button" className={s.buyNow} onClick={buyNow}>
+                      Buy now
+                    </button>
+                  )}
+                  <button type="button" className={`${s.secondary} ${dealer ? s.doorWide : ""}`} onClick={() => openContactDrawer("other", "contact")}>
                     Ask a question
                   </button>
                 </div>
@@ -334,8 +328,8 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
       </section>
 
       <CompleteLook product={product} />
-      <Details product={product} selection={selection} ringSize={sized ? size : null} />
-      <ProgramBanners product={product} />
+      <Details product={product} selection={selection} />
+      <ProgramBanners />
 
       <div className={s.bar} data-on={barOn ? "true" : undefined} aria-hidden={!barOn} inert={!barOn}>
         <div className={s.barInner}>
@@ -345,8 +339,7 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
           <span className={s.barText}>
             <span className={s.barName}>{product.name}</span>
             <span className={s.barMeta}>
-              {metalLabel}, {formatCarat(selection.carat)}
-              {sized ? `, size ${size}` : ""}, qty {qty}
+              {metalLabel}, {formatCarat(selection.carat)}, qty {qty}
             </span>
           </span>
           {dealer ? (

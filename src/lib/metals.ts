@@ -2,7 +2,8 @@
 
 /**
  * Metal options per article, set in the admin console (BRD R-12, R-13,
- * input C-02): which of white, yellow and rose gold a piece is offered in,
+ * input C-02): which of white and yellow gold a piece is offered in (rose
+ * gold was removed in the client change request of November 2026),
  * and the one it opens in. A piece with no entry offers the metals its
  * imagery shows and opens in its curated default (src/content/catalog.ts).
  *

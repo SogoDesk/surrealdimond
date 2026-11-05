@@ -202,15 +202,15 @@ type Plan = [person: number, daysAgo: number, payment: PaymentMethod, lines: [id
 
 /** Nine orders across the three test store accounts, every status and payment state represented. */
 const PLANS: Plan[] = [
-  [0, 0.1, "card", [["oval-halo", 1.5, 1, "6"], ["contour-band", 0.5, 1, "6"]], "received", "authorized"],
+  [0, 0.1, "card", [["oval-halo", 1.5, 1, null], ["contour-band", 0.5, 1, null]], "received", "authorized"],
   [2, 0.3, "wire", [["oval-tennis-necklace", 3, 1, null], ["oval-halo-studs", 1, 2, null]], "received", "awaiting"],
-  [3, 1.2, "ach", [["eternity-band", 1, 3, "6.5"], ["classic-pave-band", 0.5, 2, "7"]], "confirmed", "initiated"],
-  [0, 2.4, "card", [["three-stone-round", 2, 1, "5.5"]], "confirmed", "captured", { payRef: "TXN-4471" }],
+  [3, 1.2, "ach", [["eternity-band", 1, 3, null], ["classic-pave-band", 0.5, 2, null]], "confirmed", "initiated"],
+  [0, 2.4, "card", [["three-stone-round", 2, 1, null]], "confirmed", "captured", { payRef: "TXN-4471" }],
   [2, 4.2, "wire", [["emerald-tennis-bracelet", 3, 1, null], ["pear-bezel-pendant", 1, 3, null]], "shipped", "received", { payRef: "FW-88213", carrier: "FedEx", tracking: "7712 4490 1183", posted: true }],
   [3, 6.3, "card", [["inside-out-hoops", 1, 2, null], ["toi-et-moi-pendant", 1, 1, null]], "shipped", "captured", { payRef: "TXN-3302", carrier: "UPS", tracking: "1Z 999 AA1 01 2345 6784" }],
-  [0, 12.5, "ach", [["bridal-set-halo", 1.5, 1, "6"], ["oval-five-stone", 1, 1, "6"]], "delivered", "settled", { carrier: "FedEx", tracking: "7712 4402 9917", posted: true }],
+  [0, 12.5, "ach", [["bridal-set-halo", 1.5, 1, null], ["oval-five-stone", 1, 1, null]], "delivered", "settled", { carrier: "FedEx", tracking: "7712 4402 9917", posted: true }],
   [2, 19.4, "card", [["bezel-tennis-bracelet", 2, 2, null]], "delivered", "captured", { payRef: "TXN-1180", carrier: "UPS", tracking: "1Z 999 AA1 01 2345 1120", posted: true }],
-  [3, 26.2, "wire", [["round-solitaire", 1, 1, "7"]], "cancelled", "voided", { cancelReason: "Payment not received" }],
+  [3, 26.2, "wire", [["round-solitaire", 1, 1, null]], "cancelled", "voided", { cancelReason: "Payment not received" }],
 ];
 
 const stampOf = (t: number) => {

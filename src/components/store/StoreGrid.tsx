@@ -9,7 +9,7 @@
  *   row 2  cards and a campaign photo at the end, then (first page only)
  *          the "find your match" panel
  *   row 3  a wide campaign photo, then cards
- *   row 4  cards, then the Made to Order tile (first page) or a photo
+ *   row 4  cards, then the Custom jewelry tile (first page) or a photo
  *   row 5  a campaign photo, then cards
  *   row 6  cards, then a wide campaign photo
  *
@@ -114,16 +114,16 @@ function layout(matches: Product[], cols: number, rows: number, category: Catego
 function PromoTile() {
   return (
     <li className={s.promo}>
-      <Link href="/diamonds/made-to-order" className={s.promoLink}>
+      <Link href="/custom" className={s.promoLink}>
         <Image src="/media/photos/sb-3990-sm.webp" alt="" fill sizes="(min-width: 1280px) 40vw, 90vw" className={s.promoImage} />
         <span className={s.promoCopy}>
-          <span className={s.promoEyebrow}>Made to Order (M2O)</span>
+          <span className={s.promoEyebrow}>Custom jewelry</span>
           <span className={s.promoTitle}>
-            Any shape, <em>any carat weight</em>
+            Change anything <em>about it</em>
           </span>
-          <span className={s.promoLine}>A diamond grown to your client&apos;s exact specification, with an IGI certificate.</span>
+          <span className={s.promoLine}>Our CAD department can make just about any jewelry item, in 14K, 18K or platinum.</span>
           <span className={s.promoCta}>
-            Start an M2O order
+            Start a custom request
             <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 8h10M9 4l4 4-4 4" />
             </svg>
@@ -190,7 +190,7 @@ export default function StoreGrid({ category, matches, density, query, showShape
     return (
       <div className={s.empty} role="status">
         <p className={s.emptyTitle}>Nothing matches these filters yet.</p>
-        <p className={s.emptyLine}>Every piece can be made to order in another metal or size.</p>
+        <p className={s.emptyLine}>Our CAD department can make just about any jewelry item through a custom request.</p>
         <button type="button" className={s.emptyBtn} onClick={onClear}>
           Clear filters
         </button>

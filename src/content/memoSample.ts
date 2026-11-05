@@ -20,7 +20,7 @@ export interface SampleMemoLine {
   clarity?: string;
   /** For jewelry: the catalog piece and its metal. */
   productId?: string;
-  metal?: "wg" | "yg" | "rg";
+  metal?: "wg" | "yg";
 }
 
 export const sampleMemo: SampleMemoLine[] = [

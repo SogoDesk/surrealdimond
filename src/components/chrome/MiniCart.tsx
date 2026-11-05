@@ -4,7 +4,7 @@
  * The cart button and mini cart (after Tanishq's mini cart). Signed out, the
  * bag links to /cart, which asks the visitor to log in. Signed in, the bag
  * shows the piece count and opens a popover: "Your cart (n pieces)", each
- * line with its render, metal, carat, size and quantity, the totals the
+ * line with its render, metal, carat and quantity, the totals the
  * preview can state (pieces, total carat weight), and View cart and
  * Checkout. It also opens by itself for four seconds when a piece is added.
  */
@@ -143,7 +143,6 @@ export default function MiniCart() {
                         <span className={styles.miniName}>{p.name}</span>
                         <span className={styles.miniMeta}>
                           {metal}, {formatCarat(l.carat)}
-                          {l.size ? `, size ${l.size}` : ""}
                         </span>
                         <span className={styles.miniMeta}>
                           Qty {l.qty}, <span className="tabular">{formatUSD(linePrice(l) ?? 0)}</span>

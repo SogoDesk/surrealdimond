@@ -274,6 +274,11 @@
 }
 .secondary:hover { background: var(--mist); }
 .primary:focus-visible, .secondary:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+/* Buy now beside Add to cart, in Surreal blue; Ask a question then takes the row below. */
+.buyNow { display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 22px; border-radius: 999px; background: var(--sky); color: var(--navy); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; transition: filter 0.3s var(--ease-surreal); }
+.buyNow:hover { filter: brightness(0.94); }
+.buyNow:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.doorWide { grid-column: 1 / -1; }
 .apply { margin: -4px 0 0; font-size: 0.8125rem; color: var(--stone); }
 .apply a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .service { list-style: none; margin: 4px 0 0; padding: 0; border-top: 1px solid var(--hairline); }
@@ -296,8 +301,7 @@
 
 /* ---------- 2. Program banners ---------- */
 .banners { position: relative; z-index: 1; padding: 0 0 clamp(48px, 5vw, 80px); background: var(--porcelain); }
-.bannerGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-@media (max-width: 899px) { .bannerGrid { grid-template-columns: 1fr; } }
+.bannerGrid { display: grid; grid-template-columns: 1fr; gap: 16px; }
 .banner {
   /* Light tokens kept on the program banners, which carry their own grounds (the dark theme flips the page tokens). */
   --ink: #0b1f2a; --graphite: #3a3f44; --stone: #636e78; --white: #ffffff; --hairline: #dce1e6; --mist: #cff2ff; --sky: #86dfff; --line: #86dfff; --porcelain: #f2f4f6;
@@ -310,7 +314,6 @@
   transition: transform 0.6s var(--ease-surreal), box-shadow 0.6s var(--ease-surreal);
 }
 .banner:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
-.bannerDark { background: linear-gradient(120deg, #0f2a38, #0b1f2a); color: #f2f4f6; }
 .bannerLight { background: linear-gradient(120deg, #f4ecdc, #fbf7ee); color: var(--ink); }
 .bannerMedia { position: relative; display: block; overflow: hidden; }
 .bannerMedia img { object-fit: cover; transition: transform 1.2s var(--ease-surreal); }
@@ -320,7 +323,6 @@
 .bannerTitle { font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(1.625rem, 2.2vw, 2.125rem); line-height: 1.08; }
 .bannerLine { font-size: 0.875rem; line-height: 1.55; opacity: 0.82; }
 .bannerCta { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; padding-top: 10px; }
-.bannerDark .bannerCta { color: var(--sky); }
 
 /* ---------- 3. Jewelry details ---------- */
 .details { position: relative; z-index: 1; padding: clamp(56px, 6vw, 96px) 0; background: var(--paper); border-top: 1px solid var(--hairline); }

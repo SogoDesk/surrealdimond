@@ -5,7 +5,7 @@
  * with reorder in a couple of clicks, in the WB Mason manner.
  *
  * - Frequently reordered: the pieces the store orders most, each back in the
- *   cart in one click with the same metal, carat weight, size and quantity.
+ *   cart in one click with the same metal, carat weight and quantity.
  * - A toolbar: search by order number, piece, stock ID or PO; placed in the
  *   last 30 or 90 days or this year; download the history as CSV.
  * - One card per order: number, date, pieces and carats, payment, status,
@@ -68,7 +68,7 @@ function lineName(l: CartLine): { name: string; meta: string; product?: Product 
     return { name: st ? `${stoneTitle(st)} loose diamond` : `Stone ${l.stoneId}`, meta: st ? `${st.color} ${st.clarity}, ${st.lab} ${st.certificate}, stock ${st.id}` : `Stock ${l.stoneId}` };
   }
   const p = productById(l.productId);
-  return { name: p?.name ?? l.productId, meta: [metalLabel(l.metal), formatCarat(l.carat), l.size ? `size ${l.size}` : null].filter(Boolean).join(", "), product: p };
+  return { name: p?.name ?? l.productId, meta: [metalLabel(l.metal), formatCarat(l.carat)].join(", "), product: p };
 }
 
 export default function OrdersPage() {

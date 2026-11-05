@@ -24,7 +24,7 @@ import { useWishlist } from "@/components/store/useWishlist";
 import { gates } from "@/content/gates";
 import { brand } from "@/content/site";
 import { featured, productById, type Product } from "@/content/catalog";
-import { RING_SIZES, SIZED_CATEGORIES, pieceCount, useCart } from "@/lib/cart";
+import { pieceCount, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { LineItem, Steps, Summary, TrustRow } from "./parts";
 import s from "./checkout.module.css";
@@ -54,10 +54,6 @@ export default function CartPage() {
   if (!dealer) return <GatePage {...gates.cart} />;
 
   const pieces = pieceCount(lines);
-  const missingSize = lines.some((l) => {
-    const p = productById(l.productId);
-    return p && SIZED_CATEGORIES.has(p.category) && !l.size;
-  });
 
   return (
     <>
@@ -112,12 +108,6 @@ export default function CartPage() {
                     </span>
                   </div>
 
-                  {missingSize && (
-                    <p className={s.alert} role="status">
-                      Choose a ring size for each ring before checkout. Sizes US {RING_SIZES[0]} to {RING_SIZES[RING_SIZES.length - 1]}.
-                    </p>
-                  )}
-
                   <ul className={s.lines}>
                     {lines.map((l) => (
                       <li key={l.key}>
@@ -130,7 +120,7 @@ export default function CartPage() {
 
                 <div className={s.side}>
                   <Summary lines={lines}>
-                    <button type="button" className={s.primaryWide} disabled={missingSize} onClick={() => router.push("/checkout")}>
+                    <button type="button" className={s.primaryWide} onClick={() => router.push("/checkout")}>
                       Proceed to checkout
                       <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M3 8h10M9 4l4 4-4 4" />
@@ -181,7 +171,7 @@ export default function CartPage() {
           <span>
             <strong className="tabular">{pieces}</strong> {pieces === 1 ? "piece" : "pieces"}
           </span>
-          <button type="button" className={s.primary} disabled={missingSize} onClick={() => router.push("/checkout")}>
+          <button type="button" className={s.primary} onClick={() => router.push("/checkout")}>
             Checkout
           </button>
         </div>

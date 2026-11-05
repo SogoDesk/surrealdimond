@@ -34,7 +34,12 @@ export interface Merch {
   pins: Record<string, string[]>;
   sorts: Record<string, Sort>;
   banners: Banner[];
+  /** Complete the look, per piece: the pieces shown beside it, in order (client change request, November 2026). Optional, so settings saved before it still load. */
+  looks?: Record<string, string[]>;
 }
+
+/** Complete the look pairings a piece can carry. */
+export const LOOK_MAX = 4;
 
 export const DEFAULT_MERCH: Merch = {
   hot: hotThisWeek,

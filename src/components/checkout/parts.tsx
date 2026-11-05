@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { formatCarat, metals, productById, productHref, renderSrc, styleRef } from "@/content/catalog";
-import { RING_SIZES, SIZED_CATEGORIES, beforeCutoff, caratTotal, pieceCount, removeLine, setNote, setQty, setSize, type CartLine } from "@/lib/cart";
+import { beforeCutoff, caratTotal, pieceCount, removeLine, setNote, setQty, type CartLine } from "@/lib/cart";
 import { useWishlist } from "@/components/store/useWishlist";
 import { groundStyle } from "@/content/grounds";
 import { measurements, shipment, stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
@@ -96,7 +96,6 @@ export function LineItem({ line, editable = true }: { line: CartLine; editable?:
   if (!p) return null;
   const metal = metals.find((m) => m.id === line.metal);
   const ref = styleRef(p);
-  const sized = SIZED_CATEGORIES.has(p.category);
   const image = p.variants?.[line.metal] ?? p.image;
   const href = `${productHref(p)}?metal=${line.metal}&ct=${line.carat}`;
 
@@ -127,22 +126,6 @@ export function LineItem({ line, editable = true }: { line: CartLine; editable?:
             {metal?.label}
           </span>
           <span className={s.specChip}>{formatCarat(line.carat)}</span>
-          {sized &&
-            (editable ? (
-              <label className={s.specChip}>
-                <span className={s.srOnly}>Ring size</span>
-                <select className={s.sizeSelect} value={line.size ?? ""} onChange={(e) => setSize(line.key, e.target.value || null)} aria-invalid={!line.size}>
-                  <option value="">Choose ring size</option>
-                  {RING_SIZES.map((x) => (
-                    <option key={x} value={x}>
-                      Size US {x}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            ) : (
-              <span className={s.specChip}>{line.size ? `Size US ${line.size}` : "Size to confirm"}</span>
-            ))}
           {!editable && <span className={s.specChip}>Qty {line.qty}</span>}
         </div>
         {editable ? (
@@ -211,7 +194,6 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
                   {p.name}
                   <span>
                     {metals.find((m) => m.id === l.metal)?.label}, {formatCarat(l.carat)}
-                    {l.size ? `, size ${l.size}` : ""}
                   </span>
                 </span>
               </li>

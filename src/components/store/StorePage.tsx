@@ -34,7 +34,7 @@ import { categoryFor, clearedQuery, matchesQuery, parseQuery, poolFor, serialize
 import { renderSrc, type Category } from "@/content/catalog";
 import { applyPins, pageSort, useMerch } from "@/lib/merch";
 import { useWithMetalsList } from "@/lib/metals";
-import { divisions } from "@/content/divisions";
+import { divisionGroups, divisions } from "@/content/divisions";
 import { account } from "@/content/site";
 import { useDealer } from "@/lib/dealer";
 import StoreToolbar, { type Density } from "./StoreToolbar";
@@ -67,29 +67,39 @@ function WithParams({ category }: StorePageProps) {
   return <StoreView category={category} params={params} />;
 }
 
+/** The divisions in labelled groups: the jewelry categories (round), then the collections and programs (rounded squares), each wrapping so no row runs off the page (client change request, November 2026). */
 function DivisionRail({ active }: { active: Category | null }) {
   return (
     <nav className={s.rail} aria-label="Jewelry divisions">
-      <ul className={s.railList}>
-        <li>
-          <Link href="/jewelry" className={s.railItem} aria-current={active === null ? "page" : undefined}>
-            <span className={`${s.railThumb} ${s.railAll}`} aria-hidden>
-              All
-            </span>
-            <span className={s.railLabel}>All jewelry</span>
-          </Link>
-        </li>
-        {divisions.map((d) => (
-          <li key={d.id}>
-            <Link href={d.href} className={s.railItem} aria-current={active === d.id ? "page" : undefined}>
-              <span className={s.railThumb} aria-hidden>
-                {d.image ? <Image src={renderSrc(d.image)} alt="" width={120} height={120} sizes="64px" /> : d.motif ? <DivisionMotif motif={d.motif} className={s.railMotif} /> : null}
-              </span>
-              <span className={s.railLabel}>{d.label.replace(" Collection", "")}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {divisionGroups.map((g) => (
+        <div key={g.id} className={s.railGroup} data-group={g.id}>
+          <p className={s.railTitle}>{g.label}</p>
+          <ul className={s.railList}>
+            {g.id === "types" && (
+              <li>
+                <Link href="/jewelry" className={s.railItem} aria-current={active === null ? "page" : undefined}>
+                  <span className={`${s.railThumb} ${s.railAll}`} aria-hidden>
+                    All
+                  </span>
+                  <span className={s.railLabel}>All jewelry</span>
+                </Link>
+              </li>
+            )}
+            {divisions
+              .filter((d) => d.group === g.id)
+              .map((d) => (
+                <li key={d.id}>
+                  <Link href={d.href} className={s.railItem} aria-current={active === d.id ? "page" : undefined}>
+                    <span className={s.railThumb} aria-hidden>
+                      {d.image ? <Image src={renderSrc(d.image)} alt="" width={120} height={120} sizes="64px" /> : d.motif ? <DivisionMotif motif={d.motif} className={s.railMotif} /> : null}
+                    </span>
+                    <span className={s.railLabel}>{d.label.replace(" Collection", "")}</span>
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        </div>
+      ))}
     </nav>
   );
 }

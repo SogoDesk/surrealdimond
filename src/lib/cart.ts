@@ -102,17 +102,3 @@ export function placeOrder(order: Omit<PlacedOrder, "number" | "placedAt">): Pla
 /** New York time: is it a weekday before the cutoff? (One clock, src/lib/cutoff.ts.) */
 export { beforeCutoff } from "./cutoff";
 
-/** Change a line's size: the line takes its new key, merging into an existing line with the same configuration. */
-export function setSize(key: string, size: string | null) {
-  cart.set((lines) => {
-    const line = lines.find((l) => l.key === key);
-    if (!line) return lines;
-    const nextKey = lineKey(line.productId, line.metal, line.carat, size);
-    const twin = lines.find((l) => l.key === nextKey && l.key !== key);
-    if (twin) return lines.filter((l) => l.key !== key).map((l) => (l.key === nextKey ? { ...l, qty: Math.min(99, l.qty + line.qty) } : l));
-    return lines.map((l) => (l.key === key ? { ...l, key: nextKey, size } : l));
-  });
-}
-
-export const SIZED_CATEGORIES = new Set(["engagement", "wedding-bands", "rings"]);
-export const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];

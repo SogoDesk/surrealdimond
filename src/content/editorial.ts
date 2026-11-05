@@ -63,13 +63,13 @@ export const editorial: Record<Category, EditorialSet> = {
   necklaces: {
     single: [
       { src: P("3497"), alt: "Model wearing several diamond line necklaces", caption: "Layered" },
-      { src: P("3526"), alt: "Black and white portrait with layered diamond necklaces", caption: "Worn" },
+      { src: P("3526"), alt: "Black and white portrait with layered diamond necklaces", caption: "Shop the look" },
       { src: P("3467"), alt: "Model in a white shirt with diamond necklaces", caption: "In white" },
       { src: P("3636"), alt: "Diamond necklaces worn down the back", caption: "Worn back" },
     ],
     wide: [
       { src: P("3424"), alt: "Diamond circle pendant on a fine chain against black", caption: "In the studio" },
-      { src: P("3594"), alt: "Smiling model showing diamond rings and necklaces", caption: "Worn" },
+      { src: P("3594"), alt: "Smiling model showing diamond rings and necklaces", caption: "Shop the look" },
     ],
   },
   pendants: {
