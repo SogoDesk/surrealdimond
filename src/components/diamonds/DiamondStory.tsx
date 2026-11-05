@@ -49,7 +49,7 @@ function Ph({ label, note, shape = "round", tone = "light" }: { label: string; n
 }
 
 const TRUTHS: { title: string; body: string; icon: "crown" | "machine" | "clear" | "large" }[] = [
-  { title: "Grower direct", body: "Work with the grower at the top of the food chain.", icon: "crown" },
+  { title: "Trade only", body: "We will never sell directly to consumers.", icon: "crown" },
   { title: "Our own machines", body: "We manufacture our own CVD machines and created our growing recipe.", icon: "machine" },
   { title: "Transparent", body: "The world's most transparent diamond material, primarily DEF color and VVS clarity.", icon: "clear" },
   { title: "Larger stones", body: "Specializing in larger stones up to 15 carats, with a curated feed of 10,000 to 15,000 call stones.", icon: "large" },
@@ -217,7 +217,7 @@ const COMPARE: { row: string; lab: string; mined: string; same?: boolean }[] = [
   { row: "What it is", lab: "Diamond: pure carbon in the diamond crystal", mined: "Diamond: pure carbon in the diamond crystal", same: true },
   { row: "How it is graded", lab: "The 4Cs, by an independent lab", mined: "The 4Cs, by an independent lab", same: true },
   { row: "Time to form", lab: "Weeks, from inception to final inspection", mined: "About 1.5 billion years" },
-  { row: "Where it comes from", lab: "Grown by Surreal, environmentally responsible and ethically made", mined: "Mined from the earth" },
+  { row: "Where it comes from", lab: "Lab grown, environmentally responsible and ethically made", mined: "Mined from the earth" },
 ];
 
 export default function DiamondStory({ onApply }: { onApply: (patch: Partial<DiamondQuery>) => void }) {
@@ -241,8 +241,7 @@ export default function DiamondStory({ onApply }: { onApply: (patch: Partial<Dia
                 From 1.5 billion years <em>to just weeks.</em>
               </h2>
               <p className={s.openingBody} data-rise>
-                We are the largest CVD grower on planet Earth. We make our own CVD machines and created our own growing recipe, so every Surreal stone starts
-                with us and reaches your store from the grower.
+                We make our own CVD machines and created our own growing recipe, so every Surreal stone starts with us.
               </p>
               <p className={s.openingMission} data-rise>
                 Our mission: to democratize diamonds, so they can truly be for everyone.
@@ -487,7 +486,7 @@ export default function DiamondStory({ onApply }: { onApply: (patch: Partial<Dia
                 <Link href={account.apply} className={`${s.door} ${s.doorInk}`}>
                   <span className={s.doorKicker}>For jewelry retailers</span>
                   <strong>Become a dealer</strong>
-                  <span>Direct-from-the-grower pricing and an exclusive territory. {brand.claims.tradeOnly}.</span>
+                  <span>Direct pricing and an exclusive territory. {brand.claims.tradeOnly}.</span>
                 </Link>
               )}
             </li>

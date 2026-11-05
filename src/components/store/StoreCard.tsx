@@ -128,7 +128,7 @@ export default function StoreCard({ product, preferredMetal, priority = false, o
               <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
               <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
             </svg>
-            Log in for dealer price
+            Log in for price
           </Link>
         )}
       </div>

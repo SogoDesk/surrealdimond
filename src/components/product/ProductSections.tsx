@@ -32,7 +32,7 @@ import {
 } from "@/content/catalog";
 import { editorial } from "@/content/editorial";
 import { groundStyle } from "@/content/grounds";
-import { account, brand } from "@/content/site";
+import { brand } from "@/content/site";
 import s from "./product.module.css";
 
 const Arrow = () => (
@@ -117,7 +117,6 @@ const icon = (d: ReactNode) => (
 );
 
 export function Details({ product, selection, ringSize }: { product: Product; selection: PieceSelection; ringSize: string | null }) {
-  const [tab, setTab] = useState<"details" | "pricing">("details");
   const ref = styleRef(product);
   const shape = shapes.find((x) => x.id === product.shape)?.label;
   const metalLabel = metals.find((m) => m.id === selection.metal)?.label ?? "";
@@ -134,73 +133,38 @@ export function Details({ product, selection, ringSize }: { product: Product; se
           <h2 id="details-title" className={s.sectionTitle}>
             Jewelry <em>details</em>
           </h2>
-          <div className={s.tabs} role="tablist" aria-label="Details">
-            <button type="button" role="tab" aria-selected={tab === "details"} className={s.tab} onClick={() => setTab("details")}>
-              Product details
-            </button>
-            <button type="button" role="tab" aria-selected={tab === "pricing"} className={s.tab} onClick={() => setTab("pricing")}>
-              Dealer pricing
-            </button>
-          </div>
         </div>
 
         <div className={s.detailsLayout}>
-          <div className={s.detailsMain} role="tabpanel">
-            {tab === "details" ? (
-              <>
-                <Accordion title="Metal details" open icon={icon(<><circle cx="10" cy="11" r="5.5" /><path d="M7.5 3.5h5l1.5 2-4 3-4-3Z" /></>)}>
-                  <div className={s.specGrid}>
-                    <Spec label="Selected metal" value={metalLabel} />
-                    <Spec label="Available in" value={pictured} />
-                    {ringSize && <Spec label="Ring size" value={`US ${ringSize}`} />}
-                  </div>
-                </Accordion>
-                <Accordion title="Diamond details" icon={icon(<><path d="M6 3.5h8l3 4-7 9-7-9Z" /><path d="M3 7.5h14" /></>)}>
-                  <div className={s.specGrid}>
-                    <Spec label="Origin" value="Lab grown, CVD" />
-                    <Spec label="Grown by" value="Surreal" />
-                    <Spec label="Total carat weight" value={formatCarat(selection.carat)} />
-                    <Spec label="Offered in" value={caratOptions[product.category].map(formatCarat).join(", ")} />
-                    {shape && <Spec label="Center stone" value={shape} />}
-                  </div>
-                </Accordion>
-                <Accordion title="General details" icon={icon(<><rect x="3.5" y="3.5" width="13" height="13" rx="1.5" /><path d="M7 8h6M7 11h6M7 14h3" /></>)}>
-                  <div className={s.specGrid}>
-                    <Spec label="Category" value={categoryLabel(product.category)} />
-                    {ref && <Spec label="Reference" value={ref} />}
-                    <Spec label="Views" value={product.video ? "Renders and 360 video" : "Renders"} />
-                    <Spec label="Certificates" value="On request" />
-                  </div>
-                </Accordion>
-                <Accordion title="Description" icon={icon(<path d="M4 5h12M4 9h12M4 13h8" />)}>
-                  <p className={s.accText}>
-                    {product.name}: {product.detail.toLowerCase()}. {cat?.blurb}
-                  </p>
-                </Accordion>
-              </>
-            ) : (
-              <div className={s.pricing}>
-                <div className={s.pricingLock} aria-hidden>
-                  <svg viewBox="0 0 14 14" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
-                    <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
-                  </svg>
-                </div>
-                <p className={s.pricingTitle}>Your price, after you log in</p>
-                <p className={s.accText}>
-                  Prices on the dealer site are asset prices. For short-term memo pricing, call the office at {brand.office.phone}. Open memo items are repriced daily in your
-                  dashboard.
-                </p>
-                <div className={s.pricingDoors}>
-                  <Link href={account.login} className={s.primary}>
-                    Dealer log in
-                  </Link>
-                  <Link href={account.apply} className={s.secondaryLink}>
-                    Become a dealer
-                  </Link>
-                </div>
+          <div className={s.detailsMain}>
+            <Accordion title="Metal details" open icon={icon(<><circle cx="10" cy="11" r="5.5" /><path d="M7.5 3.5h5l1.5 2-4 3-4-3Z" /></>)}>
+              <div className={s.specGrid}>
+                <Spec label="Selected metal" value={metalLabel} />
+                <Spec label="Available in" value={pictured} />
+                {ringSize && <Spec label="Ring size" value={`US ${ringSize}`} />}
               </div>
-            )}
+            </Accordion>
+            <Accordion title="Diamond details" icon={icon(<><path d="M6 3.5h8l3 4-7 9-7-9Z" /><path d="M3 7.5h14" /></>)}>
+              <div className={s.specGrid}>
+                <Spec label="Origin" value="Lab grown, CVD" />
+                <Spec label="Total carat weight" value={formatCarat(selection.carat)} />
+                <Spec label="Offered in" value={caratOptions[product.category].map(formatCarat).join(", ")} />
+                {shape && <Spec label="Center stone" value={shape} />}
+              </div>
+            </Accordion>
+            <Accordion title="General details" icon={icon(<><rect x="3.5" y="3.5" width="13" height="13" rx="1.5" /><path d="M7 8h6M7 11h6M7 14h3" /></>)}>
+              <div className={s.specGrid}>
+                <Spec label="Category" value={categoryLabel(product.category)} />
+                {ref && <Spec label="Reference" value={ref} />}
+                <Spec label="Views" value={product.video ? "Renders and 360 video" : "Renders"} />
+                <Spec label="Certificates" value="On request" />
+              </div>
+            </Accordion>
+            <Accordion title="Description" icon={icon(<path d="M4 5h12M4 9h12M4 13h8" />)}>
+              <p className={s.accText}>
+                {product.name}: {product.detail.toLowerCase()}. {cat?.blurb}
+              </p>
+            </Accordion>
           </div>
           <figure className={s.detailsFigure}>
             {ref && <figcaption className={`${s.figRef} tabular`}>Ref. {ref}</figcaption>}

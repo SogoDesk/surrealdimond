@@ -201,14 +201,14 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
                   )}
                   {dealer ? (
                     <span className={s.priceText}>
-                      <span>Dealer price{qty > 1 ? `, ${qty} pieces` : ""}</span>
+                      <span>Price{qty > 1 ? `, ${qty} pieces` : ""}</span>
                       <strong className="tabular">{formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</strong>
                       {qty > 1 && <span>{formatUSD(jewelryPrice(product, selection.metal, selection.carat))} each</span>}
                     </span>
                   ) : (
                     <>
                       <span className={s.priceText}>
-                        <strong>Dealer price</strong>
+                        <strong>Price</strong>
                         <span>Log in to see your price and availability.</span>
                       </span>
                       <Link href={loginHref} className={s.priceLink}>
@@ -314,17 +314,6 @@ function ProductView({ product, params }: { product: Product; params: URLSearchP
 
                 <DeliveryCountdown />
                 <ul className={s.service}>
-                  <li>
-                    <span className={s.serviceIcon} aria-hidden>
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M7 4h10l4 5-9 11L3 9Z" />
-                        <path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5" />
-                      </svg>
-                    </span>
-                    <span>
-                      <strong>Grown by Surreal</strong>, the largest CVD grower
-                    </span>
-                  </li>
                   <li>
                     <span className={s.serviceIcon} aria-hidden>
                       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">

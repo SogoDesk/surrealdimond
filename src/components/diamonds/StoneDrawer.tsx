@@ -172,8 +172,8 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
 
               <div className={s.priceBox}>
                 <span>
-                  <strong className={dealer ? "tabular" : undefined}>{dealer ? formatUSD(stonePrice(stone)) : "Dealer price"}</strong>
-                  {dealer ? "Dealer price" : "Log in to see your price and availability."}
+                  <strong className={dealer ? "tabular" : undefined}>{dealer ? formatUSD(stonePrice(stone)) : "Price"}</strong>
+                  {dealer ? "Price" : "Log in to see your price and availability."}
                 </span>
                 {!dealer && (
                   <Link href={loginHref} className={s.priceLink}>

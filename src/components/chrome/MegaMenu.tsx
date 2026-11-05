@@ -46,7 +46,7 @@ const GROUPS: Group[] = [
     label: "Jewelry",
     items: divisions.filter((d) => d.group === "types"),
     extras: [],
-    promo: { title: "The full catalog", line: "Every piece, with your dealer pricing once you log in.", href: "/jewelry", cta: "View all" },
+    promo: { title: "The full catalog", line: "Every piece, with your pricing once you log in.", href: "/jewelry", cta: "View all" },
     editorial: { src: "/media/photos/sb-3605-sm.webp", caption: "Engagement, bands and everyday pieces", href: "/jewelry/engagement" },
   },
   {
@@ -238,7 +238,7 @@ export default function MegaMenu({ open, onIntent, onClose }: MegaMenuProps) {
       </div>
       {dealer ? (
         <p className={styles.megaFoot} data-mega-item>
-          Your dealer prices show on every piece. Orders, invoices and memo are in your{" "}
+          Your prices show on every piece. Orders, invoices and memo are in your{" "}
           <Link href={account.dashboard} onClick={onClose}>
             Retailer Dashboard
           </Link>

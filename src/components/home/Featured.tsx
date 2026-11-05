@@ -87,7 +87,7 @@ function Card({ p }: { p: Product }) {
         ) : (
           <Link href={account.login} className={s.price}>
             <LockIcon />
-            Dealer price
+            Price
           </Link>
         )}
       </div>
@@ -170,7 +170,7 @@ export default function Featured() {
             </h2>
             <p className={s.bandLine} data-rise>
               <span className={s.count}>{items.length} pieces</span>
-              {dealer ? "Picked by the Surreal team, at your dealer prices." : "Picked by the Surreal team. Dealer pricing and ordering after you log in."}
+              {dealer ? "Picked by the Surreal team, at your prices." : "Picked by the Surreal team. Pricing and ordering after you log in."}
             </p>
           </div>
           <div className={s.arrows}>

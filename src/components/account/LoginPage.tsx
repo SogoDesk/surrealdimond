@@ -32,7 +32,7 @@ import { TEST_DEALERS, TEST_DEALER_PASSWORD } from "@/content/testAccounts";
 import { account, brand } from "@/content/site";
 import s from "./account.module.css";
 
-const BENEFITS = ["Globally competitive direct-from-the-grower pricing", "Comprehensive brand strategy", "Digital marketing support positioning you as a grower", "Territory exclusivity"];
+const BENEFITS = ["Globally competitive direct pricing", "Comprehensive brand strategy", "Digital marketing support", "Territory exclusivity"];
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function safeNext(raw: string | null) {
@@ -192,7 +192,7 @@ function LoginForm() {
       <h1 className={s.title}>{mode === "login" ? <>Welcome <em>back</em></> : <>Reset your <em>password</em></>}</h1>
       <p className={s.lead}>
         {mode === "login"
-          ? "Log in for dealer pricing, your invoices, memo and the Retailer Dashboard. Moving from the old site? Log in with your email and we will help you set a password."
+          ? "Log in for pricing, your invoices, memo and the Retailer Dashboard. Moving from the old site? Log in with your email and we will help you set a password."
           : "Enter your account email and we will send a link to set a new password."}
       </p>
 

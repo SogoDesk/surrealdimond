@@ -199,14 +199,14 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
       <div className={s.priceBox}>
         {dealer ? (
           <span>
-            Dealer price{qty > 1 ? `, ${qty} pieces` : ""}
+            Price{qty > 1 ? `, ${qty} pieces` : ""}
             <strong className="tabular">{formatUSD(jewelryPrice(product, selection.metal, selection.carat) * qty)}</strong>
             {qty > 1 && <>{formatUSD(jewelryPrice(product, selection.metal, selection.carat))} each</>}
           </span>
         ) : (
           <>
             <span>
-              <strong>Dealer price</strong>
+              <strong>Price</strong>
               Log in to see your price and availability.
             </span>
             <Link href={loginHref} className={s.priceLink} onClick={onClose}>
@@ -310,9 +310,6 @@ function Body({ product, initial, onClose }: { product: Product; initial: PieceS
 
       <DeliveryCountdown />
       <ul className={s.facts}>
-        <li>
-          <strong>Grown by Surreal</strong>, the largest CVD grower
-        </li>
         <li>
           <strong>Available in</strong> {metals.filter((m) => ownMetals.includes(m.id)).map((m) => m.label.toLowerCase()).join(", ")}
         </li>

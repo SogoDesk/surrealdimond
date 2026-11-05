@@ -407,7 +407,7 @@ function OrderDrawer({ row, open, onClose, readOnly, by }: { row: Row | null; op
                   <h3 id="lines-title" className={s.stepTitle}>
                     {pieceCount(o.lines)} {pieceCount(o.lines) === 1 ? "piece" : "pieces"}, {caratTotal(o.lines)} ct
                   </h3>
-                  <span className={s.muted}>Sample dealer prices</span>
+                  <span className={s.muted}>Sample prices</span>
                 </div>
                 <ul className={s.orderLines}>
                   {o.lines.map((l) => {

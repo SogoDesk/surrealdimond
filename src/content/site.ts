@@ -4,7 +4,6 @@ export const brand = {
   name: "Surreal Diamond",
   wordmark: "SURREAL",
   byline: "by JB Bhanderi",
-  tagline: "Largest lab diamond grower in the world",
   positioning: "The New Forever",
   claims: {
     color: "DEF color",
@@ -15,12 +14,10 @@ export const brand = {
     ethics: "Environmentally responsible, ethically made, completely identical to a mined diamond",
     craft: "Diamonds grown with extremely high technology, jewelry handcrafted by the finest craftspeople",
     cad: "State of the art CAD department",
-    grower: "The largest CVD grower on planet Earth",
     machines: "We manufacture our own CVD machines and created our growing recipe",
     largeStones: "Specializing in larger stones up to 15 carats",
     callStones: "A curated diamond feed of 10,000 to 15,000 call stones",
     tradeOnly: "We will never sell directly to consumers",
-    foodChain: "Work with the grower at the top of the food chain",
     mission: "To democratize diamonds, so that they can truly be foreveryone",
   },
   office: {
@@ -39,7 +36,7 @@ export const brand = {
 
 /** Dealer program facts from the live site's Learn More and Apply pages. */
 export const dealerBenefits = [
-  { id: "pricing", title: "Direct from the grower", line: "Globally competitive direct-from-the-grower pricing.", icon: "pricing" },
+  { id: "pricing", title: "Direct pricing", line: "Globally competitive direct pricing.", icon: "pricing" },
   { id: "territory", title: "Exclusive territories", line: "Exclusive dealer territories in your market.", icon: "territory" },
   { id: "memo", title: "Curated memo program", line: "Large scale loose diamond memo, individually curated for your store.", icon: "memo" },
   { id: "memo-pricing", title: "Dynamic memo pricing", line: "Price adjustments on standing memo items, updated daily.", icon: "pricing-live" },

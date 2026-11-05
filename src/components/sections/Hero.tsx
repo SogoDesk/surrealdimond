@@ -29,7 +29,6 @@ import { useBanners } from "@/lib/merch";
 import { useReducedMotion } from "@/hooks/useMedia";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
-import Eyebrow from "@/components/ui/Eyebrow";
 import styles from "./Hero.module.css";
 
 /** Seconds each photograph holds. */
@@ -122,13 +121,10 @@ function Carousel({ slides }: { slides: HeroSlide[] }) {
         <div className={styles.scrim} aria-hidden />
 
         <div className={styles.content}>
-          <div className={styles.eyebrow}>
-            <Eyebrow>Largest lab diamond grower in the world</Eyebrow>
-          </div>
           <h1 className={`${styles.wordmark} t-display`}>SURREAL</h1>
           <div className={styles.copy}>
             <p className="t-body">
-              The New Forever, for your counter. DEF color, VVS clarity lab grown diamonds and handcrafted jewelry, direct from the grower. Trade only, always.
+              The New Forever, for your counter. DEF color, VVS clarity lab grown diamonds and handcrafted jewelry. Trade only, always.
             </p>
             <div className={styles.ctas}>
               <Button href={dealer ? "/diamonds" : account.login} variant="primary" magnetic={false} className={styles.primarySky}>

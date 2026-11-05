@@ -163,7 +163,7 @@ function StoreView({ category, params }: StorePageProps & { params: URLSearchPar
             {!dealer && (
               <div className={s.dealerNote}>
                 <span className={s.dealerNoteText}>
-                  <strong>Dealer pricing</strong> and ordering open once you log in.
+                  <strong>Pricing</strong> and ordering open once you log in.
                 </span>
                 <span className={s.dealerNoteDoors}>
                   <Link href={account.login} className={s.dealerLogin}>

@@ -28,9 +28,9 @@ export interface GatePageProps {
 }
 
 const DEALER_POINTS = [
-  "Globally competitive direct-from-the-grower pricing",
+  "Globally competitive direct pricing",
   "Comprehensive brand strategy",
-  "Digital marketing support positioning you as a grower",
+  "Digital marketing support",
   "Territory exclusivity",
 ];
 export default function GatePage({ kind, eyebrow, title, line, crumbs, image = "/media/photos/sb-3990.webp", motif, benefits = DEALER_POINTS }: GatePageProps) {

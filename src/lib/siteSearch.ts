@@ -100,7 +100,7 @@ const PAGES: (PageHit & { keys: string })[] = [
   { label: "Dealer log in", line: "Log in for pricing and ordering", href: "/login", keys: "login log in sign password" },
   { label: "Schedule an appointment", line: "Showroom and virtual appointments", href: "/contact?type=appointment", keys: "appointment schedule visit showroom meeting" },
   { label: "Contact", line: "Phone, email and the office", href: "/contact", keys: "contact phone email call address office help" },
-  { label: "About Surreal", line: "The grower behind the diamonds", href: "/about", keys: "about company grower story" },
+  { label: "About Surreal", line: "The company behind the diamonds", href: "/about", keys: "about company story" },
   ...divisions.map((d) => ({ label: d.label, line: d.note ?? (d.group === "types" ? "Jewelry" : d.group === "collections" ? "Collection" : "Program"), href: d.href, keys: `${d.label} ${d.group} jewelry` })),
 ];
 

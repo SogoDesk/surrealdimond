@@ -289,8 +289,6 @@
 .tab[aria-selected="true"] { background: var(--ink); color: var(--porcelain); }
 .tab:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .textLink { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--line); padding-bottom: 3px; }
-.secondaryLink { display: inline-flex; align-items: center; height: 52px; padding: 0 24px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ink); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
-.secondaryLink:hover { background: var(--mist); }
 .block { position: relative; z-index: 1; padding: clamp(56px, 6vw, 96px) 0; background: var(--porcelain); }
 .blockPaper { background: var(--paper); }
 .blockHead { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px); }
@@ -346,10 +344,6 @@
 .specLabel { font-size: 0.75rem; color: var(--stone); }
 .accText { margin: 0; font-size: 0.9375rem; line-height: 1.65; color: var(--graphite); max-width: 60ch; }
 .accText a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
-.pricing { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: clamp(24px, 3vw, 40px); border-radius: var(--radius-md); background: linear-gradient(120deg, var(--mist), var(--beam) 55%, var(--white)); box-shadow: inset 0 0 0 1px #d3e8f1; }
-.pricingLock { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--white); color: var(--ink); }
-.pricingTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: 2rem; color: var(--ink); }
-.pricingDoors { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 .detailsFigure { position: sticky; top: calc(var(--nav-h) + 24px); margin: 0; display: flex; flex-direction: column; gap: 10px; }
 @media (max-width: 1023px) { .detailsFigure { position: static; } }
 .figRef { align-self: flex-end; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--stone); }

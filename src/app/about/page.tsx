@@ -46,7 +46,7 @@ export default function Page() {
         }
       >
         <p>
-          {claims.machines}. As the largest CVD grower on planet Earth, we take every diamond from inception to final inspection in weeks,
+          {claims.machines}. We take every diamond from inception to final inspection in weeks,
           primarily {claims.color} and {claims.clarity}.
         </p>
         <Facts
@@ -75,7 +75,7 @@ export default function Page() {
         <p>Trade only, always. {claims.tradeOnly}.</p>
       </Band>
 
-      <Band eyebrow="Our team" title={<>The people behind <em>the grower</em>.</>}>
+      <Band eyebrow="Our team" title={<>The people behind <em>Surreal</em>.</>}>
         <ul className={s.team}>
           {team.map((m) => (
             <li key={m.name}>

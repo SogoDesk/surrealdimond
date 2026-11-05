@@ -22,7 +22,7 @@ export const gates = {
     kind: "building",
     eyebrow: "Apply for an account",
     title: <>Become a <em>Surreal dealer</em></>,
-    line: "Globally competitive direct-from-the-grower pricing, comprehensive brand strategy, digital marketing support and territory exclusivity. The application form is in design.",
+    line: "Globally competitive direct pricing, comprehensive brand strategy, digital marketing support and territory exclusivity. The application form is in design.",
     crumbs: [{ label: "Apply" }],
     image: "/media/photos/sb-3591.webp",
   },

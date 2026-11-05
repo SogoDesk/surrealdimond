@@ -14,10 +14,10 @@ import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import s from "./Assurance.module.css";
 
-type EmblemId = "grower" | "grade" | "ethics" | "craft";
+type EmblemId = "cvd" | "grade" | "ethics" | "craft";
 
 const ITEMS: { id: EmblemId; line1: string; line2: string }[] = [
-  { id: "grower", line1: "Grown by the largest", line2: "CVD grower" },
+  { id: "cvd", line1: "Lab grown,", line2: "CVD diamonds" },
   { id: "grade", line1: "Primarily DEF color,", line2: "VVS clarity" },
   { id: "ethics", line1: "Ethically made, identical", line2: "to a mined diamond" },
   { id: "craft", line1: "Handcrafted by the", line2: "finest craftspeople" },
@@ -42,14 +42,14 @@ function Emblem({ id }: { id: EmblemId }) {
           <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
         </linearGradient>
         <clipPath id={`clip-${uid}`}>
-          {id === "grower" && <path d="M22 104V58a38 38 0 0 1 76 0v46Z" />}
+          {id === "cvd" && <path d="M22 104V58a38 38 0 0 1 76 0v46Z" />}
           {id === "grade" && <circle cx="60" cy="60" r="44" />}
           {id === "ethics" && <path d="M34 22h52l24 30-50 58L10 52Z" />}
           {id === "craft" && <path d="M22 18h76v42c0 26-20 42-38 50-18-8-38-24-38-50Z" />}
         </clipPath>
       </defs>
 
-      {id === "grower" && (
+      {id === "cvd" && (
         <>
           <path d="M14 62a46 46 0 0 1 82-28" {...W} stroke="#9fd6ec" strokeWidth={1.4} />
           <path d="M92 26l5 8-9 1" {...W} stroke="#9fd6ec" strokeWidth={1.4} />
@@ -123,7 +123,7 @@ export default function Assurance({ className = "" }: { className?: string }) {
           <h2 id="assurance-title" className={s.title}>
             The Surreal <em>Assurance</em>
           </h2>
-          <p className={s.sub}>Grown by us. Crafted by hand.</p>
+          <p className={s.sub}>Lab grown. Crafted by hand.</p>
         </header>
         <ul className={s.list}>
           {ITEMS.map((item) => (

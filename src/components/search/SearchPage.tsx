@@ -148,7 +148,7 @@ function Results({ q }: { q: string }) {
           )}
           {!dealer && stoneList.length > 0 && (
             <p className={s.fine}>
-              <Link href={`${account.login}?next=${encodeURIComponent(`/search?q=${encodeURIComponent(q)}`)}`}>Log in</Link> for dealer prices and to order.
+              <Link href={`${account.login}?next=${encodeURIComponent(`/search?q=${encodeURIComponent(q)}`)}`}>Log in</Link> for prices and to order.
             </p>
           )}
         </section>

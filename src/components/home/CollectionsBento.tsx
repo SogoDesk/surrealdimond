@@ -70,7 +70,7 @@ export default function CollectionsBento() {
           eyebrow="Collections"
           title={
             <>
-              Five collections, <em>one grower</em>
+              Shop our <em>exclusive collections</em>
             </>
           }
           sub="From twelve zodiac pendants to enamel, laser pierced, vermeil and sterling silver pieces."

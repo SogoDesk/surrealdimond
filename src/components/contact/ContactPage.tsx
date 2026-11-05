@@ -125,7 +125,7 @@ const QUICK: { q: string; a: ReactNode }[] = [
   { q: "Where can I see stones in person?", a: <>Book an appointment at our North American Office, {brand.office.address1}, {brand.office.address2}.</> },
 ];
 
-const DEALER_POINTS = ["Globally competitive direct-from-the-grower pricing", "Comprehensive brand strategy", "Digital marketing support positioning you as a grower", "Territory exclusivity"];
+const DEALER_POINTS = ["Globally competitive direct pricing", "Comprehensive brand strategy", "Digital marketing support", "Territory exclusivity"];
 
 export default function ContactPage() {
   return (

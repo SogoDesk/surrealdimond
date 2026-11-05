@@ -63,7 +63,7 @@ function StoneLine({ line, editable }: { line: CartLine; editable: boolean }) {
             </span>
           </div>
           <span className={s.linePrice}>
-            <span>Dealer price</span>
+            <span>Price</span>
             {formatUSD(stonePrice(st))}
           </span>
         </div>
@@ -117,7 +117,7 @@ export function LineItem({ line, editable = true }: { line: CartLine; editable?:
             </span>
           </div>
           <span className={s.linePrice}>
-            <span>{line.qty > 1 ? `${line.qty} × ${formatUSD(jewelryPrice(p, line.metal, line.carat))}` : "Dealer price"}</span>
+            <span>{line.qty > 1 ? `${line.qty} × ${formatUSD(jewelryPrice(p, line.metal, line.carat))}` : "Price"}</span>
             {formatUSD(jewelryPrice(p, line.metal, line.carat) * line.qty)}
           </span>
         </div>
@@ -251,7 +251,7 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
 
 export function TrustRow() {
   const items = [
-    { t: "Grown by Surreal", l: "The largest CVD grower", d: <path d="M7 4h10l4 5-9 11L3 9Z M3 9h18" /> },
+    { t: "Lab-grown CVD", l: "Primarily DEF color, VVS clarity", d: <path d="M7 4h10l4 5-9 11L3 9Z M3 9h18" /> },
     { t: "Next day delivery", l: "For orders before 4:00pm EST", d: <path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7" /> },
     { t: "Certificates", l: "Provided on request", d: <path d="M4 3.5h16v12H4zM8 8h8M8 11h5M9 15.5l-1 5 4-2 4 2-1-5" /> },
   ];
