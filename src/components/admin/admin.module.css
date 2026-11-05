@@ -256,7 +256,7 @@
 
 /* Dealers */
 .statusChip[data-status="active"], .statusChip[data-status="new"] { background: rgba(46, 158, 107, 0.12); color: #1f7a52; }
-.statusChip[data-status="invited"] { background: rgba(47, 127, 166, 0.12); color: #23607e; }
+.statusChip[data-status="invited"] { background: var(--sky-40); color: var(--navy); }
 .statusChip[data-status="not-invited"] { background: var(--porcelain); color: var(--graphite); box-shadow: inset 0 0 0 1px var(--hairline); }
 .statusChip[data-status="update"] { background: var(--mist); color: var(--ink); }
 .statusChip[data-status="error"] { background: rgba(176, 32, 120, 0.1); color: var(--magenta); }
@@ -346,8 +346,8 @@
 .barLabel { display: inline-flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; font-size: 0.8125rem; color: var(--graphite); text-overflow: ellipsis; white-space: nowrap; }
 .barIcon { flex: 0 0 auto; width: 18px; height: 18px; color: var(--ink); }
 .barTrack { display: flex; align-items: center; gap: 8px; min-width: 0; height: 22px; border-left: 1px solid var(--hairline); }
-.barFill { display: block; min-width: 2px; height: 14px; border-radius: 0 4px 4px 0; background: #2f7fa6; transition: background-color 0.2s var(--ease-surreal); }
-.barRow[data-active] .barFill { background: #24688a; }
+.barFill { display: block; min-width: 2px; height: 14px; border-radius: 0 4px 4px 0; background: #00698f; transition: background-color 0.2s var(--ease-surreal); }
+.barRow[data-active] .barFill { background: var(--navy); }
 .barValue { flex: 0 0 auto; font-size: 0.8125rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
 .vizTip { position: absolute; z-index: 5; display: flex; flex-direction: column; gap: 1px; padding: 8px 12px; border-radius: 10px; background: var(--white); box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--hairline); font-size: 0.75rem; color: var(--stone); white-space: nowrap; pointer-events: none; transform: translateY(calc(-100% - 4px)); }
 .vizTip strong { font-size: 0.875rem; font-weight: 600; color: var(--ink); }
@@ -384,9 +384,9 @@
 :is(.shareSeg, .swatch)[data-tone="age2"] { background: #d4703f; }
 :is(.shareSeg, .swatch)[data-tone="age3"] { background: #a94622; }
 :is(.shareSeg, .swatch)[data-tone="age4"] { background: #6e2410; }
-:is(.shareSeg, .swatch)[data-tone="step1"] { background: #c4dde9; }
-:is(.shareSeg, .swatch)[data-tone="step2"] { background: #5ea6c8; }
-:is(.shareSeg, .swatch)[data-tone="step3"] { background: #1d5f80; }
+:is(.shareSeg, .swatch)[data-tone="step1"] { background: #cff2ff; }
+:is(.shareSeg, .swatch)[data-tone="step2"] { background: #86dfff; }
+:is(.shareSeg, .swatch)[data-tone="step3"] { background: #00698f; }
 
 /* Orders and payments */
 .stats.statsFive { grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -395,12 +395,12 @@
 .segCount { margin-left: 4px; font-size: 0.6875rem; opacity: 0.7; }
 .orderChip, .payChip { display: inline-block; width: fit-content; padding: 2px 9px; border-radius: 999px; font-size: 0.6875rem; white-space: nowrap; }
 .orderChip[data-status="received"] { background: rgba(192, 138, 30, 0.14); color: #7a5810; }
-.orderChip[data-status="confirmed"] { background: var(--beam); color: var(--ink); box-shadow: inset 0 0 0 1px #c9e6f2; }
-.orderChip[data-status="shipped"] { background: rgba(47, 127, 166, 0.14); color: #1d5f80; }
+.orderChip[data-status="confirmed"] { background: var(--beam); color: var(--ink); box-shadow: inset 0 0 0 1px #b6ecff; }
+.orderChip[data-status="shipped"] { background: var(--sky); color: var(--navy); }
 .orderChip[data-status="delivered"] { background: rgba(46, 158, 107, 0.12); color: #1f7a52; }
 .orderChip[data-status="cancelled"] { background: var(--porcelain); color: var(--stone); box-shadow: inset 0 0 0 1px var(--hairline); }
 .payChip[data-tone="ok"] { background: rgba(46, 158, 107, 0.12); color: #1f7a52; }
-.payChip[data-tone="pending"] { background: var(--beam); color: #1d5f80; }
+.payChip[data-tone="pending"] { background: var(--beam); color: var(--navy); }
 .payChip[data-tone="waiting"] { background: rgba(192, 138, 30, 0.14); color: #7a5810; }
 .payChip[data-tone="off"] { background: var(--porcelain); color: var(--stone); }
 .rowBtn { height: 30px; padding: 0 12px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; white-space: nowrap; }
@@ -455,6 +455,6 @@
 .timelineText { display: flex; flex-direction: column; gap: 1px; min-width: 0; font-size: 0.8125rem; }
 .timelineText strong { font-weight: 500; color: var(--ink); }
 .seenTag { flex: 0 0 auto; padding: 1px 8px; border-radius: 999px; background: var(--porcelain); font-size: 0.625rem; letter-spacing: 0.08em; color: var(--stone); white-space: nowrap; }
-.seenTag[data-dealer] { background: var(--beam); color: #1d5f80; }
+.seenTag[data-dealer] { background: var(--beam); color: var(--navy); }
 .noteForm { display: flex; gap: 8px; }
 .noteForm .input { flex: 1 1 auto; }

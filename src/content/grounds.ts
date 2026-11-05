@@ -9,7 +9,7 @@ import type { Category } from "./catalog";
  * sits in a pool of color.
  */
 export const grounds: Record<Category, string> = {
-  engagement: "#e3f0f7",
+  engagement: "#e7f9ff",
   "wedding-bands": "#eeebe4",
   earrings: "#f3e7ec",
   necklaces: "#e3eee8",

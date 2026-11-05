@@ -31,10 +31,10 @@ function Emblem({ id }: { id: EmblemId }) {
     <svg viewBox="0 0 120 120" className={s.emblem} aria-hidden>
       <defs>
         <linearGradient id={`metal-${uid}`} x1="0.1" y1="0" x2="0.9" y2="1">
-          <stop offset="0%" stopColor="#e9f7fd" />
-          <stop offset="38%" stopColor="#9fd6ec" />
-          <stop offset="72%" stopColor="#5b9bb9" />
-          <stop offset="100%" stopColor="#1f4d66" />
+          <stop offset="0%" stopColor="#e7f9ff" />
+          <stop offset="38%" stopColor="#9ee5ff" />
+          <stop offset="72%" stopColor="#86dfff" />
+          <stop offset="100%" stopColor="#00698f" />
         </linearGradient>
         <linearGradient id={`sheen-${uid}`} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
@@ -51,8 +51,8 @@ function Emblem({ id }: { id: EmblemId }) {
 
       {id === "cvd" && (
         <>
-          <path d="M14 62a46 46 0 0 1 82-28" {...W} stroke="#9fd6ec" strokeWidth={1.4} />
-          <path d="M92 26l5 8-9 1" {...W} stroke="#9fd6ec" strokeWidth={1.4} />
+          <path d="M14 62a46 46 0 0 1 82-28" {...W} stroke="#9ee5ff" strokeWidth={1.4} />
+          <path d="M92 26l5 8-9 1" {...W} stroke="#9ee5ff" strokeWidth={1.4} />
           <path d="M22 104V58a38 38 0 0 1 76 0v46Z" fill={fill} />
           <path d="M48 58h24l7 9-19 22-19-22Z" {...W} />
           <path d="M41 67h38M53 58l-3 9 10 22 10-22-3-9" {...W} strokeWidth={1.1} />
@@ -62,7 +62,7 @@ function Emblem({ id }: { id: EmblemId }) {
       )}
       {id === "grade" && (
         <>
-          <circle cx="60" cy="60" r="52" fill="none" stroke="#9fd6ec" strokeWidth="1.2" strokeDasharray="2 4" />
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#9ee5ff" strokeWidth="1.2" strokeDasharray="2 4" />
           <circle cx="60" cy="60" r="44" fill={fill} />
           <circle cx="60" cy="60" r="36" {...W} strokeWidth={1.1} />
           <text x="60" y="64" textAnchor="middle" className={s.emblemText}>

@@ -119,7 +119,7 @@
   white-space: nowrap;
   font-size: clamp(64px, 10vw, 180px);
   line-height: 0.95;
-  color: var(--porcelain);
+  color: var(--sky);
 }
 .copy {
   max-width: 34rem;

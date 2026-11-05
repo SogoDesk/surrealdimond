@@ -89,9 +89,9 @@
   --stone: #636e78;
   --white: #ffffff;
   --hairline: #dce1e6;
-  --mist: #dceff7;
+  --mist: #cff2ff;
   --sky: #86dfff;
-  --line: #70c0e0;
+  --line: #86dfff;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -250,7 +250,7 @@
   font-size: 0.8125rem;
   color: var(--ink);
 }
-.chip:hover { background: #cbe7f3; }
+.chip:hover { background: var(--sky); color: var(--navy); }
 .clearAll { font-size: 0.8125rem; color: var(--graphite); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; padding: 0 6px; }
 
 /* ---------- Grid ---------- */
@@ -279,9 +279,9 @@
   --stone: #636e78;
   --white: #ffffff;
   --hairline: #dce1e6;
-  --mist: #dceff7;
+  --mist: #cff2ff;
   --sky: #86dfff;
-  --line: #70c0e0;
+  --line: #86dfff;
   position: relative;
   aspect-ratio: 1;
   border-radius: var(--radius-md);
@@ -490,7 +490,7 @@
   padding: clamp(20px, 2.4vw, 32px) clamp(20px, 3vw, 44px);
   border-radius: var(--radius-lg);
   background: linear-gradient(110deg, var(--mist) 0%, var(--beam) 45%, var(--white) 100%);
-  box-shadow: inset 0 0 0 1px #d3e8f1;
+  box-shadow: inset 0 0 0 1px #b6ecff;
 }
 .matchHead { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
 .matchTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: clamp(1.75rem, 2.4vw, 2.5rem); line-height: 1.05; color: var(--ink); }

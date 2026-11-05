@@ -46,9 +46,9 @@
   --stone: #636e78;
   --white: #ffffff;
   --hairline: #dce1e6;
-  --mist: #dceff7;
+  --mist: #cff2ff;
   --sky: #86dfff;
-  --line: #70c0e0;
+  --line: #86dfff;
   position: relative;
   width: 100%;
   aspect-ratio: 1;
@@ -143,7 +143,7 @@
   padding: 14px 14px 14px 16px;
   border-radius: var(--radius-md);
   background: linear-gradient(110deg, var(--mist), var(--beam) 60%, var(--white));
-  box-shadow: inset 0 0 0 1px #d3e8f1;
+  box-shadow: inset 0 0 0 1px #b6ecff;
 }
 .priceIcon { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: var(--white); color: var(--ink); flex: 0 0 auto; }
 .priceText { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; font-size: 0.8125rem; color: var(--graphite); }
@@ -300,7 +300,7 @@
 @media (max-width: 899px) { .bannerGrid { grid-template-columns: 1fr; } }
 .banner {
   /* Light tokens kept on the program banners, which carry their own grounds (the dark theme flips the page tokens). */
-  --ink: #0b1f2a; --graphite: #3a3f44; --stone: #636e78; --white: #ffffff; --hairline: #dce1e6; --mist: #dceff7; --sky: #86dfff; --line: #70c0e0; --porcelain: #f2f4f6;
+  --ink: #0b1f2a; --graphite: #3a3f44; --stone: #636e78; --white: #ffffff; --hairline: #dce1e6; --mist: #cff2ff; --sky: #86dfff; --line: #86dfff; --porcelain: #f2f4f6;
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
@@ -354,7 +354,7 @@
 /* ---------- 4. See it in person ---------- */
 .person { position: relative; z-index: 1; padding: clamp(40px, 4vw, 64px) 0 0; background: var(--porcelain); }
 .personBand {
-  --ink: #0b1f2a; --graphite: #3a3f44; --stone: #636e78; --white: #ffffff; --hairline: #dce1e6; --mist: #dceff7; --sky: #86dfff; --line: #70c0e0; --porcelain: #f2f4f6;
+  --ink: #0b1f2a; --graphite: #3a3f44; --stone: #636e78; --white: #ffffff; --hairline: #dce1e6; --mist: #cff2ff; --sky: #86dfff; --line: #86dfff; --porcelain: #f2f4f6;
   color: var(--ink);
   display: flex;
   align-items: center;
@@ -364,11 +364,11 @@
   border-radius: var(--radius-lg);
   background:
     radial-gradient(80% 140% at 100% 0%, rgba(134, 223, 255, 0.28), rgba(134, 223, 255, 0) 60%),
-    linear-gradient(120deg, #eef7fb, var(--white));
-  box-shadow: inset 0 0 0 1px #d3e8f1;
+    linear-gradient(120deg, #e7f9ff, var(--white));
+  box-shadow: inset 0 0 0 1px #b6ecff;
 }
 .personThumbs { display: inline-flex; }
-.personThumb { width: 72px; height: 72px; border-radius: 50%; background: var(--well); box-shadow: 0 0 0 3px #eef7fb, var(--shadow-card); display: inline-flex; align-items: center; justify-content: center; overflow: hidden; }
+.personThumb { width: 72px; height: 72px; border-radius: 50%; background: var(--well); box-shadow: 0 0 0 3px #e7f9ff, var(--shadow-card); display: inline-flex; align-items: center; justify-content: center; overflow: hidden; }
 .personThumb + .personThumb { margin-left: -18px; }
 .personThumb img { width: 84%; height: 84%; object-fit: contain; mix-blend-mode: multiply; }
 .personCopy { flex: 1 1 320px; display: flex; flex-direction: column; gap: 6px; }

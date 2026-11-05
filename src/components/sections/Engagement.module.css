@@ -9,6 +9,10 @@
   /* Keylines that would vanish in sky blue draw in navy here. */
   --line: var(--navy);
 }
+/* Dark mode: the chapter is blue from the start, so its navy copy never sits on the black page ground before the splash. */
+:global(html[data-mode="dark"]) .section.section {
+  background: var(--sky);
+}
 .inner {
   position: relative;
   isolation: isolate;

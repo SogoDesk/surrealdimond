@@ -40,7 +40,7 @@
 .stoneMain strong { font-weight: 600; font-size: 0.9375rem; }
 .stoneMain span { overflow: hidden; font-size: 0.8125rem; color: var(--stone); text-overflow: ellipsis; white-space: nowrap; }
 .stoneShip { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--porcelain); font-size: 0.75rem; color: var(--graphite); white-space: nowrap; }
-.stoneShip[data-next] { background: var(--beam); box-shadow: inset 0 0 0 1px #c9e6f2; color: var(--ink); font-weight: 600; }
+.stoneShip[data-next] { background: var(--beam); box-shadow: inset 0 0 0 1px #b6ecff; color: var(--ink); font-weight: 600; }
 .stonePrice { font-size: 0.8125rem; color: var(--ink); white-space: nowrap; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .none { display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: var(--radius-md); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); }
 .none p { margin: 0; font-size: 0.9375rem; color: var(--graphite); }

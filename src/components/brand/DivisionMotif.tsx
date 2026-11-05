@@ -56,13 +56,13 @@ export default function DivisionMotif({ motif, className = "", title }: { motif:
         </defs>
         <rect width="100" height="100" fill={`url(#${g("sky")})`} />
         {DUST.map(([x, y], i) => (
-          <circle key={i} cx={x} cy={y} r={0.45} fill="#dceff7" opacity={0.55} data-twinkle />
+          <circle key={i} cx={x} cy={y} r={0.45} fill="#cff2ff" opacity={0.55} data-twinkle />
         ))}
         {LINKS.map(([a, b], i) => (
-          <line key={i} x1={STARS[a][0]} y1={STARS[a][1]} x2={STARS[b][0]} y2={STARS[b][1]} stroke="#70c0e0" strokeWidth={0.35} opacity={0.8} data-draw />
+          <line key={i} x1={STARS[a][0]} y1={STARS[a][1]} x2={STARS[b][0]} y2={STARS[b][1]} stroke="#86dfff" strokeWidth={0.35} opacity={0.8} data-draw />
         ))}
         {STARS.map(([x, y, r], i) => (
-          <path key={i} d={sparkle(x, y, r)} fill="#e8f6ff" data-twinkle />
+          <path key={i} d={sparkle(x, y, r)} fill="#e7f9ff" data-twinkle />
         ))}
       </svg>
     );
@@ -74,7 +74,7 @@ export default function DivisionMotif({ motif, className = "", title }: { motif:
         <defs>
           <linearGradient id={g("e1")} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#86dfff" />
-            <stop offset="100%" stopColor="#3a8fb5" />
+            <stop offset="100%" stopColor="#86dfff" />
           </linearGradient>
           <linearGradient id={g("e2")} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#1d4a63" />
@@ -85,7 +85,7 @@ export default function DivisionMotif({ motif, className = "", title }: { motif:
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </radialGradient>
         </defs>
-        <rect width="100" height="100" fill="#dceff7" />
+        <rect width="100" height="100" fill="#cff2ff" />
         <circle cx="42" cy="46" r="24" fill={`url(#${g("e2")})`} />
         <circle cx="42" cy="46" r="24" fill={`url(#${g("gloss")})`} />
         <circle cx="62" cy="58" r="20" fill={`url(#${g("e1")})`} />
@@ -105,14 +105,14 @@ export default function DivisionMotif({ motif, className = "", title }: { motif:
         <defs>
           <linearGradient id={g("beam")} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#86dfff" stopOpacity="0" />
-            <stop offset="50%" stopColor="#e8f6ff" stopOpacity="1" />
+            <stop offset="50%" stopColor="#e7f9ff" stopOpacity="1" />
             <stop offset="100%" stopColor="#86dfff" stopOpacity="0" />
           </linearGradient>
         </defs>
         <rect width="100" height="100" fill="#0a0b0c" />
         {dots.map(([x, y], i) => {
           const onBeam = Math.abs(x - y) < 6;
-          return <circle key={i} cx={x} cy={y} r={onBeam ? 1.5 : 0.9} fill={onBeam ? "#e8f6ff" : "#3a3f44"} data-twinkle={onBeam ? "" : undefined} />;
+          return <circle key={i} cx={x} cy={y} r={onBeam ? 1.5 : 0.9} fill={onBeam ? "#e7f9ff" : "#3a3f44"} data-twinkle={onBeam ? "" : undefined} />;
         })}
         <line x1="4" y1="4" x2="96" y2="96" stroke={`url(#${g("beam")})`} strokeWidth="0.8" data-draw />
       </svg>
@@ -149,19 +149,19 @@ export default function DivisionMotif({ motif, className = "", title }: { motif:
     const isFlyer = motif === "flyer";
     return (
       <svg viewBox="0 0 100 100" className={className} {...a11y} preserveAspectRatio="xMidYMid slice">
-        <rect width="100" height="100" fill={isFlyer ? "#dceff7" : "#0b1f2a"} />
+        <rect width="100" height="100" fill={isFlyer ? "#cff2ff" : "#0b1f2a"} />
         {isFlyer ? (
           <g fill="#fafbfc" stroke="#0b1f2a" strokeWidth="0.5" strokeLinejoin="round">
             <path d="M24 28 L42 24 L42 76 L24 80Z" data-draw />
             <path d="M42 24 L60 28 L60 80 L42 76Z" data-draw />
             <path d="M60 28 L78 24 L78 76 L60 80Z" data-draw />
-            <path d="M30 40h8M30 45h8M48 40h8M48 45h6M66 40h8M66 45h8" stroke="#70c0e0" />
+            <path d="M30 40h8M30 45h8M48 40h8M48 45h6M66 40h8M66 45h8" stroke="#86dfff" />
           </g>
         ) : (
           <g fill="none" stroke="#86dfff" strokeWidth="0.6" strokeLinejoin="round">
             <path d="M30 26 L66 26 L70 30 L70 78 L30 78Z" fill="#12283a" data-draw />
-            <path d="M36 36h24M36 42h18M36 66h28M36 71h20" stroke="#70c0e0" opacity="0.7" />
-            <path d={sparkle(52, 54, 2.6)} fill="#e8f6ff" stroke="none" data-twinkle />
+            <path d="M36 36h24M36 42h18M36 66h28M36 71h20" stroke="#86dfff" opacity="0.7" />
+            <path d={sparkle(52, 54, 2.6)} fill="#e7f9ff" stroke="none" data-twinkle />
           </g>
         )}
       </svg>

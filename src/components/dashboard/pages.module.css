@@ -117,6 +117,7 @@ a.lineName:hover { text-decoration: underline; text-decoration-color: var(--line
 .legend [data-band="current"], .age[data-band="current"] { --band: #2e9e6b; --band-bg: rgba(46, 158, 107, 0.12); }
 .legend [data-band="watch"], .age[data-band="watch"] { --band: #c08a1e; --band-bg: rgba(192, 138, 30, 0.14); }
 .legend [data-band="long"], .age[data-band="long"] { --band: #b3413a; --band-bg: rgba(179, 65, 58, 0.12); }
+:global(html[data-mode="dark"]) :is(.legend [data-band="long"], .age[data-band="long"]) { --band: #ff8f86; --band-bg: rgba(255, 143, 134, 0.14); }
 .age { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 26px; padding: 0 8px; border-radius: 999px; background: var(--band-bg); color: var(--band); font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .memoWrap { margin-top: 10px; overflow-x: auto; border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); }
@@ -168,8 +169,8 @@ a.lineName:hover { text-decoration: underline; text-decoration-color: var(--line
 
 /* Order status from the console (lib/orderStatus.ts) */
 .steps li[data-done]::before { background: var(--ink); }
-.status[data-status="confirmed"] { background: var(--beam); box-shadow: inset 0 0 0 1px #c9e6f2; }
-.status[data-status="shipped"] { background: rgba(47, 127, 166, 0.14); color: #1d5f80; }
+.status[data-status="confirmed"] { background: var(--beam); box-shadow: inset 0 0 0 1px #b6ecff; }
+.status[data-status="shipped"] { background: var(--sky); color: var(--navy); }
 .status[data-status="delivered"] { background: rgba(46, 158, 107, 0.14); color: #1f7a52; }
 .status[data-status="cancelled"] { background: var(--porcelain); color: var(--stone); box-shadow: inset 0 0 0 1px var(--hairline); }
 .cancelled { margin: 14px 0 6px; padding: 12px 14px; border-radius: 12px; background: var(--porcelain); font-size: 0.875rem; color: var(--graphite); }

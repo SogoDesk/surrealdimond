@@ -38,7 +38,7 @@
 .tile[data-tone="dark"] { color: var(--porcelain); background: var(--ink); }
 /* Each tile's ground matches its motif's own ground, so a motif held to one side reads as part of the tile */
 .tile[data-id="constellation"] { background: #0b1f2a; }
-.tile[data-id="enamour-enamel"] { background: #dceff7; }
+.tile[data-id="enamour-enamel"] { background: #cff2ff; }
 .tile[data-id="laser-pierced"] { background: #0a0b0c; }
 .tile[data-id="vermeil"] { background: #f7efe0; }
 .tile[data-id="sterling-silver"] { background: linear-gradient(135deg, #ffffff, #e4e8eb 60%, #f2f4f6); }

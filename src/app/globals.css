@@ -275,7 +275,8 @@ body {
     --porcelain: #0c1014;
     --paper: #11161b;
     --white: #161d23;
-    --hairline: rgba(226, 235, 242, 0.12);
+    /* Box edges and keylines in Surreal blue, so cards read as blue boxes on the black (client change request, November 2026). */
+    --hairline: rgba(134, 223, 255, 0.3);
     --stone: #a9b5be;
     --graphite: #d8dfe4;
     --ink: #edf2f6;

@@ -71,7 +71,7 @@
 .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 0.6875rem; font-weight: 500; white-space: nowrap; background: color-mix(in srgb, var(--tone, var(--stone)) 14%, transparent); color: color-mix(in srgb, var(--tone, var(--stone)) 82%, #000); }
 .chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--tone, var(--stone)); }
 .chip[data-tone="ok"] { --tone: #2e9e6b; }
-.chip[data-tone="info"] { --tone: #2f7fa6; }
+.chip[data-tone="info"] { --tone: #00698f; }
 .chip[data-tone="review"] { --tone: #7a5cc2; }
 .chip[data-tone="d30"] { --tone: #c08a1e; }
 .chip[data-tone="d60"] { --tone: #d0702a; }
@@ -171,7 +171,8 @@
 .stamp { position: absolute; top: 168px; right: 48px; padding: 6px 14px; border: 2px solid currentColor; border-radius: 8px; font-size: 0.875rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; transform: rotate(-8deg); opacity: 0.85; }
 .stamp[data-tone="paid"] { color: #2e9e6b; }
 .stamp[data-tone="overdue"] { color: #b3413a; }
-.stamp[data-tone="pending"] { color: #2f7fa6; }
+:global(html[data-mode="dark"]) .stamp[data-tone="overdue"] { color: #ff8f86; }
+.stamp[data-tone="pending"] { color: #00698f; }
 .docNote { margin: 18px 0 0; font-size: 0.75rem; color: #636e78; }
 
 @media print {
