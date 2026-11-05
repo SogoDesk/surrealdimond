@@ -107,6 +107,7 @@
 .table tbody th { color: var(--ink); font-weight: 600; }
 .table th:first-child, .table td:first-child { padding-left: 0; }
 .cellNote { color: var(--stone); }
+.tableNote { margin: 10px 0 0; font-size: 0.75rem; line-height: 1.5; color: var(--stone); }
 .cellAction { text-align: right !important; padding-right: 0 !important; }
 .status { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--mist); font-size: 0.6875rem; color: var(--ink); }
 .reorder { height: 32px; padding: 0 14px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; }
@@ -190,6 +191,7 @@
 .miniAging span { display: block; min-width: 3px; }
 .sideStats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
 .sideStats .stat dd { font-size: 1.625rem; }
+.sideStats .statDelivery { grid-column: 1 / -1; }
 .invoiceList { margin: 0; padding: 0; list-style: none; }
 .invoiceList li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 11px 0; border-top: 1px solid var(--hairline); font-size: 0.8125rem; color: var(--graphite); }
 .invoiceList li:first-child { border-top: 0; padding-top: 0; }

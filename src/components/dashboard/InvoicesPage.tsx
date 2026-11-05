@@ -6,9 +6,10 @@
  * Phase 1). In the WB Mason customer portal manner, inside the dashboard
  * shell:
  *
- * - The account at a glance: balance due, past due, due within a week,
- *   credit available, and an aging bar (current, 1 to 30, 31 to 60, 61 to
- *   90, over 90 days) whose segments filter the list.
+ * - The account at a glance: balance due, past due, due within a week (no
+ *   credit available, client change request, November 2026), and an aging
+ *   bar (current, 1 to 30, 31 to 60, 61 to 90, over 90 days) whose segments
+ *   filter the list.
  * - Open invoices: select some, all past due, or everything, and pay with a
  *   saved card or bank account (or record a wire); each invoice opens its
  *   printable document.
@@ -169,13 +170,6 @@ export default function InvoicesPage() {
             <dt>Due this week</dt>
             <dd className="tabular">{formatMoney(summary.dueSoon)}</dd>
             <span>{summary.nextDue ? `Next due ${longDate(summary.nextDue)}` : "Nothing due"}</span>
-          </div>
-          <div>
-            <dt>Credit available</dt>
-            <dd className="tabular">{formatMoney(summary.available)}</dd>
-            <span>
-              Of {formatMoney(summary.creditLimit)}, after {formatMoney(summary.memoBalance)} on memo
-            </span>
           </div>
         </dl>
         <Aging aging={summary.aging} total={Object.values(summary.aging).reduce((a, b) => a + b, 0)} active={bucket} onPick={(b) => {

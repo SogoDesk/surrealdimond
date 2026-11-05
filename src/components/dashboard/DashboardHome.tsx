@@ -7,11 +7,15 @@
  *
  * 1. Greeting with the store name and New York time of day, and the
  *    dashboard search (R-29).
- * 2. The account (owner): balance due with its aging, past due, the next due
- *    date and credit available, with Pay invoices and Statement. Associates,
- *    who do not see billing, get their orders and memo figures instead.
- * 3. Open invoices beside recent orders with Reorder (R-25: an exact
- *    previous order back in the cart in one click; loose stones stay out).
+ * 2. The account (owner): balance due with its aging, past due and the next
+ *    due date, with Pay invoices and Statement, then On memo, Last payment
+ *    and the cutoff timer (Credit available was removed in the client change
+ *    request of November 2026). Associates, who do not see billing, get
+ *    their orders and memo figures instead.
+ * 3. Open invoices beside recent orders, every channel: the orders placed
+ *    here with Reorder (R-25: an exact previous order back in the cart in
+ *    one click; loose stones stay out) and the phone orders RightClick
+ *    holds (lib/accountOrders.ts; samples until it is connected).
  * 4. On memo, and the dealer's M2O and custom requests with their numbers.
  * 5. Quick doors and the next day delivery countdown.
  *
@@ -32,6 +36,8 @@ import { useDealer } from "@/lib/dealer";
 import { useMemos } from "@/lib/memo";
 import { AGING_ORDER, canSeeBilling, formatMoney, useAccount } from "@/lib/invoices";
 import { m2oSize, useCustomRequests, useM2ORequests } from "@/lib/requests";
+import { samplePhoneOrders } from "@/lib/accountOrders";
+import { useNow } from "@/lib/useNow";
 import DashSearch from "./DashSearch";
 import s from "./dashboard.module.css";
 
@@ -53,7 +59,14 @@ export default function DashboardHome() {
   const m2o = useM2ORequests();
   const custom = useCustomRequests();
   const [reordered, setReordered] = useState<string | null>(null);
+  const now = useNow();
   if (!dealer) return null;
+
+  // Recent orders, every channel: the site's, and the phone orders from RightClick.
+  const phone = now ? samplePhoneOrders(dealer.email, now) : [];
+  const recent = [...orders.map((o) => ({ placedAt: o.placedAt, site: o, phone: undefined })), ...phone.map((p) => ({ placedAt: p.placedAt, site: undefined, phone: p }))]
+    .sort((a, b) => b.placedAt.localeCompare(a.placedAt))
+    .slice(0, 5);
 
   const billing = canSeeBilling(dealer) && acct;
   const openInvoices = acct ? acct.invoices.filter((i) => i.state === "open").sort((a, b) => b.overdue - a.overdue || a.due.localeCompare(b.due)) : [];
@@ -113,11 +126,6 @@ export default function DashboardHome() {
             </div>
           </dl>
           <dl className={s.sideStats}>
-            <div className={s.stat}>
-              <dt>Credit available</dt>
-              <dd className="tabular">{formatMoney(acct.summary.available)}</dd>
-              <span>Of {formatMoney(acct.summary.creditLimit)}</span>
-            </div>
             <div className={s.stat}>
               <dt>On memo</dt>
               <dd className="tabular">{formatMoney(acct.summary.memoBalance)}</dd>
@@ -206,7 +214,7 @@ export default function DashboardHome() {
               </Link>
             </p>
           )}
-          {orders.length === 0 ? (
+          {recent.length === 0 ? (
             <div className={s.empty}>
               <p>Your orders appear here, each ready to reorder in one click.</p>
               <Link href="/jewelry" className={s.secondary}>
@@ -219,6 +227,7 @@ export default function DashboardHome() {
                 <thead>
                   <tr>
                     <th scope="col">Order</th>
+                    <th scope="col">Channel</th>
                     <th scope="col">Placed</th>
                     <th scope="col">Pieces</th>
                     <th scope="col">Payment</th>
@@ -229,7 +238,29 @@ export default function DashboardHome() {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.slice(0, 5).map((o) => {
+                  {recent.map(({ site: o, phone: p }) => {
+                    if (p)
+                      return (
+                        <tr key={p.number}>
+                          <th scope="row" className="tabular">
+                            {p.number}
+                          </th>
+                          <td>Phone</td>
+                          <td>{shortDate(p.placedAt)}</td>
+                          <td className="tabular">
+                            {p.pieces}
+                            {p.stones > 0 && <span className={s.cellNote}> incl. {p.stones} {p.stones === 1 ? "stone" : "stones"}</span>}
+                          </td>
+                          <td>Invoice</td>
+                          <td>
+                            <span className={s.status} data-status={p.status}>
+                              {STATUS_LABEL[p.status]}
+                            </span>
+                          </td>
+                          <td />
+                        </tr>
+                      );
+                    if (!o) return null;
                     const jewelry = o.lines.filter((l) => !l.stoneId);
                     const stonesIn = o.lines.length - jewelry.length;
                     return (
@@ -237,6 +268,7 @@ export default function DashboardHome() {
                         <th scope="row" className="tabular">
                           {o.number}
                         </th>
+                        <td>Website</td>
                         <td>{shortDate(o.placedAt)}</td>
                         <td className="tabular">
                           {pieceCount(o.lines)}
@@ -258,6 +290,7 @@ export default function DashboardHome() {
                   })}
                 </tbody>
               </table>
+              {phone.length > 0 && <p className={s.tableNote}>Phone orders come from RightClick; these are samples until it is connected.</p>}
             </div>
           )}
         </section>
