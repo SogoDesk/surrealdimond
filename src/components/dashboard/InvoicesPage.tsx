@@ -2,8 +2,7 @@
 
 /**
  * Invoices and payments (client feedback, 27 October 2026: open invoices,
- * outstanding payments and invoice and memo reconciliation, prioritised for
- * Phase 1). In the WB Mason customer portal manner, inside the dashboard
+ * outstanding payments, prioritised for Phase 1). In the WB Mason customer portal manner, inside the dashboard
  * shell:
  *
  * - The account at a glance: balance due, past due, due within a week (no
@@ -17,9 +16,10 @@
  *   has yet to post (RightClick has no call to record a payment).
  * - Statement: invoices, payments and credits in date order with a running
  *   balance, for a period; CSV and print.
- * - Reconcile: confirm the open balance or flag the invoices that differ,
- *   with a reason; memo items are reconciled on Open memo items, and the
- *   ones reported sold arrive here as invoices awaiting issue.
+ *
+ * Memo items are reconciled on Open memo items, and the ones reported sold
+ * arrive here as invoices awaiting issue. The invoice Reconcile tab and its
+ * sidebar link were removed (client request, November 2026).
  *
  * Associates do not see billing (F-E3); the account owner does. All figures
  * are sample data until RightClick and the card processor are connected.
@@ -36,22 +36,18 @@ import { useNow } from "@/lib/useNow";
 import {
   AGING_LABEL,
   AGING_ORDER,
-  DISPUTE_REASONS,
   canSeeBilling,
   formatMoney,
   payInvoices,
-  sendInvoiceReconciliation,
   useAccount,
   type AgingBucket,
-  type DisputeReason,
-  type InvoiceReconciliation,
   type InvoiceView,
   type Payment,
 } from "@/lib/invoices";
 import p from "./pages.module.css";
 import s from "./invoices.module.css";
 
-type Tab = "open" | "payments" | "statement" | "reconcile";
+type Tab = "open" | "payments" | "statement";
 type Filter = "open" | "pastdue" | "soon" | "awaiting" | "paid";
 type Period = "90" | "year" | "all";
 
@@ -59,7 +55,6 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "open", label: "Invoices" },
   { id: "payments", label: "Payments" },
   { id: "statement", label: "Statement" },
-  { id: "reconcile", label: "Reconcile" },
 ];
 const FILTERS: { id: Filter; label: string }[] = [
   { id: "open", label: "All open" },
@@ -71,7 +66,7 @@ const FILTERS: { id: Filter; label: string }[] = [
 
 const longDate = (d: string) => new Date(d.length === 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-/** The tab comes from ?tab=, so the sidebar's Reconciliation link opens it even from this page. */
+/** The tab comes from ?tab=, so links such as the dashboard's View statement open it. */
 function tabFrom(t: string | null): Tab {
   return TABS.some((x) => x.id === t) ? (t as Tab) : "open";
 }
@@ -79,7 +74,6 @@ function tabFrom(t: string | null): Tab {
 export function StatusChip({ inv }: { inv: InvoiceView }) {
   if (inv.state === "awaiting") return <span className={s.chip} data-tone="info">Awaiting invoice</span>;
   if (inv.state === "paid") return <span className={s.chip} data-tone={inv.pendingPosting ? "info" : "ok"}>{inv.pendingPosting ? "Paid, pending posting" : "Paid"}</span>;
-  if (inv.inReview) return <span className={s.chip} data-tone="review">In review</span>;
   if (inv.overdue > 0) return <span className={s.chip} data-tone={inv.bucket}>{`${inv.overdue} ${inv.overdue === 1 ? "day" : "days"} past due`}</span>;
   return <span className={s.chip} data-tone="ok">Due {longDate(inv.due)}</span>;
 }
@@ -217,7 +211,6 @@ export default function InvoicesPage() {
       )}
       {tab === "payments" && <Payments payments={account.payments} invoices={invoices} />}
       {tab === "statement" && <Statement account={account} store={dealer.store} />}
-      {tab === "reconcile" && <Reconcile invoices={invoices} balance={summary.balance} history={account.reconciliations} />}
 
       {paying && (
         <PayDialog
@@ -696,152 +689,6 @@ function Statement({ account, store }: { account: NonNullable<ReturnType<typeof 
           </tbody>
         </table>
       </div>
-    </section>
-  );
-}
-
-function Reconcile({ invoices, balance, history }: { invoices: InvoiceView[]; balance: number; history: InvoiceReconciliation[] }) {
-  const list = invoices.filter((i) => i.state !== "paid");
-  const [matched, setMatched] = useState<Set<string>>(new Set());
-  const [disputes, setDisputes] = useState<Record<string, { reason: DisputeReason; note: string }>>({});
-  const [confirmed, setConfirmed] = useState(false);
-  const [error, setError] = useState("");
-  const [sent, setSent] = useState<InvoiceReconciliation | null>(null);
-
-  const toggleMatch = (id: string) => {
-    const next = new Set(matched);
-    if (next.has(id)) next.delete(id);
-    else {
-      next.add(id);
-      const d = { ...disputes };
-      delete d[id];
-      setDisputes(d);
-    }
-    setMatched(next);
-  };
-  const toggleDispute = (id: string) => {
-    const d = { ...disputes };
-    if (d[id]) delete d[id];
-    else {
-      d[id] = { reason: "Amount differs", note: "" };
-      const next = new Set(matched);
-      next.delete(id);
-      setMatched(next);
-    }
-    setDisputes(d);
-  };
-
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    const flagged = Object.entries(disputes);
-    if (!confirmed && matched.size === 0 && flagged.length === 0) return setError("Tick the invoices that match, flag the ones that differ, or confirm the balance.");
-    if (flagged.some(([, d]) => d.reason === "Other" && !d.note.trim())) return setError("Add a note for each difference marked Other.");
-    setError("");
-    setSent(
-      sendInvoiceReconciliation({
-        through: new Date().toISOString().slice(0, 10),
-        confirmed,
-        matched: [...matched],
-        disputes: flagged.map(([invoiceId, d]) => ({ invoiceId, reason: d.reason, note: d.note.trim() })),
-      }),
-    );
-    setMatched(new Set());
-    setDisputes({});
-    setConfirmed(false);
-  };
-
-  return (
-    <section aria-label="Reconcile" className={s.reconcile}>
-      <p className={p.lead}>
-        Check your open invoices against your records. Tick the ones that match and flag any that differ; Accounts reviews each difference. Memo items are reconciled on{" "}
-        <Link href="/dashboard/memo" className={p.textLink}>
-          Open memo items
-        </Link>
-        , and the ones you report sold arrive here as invoices awaiting issue.
-      </p>
-
-      {sent && (
-        <p className={p.notice} role="status">
-          Reconciliation {sent.number} sent: {sent.matched.length} matched, {sent.disputes.length} {sent.disputes.length === 1 ? "difference" : "differences"} flagged{sent.confirmed ? ", balance confirmed" : ""}. Flagged invoices show as In review.
-        </p>
-      )}
-
-      <form onSubmit={submit} noValidate>
-        {list.length === 0 && <p className={p.notice}>No open invoices to check. You can still confirm your balance below.</p>}
-        <ul className={s.reconList}>
-          {list.map((i) => {
-            const d = disputes[i.id];
-            return (
-              <li key={i.id} className={s.reconItem} data-flagged={d ? "" : undefined}>
-                <div className={s.reconRow}>
-                  <span className={s.reconText}>
-                    <strong>{i.number ? `Invoice ${i.number}` : "Being invoiced"}</strong>
-                    <span className={s.sub}>
-                      {longDate(i.date)}, {i.reference}
-                      {i.po ? `, ${i.po}` : ""}
-                    </span>
-                  </span>
-                  <strong className="tabular">{formatMoney(i.state === "awaiting" ? i.total : i.balance)}</strong>
-                  <StatusChip inv={i} />
-                  <span className={s.reconDoors}>
-                    <label className={s.reconCheck}>
-                      <input type="checkbox" checked={matched.has(i.id)} onChange={() => toggleMatch(i.id)} />
-                      Matches
-                    </label>
-                    <button type="button" className={s.flagBtn} aria-pressed={Boolean(d)} onClick={() => toggleDispute(i.id)}>
-                      {d ? "Flagged" : "Flag a difference"}
-                    </button>
-                  </span>
-                </div>
-                {d && (
-                  <div className={s.disputeRow}>
-                    <label className={s.field}>
-                      <span className={p.label}>Reason</span>
-                      <select value={d.reason} onChange={(e) => setDisputes({ ...disputes, [i.id]: { ...d, reason: e.target.value as DisputeReason } })}>
-                        {DISPUTE_REASONS.map((r) => (
-                          <option key={r}>{r}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label className={`${s.field} ${s.fieldWide}`}>
-                      <span className={p.label}>Note{d.reason === "Other" ? "" : " (optional)"}</span>
-                      <input value={d.note} onChange={(e) => setDisputes({ ...disputes, [i.id]: { ...d, note: e.target.value } })} placeholder="For example, we were invoiced for 3 pieces and received 2" />
-                    </label>
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-        <label className={s.confirm}>
-          <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} />
-          <span>I confirm our open balance of {formatMoney(balance)} matches our records, apart from anything flagged above.</span>
-        </label>
-        {error && (
-          <p className={p.error} role="alert">
-            {error}
-          </p>
-        )}
-        <div className={s.dialogDoors}>
-          <button type="submit" className={p.primary}>
-            Send reconciliation
-          </button>
-          <span className={p.hintText}>Questions about your account? Call {brand.office.phone}.</span>
-        </div>
-      </form>
-
-      {history.length > 0 && (
-        <div className={s.history}>
-          <h2 className={p.panelTitle}>Sent</h2>
-          <ul>
-            {history.map((h) => (
-              <li key={h.number}>
-                <strong className="tabular">{h.number}</strong> {longDate(h.sentAt)}: {h.matched.length} matched, {h.disputes.length} flagged{h.confirmed ? ", balance confirmed" : ""}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </section>
   );
 }

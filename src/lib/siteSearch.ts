@@ -93,7 +93,7 @@ const PAGES: (PageHit & { keys: string })[] = [
   { label: "Custom jewelry", line: "The custom order portal", href: "/custom", keys: "custom design cad bespoke portal" },
   { label: "Jewelry order form", line: "Order by style number", href: "/jewelry/order-form", keys: "order form style number bulk" },
   { label: "Retailer Dashboard", line: "Orders, memo, invoices and payments", href: "/dashboard", keys: "dashboard account retailer dealer portal" },
-  { label: "Invoices and payments", line: "Open invoices, statement and reconciliation", href: "/dashboard/invoices", keys: "invoice invoices payment payments statement balance reconcile reconciliation billing" },
+  { label: "Invoices and payments", line: "Open invoices, payments and statement", href: "/dashboard/invoices", keys: "invoice invoices payment payments statement balance billing" },
   { label: "Open memo items", line: "Stones on memo and memo reports", href: "/dashboard/memo", keys: "memo consignment report" },
   { label: "Trade show appointments", line: "Meet us at the shows", href: "/dashboard/trade-shows", keys: "trade show shows jck appointment booth" },
   { label: "Become a dealer", line: "Apply for a dealer account", href: "/apply", keys: "apply dealer become register account wholesale" },

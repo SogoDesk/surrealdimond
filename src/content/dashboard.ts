@@ -2,8 +2,8 @@
  * The Retailer Dashboard's sections. The live dashboard had fifteen tiles
  * (docs/CONTEXT.md, "Retailer Dashboard"); after the client's feedback of 27
  * October 2026 the dashboard keeps what dealers use day to day and puts the
- * account first: billing (invoices, payments, statement, reconciliation; the
- * Phase 2 payment portal brought forward), orders and memo, ordering, and the
+ * account first: billing (invoices, payments and statement; the Phase 2
+ * payment portal brought forward), orders and memo, ordering, and the
  * dealer's own account. The marketing, catalog, social, training, website,
  * SPIF, authorized users and policies tiles are out of the navigation until
  * Surreal asks for them back (Q5); their notes stay in docs/CONTEXT.md.
@@ -42,7 +42,6 @@ export const dashSections: DashSection[] = [
   { id: "home", label: "Dashboard", line: "Your store at a glance", href: "/dashboard", group: "Overview", icon: "home" },
 
   { id: "invoices", label: "Invoices and payments", line: "Open invoices, payments and your statement", href: "/dashboard/invoices", group: "Billing", icon: "invoices", billing: true, fresh: true },
-  { id: "reconcile", label: "Reconciliation", line: "Confirm your balance or flag a difference", href: "/dashboard/invoices?tab=reconcile", group: "Billing", icon: "memo", billing: true },
   { id: "payments", label: "Payment methods", line: "Cards and bank accounts on file", href: "/dashboard/payments", group: "Billing", icon: "payments", billing: true },
 
   { id: "orders", label: "Orders", line: "Order history and one-click reorder", href: "/dashboard/orders", group: "Orders and memo", icon: "orders" },

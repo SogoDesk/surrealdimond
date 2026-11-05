@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Invoices, payments and reconciliation for the Retailer Dashboard (client
+ * Invoices and payments for the Retailer Dashboard (client
  * feedback 27 October 2026, moved into Phase 1 from the Phase 2 payment
  * portal). The shapes follow RightClick, which will supply the real data
  * (docs/RIGHTCLICK.md): the customer balance (account balance, aging buckets,
@@ -19,10 +19,6 @@
  * - payments made here settle invoices at once, marked "pending posting":
  *   RightClick has no call to record a payment, so finance posts the cash
  *   receipt there and the next sync clears the flag.
- *
- * Reconciliations (the dealer confirms the statement or flags invoices that
- * differ) are kept in this browser with an RC number, like memo
- * reconciliations, until the console's inbox takes them.
  */
 
 import { useMemo } from "react";
@@ -71,7 +67,7 @@ export interface Invoice {
   sample: boolean;
 }
 
-/** An invoice as the dealer sees it today, after their payments and reconciliations. */
+/** An invoice as the dealer sees it today, after their payments. */
 export interface InvoiceView extends Invoice {
   paidHere: number;
   balance: number;
@@ -79,8 +75,6 @@ export interface InvoiceView extends Invoice {
   /** Days past due, 0 when not yet due. */
   overdue: number;
   bucket: AgingBucket;
-  /** Flagged in a reconciliation and not yet resolved. */
-  inReview: boolean;
   /** Paid on the site; finance has not posted the receipt yet. */
   pendingPosting: boolean;
 }
@@ -114,19 +108,6 @@ export interface Credit {
   amount: number;
   reason: string;
   sample: boolean;
-}
-
-export type DisputeReason = "Amount differs" | "Already paid" | "Items not received" | "Items returned" | "Other";
-export const DISPUTE_REASONS: DisputeReason[] = ["Amount differs", "Already paid", "Items not received", "Items returned", "Other"];
-
-export interface InvoiceReconciliation {
-  number: string;
-  sentAt: string;
-  /** Statement period the dealer reviewed. */
-  through: string;
-  confirmed: boolean;
-  matched: string[];
-  disputes: { invoiceId: string; reason: DisputeReason; note: string }[];
 }
 
 export interface StatementEntry {
@@ -167,12 +148,9 @@ export const invoiceTotal = (lines: InvoiceLine[], shipping = 0, tax = 0) => cen
 /* Stores */
 
 const isPayments = (v: unknown): v is Payment[] => Array.isArray(v);
-const isRecons = (v: unknown): v is InvoiceReconciliation[] => Array.isArray(v);
 const paymentsStore = createLocalStore<Payment[]>("surreal-invoice-payments", [], isPayments);
-const reconStore = createLocalStore<InvoiceReconciliation[]>("surreal-invoice-recons", [], isRecons);
 
 export const useInvoicePayments = paymentsStore.useStore;
-export const useInvoiceReconciliations = reconStore.useStore;
 
 /** Record a payment made on the site against invoices (full balances). */
 export function payInvoices(invoices: InvoiceView[], kind: PayKind, method: string, payer?: string): Payment {
@@ -197,13 +175,6 @@ export function payInvoices(invoices: InvoiceView[], kind: PayKind, method: stri
 export function postInvoicePayment(id: string) {
   const at = new Date().toISOString();
   paymentsStore.set((list) => list.map((p) => (p.id === id ? { ...p, pending: false, postedAt: at } : p)));
-}
-
-export function sendInvoiceReconciliation(r: Omit<InvoiceReconciliation, "number" | "sentAt">): InvoiceReconciliation {
-  const now = new Date();
-  const sent: InvoiceReconciliation = { ...r, number: `RC-${String(now.getTime()).slice(-6)}`, sentAt: now.toISOString() };
-  reconStore.set((list) => [sent, ...list]);
-  return sent;
 }
 
 /* Sample account (seeded per dealer) */
@@ -382,7 +353,6 @@ export interface Account {
   credits: Credit[];
   statement: StatementEntry[];
   summary: AccountSummary;
-  reconciliations: InvoiceReconciliation[];
 }
 
 function bucketOf(overdue: number, state: InvoiceState): AgingBucket {
@@ -443,7 +413,6 @@ export function useAccount(): Account | null {
   const memoLines = useMemoLines();
   const memoReports = useMemoReports();
   const sitePayments = useInvoicePayments();
-  const reconciliations = useInvoiceReconciliations();
 
   return useMemo(() => {
     if (!dealer || !now) return null;
@@ -452,8 +421,6 @@ export function useAccount(): Account | null {
 
     const paidHere = new Map<string, number>();
     sitePayments.forEach((p) => p.allocations.forEach((a) => paidHere.set(a.invoiceId, cents((paidHere.get(a.invoiceId) ?? 0) + a.amount))));
-    const inReview = new Set<string>();
-    reconciliations.forEach((rc) => rc.disputes.forEach((d) => inReview.add(d.invoiceId)));
 
     const today = new Date(now).toISOString().slice(0, 10);
     const views: InvoiceView[] = all
@@ -462,7 +429,7 @@ export function useAccount(): Account | null {
         const balance = cents(Math.max(0, inv.total - inv.applied - here));
         const state: InvoiceState = inv.number === null ? "awaiting" : balance <= 0 ? "paid" : "open";
         const overdue = state === "open" && inv.due < today ? Math.floor((now - new Date(inv.due + "T12:00:00").getTime()) / DAY) : 0;
-        return { ...inv, paidHere: here, balance, state, overdue: Math.max(0, overdue), bucket: bucketOf(overdue, state), inReview: inReview.has(inv.id), pendingPosting: here > 0 };
+        return { ...inv, paidHere: here, balance, state, overdue: Math.max(0, overdue), bucket: bucketOf(overdue, state), pendingPosting: here > 0 };
       })
       .sort((a, b) => b.date.localeCompare(a.date));
 
@@ -498,7 +465,6 @@ export function useAccount(): Account | null {
       payments: paymentsAll,
       credits: sample.credits,
       statement,
-      reconciliations,
       summary: {
         balance,
         pastDue,
@@ -515,7 +481,7 @@ export function useAccount(): Account | null {
         lastPayment: paymentsAll[0] ?? null,
       },
     };
-  }, [dealer, now, orders, orderWork, memoLines, memoReports, sitePayments, reconciliations]);
+  }, [dealer, now, orders, orderWork, memoLines, memoReports, sitePayments]);
 }
 
 /** Owners see billing; associates order and see orders and memo (E3 role tests). */
