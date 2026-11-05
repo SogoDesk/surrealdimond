@@ -132,7 +132,9 @@ export default function CartPage() {
                   </Summary>
                   <div className={s.memoCard}>
                     <p className={s.memoTitle}>Prefer it on memo?</p>
-                    <p>Surreal runs a long-term memo program for diamonds and jewelry. Call the office at {brand.office.phone} to talk about memo for your case.</p>
+                    <p>
+                      Loose stones can come on memo: choose Get on memo on the diamond page and the stone travels with this order, at the memo price Surreal confirms. Jewelry is purchase only. Questions: {brand.office.phone}.
+                    </p>
                   </div>
                 </div>
               </div>

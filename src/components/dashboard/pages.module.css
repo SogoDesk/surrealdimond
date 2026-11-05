@@ -171,6 +171,9 @@ a.lineName:hover { text-decoration: underline; text-decoration-color: var(--line
 .steps li[data-done]::before { background: var(--ink); }
 .status[data-status="confirmed"] { background: var(--beam); box-shadow: inset 0 0 0 1px #b6ecff; }
 .status[data-status="shipped"] { background: var(--sky); color: var(--navy); }
+/* A stone taken on memo, flagged in the order (client change request, November 2026). */
+.line[data-memo] { box-shadow: inset 3px 0 0 var(--sky); padding-left: 12px; }
+.memoTag { display: inline-flex; align-items: center; width: fit-content; height: 20px; padding: 0 8px; border-radius: 999px; background: var(--sky); color: var(--navy); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
 .status[data-status="delivered"] { background: rgba(46, 158, 107, 0.14); color: #1f7a52; }
 .status[data-status="cancelled"] { background: var(--porcelain); color: var(--stone); box-shadow: inset 0 0 0 1px var(--hairline); }
 .cancelled { margin: 14px 0 6px; padding: 12px 14px; border-radius: 12px; background: var(--porcelain); font-size: 0.875rem; color: var(--graphite); }

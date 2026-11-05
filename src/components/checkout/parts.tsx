@@ -16,7 +16,7 @@ import { formatCarat, metals, productById, productHref, renderSrc, styleRef } fr
 import { beforeCutoff, caratTotal, pieceCount, removeLine, setNote, setQty, type CartLine } from "@/lib/cart";
 import { useWishlist } from "@/components/store/useWishlist";
 import { groundStyle } from "@/content/grounds";
-import { measurements, shipment, stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
+import { STONE_TYPE, measurements, stoneById, stoneGrade, stoneTitle } from "@/content/diamonds";
 import ShapeIcon from "@/components/brand/ShapeIcon";
 import { formatUSD, jewelryPrice, linesTotal, stonePrice } from "@/lib/pricing";
 import s from "./checkout.module.css";
@@ -48,7 +48,7 @@ function StoneLine({ line, editable }: { line: CartLine; editable: boolean }) {
   const st = line.stoneId ? stoneById(line.stoneId) : undefined;
   if (!st) return null;
   return (
-    <article className={s.line} data-compact={editable ? undefined : "true"}>
+    <article className={s.line} data-compact={editable ? undefined : "true"} data-memo={line.memo ? "true" : undefined}>
       <Link href={`/diamonds?stone=${st.id}`} className={`${s.lineThumb} ${s.stoneThumb}`} aria-label={stoneTitle(st)}>
         <ShapeIcon shape={st.shape} detail className={s.stoneIcon} />
       </Link>
@@ -59,19 +59,29 @@ function StoneLine({ line, editable }: { line: CartLine; editable: boolean }) {
               {stoneTitle(st)}
             </Link>
             <span className={s.lineDetail}>
-              Loose lab grown diamond · Stock {st.id} · {st.lab} {st.certificate}
+              {STONE_TYPE} diamond · Stock {st.id} · {st.lab} {st.certificate}
             </span>
           </div>
-          <span className={s.linePrice}>
-            <span>Price</span>
-            {formatUSD(stonePrice(st))}
-          </span>
+          {/* A memo line carries no figure: Surreal confirms the memo price with the order. */}
+          {line.memo ? (
+            <span className={s.linePrice}>
+              <span>Memo price</span>
+              Confirmed by Surreal
+            </span>
+          ) : (
+            <span className={s.linePrice}>
+              <span>Price</span>
+              {formatUSD(stonePrice(st))}
+            </span>
+          )}
         </div>
         <div className={s.lineSpecs}>
+          <span className={s.specChip} data-kind={line.memo ? "memo" : "purchase"}>
+            {line.memo ? "Memo" : "Purchase"}
+          </span>
           <span className={s.specChip}>{stoneGrade(st)}</span>
           {st.cut && <span className={s.specChip}>{st.cut} cut</span>}
           <span className={s.specChip}>{measurements(st)}</span>
-          <span className={s.specChip}>{shipment(st)}</span>
           {!editable && <span className={s.specChip}>Qty 1</span>}
         </div>
         {editable && (
@@ -160,6 +170,7 @@ export function LineItem({ line, editable = true }: { line: CartLine; editable?:
 export function Summary({ lines, children, compact = false }: { lines: CartLine[]; children?: ReactNode; compact?: boolean }) {
   const pieces = pieceCount(lines);
   const nextDay = beforeCutoff();
+  const memoCount = lines.filter((l) => l.memo).length;
   return (
     <aside className={s.summary} aria-label="Order summary">
       <p className={s.summaryTitle}>Order summary</p>
@@ -178,6 +189,7 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
                     {stoneTitle(st)}
                     <span>
                       {stoneGrade(st)}, stock {st.id}
+                      {l.memo ? ", on memo" : ""}
                     </span>
                   </span>
                 </li>
@@ -218,6 +230,14 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
           <dt>Delivery</dt>
           <dd>{nextDay ? "Next day" : "After the 4:00pm ET cutoff"}</dd>
         </div>
+        {memoCount > 0 && (
+          <div>
+            <dt>On memo</dt>
+            <dd>
+              {memoCount} {memoCount === 1 ? "stone" : "stones"}, memo price confirmed by Surreal
+            </dd>
+          </div>
+        )}
         <div className={s.summaryTotal}>
           <dt>Order total</dt>
           <dd className="tabular">{formatUSD(linesTotal(lines))}</dd>

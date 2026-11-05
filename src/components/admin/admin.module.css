@@ -397,6 +397,9 @@
 .orderChip[data-status="received"] { background: rgba(192, 138, 30, 0.14); color: #7a5810; }
 .orderChip[data-status="confirmed"] { background: var(--beam); color: var(--ink); box-shadow: inset 0 0 0 1px #b6ecff; }
 .orderChip[data-status="shipped"] { background: var(--sky); color: var(--navy); }
+/* A stone taken on memo, flagged in the order (client change request, November 2026). */
+.orderLines li[data-memo] { box-shadow: inset 3px 0 0 var(--sky); padding-left: 10px; }
+.memoTag { display: inline-flex; align-items: center; width: fit-content; height: 20px; padding: 0 8px; border-radius: 999px; background: var(--sky); color: var(--navy); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
 .orderChip[data-status="delivered"] { background: rgba(46, 158, 107, 0.12); color: #1f7a52; }
 .orderChip[data-status="cancelled"] { background: var(--porcelain); color: var(--stone); box-shadow: inset 0 0 0 1px var(--hairline); }
 .payChip[data-tone="ok"] { background: rgba(46, 158, 107, 0.12); color: #1f7a52; }

@@ -65,7 +65,8 @@ function Thumb({ line }: { line: CartLine }) {
 function lineName(l: CartLine): { name: string; meta: string; product?: Product } {
   if (l.stoneId) {
     const st = stoneById(l.stoneId);
-    return { name: st ? `${stoneTitle(st)} loose diamond` : `Stone ${l.stoneId}`, meta: st ? `${st.color} ${st.clarity}, ${st.lab} ${st.certificate}, stock ${st.id}` : `Stock ${l.stoneId}` };
+    const memo = l.memo ? "On memo, " : "";
+    return { name: st ? `${stoneTitle(st)} loose diamond` : `Stone ${l.stoneId}`, meta: st ? `${memo}${st.color} ${st.clarity}, ${st.lab} ${st.certificate}, stock ${st.id}` : `${memo}Stock ${l.stoneId}` };
   }
   const p = productById(l.productId);
   return { name: p?.name ?? l.productId, meta: [metalLabel(l.metal), formatCarat(l.carat)].join(", "), product: p };
@@ -324,9 +325,10 @@ export default function OrdersPage() {
                         {o.lines.map((l) => {
                           const n = lineName(l);
                           return (
-                            <li key={l.key} className={s.line}>
+                            <li key={l.key} className={s.line} data-memo={l.memo ? "true" : undefined}>
                               <Thumb line={l} />
                               <span className={s.lineText}>
+                                {l.memo && <span className={s.memoTag}>Memo</span>}
                                 {n.product ? (
                                   <Link href={productHref(n.product)} className={s.lineName}>
                                     {n.name}

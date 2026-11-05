@@ -1,21 +1,23 @@
 /**
- * Diamond page filters and sort (BRD R-16, R-17; client feedback F-B1, F-B2,
- * F-B4). Pure functions over the stone feed. Ranges are inclusive; color and
- * clarity are ranges over their grade scales (best first); measurements are
- * length, width and depth ranges in millimetres (placeholder layout until
- * Surreal's reference, C-16). Sorting is cut to what dealers use: Surreal's
- * own stones first, carat, and price once signed in. The M2O link carries
- * the search into the Made to Order request (R-19), and fromParams reads a
- * search handed over in the address (the site search, the homepage).
+ * Diamond page filters and sort (BRD R-16, R-17; client feedback F-B1, F-B2;
+ * client change request, November 2026). Pure functions over the stone
+ * feed. Ranges are inclusive; color and clarity are ranges over their grade
+ * scales (best first); measurements are length, width and depth ranges in
+ * millimetres (placeholder layout until Surreal's reference, C-16); table
+ * and depth are percentage ranges. The source filter and the next day sort
+ * and filter are gone (the November request reversed the delivery
+ * highlighting). feedOptions reads every filter's choices and ranges from
+ * the feed itself. The M2O link carries the search into the Made to Order
+ * request (R-19), and fromParams reads a search handed over in the address
+ * (the site search, the homepage).
  */
 
-import { CLARITIES, COLORS, GRADES, LABS, SHAPES, SHAPE_LABEL, shipsNextDay, type Fluorescence, type Grade, type Lab, type Source, type Stone, type StoneShape } from "@/content/diamonds";
+import { CLARITIES, COLORS, FLUORESCENCE, GRADES, LABS, SHAPES, SHAPE_LABEL, type Fluorescence, type Grade, type Lab, type Stone, type StoneShape } from "@/content/diamonds";
 import { stonePrice } from "@/lib/pricing";
 
-export type SortKey = "featured" | "carat-asc" | "carat-desc" | "price-asc" | "price-desc";
+export type SortKey = "carat-asc" | "carat-desc" | "price-asc" | "price-desc";
 
 export const SORT_LABEL: Record<SortKey, string> = {
-  featured: "Next day delivery first",
   "carat-asc": "Carat, low to high",
   "carat-desc": "Carat, high to low",
   "price-asc": "Price, low to high",
@@ -40,14 +42,16 @@ export interface DiamondQuery {
   widthMax: number | null;
   depthMin: number | null;
   depthMax: number | null;
-  /** Only stones delivered the next day. */
-  nextDay: boolean;
+  /** Table and depth as a percentage (depth here is the proportion, not the mm measurement above). */
+  tableMin: number | null;
+  tableMax: number | null;
+  depthPctMin: number | null;
+  depthPctMax: number | null;
   polish: Grade | null;
   symmetry: Grade | null;
   fluorescence: Fluorescence[];
   ratioMin: number | null;
   ratioMax: number | null;
-  source: Source | null;
   sort: SortKey;
 }
 
@@ -65,14 +69,16 @@ export const EMPTY: DiamondQuery = {
   widthMax: null,
   depthMin: null,
   depthMax: null,
-  nextDay: false,
+  tableMin: null,
+  tableMax: null,
+  depthPctMin: null,
+  depthPctMax: null,
   polish: null,
   symmetry: null,
   fluorescence: [],
   ratioMin: null,
   ratioMax: null,
-  source: null,
-  sort: "featured",
+  sort: "carat-asc",
 };
 
 const gradeAtLeast = (g: Grade, min: Grade | null) => min === null || GRADES.indexOf(g) <= GRADES.indexOf(min);
@@ -86,18 +92,16 @@ export function matches(s: Stone, q: DiamondQuery): boolean {
   if (q.cut.length && (!s.cut || !q.cut.includes(s.cut))) return false;
   if (q.lab.length && !q.lab.includes(s.lab)) return false;
   if (!inRange(s.length, q.lengthMin, q.lengthMax) || !inRange(s.width, q.widthMin, q.widthMax) || !inRange(s.depth, q.depthMin, q.depthMax)) return false;
-  if (q.nextDay && !shipsNextDay(s)) return false;
+  if (!inRange(s.tablePct, q.tableMin, q.tableMax) || !inRange(s.depthPct, q.depthPctMin, q.depthPctMax)) return false;
   if (!gradeAtLeast(s.polish, q.polish) || !gradeAtLeast(s.symmetry, q.symmetry)) return false;
   if (q.fluorescence.length && !q.fluorescence.includes(s.fluorescence)) return false;
   if (!inRange(s.ratio, q.ratioMin, q.ratioMax)) return false;
-  if (q.source && s.source !== q.source) return false;
   return true;
 }
 
 export function sortStones(list: Stone[], sort: SortKey): Stone[] {
   const out = [...list];
   const by = {
-    featured: (a: Stone, b: Stone) => Number(!shipsNextDay(a)) - Number(!shipsNextDay(b)) || a.carat - b.carat,
     "carat-asc": (a: Stone, b: Stone) => a.carat - b.carat,
     "carat-desc": (a: Stone, b: Stone) => b.carat - a.carat,
     "price-asc": (a: Stone, b: Stone) => stonePrice(a) - stonePrice(b),
@@ -110,10 +114,51 @@ export const hasMeasurements = (q: DiamondQuery) => [q.lengthMin, q.lengthMax, q
 
 /** How many filters are on, for the Clear button and the More filters badge. */
 export function activeCount(q: DiamondQuery): { quick: number; more: number } {
-  const quick = [q.shapes.length > 0, q.caratMin !== null || q.caratMax !== null, q.color !== null, q.clarity !== null, q.cut.length > 0, hasMeasurements(q), q.nextDay].filter(Boolean).length;
-  const more = [q.lab.length > 0, q.polish !== null, q.symmetry !== null, q.fluorescence.length > 0, q.ratioMin !== null || q.ratioMax !== null, q.source !== null].filter(Boolean).length;
+  const quick = [q.shapes.length > 0, q.caratMin !== null || q.caratMax !== null, q.color !== null, q.clarity !== null, q.cut.length > 0, hasMeasurements(q)].filter(Boolean).length;
+  const more = [
+    q.lab.length > 0,
+    q.polish !== null,
+    q.symmetry !== null,
+    q.fluorescence.length > 0,
+    q.ratioMin !== null || q.ratioMax !== null,
+    q.tableMin !== null || q.tableMax !== null,
+    q.depthPctMin !== null || q.depthPctMax !== null,
+  ].filter(Boolean).length;
   return { quick, more };
 }
+
+type Span = [number, number] | null;
+const spanOf = (list: Stone[], pick: (s: Stone) => number): Span => (list.length ? [Math.min(...list.map(pick)), Math.max(...list.map(pick))] : null);
+
+/**
+ * The filters' choices, read from the inventory feed rather than fixed
+ * lists (client change request, November 2026): only the shapes, grades,
+ * cuts and labs the feed carries, in their usual order, and the feed's span
+ * for every range. Fluorescence offers None only. Color and clarity give
+ * the indexes on their scales, so a range still reads as before.
+ */
+export function feedOptions(list: Stone[]) {
+  const present = <T>(scale: readonly T[], pick: (s: Stone) => T | null) => scale.filter((x) => list.some((s) => pick(s) === x));
+  const indexes = (scale: readonly string[], pick: (s: Stone) => string) => scale.map((_, i) => i).filter((i) => list.some((s) => pick(s) === scale[i]));
+  return {
+    shapes: present(SHAPES, (s) => s.shape),
+    colors: indexes(COLORS, (s) => s.color),
+    clarities: indexes(CLARITIES, (s) => s.clarity),
+    cuts: present(GRADES, (s) => s.cut),
+    polish: present(GRADES, (s) => s.polish),
+    symmetry: present(GRADES, (s) => s.symmetry),
+    labs: present(LABS, (s) => s.lab),
+    fluorescence: present(FLUORESCENCE, (s) => s.fluorescence).filter((f): f is Fluorescence => f === "None"),
+    carat: spanOf(list, (s) => s.carat),
+    length: spanOf(list, (s) => s.length),
+    width: spanOf(list, (s) => s.width),
+    depth: spanOf(list, (s) => s.depth),
+    ratio: spanOf(list, (s) => s.ratio),
+    table: spanOf(list, (s) => s.tablePct),
+    depthPct: spanOf(list, (s) => s.depthPct),
+  };
+}
+export type FeedOptions = ReturnType<typeof feedOptions>;
 
 /** Made to Order link carrying the search: first shape, a size and a ratio (R-19). */
 export function m2oHref(q: DiamondQuery, stone?: Stone): string {
@@ -145,8 +190,8 @@ function scaleRange(scale: readonly string[], v: string | null): [number, number
 
 /**
  * Filters from the address: shape (one or more, comma separated), cmin and
- * cmax (carat), color and clarity (a grade or a range, D-F, VVS1-VS1), lab,
- * next=1. Unknown values are ignored; null when the address has none.
+ * cmax (carat), color and clarity (a grade or a range, D-F, VVS1-VS1), lab.
+ * Unknown values are ignored; null when the address has none.
  */
 export function fromParams(params: URLSearchParams | null): Partial<DiamondQuery> | null {
   if (!params) return null;
@@ -163,7 +208,6 @@ export function fromParams(params: URLSearchParams | null): Partial<DiamondQuery
   if (clarity) out.clarity = clarity;
   const lab = (params.get("lab") ?? "").toUpperCase().split(",").filter((x): x is Lab => (LABS as readonly string[]).includes(x));
   if (lab.length) out.lab = lab;
-  if (params.get("next") === "1") out.nextDay = true;
   return Object.keys(out).length ? out : null;
 }
 
@@ -176,6 +220,5 @@ export function toParams(q: Partial<DiamondQuery>): string {
   if (q.color) p.set("color", q.color[0] === q.color[1] ? COLORS[q.color[0]] : `${COLORS[q.color[0]]}-${COLORS[q.color[1]]}`);
   if (q.clarity) p.set("clarity", q.clarity[0] === q.clarity[1] ? CLARITIES[q.clarity[0]] : `${CLARITIES[q.clarity[0]]}-${CLARITIES[q.clarity[1]]}`);
   if (q.lab?.length) p.set("lab", q.lab.join(","));
-  if (q.nextDay) p.set("next", "1");
   return p.toString();
 }

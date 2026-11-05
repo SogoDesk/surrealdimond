@@ -28,7 +28,7 @@ import { useQuickViewList } from "@/components/store/useQuickViewList";
 import StoneDrawer from "@/components/diamonds/StoneDrawer";
 import { EMPTY, m2oHref } from "@/components/diamonds/query";
 import { categories } from "@/content/catalog";
-import { SHAPE_LABEL, shipment, shipsNextDay } from "@/content/diamonds";
+import { SHAPE_LABEL, STONE_TYPE } from "@/content/diamonds";
 import { account } from "@/content/site";
 import { useDealer } from "@/lib/dealer";
 import { useUnavailable } from "@/lib/memo";
@@ -123,9 +123,7 @@ function Results({ q }: { q: string }) {
                         {st.cut ? ` · ${st.cut}` : ""} · {st.lab} · {st.id}
                       </span>
                     </span>
-                    <span className={s.stoneShip} data-next={shipsNextDay(st) || undefined}>
-                      {shipment(st)}
-                    </span>
+                    <span className={s.stoneShip}>{STONE_TYPE}</span>
                     <span className={s.stonePrice}>{dealer ? formatUSD(stonePrice(st)) : "Quick view"}</span>
                   </button>
                 </li>

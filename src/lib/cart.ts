@@ -17,6 +17,8 @@ export interface CartLine {
   productId: string;
   /** Set for a loose stone from the diamond page: one of a kind, quantity always 1 (BRD B-01). productId is empty then. */
   stoneId?: string;
+  /** A stone taken on memo rather than purchased (Get on memo): it travels in the same cart and order, flagged, at the memo price Surreal confirms (client change request, November 2026). Stones only; jewelry has no memo. */
+  memo?: boolean;
   metal: Metal;
   carat: number;
   size: string | null;
@@ -74,10 +76,10 @@ export function addToCart(line: Omit<CartLine, "key">, { quiet = false }: { quie
   if (!quiet) window.dispatchEvent(new CustomEvent(CART_ADDED, { detail: key }));
 }
 
-/** Add a loose stone. A stone is one of a kind, so adding it again changes nothing. */
-export function addStone(stoneId: string, carat: number) {
+/** Add a loose stone, to purchase or on memo. A stone is one of a kind: adding it again only switches it between purchase and memo. */
+export function addStone(stoneId: string, carat: number, { memo = false }: { memo?: boolean } = {}) {
   const key = `stone|${stoneId}`;
-  cart.set((lines) => (lines.some((l) => l.key === key) ? lines : [...lines, { key, productId: "", stoneId, metal: "wg", carat, size: null, qty: 1, note: "" }]));
+  cart.set((lines) => (lines.some((l) => l.key === key) ? lines.map((l) => (l.key === key ? { ...l, memo } : l)) : [...lines, { key, productId: "", stoneId, metal: "wg", carat, size: null, qty: 1, note: "", memo }]));
   window.dispatchEvent(new CustomEvent(CART_ADDED, { detail: key }));
 }
 

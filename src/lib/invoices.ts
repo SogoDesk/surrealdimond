@@ -344,10 +344,10 @@ function memoInvoices(lines: MemoLine[], reports: ReturnType<typeof useMemoRepor
     });
 }
 
-/** Orders placed on the site, as invoices: cancelled orders drop out, and a wire order is paid once finance records the wire (lib/orderStatus.ts). */
+/** Orders placed on the site, as invoices: cancelled orders drop out, and a wire order is paid once finance records the wire (lib/orderStatus.ts). Stones taken on memo are not invoiced: they open as memo items instead. */
 function orderInvoices(orders: PlacedOrder[], work: Record<string, OrderWork>): Invoice[] {
-  return orders.filter((o) => workOf(work, o).status !== "cancelled").map((o) => {
-    const lines: InvoiceLine[] = o.lines.map((l) => ({
+  return orders.filter((o) => workOf(work, o).status !== "cancelled" && o.lines.some((l) => !l.memo)).map((o) => {
+    const lines: InvoiceLine[] = o.lines.filter((l) => !l.memo).map((l) => ({
       description: l.stoneId ? `Loose diamond, stock ${l.stoneId}` : `${productById(l.productId)?.name ?? l.productId}, ${metalLabel(l.metal)}, ${l.carat} ct`,
       ref: l.stoneId ?? (productById(l.productId) ? (styleRef(productById(l.productId)!) ?? undefined) : undefined),
       qty: l.qty,

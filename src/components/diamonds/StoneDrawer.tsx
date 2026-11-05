@@ -3,26 +3,25 @@
 /**
  * Quick View for a stone (BRD R-15): a drawer from the right with the shape
  * drawn large in plan view and its length and width marked, the grade chips,
- * delivery (next day with the time left before the 4:00pm ET cutoff, or
- * the supplier's lead time; F-B4), every attribute in a grid (the list
- * keeps only the essentials, F-B3), the certificate and the source, then the
- * doors: Add to cart and Request on memo for a signed-in dealer (Log in
- * otherwise), Grow one like it to order, which opens the M2O request
- * prefilled with this stone (R-19), and Diamond Legacy (F-C3). Previous
+ * every attribute in a grid (the list keeps only the essentials, F-B3), the
+ * certificate, then the doors: Purchase and Get on memo for a signed-in
+ * dealer, both into the one cart (Log in otherwise), Grow one like it to
+ * order, which opens the M2O request prefilled with this stone (R-19), and
+ * Diamond Legacy (F-C3). Every stone reads Lab-grown CVD; the delivery block
+ * and the source are gone (client change request, November 2026). Previous
  * and next step through the current results. Mechanics come from useDrawer
  * (inert while closed, focus trap, Escape, scroll lock).
  */
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import ShapeIcon from "@/components/brand/ShapeIcon";
 import { trapTab, useDrawer } from "@/components/shop/useDrawer";
-import { SHAPE_LABEL, measurements, shipment, shipmentNote, shipsNextDay, stoneGrade, stoneTitle, type Stone } from "@/content/diamonds";
-import { CUTOFF_LABEL, formatLeft, useCutoffMinutes } from "@/lib/cutoff";
+import { SHAPE_LABEL, STONE_TYPE, measurements, stoneGrade, stoneTitle, type Stone } from "@/content/diamonds";
 import { account, brand } from "@/content/site";
 import { addStone, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
-import { requestMemo, useUnavailable } from "@/lib/memo";
+import { useUnavailable } from "@/lib/memo";
 import { m2oHref, EMPTY } from "./query";
 import s from "./diamonds.module.css";
 import { formatUSD, stonePrice } from "@/lib/pricing";
@@ -43,11 +42,9 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
   const { onKeyDown } = useDrawer({ open, onClose, rootRef, panelRef, backdropRef, axis: "x" });
   const dealer = useDealer();
   const cart = useCart();
-  const [memoFor, setMemoFor] = useState<string | null>(null);
-  const left = useCutoffMinutes();
 
   const gone = useUnavailable();
-  const inCart = stone ? cart.some((l) => l.stoneId === stone.id) : false;
+  const line = stone ? cart.find((l) => l.stoneId === stone.id) : undefined;
   const held = stone ? gone.has(stone.id) : false;
   const loginHref = stone ? `${account.login}?next=${encodeURIComponent(`/diamonds?stone=${stone.id}`)}` : account.login;
 
@@ -66,9 +63,8 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
         ["Table", `${stone.tablePct.toFixed(1)}%`],
         ["Depth", `${stone.depthPct.toFixed(1)}%`],
         ["Lab", stone.lab],
-        ["Growth", "Lab grown, CVD"],
+        ["Type", STONE_TYPE],
         ["Stock ID", stone.id],
-        ["Delivery", shipment(stone)],
       ]
     : [];
 
@@ -112,7 +108,7 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
               <div className={s.drawerTitleRow}>
                 <h2 className={s.drawerTitle}>{stoneTitle(stone)}</h2>
                 <p className={s.drawerSub}>
-                  Stock {stone.id} · {stone.source === "surreal" ? "Grown by Surreal" : "Supplier stone"}
+                  Stock {stone.id} · {STONE_TYPE}
                 </p>
                 <div className={s.gradeChips}>
                   <span>{stoneGrade(stone)}</span>
@@ -122,28 +118,6 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
                   </span>
                   <span>Fluor. {stone.fluorescence}</span>
                 </div>
-              </div>
-
-              <div className={s.delivery} data-next={shipsNextDay(stone) || undefined}>
-                <svg aria-hidden viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7" />
-                  <circle cx="7" cy="17.5" r="1.6" />
-                  <circle cx="17" cy="17.5" r="1.6" />
-                </svg>
-                <span>
-                  <strong>{shipment(stone)}</strong>
-                  <span>
-                    {shipsNextDay(stone) && left !== null ? (
-                      <>
-                        Order within <span className="tabular">{formatLeft(left)}</span> to receive it tomorrow.
-                      </>
-                    ) : shipsNextDay(stone) ? (
-                      `For orders placed before ${CUTOFF_LABEL}.`
-                    ) : (
-                      shipmentNote(stone)
-                    )}
-                  </span>
-                </span>
               </div>
 
               <dl className={s.specGrid}>
@@ -163,11 +137,6 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
                   </strong>
                   <span>Sample number. Live stones link to the lab report.</span>
                 </div>
-                <div className={s.infoCard}>
-                  <span className={s.infoLabel}>Source</span>
-                  <strong>{stone.source === "surreal" ? "Grown by Surreal" : "Supplier stone"}</strong>
-                  <span>{stone.source === "surreal" ? "Lab grown by Surreal, CVD." : "Listed by a supplier, alongside Surreal's stones."}</span>
-                </div>
               </div>
 
               <div className={s.priceBox}>
@@ -184,28 +153,22 @@ export default function StoneDrawer({ stone, open, position, total, onClose, onS
 
               {held && (
                 <p className={s.notice} role="status">
-                  {memoFor === stone.id ? `Memo requested. The stone is held for ${dealer?.store ?? "your store"} and has left the available list.` : "This stone is on an order or on memo and has left the available list."}{" "}
+                  This stone is on an order or on memo and has left the available list.{" "}
                   Questions: {brand.office.phone}.
                 </p>
               )}
 
               <div className={s.drawerDoors} hidden={held}>
+                {/* Purchase or Get on memo, both into the one cart; choosing the other switches the line (client change request, November 2026). */}
                 {dealer ? (
                   <>
-                    <button type="button" className={s.primary} disabled={inCart} onClick={() => addStone(stone.id, stone.carat)}>
-                      {inCart ? "In your cart" : "Add to cart"}
+                    <button type="button" className={s.primary} aria-pressed={Boolean(line && !line.memo)} onClick={() => addStone(stone.id, stone.carat)}>
+                      {line && !line.memo ? "In your cart" : "Purchase"}
                     </button>
-                    <button
-                      type="button"
-                      className={s.secondary}
-                      disabled={memoFor === stone.id}
-                      onClick={() => {
-                        requestMemo(stone.id);
-                        setMemoFor(stone.id);
-                      }}
-                    >
-                      Request on memo
+                    <button type="button" className={s.memoDoor} aria-pressed={Boolean(line?.memo)} onClick={() => addStone(stone.id, stone.carat, { memo: true })}>
+                      {line?.memo ? "In your cart on memo" : "Get on memo"}
                     </button>
+                    <p className={s.memoNote}>Get on memo: the stone comes to you on memo, at the memo price Surreal confirms with the order.</p>
                   </>
                 ) : (
                   <Link href={loginHref} className={s.primary}>

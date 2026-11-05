@@ -31,6 +31,7 @@ import GatePage from "@/components/pages/GatePage";
 import { gates } from "@/content/gates";
 import { account } from "@/content/site";
 import { beforeCutoff, pieceCount, placeOrder, useCart, type PaymentMethod, type PlacedOrder, type StoreDetails } from "@/lib/cart";
+import { requestMemo } from "@/lib/memo";
 import { useDealer } from "@/lib/dealer";
 import { LineItem, Steps, Summary } from "./parts";
 import s from "./checkout.module.css";
@@ -131,6 +132,8 @@ export default function CheckoutPage() {
       return;
     }
     const order = placeOrder({ lines, details: form, payment: method, beforeCutoff: beforeCutoff() });
+    // Stones taken on memo also open as memo items, so they reach Open memo items and the memo report.
+    order.lines.forEach((l) => l.memo && l.stoneId && requestMemo(l.stoneId));
     setPlaced(order);
     go(4);
   };

@@ -72,14 +72,9 @@
 .barRight { display: flex; align-items: center; gap: 10px; }
 .m2oBtn { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.75rem; letter-spacing: 0.08em; white-space: nowrap; transition: background-color 0.2s var(--ease-surreal); }
 .m2oBtn:hover { background: var(--ink-hover); color: var(--ink-hover-fg); }
-.m2oBtn:focus-visible, .nextDayBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+.m2oBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 .m2oBtnIcon { width: 20px; height: 20px; color: var(--sky); }
 @media (max-width: 599px) { .barRight { gap: 6px; } .m2oBtn { padding: 0 10px; font-size: 0; gap: 0; } .m2oBtn::after { content: "M2O"; font-size: 0.75rem; margin-left: 6px; } }
-.nextDayBtn { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; color: var(--ink); }
-.nextDayBtn svg { color: #00698f; }
-.nextDayBtn:hover { box-shadow: inset 0 0 0 1px var(--ink); }
-.nextDayBtn[aria-pressed="true"] { background: var(--ink); color: var(--porcelain); box-shadow: none; }
-.nextDayBtn[aria-pressed="true"] svg { color: var(--sky); }
 .sort select { height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font: 500 0.8125rem var(--font-ui), "Urbanist", sans-serif; color: var(--ink); }
 
 /* M2O entry */
@@ -94,9 +89,6 @@
 
 /* Above the list: delivery rule and where the full specifications are */
 .listNote { display: flex; align-items: center; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; margin: 0 0 12px; font-size: 0.8125rem; color: var(--graphite); }
-.deliveryLine { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; }
-.deliveryLine strong { font-weight: 600; color: var(--ink); }
-.deliveryOther { color: var(--stone); }
 .specHint { font-size: 0.75rem; color: var(--stone); }
 
 /* Table */
@@ -115,11 +107,11 @@
 .colCheck { width: 36px; padding-left: 14px !important; }
 .colCheck input { width: 16px; height: 16px; accent-color: var(--ink); cursor: pointer; }
 .shapeCell { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); }
+.shapeName { display: inline-flex; flex-direction: column; line-height: 1.2; }
+/* Every stone labelled Lab-grown CVD (client change request, November 2026) */
+.stoneType { font-size: 0.6875rem; letter-spacing: 0.04em; color: var(--stone); white-space: nowrap; }
 .rowIcon { flex: 0 0 auto; width: 22px; height: 22px; }
 .lab { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 6px; background: var(--porcelain); font-size: 0.6875rem; color: var(--ink); }
-.shipChip { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--porcelain); font-size: 0.75rem; color: var(--graphite); white-space: nowrap; }
-.shipChip[data-next] { background: var(--beam); box-shadow: inset 0 0 0 1px #b6ecff; color: var(--ink); font-weight: 600; }
-.shipChip svg { flex: 0 0 auto; color: #00698f; }
 .priceCell { font-size: 0.75rem; color: var(--ink); }
 .priceLock { font-size: 0.75rem; color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .actions { display: flex; align-items: center; gap: 6px; padding-right: 14px !important; }
@@ -128,7 +120,11 @@
 .add { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 14px; border-radius: 999px; background: var(--ink); color: var(--porcelain); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; }
 .add:hover:not(:disabled) { background: var(--ink-hover); color: var(--ink-hover-fg); }
 .add:disabled { background: var(--mist); color: var(--ink); cursor: default; }
-.view:focus-visible, .add:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+.add[aria-pressed="true"] { background: var(--mist); color: var(--ink); }
+/* Get on memo beside Purchase: a Surreal blue outline, solid blue once the stone is in the cart on memo */
+.memoBtn { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 12px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--sky); color: var(--ink); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; transition: background-color 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal); }
+.memoBtn:hover, .memoBtn[aria-pressed="true"] { background: var(--sky); color: var(--navy); }
+.view:focus-visible, .add:focus-visible, .memoBtn:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
 
 /* Phones: each stone becomes a compact card */
 @media (max-width: 899px) {
@@ -145,12 +141,14 @@
   .shapeCell { display: block; }
   .shapeCell .rowIcon { display: inline-block; margin-right: 6px; vertical-align: -6px; }
   .shapeCell::after { content: attr(data-summary); }
+  .shapeName { display: inline; }
+  .stoneType { display: block; margin-top: 2px; }
+  .table td.cActions { flex-direction: column; align-items: stretch; gap: 6px; }
+  .table td.cActions .view { display: none; }
 }
 @media (max-width: 599px) {
   .bar { flex-wrap: wrap; gap: 8px; }
   .barLeft { flex-wrap: nowrap; gap: 8px; }
-  .nextDayBtn { font-size: 0; gap: 0; padding: 0 12px; }
-  .nextDayBtn::after { content: "Next day"; margin-left: 6px; font-size: 0.8125rem; }
   .moreBtn { padding: 0 12px; }
   .barRight { flex: 1 1 100%; justify-content: space-between; }
   .sort select { max-width: 190px; }
@@ -184,16 +182,16 @@
 .trayHint { font-size: 0.8125rem; color: var(--stone); }
 .compareRoot { position: fixed; inset: 0; z-index: 92; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .compareBackdrop { position: absolute; inset: 0; background: rgba(11, 31, 42, 0.42); }
-.compare { position: relative; width: min(1100px, 100%); max-height: calc(100vh - 40px); overflow: auto; padding: 24px; border-radius: var(--radius-lg); background: var(--paper); box-shadow: var(--shadow-lift); animation: fadeIn 0.3s var(--ease-surreal); }
+.compare { position: relative; width: min(1480px, 100%); max-height: calc(100vh - 40px); overflow: auto; padding: 32px; border-radius: var(--radius-lg); background: var(--paper); box-shadow: var(--shadow-lift); animation: fadeIn 0.3s var(--ease-surreal); }
 .compareHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .compareTitle { margin: 0; font-family: var(--font-editorial), "Urbanist", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: 2rem; color: var(--ink); }
 .compareTitle em { font-style: italic; }
-.compareGrid { display: grid; gap: 0 12px; font-size: 0.875rem; }
+.compareGrid { display: grid; gap: 0 16px; font-size: 0.9375rem; }
 .compareStone { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px; border-radius: var(--radius-md); background: var(--white); color: var(--ink); text-align: center; margin-bottom: 8px; }
-.compareIcon { width: 72px; height: 72px; }
+.compareIcon { width: 96px; height: 96px; }
 .compareRow { display: contents; }
-.compareRow > span { padding: 10px 6px; border-bottom: 1px solid var(--hairline); color: var(--ink); }
-.compareLabel { color: var(--stone) !important; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.compareRow > span { padding: 12px 8px; border-bottom: 1px solid var(--hairline); color: var(--ink); }
+.compareLabel { color: var(--stone) !important; font-size: 0.8125rem; letter-spacing: 0.1em; text-transform: uppercase; }
 .compareDoors { display: flex; justify-content: center; padding-top: 14px; }
 
 /* Quick View drawer */
@@ -231,6 +229,10 @@
 .notice { margin: 0; padding: 12px 14px; border-radius: 12px; background: #e9f6ee; font-size: 0.8125rem; color: #1f5a3a; }
 .drawerDoors { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .drawerDoors > :only-child { grid-column: 1 / -1; }
+.memoDoor { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 20px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--sky); color: var(--ink); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; transition: background-color 0.3s var(--ease-surreal), color 0.3s var(--ease-surreal); }
+.memoDoor:hover, .memoDoor[aria-pressed="true"] { background: var(--sky); color: var(--navy); }
+.memoDoor:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+.memoNote { grid-column: 1 / -1; margin: 0; font-size: 0.75rem; color: var(--stone); }
 .m2oLink { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; color: var(--graphite); transition: box-shadow 0.3s var(--ease-surreal); }
 .m2oLink:hover { box-shadow: inset 0 0 0 1px var(--ink); }
 .m2oLink span { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; }
@@ -241,8 +243,3 @@
 .storyLink { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 10px 0 0; font-size: 0.8125rem; color: var(--stone); }
 .storyLink button, .storyLink a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .storyLink button:hover, .storyLink a:hover { text-decoration-color: var(--ink); }
-.delivery { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-md); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 0.8125rem; color: var(--graphite); }
-.delivery[data-next] { background: var(--beam); box-shadow: inset 0 0 0 1px #b6ecff; }
-.delivery svg { flex: 0 0 auto; color: #00698f; }
-.delivery > span { display: flex; flex-direction: column; gap: 1px; }
-.delivery strong { font-weight: 600; font-size: 0.9375rem; color: var(--ink); }

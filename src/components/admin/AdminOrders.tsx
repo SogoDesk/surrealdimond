@@ -100,7 +100,8 @@ const PAY_TONE: Record<PayState, string> = { authorized: "pending", initiated: "
 function lineText(l: CartLine) {
   if (l.stoneId) {
     const st = stoneById(l.stoneId);
-    return { name: st ? `${stoneTitle(st)} loose diamond` : `Stone ${l.stoneId}`, meta: st ? `${st.color} ${st.clarity}, ${st.lab} ${st.certificate}, stock ${st.id}` : `Stock ${l.stoneId}`, href: `/diamonds?stone=${l.stoneId}`, shape: st?.shape };
+    const memo = l.memo ? "On memo, " : "";
+    return { name: st ? `${stoneTitle(st)} loose diamond` : `Stone ${l.stoneId}`, meta: st ? `${memo}${st.color} ${st.clarity}, ${st.lab} ${st.certificate}, stock ${st.id}` : `${memo}Stock ${l.stoneId}`, href: `/diamonds?stone=${l.stoneId}`, shape: st?.shape };
   }
   const p = productById(l.productId);
   return { name: p?.name ?? l.productId, meta: [metalLabel(l.metal), formatCarat(l.carat)].join(", "), href: p ? productHref(p) : undefined, shape: undefined };
@@ -413,9 +414,10 @@ function OrderDrawer({ row, open, onClose, readOnly, by }: { row: Row | null; op
                   {o.lines.map((l) => {
                     const t = lineText(l);
                     return (
-                      <li key={l.key}>
+                      <li key={l.key} data-memo={l.memo ? "true" : undefined}>
                         {t.shape && <ShapeIcon shape={t.shape} className={s.shapeIcon} />}
                         <span className={s.personCell}>
+                          {l.memo && <span className={s.memoTag}>Memo</span>}
                           {t.href ? (
                             <Link href={t.href} className={s.pieceName} target="_blank" rel="noreferrer">
                               {t.name}
@@ -429,7 +431,7 @@ function OrderDrawer({ row, open, onClose, readOnly, by }: { row: Row | null; op
                           </span>
                         </span>
                         <span className={s.lineQty}>× {l.qty}</span>
-                        <span className={s.lineAmount}>{formatMoney(linePrice(l) ?? 0)}</span>
+                        <span className={s.lineAmount}>{l.memo ? "Memo price to confirm" : formatMoney(linePrice(l) ?? 0)}</span>
                       </li>
                     );
                   })}

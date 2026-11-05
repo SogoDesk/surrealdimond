@@ -56,8 +56,9 @@ export function stonePrice(stone: { carat: number; color: string; clarity: strin
   return round5(perCarat * stone.carat);
 }
 
-/** A cart or order line's price: the stone, or the piece times its quantity. Null when the piece or stone is unknown. */
-export function linePrice(line: { productId: string; metal: Metal; carat: number; qty: number; stoneId?: string }): number | null {
+/** A cart or order line's price: the stone, or the piece times its quantity. Null when the piece or stone is unknown, and for a stone on memo, whose memo price Surreal confirms (RightClick supplies it once connected), so memo lines stay out of totals. */
+export function linePrice(line: { productId: string; metal: Metal; carat: number; qty: number; stoneId?: string; memo?: boolean }): number | null {
+  if (line.memo) return null;
   if (line.stoneId) {
     const st = stoneById(line.stoneId);
     return st ? stonePrice(st) : null;

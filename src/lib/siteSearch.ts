@@ -5,7 +5,7 @@
  * The query is read word by word:
  * - Stone words become diamond filters: a shape ("oval", "ovals"), a carat
  *   ("2ct", "1.5 carat", "1-2ct", "3ct+"), a color ("D", "D-F", "DEF"), a
- *   clarity ("VVS1", "VS", "IF"), a lab ("IGI"), "next day". "Diamond",
+ *   clarity ("VVS1", "VS", "IF"), a lab ("IGI"). "Diamond",
  *   "stone", "loose", "lab grown" only say the search is about stones.
  * - A stock ID ("SD040210", or its digits) or a certificate number finds
  *   that stone.
@@ -174,11 +174,6 @@ export function searchSite(text: string, opts: { gone?: Set<string>; productLimi
       stoneIntent = true;
       continue;
     }
-    if (tok === "next" && toks[i + 1] === "day") {
-      filter.nextDay = true;
-      i += 1;
-      continue;
-    }
     const shape = shapeOf(tok);
     if (shape) {
       shapes.push(shape);
@@ -216,7 +211,7 @@ export function searchSite(text: string, opts: { gone?: Set<string>; productLimi
   const hasStoneFilter = Object.keys(filter).length > 0;
   const stoneSearch = (hasStoneFilter || stoneIntent) && unknownForStones === 0;
   const q: DiamondQuery = { ...EMPTY, ...filter };
-  const stoneList = stoneSearch ? sortStones(stones.filter((st) => !gone.has(st.id) && matches(st, q)), "featured") : [];
+  const stoneList = stoneSearch ? sortStones(stones.filter((st) => !gone.has(st.id) && matches(st, q)), "carat-asc") : [];
 
   // Jewelry: every jewelry word must start a word of the piece (or its style number). A query that is
   // plainly about loose stones (a carat, color, clarity or lab, with nothing but a shape besides) lists none.
@@ -243,7 +238,6 @@ export function searchSite(text: string, opts: { gone?: Set<string>; productLimi
     filter.color ? (filter.color[0] === filter.color[1] ? COLORS[filter.color[0]] : `${COLORS[filter.color[0]]} to ${COLORS[filter.color[1]]}`) : "",
     filter.clarity ? (filter.clarity[0] === filter.clarity[1] ? CLARITIES[filter.clarity[0]] : `${CLARITIES[filter.clarity[0]]} to ${CLARITIES[filter.clarity[1]]}`) : "",
     filter.lab?.join(", "),
-    filter.nextDay ? "next day delivery" : "",
   ].filter(Boolean);
 
   const qs = toParams(filter);

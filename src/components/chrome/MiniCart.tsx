@@ -113,7 +113,7 @@ export default function MiniCart() {
                   const st = l.stoneId ? stoneById(l.stoneId) : undefined;
                   if (st)
                     return (
-                      <li key={l.key} className={styles.miniLine} data-flash={flash === l.key ? "true" : undefined}>
+                      <li key={l.key} className={styles.miniLine} data-flash={flash === l.key ? "true" : undefined} data-memo={l.memo ? "true" : undefined}>
                         <span className={`${styles.miniThumb} ${styles.miniStone}`}>
                           <ShapeIcon shape={st.shape} detail className={styles.miniStoneIcon} />
                         </span>
@@ -122,7 +122,10 @@ export default function MiniCart() {
                           <span className={styles.miniMeta}>
                             {stoneGrade(st)}, {st.lab}
                           </span>
-                          <span className={styles.miniMeta}>Stock {st.id}</span>
+                          <span className={styles.miniMeta}>
+                            Stock {st.id}
+                            {l.memo && <span className={styles.miniMemo}>On memo</span>}
+                          </span>
                         </span>
                         <button type="button" className={styles.miniRemove} onClick={() => removeLine(l.key)} aria-label={`Remove ${stoneTitle(st)}`}>
                           <svg aria-hidden viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round">
