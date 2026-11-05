@@ -13,10 +13,6 @@ export default function AdminIcon({ id, className = "" }: { id: Id; className?: 
       {id === "dealers" && <path d="M4 10h16M5 10l2-5h10l2 5M6 10v10h12V10M10 20v-5h4v5" {...p} />}
       {id === "sync" && <path d="M20 8a8 8 0 0 0-14.6-2M4 4v4h4M4 16a8 8 0 0 0 14.6 2M20 20v-4h-4" {...p} />}
       {id === "orders" && <path d="M6 3h12v18l-3-2-3 2-3-2-3 2ZM9 8h6M9 12h6" {...p} />}
-      {id === "memo" && <path d="M7 3h8l4 4v14H7ZM15 3v4h4M10 12h6M10 16h6" {...p} />}
-      {id === "requests" && <path d="M3 6h18v12H3ZM3 7l9 6 9-6" {...p} />}
-      {id === "content" && <path d="M5 3h14v18H5ZM8 7h8M8 11h8M8 15h5" {...p} />}
-      {id === "marketing" && <path d="M4 10v4h3l7 4V6l-7 4ZM17 9a4 4 0 0 1 0 6" {...p} />}
       {id === "staff" && <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5a3 3 0 0 1 0 6M18 14c1.8.8 3 2.8 3 6" {...p} />}
     </svg>
   );

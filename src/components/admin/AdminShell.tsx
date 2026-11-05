@@ -92,8 +92,6 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
                         <rect x="2.5" y="6" width="9" height="6.5" rx="1" />
                         <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" />
                       </svg>
-                    ) : m.status === "design" ? (
-                      <span className={s.navTag}>Soon</span>
                     ) : null}
                   </Link>
                 </li>
