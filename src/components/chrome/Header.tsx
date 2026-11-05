@@ -64,7 +64,7 @@ export const DASHBOARD_LINK: ChromeLink = { label: "Retailer Dashboard", href: a
 
 const CONDENSE_AT = 80;
 /** The bar fades while the page scrolls, and is back this long after the scrolling stops. */
-const FADE_IDLE = 250;
+const FADE_IDLE = 450;
 
 const subscribeScroll = (onChange: () => void) => {
   window.addEventListener("scroll", onChange, { passive: true });

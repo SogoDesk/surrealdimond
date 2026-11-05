@@ -12,7 +12,8 @@
   z-index: 60;
   color: var(--ink);
   font-family: var(--font-ui), "Urbanist", sans-serif;
-  transition: opacity 0.35s var(--ease-surreal);
+  /* A gentle ease both ways, so the scroll fade reads as a fade, not a blink. */
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.45s var(--ease-surreal), background-color 0.45s var(--ease-surreal), box-shadow 0.45s var(--ease-surreal);
 }
 .header.header[data-theme] { background: transparent; }
 /* While the page scrolls the bar fades out; hover, focus, an open menu or the scrolling stopping bring it back (client change request, November 2026). */
@@ -636,7 +637,6 @@
   the mobile sheet always open on light.
 */
 .header::before { transition: box-shadow 0.4s var(--ease-surreal), background-color 0.5s var(--ease-surreal), opacity 0.5s var(--ease-surreal); }
-.header,
 .logo,
 .iconLink,
 .search,
