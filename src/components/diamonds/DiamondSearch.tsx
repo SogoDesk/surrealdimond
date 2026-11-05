@@ -28,10 +28,16 @@
  *
  * Below the list, the story (DiamondStory) for retailers who are not dealers
  * yet; a signed-out visitor gets a line under the lead that jumps to it.
+ *
+ * program="legacy" is the Legacy stone search at /legacy/stones (client
+ * request, November 2026): Start a Legacy on the Legacy page transitions
+ * here. Only the Legacy stones are listed and filtered, the Legacy filter
+ * stays on, and the heading and breadcrumb lead back to the Legacy page.
  */
 
+import Image from "next/image";
 import Link from "next/link";
-import { Suspense, useMemo, useState, type ReactNode } from "react";
+import { Suspense, ViewTransition, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer from "@/components/chrome/ContactDrawer";
@@ -43,6 +49,7 @@ import { account, brand } from "@/content/site";
 import { addStone, useCart } from "@/lib/cart";
 import { useDealer } from "@/lib/dealer";
 import { useUnavailable } from "@/lib/memo";
+import { LEGACY_PHOTO, LEGACY_VT, LEGACY_PHOTO_VT } from "@/components/legacy/transition";
 import { EMPTY, PRICE_SORTS, SORT_LABEL, activeCount, describe, feedOptions, fromParams, hasMeasurements, m2oHref, matches, sortStones, type DiamondQuery, type FeedOptions, type SortKey } from "./query";
 import StoneDrawer from "./StoneDrawer";
 import DiamondStory from "./DiamondStory";
@@ -62,25 +69,34 @@ const CARAT_PRESETS: [string, number, number | null][] = [
 const toggle = <T,>(list: T[], v: T) => (list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
 const short = (g: Grade | null) => (g === null ? "N/A" : g === "Excellent" ? "EX" : g === "Very Good" ? "VG" : g === "Ideal" ? "ID" : "G");
 
-export default function DiamondSearch() {
+export type SearchProgram = "legacy";
+
+/** The Legacy search starts with the Legacy filter on, and Clear keeps it on. */
+const LEGACY_BASE: DiamondQuery = { ...EMPTY, legacy: true };
+const ASK_LEGACY = "/contact?type=programs";
+
+export default function DiamondSearch({ program }: { program?: SearchProgram }) {
+  const main = (
+    <main id="main">
+      <Suspense fallback={<SearchView params={null} program={program} />}>
+        <WithParams program={program} />
+      </Suspense>
+      <Assurance />
+      <Footer />
+    </main>
+  );
   return (
     <>
       <SiteChrome />
       <ContactDrawer />
-      <main id="main">
-        <Suspense fallback={<SearchView params={null} />}>
-          <WithParams />
-        </Suspense>
-        <Assurance />
-        <Footer />
-      </main>
+      {program === "legacy" ? <ViewTransition {...LEGACY_VT}>{main}</ViewTransition> : main}
     </>
   );
 }
 
-function WithParams() {
+function WithParams({ program }: { program?: SearchProgram }) {
   const params = useSearchParams();
-  return <SearchView params={params} />;
+  return <SearchView params={params} program={program} />;
 }
 
 /** A range picked on a grade scale: first click sets both ends, the second sets the other end. Only the grades in the feed show (show: their indexes on the scale). */
@@ -190,11 +206,13 @@ function Measurements({ q, feed, onChange }: { q: DiamondQuery; feed: FeedOption
   );
 }
 
-function SearchView({ params }: { params: URLSearchParams | null }) {
+function SearchView({ params, program }: { params: URLSearchParams | null; program?: SearchProgram }) {
   const dealer = useDealer();
   const cart = useCart();
   const gone = useUnavailable();
-  const [q, setQ] = useState<DiamondQuery>(EMPTY);
+  const legacyOnly = program === "legacy";
+  const base = legacyOnly ? LEGACY_BASE : EMPTY;
+  const [q, setQ] = useState<DiamondQuery>(base);
   const [more, setMore] = useState(false);
   const [shown, setShown] = useState(PAGE);
   const [compare, setCompare] = useState<string[]>([]);
@@ -217,11 +235,11 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
   if (linkedKey !== seenKey) {
     setSeenKey(linkedKey);
     const patch = fromParams(params);
-    if (patch) setQ({ ...EMPTY, ...patch });
+    if (patch) setQ({ ...base, ...patch });
   }
 
   const update = (patch: Partial<DiamondQuery>) => {
-    setQ((prev) => ({ ...prev, ...patch }));
+    setQ((prev) => ({ ...prev, ...patch, ...(legacyOnly && { legacy: true }) }));
     setShown(PAGE);
   };
 
@@ -229,12 +247,16 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
   const sort: SortKey = !dealer && PRICE_SORTS.includes(q.sort) ? EMPTY.sort : q.sort;
   const sorts = (Object.keys(SORT_LABEL) as SortKey[]).filter((k) => dealer || !PRICE_SORTS.includes(k));
   // The filters offer what the feed carries (client change request, November 2026).
-  const feed = useMemo(() => feedOptions(stones), []);
+  // The Legacy search lists, counts and filters the Legacy stones only.
+  const pool = useMemo(() => (legacyOnly ? stones.filter((st) => st.legacy) : stones), [legacyOnly]);
+  const feed = useMemo(() => feedOptions(pool), [pool]);
   const presets = CARAT_PRESETS.filter(([, lo, hi]) => !feed.carat || (lo <= feed.carat[1] && (hi === null || hi >= feed.carat[0])));
 
-  const available = useMemo(() => stones.filter((st) => !gone.has(st.id)), [gone]);
+  const available = useMemo(() => pool.filter((st) => !gone.has(st.id)), [pool, gone]);
   const results = useMemo(() => sortStones(available.filter((st) => matches(st, q)), sort), [available, q, sort]);
-  const counts = activeCount(q);
+  const active = activeCount(q);
+  // On the Legacy search the Legacy filter is the page itself, not a filter to clear.
+  const counts = legacyOnly ? { ...active, quick: active.quick - 1 } : active;
   const cartLine = (id: string) => cart.find((l) => l.stoneId === id);
   const openStone = openId ? stoneById(openId) ?? null : null;
   const position = openId ? results.findIndex((st) => st.id === openId) : -1;
@@ -250,10 +272,10 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
   };
   /** A door in the story below: apply its filters (none keeps the search as it is) and go back up to the stones. */
   const applyFromStory = (patch: Partial<DiamondQuery>) => {
-    if (Object.keys(patch).length) update({ ...EMPTY, sort: q.sort, ...patch });
+    if (Object.keys(patch).length) update({ ...base, sort: q.sort, ...patch });
     scrollToTarget("#diamonds-title", -180);
   };
-  const loginFor = (st: Stone) => `${account.login}?next=${encodeURIComponent(`/diamonds?stone=${st.id}`)}`;
+  const loginFor = (st: Stone) => `${account.login}?next=${encodeURIComponent(`${legacyOnly ? "/legacy/stones" : "/diamonds"}?stone=${st.id}`)}`;
 
   const m2oBanner = (
     <Link href={m2oHref(q)} className={s.m2o}>
@@ -277,36 +299,74 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
           <nav aria-label="Breadcrumb" className={s.crumbs}>
             <Link href="/">Home</Link>
             <span aria-hidden>/</span>
-            <span aria-current="page">Lab Diamond Search</span>
+            {legacyOnly ? (
+              <>
+                <Link href="/legacy" transitionTypes={["legacy-back"]}>
+                  Diamond Legacy
+                </Link>
+                <span aria-hidden>/</span>
+                <span aria-current="page">Legacy stones</span>
+              </>
+            ) : (
+              <span aria-current="page">Lab Diamond Search</span>
+            )}
           </nav>
           <div className={s.titleRow}>
-            <div>
-              <h1 id="diamonds-title" className={s.title}>
-                Lab Diamond <em>Search</em> <span className={s.titleCount}>({available.length} stones)</span>
-              </h1>
-              <p className={s.lead}>
-                CVD diamonds we grow, primarily DEF color and VVS clarity, up to 15 carats, with supplier stones alongside. All prices shown are for asset; for short-term memo
-                pricing, call {brand.office.phone}.
-              </p>
-              <p className={s.storyLink}>
-                Programs:
-                <Link href="/diamonds/made-to-order">Made to Order</Link>
-                <span aria-hidden>·</span>
-                <Link href="/legacy">Diamond Legacy</Link>
-                <span aria-hidden>·</span>
-                <Link href="/custom">Custom jewelry</Link>
-              </p>
-              {!dealer && (
-                <p className={s.storyLink}>
-                  New to Surreal?{" "}
-                  <button type="button" onClick={() => scrollToTarget("#diamond-story", -60)}>
-                    How our diamonds are grown
-                  </button>
-                  <span aria-hidden>·</span>
-                  <Link href={account.apply}>Become a dealer</Link>
+            {legacyOnly ? (
+              <div className={s.legacyHead}>
+                {/* The Legacy page's photograph settles here as the page turns into the search. */}
+                <ViewTransition name={LEGACY_PHOTO_VT} share="legacy-morph" default="none">
+                  <span className={s.legacyPhoto}>
+                    <Image src={LEGACY_PHOTO} alt="" fill sizes="200px" />
+                  </span>
+                </ViewTransition>
+                <div>
+                  <p className={s.legacyEyebrow}>Diamond Legacy</p>
+                  <h1 id="diamonds-title" className={s.title}>
+                    Legacy <em>stones</em> <span className={s.titleCount}>({available.length} stones)</span>
+                  </h1>
+                  <p className={s.lead}>
+                    Every diamond in a Legacy collection is grown from the same seed line. Choose a Legacy stone with your client, then purchase it or take it on memo like any
+                    stone. All prices shown are for asset; for short-term memo pricing, call {brand.office.phone}.
+                  </p>
+                  <p className={s.storyLink}>
+                    <Link href="/legacy" transitionTypes={["legacy-back"]}>
+                      About Diamond Legacy
+                    </Link>
+                    <span aria-hidden>·</span>
+                    <Link href={ASK_LEGACY}>Ask about Legacy</Link>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <h1 id="diamonds-title" className={s.title}>
+                  Lab Diamond <em>Search</em> <span className={s.titleCount}>({available.length} stones)</span>
+                </h1>
+                <p className={s.lead}>
+                  CVD diamonds we grow, primarily DEF color and VVS clarity, up to 15 carats, with supplier stones alongside. All prices shown are for asset; for short-term memo
+                  pricing, call {brand.office.phone}.
                 </p>
-              )}
-            </div>
+                <p className={s.storyLink}>
+                  Programs:
+                  <Link href="/diamonds/made-to-order">Made to Order</Link>
+                  <span aria-hidden>·</span>
+                  <Link href="/legacy">Diamond Legacy</Link>
+                  <span aria-hidden>·</span>
+                  <Link href="/custom">Custom jewelry</Link>
+                </p>
+                {!dealer && (
+                  <p className={s.storyLink}>
+                    New to Surreal?{" "}
+                    <button type="button" onClick={() => scrollToTarget("#diamond-story", -60)}>
+                      How our diamonds are grown
+                    </button>
+                    <span aria-hidden>·</span>
+                    <Link href={account.apply}>Become a dealer</Link>
+                  </p>
+                )}
+              </div>
+            )}
             <p className={s.sampleNote}>
               <strong>Sample feed.</strong> These stones show the layout. Live inventory arrives with the RightClick connection and supplier feeds.
             </p>
@@ -376,16 +436,18 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
             <span className={`${s.count} tabular`} aria-live="polite">
               {results.length} {results.length === 1 ? "stone" : "stones"}
             </span>
-            {/* Diamond Legacy: the Legacy stones in the one inventory (Start a Legacy lands here with it on). */}
-            <button type="button" className={s.legacyBtn} aria-pressed={q.legacy} onClick={() => update({ legacy: !q.legacy })}>
-              Legacy stones
-            </button>
+            {/* Diamond Legacy: the Legacy stones in the one inventory. The Legacy search (/legacy/stones) keeps it on. */}
+            {!legacyOnly && (
+              <button type="button" className={s.legacyBtn} aria-pressed={q.legacy} onClick={() => update({ legacy: !q.legacy })}>
+                Legacy stones
+              </button>
+            )}
             <button type="button" className={s.moreBtn} aria-expanded={more} onClick={() => setMore((m) => !m)}>
               {more ? "Fewer filters" : "More filters"}
               {counts.more > 0 && <span className={s.badge}>{counts.more}</span>}
             </button>
             {counts.quick + counts.more > 0 && (
-              <button type="button" className={s.clear} onClick={() => update({ ...EMPTY, sort: q.sort })}>
+              <button type="button" className={s.clear} onClick={() => update({ ...base, sort: q.sort })}>
                 Clear all
               </button>
             )}
@@ -417,7 +479,7 @@ function SearchView({ params }: { params: URLSearchParams | null }) {
             <div className={s.empty}>
               <p className={s.emptyTitle}>No stones match these filters.</p>
               <p>Widen the search, or grow the stone to order with the request above.</p>
-              <button type="button" className={s.secondary} onClick={() => update({ ...EMPTY, sort: q.sort })}>
+              <button type="button" className={s.secondary} onClick={() => update({ ...base, sort: q.sort })}>
                 Clear all
               </button>
             </div>

@@ -9,7 +9,7 @@ import g from "./GatePage.module.css";
 import s from "./ContentPage.module.css";
 
 /**
- * Short content pages (About, Legacy; BRD R-20): the holding page's opening
+ * Short content pages (About; BRD R-20; Legacy has its own page, src/components/legacy): the holding page's opening
  * (breadcrumb, eyebrow, title, lead, doors, one photograph) followed by a few
  * plain bands passed as children. The bands use the Band, Facts and Steps
  * pieces below so every content page reads the same. Copy comes from the

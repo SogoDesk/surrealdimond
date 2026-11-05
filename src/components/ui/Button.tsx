@@ -26,6 +26,8 @@ export interface ButtonProps {
   ariaLabel?: string;
   magnetic?: boolean;
   target?: string;
+  /** View transition types for an in-site link (next/link transitionTypes). */
+  transitionTypes?: string[];
 }
 
 const base =
@@ -42,6 +44,7 @@ export default function Button({
   ariaLabel,
   magnetic = true,
   target,
+  transitionTypes,
 }: ButtonProps) {
   const ref = useRef<HTMLElement | null>(null);
 
@@ -110,7 +113,7 @@ export default function Button({
       );
     }
     return (
-      <Link ref={(el) => { ref.current = el; }} href={href} onClick={onClick} {...shared}>
+      <Link ref={(el) => { ref.current = el; }} href={href} onClick={onClick} transitionTypes={transitionTypes} {...shared}>
         {inner}
       </Link>
     );

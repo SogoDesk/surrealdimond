@@ -259,6 +259,35 @@ body {
 }
 
 /*
+ * Diamond Legacy view transition (src/components/legacy/transition.ts):
+ * Start a Legacy lifts the Legacy page away and raises the Legacy stone
+ * search in, while the Legacy photograph settles into the search heading;
+ * the links back play it in reverse. The header stays put above it all.
+ */
+[data-site-header] { view-transition-name: site-header; }
+::view-transition { pointer-events: none; }
+::view-transition-group(site-header) { animation: none; z-index: 100; }
+::view-transition-old(site-header) { display: none; }
+::view-transition-new(site-header) { animation: none; }
+
+::view-transition-old(.legacy-forward) { --vt-shift: -32px; animation: 260ms cubic-bezier(0.4, 0, 1, 1) both vt-fade reverse, 460ms cubic-bezier(0.4, 0, 0.2, 1) both vt-shift reverse; }
+::view-transition-new(.legacy-forward) { --vt-shift: 40px; animation: 380ms cubic-bezier(0, 0, 0.2, 1) 180ms both vt-fade, 640ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both vt-shift; }
+::view-transition-old(.legacy-back) { --vt-shift: 32px; animation: 260ms cubic-bezier(0.4, 0, 1, 1) both vt-fade reverse, 460ms cubic-bezier(0.4, 0, 0.2, 1) both vt-shift reverse; }
+::view-transition-new(.legacy-back) { --vt-shift: -40px; animation: 380ms cubic-bezier(0, 0, 0.2, 1) 180ms both vt-fade, 640ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both vt-shift; }
+
+::view-transition-group(.legacy-morph) { z-index: 50; animation-duration: 720ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+::view-transition-image-pair(.legacy-morph) { animation-name: vt-soften; }
+::view-transition-old(.legacy-morph), ::view-transition-new(.legacy-morph) { animation-duration: 720ms; height: 100%; object-fit: cover; overflow: clip; }
+
+@keyframes vt-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vt-shift { from { translate: 0 var(--vt-shift); } to { translate: 0 0; } }
+@keyframes vt-soften { 40% { filter: blur(2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*), ::view-transition-new(*), ::view-transition-group(*), ::view-transition-image-pair(*) { animation-duration: 0s !important; animation-delay: 0s !important; }
+}
+
+/*
  * Dark theme (client feedback F-A5, for Surreal's review): the toggle in
  * the header sets data-mode="dark" on <html> (remembered in this browser,
  * applied before first paint by the script in layout.tsx). The page and
