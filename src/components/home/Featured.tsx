@@ -162,7 +162,6 @@ export default function Featured() {
               Hot <em>this week</em>
             </h2>
             <p className={s.bandLine} data-rise>
-              <span className={s.count}>{items.length} pieces</span>
               {dealer ? "Picked by the Surreal team, at your prices." : "Picked by the Surreal team. Pricing and ordering after you log in."}
             </p>
           </div>
