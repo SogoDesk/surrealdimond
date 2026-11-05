@@ -8,8 +8,12 @@
  * Fine pointers: hovering scrubs currentTime with the pointer's x across the
  * tile (0 to the clip's length) and the ring eases back to rest over 0.8s on
  * leave. Touch: the clip autoplays muted inline while in view and pauses when
- * out. Tiles reveal with a clip-path from the bottom, stagger 0.15s. Sources
- * attach only once a tile is near the viewport. Reduced motion: short fade.
+ * out. Tiles reveal with a clip-path from the bottom, stagger 0.15s. Each
+ * clip is about 2 MB, so a source attaches only when it is wanted: on touch
+ * once its tile is in view, on fine pointers on the first hover (the site
+ * lag in the client change request of November 2026: the homepage loaded
+ * all three up front). Until then the tile shows its poster. Reduced
+ * motion: short fade.
  */
 
 import Link from "next/link";
@@ -27,32 +31,37 @@ const SETTINGS = [
 const CLIP_SECONDS = 15;
 const HREF = "/jewelry/engagement";
 
+/** Attach a clip's source once, the first time it is wanted. */
+function attach(video: HTMLVideoElement) {
+  if (video.src) return;
+  video.preload = "auto";
+  video.src = video.dataset.src ?? "";
+  video.load();
+}
+
 export default function SettingTiles({ className = "" }: { className?: string }) {
   const rootRef = useRef<HTMLUListElement>(null);
 
-  // Lazy source attach plus touch autoplay, both through one observer.
+  // Touch: the source attaches and the clip autoplays while its tile is in view. Fine pointers attach on hover (below).
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
     const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video[data-src]"));
     const touch = isTouchDevice();
+    if (!touch) return;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           const video = entry.target as HTMLVideoElement;
           if (entry.isIntersecting) {
-            if (!video.src) {
-              video.preload = "auto";
-              video.src = video.dataset.src ?? "";
-              video.load();
-            }
-            if (touch && !prefersReducedMotion()) video.play().catch(() => undefined);
-          } else if (touch) {
+            attach(video);
+            if (!prefersReducedMotion()) video.play().catch(() => undefined);
+          } else {
             video.pause();
           }
         }
       },
-      { rootMargin: touch ? "0px" : "40% 0px" },
+      { rootMargin: "0px" },
     );
     videos.forEach((v) => observer.observe(v));
     return () => observer.disconnect();
@@ -104,6 +113,7 @@ export default function SettingTiles({ className = "" }: { className?: string })
           timeTo(x * length);
         };
         const enter = () => {
+          attach(video);
           video.pause();
           stopReturn();
         };
