@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Next day delivery, from the dealer site's banner: "Order before 4:00pm EST
+ * Next day delivery, from the dealer site's banner: "Order before 4:00pm ET
  * to receive next day delivery." On a weekday before the cutoff (New York
  * time) it counts down the hours and minutes left; otherwise it states the
  * rule (the clock is src/lib/cutoff.ts).
@@ -38,7 +38,7 @@ export default function DeliveryCountdown() {
           </>
         ) : (
           <>
-            <strong>Next day delivery</strong> for dealer orders placed before 4:00pm EST
+            <strong>Next day delivery</strong> for dealer orders placed before 4:00pm ET
           </>
         )}
       </span>

@@ -234,7 +234,7 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
         </div>
         <div>
           <dt>Delivery</dt>
-          <dd>{nextDay ? "Next day" : "After the 4:00pm EST cutoff"}</dd>
+          <dd>{nextDay ? "Next day" : "After the 4:00pm ET cutoff"}</dd>
         </div>
         <div className={s.summaryTotal}>
           <dt>Order total</dt>
@@ -252,7 +252,7 @@ export function Summary({ lines, children, compact = false }: { lines: CartLine[
 export function TrustRow() {
   const items = [
     { t: "Lab-grown CVD", l: "Primarily DEF color, VVS clarity", d: <path d="M7 4h10l4 5-9 11L3 9Z M3 9h18" /> },
-    { t: "Next day delivery", l: "For orders before 4:00pm EST", d: <path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7" /> },
+    { t: "Next day delivery", l: "For orders before 4:00pm ET", d: <path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7" /> },
     { t: "Certificates", l: "Provided on request", d: <path d="M4 3.5h16v12H4zM8 8h8M8 11h5M9 15.5l-1 5 4-2 4 2-1-5" /> },
   ];
   return (

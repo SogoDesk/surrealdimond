@@ -14,7 +14,7 @@ export const gates = {
     kind: "dealer",
     eyebrow: "Your order",
     title: <>Your cart is <em>waiting</em></>,
-    line: "Log in to fill your cart, check out and pay for your store. Order before 4:00pm EST to receive next day delivery.",
+    line: "Log in to fill your cart, check out and pay for your store. Order before 4:00pm ET to receive next day delivery.",
     crumbs: [{ label: "Cart" }],
     image: "/media/photos/sb-3614.webp",
   },

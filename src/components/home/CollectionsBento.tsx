@@ -73,7 +73,6 @@ export default function CollectionsBento() {
               Shop our <em>exclusive collections</em>
             </>
           }
-          sub="From twelve zodiac pendants to enamel, laser pierced, vermeil and sterling silver pieces."
           action={
             <Button href="/jewelry" variant="tertiary" arrow>
               All collections

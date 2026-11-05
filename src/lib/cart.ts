@@ -99,13 +99,8 @@ export function placeOrder(order: Omit<PlacedOrder, "number" | "placedAt">): Pla
   return placed;
 }
 
-/** New York time: is it a weekday before the 4:00pm EST cutoff? */
-export function beforeCutoff(date = new Date()): boolean {
-  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short", hour: "numeric", hourCycle: "h23" }).formatToParts(date);
-  const weekday = parts.find((p) => p.type === "weekday")?.value ?? "";
-  const hour = Number(parts.find((p) => p.type === "hour")?.value);
-  return !["Sat", "Sun"].includes(weekday) && hour < 16;
-}
+/** New York time: is it a weekday before the cutoff? (One clock, src/lib/cutoff.ts.) */
+export { beforeCutoff } from "./cutoff";
 
 /** Change a line's size: the line takes its new key, merging into an existing line with the same configuration. */
 export function setSize(key: string, size: string | null) {

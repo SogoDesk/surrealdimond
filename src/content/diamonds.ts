@@ -164,10 +164,10 @@ export const stoneGrade = (s: Stone) => `${s.color} ${s.clarity}`;
 export const measurements = (s: Stone) => `${s.length.toFixed(2)} × ${s.width.toFixed(2)} × ${s.depth.toFixed(2)} mm`;
 /**
  * Shipment (F-B4). Stones Surreal holds are delivered the next day when
- * ordered before 4:00pm EST (the dealer site's rule); supplier stones ship
+ * ordered before 4:00pm ET (the dealer site's rule); supplier stones ship
  * from the supplier, with timing confirmed on the order. The wording stays a
  * placeholder until Surreal's shipment rules per source (C-18).
  */
 export const shipsNextDay = (s: Stone) => s.source === "surreal";
 export const shipment = (s: Stone) => (shipsNextDay(s) ? "Next day delivery" : "Supplier lead time");
-export const shipmentNote = (s: Stone) => (shipsNextDay(s) ? "Order before 4:00pm EST to receive it the next day." : "Ships from the supplier; timing is confirmed with your order.");
+export const shipmentNote = (s: Stone) => (shipsNextDay(s) ? "Order before 4:00pm ET to receive it the next day." : "Ships from the supplier; timing is confirmed with your order.");

@@ -94,7 +94,7 @@ const STEPS: { title: string; body: string; shape: StoneShape }[] = [
   { title: "Grow", body: "Carbon builds on the seed layer by layer, in machines we make ourselves.", shape: "emerald" },
   { title: "Cut and polish", body: "The rough crystal is planned, cut and polished to its shape.", shape: "oval" },
   { title: "Grade", body: "An independent lab grades the stone and issues its certificate number.", shape: "round" },
-  { title: "To your store", body: "Surreal stones ordered before 4:00pm EST ship the next day.", shape: "pear" },
+  { title: "To your store", body: "Surreal stones ordered before 4:00pm ET ship the next day.", shape: "pear" },
 ];
 
 type CKey = "carat" | "cut" | "color" | "clarity";

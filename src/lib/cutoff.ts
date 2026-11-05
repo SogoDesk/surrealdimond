@@ -1,9 +1,11 @@
 "use client";
 
 /**
- * The next day delivery cutoff: "Order before 4:00pm EST to receive next day
- * delivery." On a weekday before the cutoff (New York time) the hook gives
- * the minutes left; otherwise null. The clock is read through
+ * The next day delivery cutoff: "Order before 4:00pm ET to receive next day
+ * delivery." Surreal's time zone is New York, so the clock is always New
+ * York's (Eastern time, EST or EDT by the season) wherever the dealer is.
+ * On a weekday before the cutoff the hook gives the minutes left; otherwise
+ * null. The clock is read through
  * useSyncExternalStore with a 30 second tick, and the server snapshot is
  * null, so the first paint states the plain rule and hydration never
  * disagrees.
@@ -11,7 +13,7 @@
 
 import { useSyncExternalStore } from "react";
 
-export const CUTOFF_LABEL = "4:00pm EST";
+export const CUTOFF_LABEL = "4:00pm ET";
 const CUTOFF_MIN = 16 * 60;
 
 function subscribe(onChange: () => void) {
@@ -22,15 +24,25 @@ function subscribe(onChange: () => void) {
 let lastKey = "";
 let lastValue: number | null = null;
 
-function minutesLeft(): number | null {
-  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short", hour: "numeric", minute: "numeric", hourCycle: "h23" }).formatToParts(new Date());
+/** The New York wall clock: the weekday and the minutes past midnight. */
+function newYork(date: Date) {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short", hour: "numeric", minute: "numeric", hourCycle: "h23" }).formatToParts(date);
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
-  const key = `${get("weekday")}-${get("hour")}-${get("minute")}`;
+  return { day: get("weekday"), minutes: Number(get("hour")) * 60 + Number(get("minute")) };
+}
+
+/** Is it a weekday before the cutoff in New York? */
+export function beforeCutoff(date = new Date()): boolean {
+  const { day, minutes } = newYork(date);
+  return !["Sat", "Sun"].includes(day) && minutes < CUTOFF_MIN;
+}
+
+function minutesLeft(): number | null {
+  const { day, minutes } = newYork(new Date());
+  const key = `${day}-${minutes}`;
   if (key === lastKey) return lastValue;
   lastKey = key;
-  const weekday = !["Sat", "Sun"].includes(get("weekday"));
-  const now = Number(get("hour")) * 60 + Number(get("minute"));
-  lastValue = weekday && now < CUTOFF_MIN ? CUTOFF_MIN - now : null;
+  lastValue = !["Sat", "Sun"].includes(day) && minutes < CUTOFF_MIN ? CUTOFF_MIN - minutes : null;
   return lastValue;
 }
 

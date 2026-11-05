@@ -115,10 +115,6 @@
   mix-blend-mode: multiply;
 }
 
-.strip {
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
 
 /* Settings row: a short intro beside the three solitaires, no empty band above. */
 .settings {

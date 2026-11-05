@@ -2,9 +2,9 @@
 
 /**
  * 03. Say yes (engagement), calm since the client's feedback of 27 October
- * 2026 (F-A3): the copy and doors beside the oval halo render, the shop by
- * shape strip with stock counts at the foot, then the solitaire settings
- * row. The scroll-scrubbed 96 frame turntable, the pinned stage and the
+ * 2026 (F-A3): the copy and doors beside the oval halo render, then the
+ * solitaire settings row (the shape strip with stock counts was removed in
+ * the client change request of November 2026). The scroll-scrubbed 96 frame turntable, the pinned stage and the
  * circle of light that opened it are gone; the section is light from the
  * start, so the header follows it without a mid-scroll flip.
  *
@@ -19,13 +19,12 @@
  */
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/hooks/useMedia";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
-import ShapeStrip, { type ShapeStripHandle } from "./ShapeStrip";
 import SettingTiles from "./SettingTiles";
 import styles from "./Engagement.module.css";
 
@@ -35,7 +34,6 @@ const CHAPTER = "engagement";
 export default function Engagement() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const stripRef = useRef<ShapeStripHandle>(null);
 
   // The splash: the blue opens as a circle from the ring, then the copy and the ring's light arrive.
   useGSAP(
@@ -78,21 +76,6 @@ export default function Engagement() {
     { scope: sectionRef },
   );
 
-  // The shape outlines draw in once, as the strip comes into view.
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return;
-        stripRef.current?.draw();
-        observer.disconnect();
-      },
-      { threshold: 0.35 },
-    );
-    observer.observe(stage);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <Section id={CHAPTER} theme="sky" label="Engagement" className={styles.section}>
@@ -106,7 +89,7 @@ export default function Engagement() {
                   <Eyebrow>Bridal</Eyebrow>
                 </span>
                 <h2 className="t-headline" data-rise>
-                  The ring your client <em>says yes&nbsp;to</em>.
+                  The ring she <em>says yes&nbsp;to</em>.
                 </h2>
                 <p className="t-body" data-rise>
                   Engagement rings handcrafted around diamonds we grew, in every shape your counter needs. When the stone
@@ -128,7 +111,6 @@ export default function Engagement() {
                 </div>
               </div>
             </div>
-            <ShapeStrip ref={stripRef} className={styles.strip} />
           </div>
         </div>
         <div className={`container grid-12 ${styles.settings}`}>

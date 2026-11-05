@@ -25,7 +25,7 @@ import { useSplitLines } from "@/components/motion/SplitReveal";
 import { registerGsap, gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { isTouchDevice, prefersReducedMotion } from "@/hooks/useMedia";
 import { calmChapters } from "@/lib/motion";
-import { brand } from "@/content/site";
+import { brand, dealerBenefits } from "@/content/site";
 import { openContactDrawer } from "@/components/chrome/ContactDrawer";
 import styles from "./Visit.module.css";
 
@@ -304,6 +304,29 @@ export default function Visit({ className = "" }: VisitProps) {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* For the trade: the dealer program and its doors, moved up here when the blue Trade band that followed was removed (client change request, November 2026). */}
+        <div className={styles.trade}>
+          <Eyebrow>For the trade</Eyebrow>
+          <ul className={styles.benefits} aria-label="The Surreal dealer program">
+            {dealerBenefits.map((b) => (
+              <li key={b.id} title={b.line}>
+                <svg aria-hidden viewBox="0 0 10 10" width="8" height="8" className={styles.bullet}>
+                  <path d="M5 0.5 9.5 5 5 9.5 0.5 5Z" fill="currentColor" />
+                </svg>
+                {b.title}
+              </li>
+            ))}
+          </ul>
+          <div className={styles.tradeCtas}>
+            <Button href="/dashboard" variant="primary" arrow>
+              Retailer Dashboard
+            </Button>
+            <Button variant="tertiary" onClick={() => openContactDrawer("dealer", "contact")}>
+              Talk to us
+            </Button>
           </div>
         </div>
 

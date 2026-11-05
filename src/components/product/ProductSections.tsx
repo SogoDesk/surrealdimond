@@ -403,7 +403,7 @@ const QUESTIONS: { q: string; a: ReactNode }[] = [
     ),
   },
   { q: "Can jewelry come on memo?", a: "Surreal runs a long-term memo program for diamonds and jewelry. Open memo items are repriced daily, and you reconcile them from your Retailer Dashboard." },
-  { q: "When will an order arrive?", a: "Order before 4:00pm EST to receive next day delivery." },
+  { q: "When will an order arrive?", a: "Order before 4:00pm ET to receive next day delivery." },
   { q: "How can we pay?", a: "By credit or debit card, ACH or wire transfer at checkout. Check and Zelle are arranged with the office." },
   { q: "Is a certificate included?", a: "Certificates can be provided on request. Made to Order diamonds always come with an IGI grading certificate." },
   {

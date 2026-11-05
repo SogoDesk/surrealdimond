@@ -304,7 +304,7 @@ export default function OrdersPage() {
                             )}
                           </p>
                         ) : work.status !== "cancelled" ? (
-                          <p>{o.beforeCutoff ? "Placed before the 4:00pm EST cutoff for next day delivery." : "Placed after the 4:00pm EST cutoff."}</p>
+                          <p>{o.beforeCutoff ? "Placed before the 4:00pm ET cutoff for next day delivery." : "Placed after the 4:00pm ET cutoff."}</p>
                         ) : null}
                         <p>
                           <strong>Payment</strong> {PAYMENT[o.payment]}, {PAY_LABEL[work.pay].toLowerCase()}

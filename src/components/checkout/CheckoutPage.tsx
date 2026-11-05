@@ -211,7 +211,7 @@ export default function CheckoutPage() {
                     </li>
                     <li>
                       <strong>{placed.beforeCutoff ? "Next day delivery" : "Delivery"}</strong>
-                      {placed.beforeCutoff ? ": your order was placed before the 4:00pm EST cutoff." : ": placed after the 4:00pm EST cutoff, so it is not in today's next day delivery."}
+                      {placed.beforeCutoff ? ": your order was placed before the 4:00pm ET cutoff." : ": placed after the 4:00pm ET cutoff, so it is not in today's next day delivery."}
                     </li>
                   </ol>
                   <div className={s.confirmDoors}>

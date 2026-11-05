@@ -108,7 +108,8 @@ export default function NineWays() {
               {panels}
             </div>
           ) : (
-            <Marquee speed={34} gap={20} pauseOnHover fade className={s.carousel}>
+            // A slow drift (client change request, November 2026: calmer than the 34px/s it ran at).
+            <Marquee speed={16} gap={20} pauseOnHover fade className={s.carousel}>
               {panels}
             </Marquee>
           )}

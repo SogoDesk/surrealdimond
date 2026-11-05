@@ -3,7 +3,6 @@ import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Hero from "@/components/sections/Hero";
 import Engagement from "@/components/sections/Engagement";
 import Visit from "@/components/sections/Visit";
-import Trade from "@/components/sections/Trade";
 import NineWays from "@/components/sections/NineWays";
 import DealerHome from "@/components/home/DealerHome";
 import CollectionsBento from "@/components/home/CollectionsBento";
@@ -16,7 +15,8 @@ import PromoPopup from "@/components/home/PromoPopup";
  * to F-A3): the hero is a full-width carousel of photographs behind the
  * fixed headline and buttons, Hot this week follows it directly, then the
  * signed-in dealer band, bridal, the collections, the nine ways to shop,
- * the New York visit and the trade door. The banner carousel, the lookbook,
+ * and the New York visit, which ends with the trade program and its doors
+ * (the blue trade band was removed in November 2026). The banner carousel, the lookbook,
  * the Foreveryone collage and the time counter repeated what the hero and
  * the sections around them already say, so they are gone, with the
  * preloader. The chapters keep still (src/lib/motion.ts). The contact
@@ -36,7 +36,6 @@ export default function Home() {
         <CollectionsBento />
         <NineWays />
         <Visit />
-        <Trade />
         <Footer />
       </main>
     </>

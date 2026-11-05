@@ -149,6 +149,47 @@ a.row:focus-visible {
 }
 
 /* Bottom right: the Instagram text link */
+/* For the trade: the dealer program's selling points and its doors */
+.trade {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  margin-top: clamp(56px, 7vw, 96px);
+}
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 var(--col-gap, 24px);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 1023px) { .benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 559px) { .benefits { grid-template-columns: 1fr; } }
+.benefits li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(11, 31, 42, 0.16);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--fg);
+}
+.bullet {
+  flex: none;
+  color: var(--ink);
+}
+.tradeCtas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+  margin-top: 8px;
+}
+
 .social {
   display: inline-flex;
   align-items: center;

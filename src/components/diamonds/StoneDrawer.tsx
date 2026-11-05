@@ -3,7 +3,7 @@
 /**
  * Quick View for a stone (BRD R-15): a drawer from the right with the shape
  * drawn large in plan view and its length and width marked, the grade chips,
- * delivery (next day with the time left before the 4:00pm EST cutoff, or
+ * delivery (next day with the time left before the 4:00pm ET cutoff, or
  * the supplier's lead time; F-B4), every attribute in a grid (the list
  * keeps only the essentials, F-B3), the certificate and the source, then the
  * doors: Add to cart and Request on memo for a signed-in dealer (Log in

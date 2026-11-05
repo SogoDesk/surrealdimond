@@ -119,7 +119,7 @@ function TypeIcon({ id }: { id: InquiryType }) {
 
 const QUICK: { q: string; a: ReactNode }[] = [
   { q: "When is the office open?", a: <>Monday to Friday, 9:30am to 6pm EST. We are closed on Saturday and Sunday.</> },
-  { q: "When do orders ship?", a: <>Order before 4:00pm EST to receive next day delivery.</> },
+  { q: "When do orders ship?", a: <>Order before 4:00pm ET to receive next day delivery.</> },
   { q: "Do you sell to consumers?", a: <>No. We will never sell directly to consumers; Surreal works with jewelry retailers.</> },
   { q: "How can dealers pay?", a: <>By credit or debit card, ACH or wire transfer at checkout. Check and Zelle are arranged with the office.</> },
   { q: "Where can I see stones in person?", a: <>Book an appointment at our North American Office, {brand.office.address1}, {brand.office.address2}.</> },

@@ -15,27 +15,32 @@
  * Surreal blue (client feedback, 28 October 2026: the page read as white,
  * grey and black): the band's copy side washes in the brand tint, the count
  * chip is blue, hovering a card rings it in blue, and a blue thumb under the
- * row tracks where the row is scrolled to. The cards slide in once from the
- * right, the way the row scrolls (a short arrival, in keeping with the calm
- * chapters); reduced motion keeps them in place.
+ * row tracks where the row is scrolled to.
+ *
+ * Client change request, November 2026: the row always shows 12 pieces (the
+ * console's list, topped up from the house picks), the arrows sit under the
+ * row beside the thumb, and the cards are simply there: the slide-in that
+ * held them hidden until a scroll trigger fired is gone.
  */
 
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { caratOptions, defaultMetalOf, metals, productById, productHref, productMetals, renderSrc, type Product } from "@/content/catalog";
+import { caratOptions, defaultMetalOf, metals, productById, productHref, productMetals, products, renderSrc, type Product } from "@/content/catalog";
+import { hotThisWeek } from "@/content/featuring";
 import { useMerch } from "@/lib/merch";
 import { account } from "@/content/site";
 import { groundStyle } from "@/content/grounds";
 import { useRevealIn } from "./useRevealIn";
-import { registerGsap, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { prefersReducedMotion } from "@/hooks/useMedia";
 import h from "./home.module.css";
 import s from "./Featured.module.css";
 import { useWithMetalsList } from "@/lib/metals";
 import { formatUSD, jewelryPrice } from "@/lib/pricing";
 import { useDealer } from "@/lib/dealer";
+
+/** Hot this week shows this many pieces. */
+const HOT_COUNT = 12;
 
 function altView(p: Product) {
   if (p.angles?.[0]) return p.angles[0];
@@ -102,7 +107,14 @@ export default function Featured() {
   const [edge, setEdge] = useState({ start: true, end: false });
   const { hot } = useMerch();
   const dealer = useDealer();
-  const listed = useMemo(() => hot.map((id) => productById(id)).filter((p): p is Product => Boolean(p)), [hot]);
+  // The console's picks first, then the house picks and the featured pieces, until there are twelve.
+  const listed = useMemo(() => {
+    const ids = [...new Set([...hot, ...hotThisWeek, ...products.filter((p) => p.featured).map((p) => p.id)])];
+    return ids
+      .map((id) => productById(id))
+      .filter((p): p is Product => Boolean(p))
+      .slice(0, HOT_COUNT);
+  }, [hot]);
   const items = useWithMetalsList(listed);
   useRevealIn(ref);
 
@@ -116,25 +128,6 @@ export default function Featured() {
     trackRef.current?.style.setProperty("--p", String(room > 0 ? el.scrollLeft / room : 0));
   }, []);
 
-  // The cards arrive once, sliding in from the right as the row comes into view.
-  useGSAP(
-    () => {
-      registerGsap();
-      const rail = railRef.current;
-      if (!rail || prefersReducedMotion()) return;
-      const cards = gsap.utils.toArray<HTMLElement>("[data-slide]", rail);
-      if (!cards.length) return;
-      gsap.set(cards, { autoAlpha: 0, x: 56 });
-      ScrollTrigger.create({
-        trigger: rail,
-        start: "top 85%",
-        once: true,
-        onEnter: () => gsap.to(cards, { autoAlpha: 1, x: 0, duration: 1, ease: "surreal", stagger: 0.07, clearProps: "transform,opacity,visibility" }),
-      });
-    },
-    { scope: railRef, dependencies: [items.length] },
-  );
-
   useEffect(() => {
     const el = railRef.current;
     if (!el) return;
@@ -146,7 +139,7 @@ export default function Featured() {
       window.removeEventListener("resize", measure);
       window.cancelAnimationFrame(id);
     };
-  }, [measure]);
+  }, [measure, items.length]);
 
   const scroll = (dir: 1 | -1) => {
     const el = railRef.current;
@@ -173,31 +166,33 @@ export default function Featured() {
               {dealer ? "Picked by the Surreal team, at your prices." : "Picked by the Surreal team. Pricing and ordering after you log in."}
             </p>
           </div>
-          <div className={s.arrows}>
-            <button type="button" className={s.arrow} onClick={() => scroll(-1)} disabled={edge.start} aria-label="Scroll back">
-              <svg aria-hidden viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 10H4M9 5l-5 5 5 5" />
-              </svg>
-            </button>
-            <button type="button" className={s.arrow} onClick={() => scroll(1)} disabled={edge.end} aria-label="Scroll forward">
-              <svg aria-hidden viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 10h12M11 5l5 5-5 5" />
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
       <ul ref={railRef} className={s.rail} aria-label="Hot this week">
         {items.map((p) => (
-          <li key={p.id} className={s.item} data-slide>
+          <li key={p.id} className={s.item}>
             <Card p={p} />
           </li>
         ))}
       </ul>
       <div className={h.wrap}>
         <div className={s.after} data-rise>
-          <div ref={trackRef} className={s.track} aria-hidden>
-            <span className={s.thumb} />
+          <div className={s.scroller}>
+            <div ref={trackRef} className={s.track} aria-hidden>
+              <span className={s.thumb} />
+            </div>
+            <div className={s.arrows}>
+              <button type="button" className={s.arrow} onClick={() => scroll(-1)} disabled={edge.start} aria-label="Scroll back">
+                <svg aria-hidden viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 10H4M9 5l-5 5 5 5" />
+                </svg>
+              </button>
+              <button type="button" className={s.arrow} onClick={() => scroll(1)} disabled={edge.end} aria-label="Scroll forward">
+                <svg aria-hidden viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 10h12M11 5l5 5-5 5" />
+                </svg>
+              </button>
+            </div>
           </div>
           <Link href="/jewelry" className={`t-nav ${s.viewAll}`}>
             View the full catalog
