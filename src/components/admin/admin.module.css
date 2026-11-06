@@ -456,3 +456,13 @@
 .seenTag[data-dealer] { background: var(--beam); color: var(--navy); }
 .noteForm { display: flex; gap: 8px; }
 .noteForm .input { flex: 1 1 auto; }
+
+/* Staff sign in through the API (StaffGate) */
+.gateForm { display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
+.gateForm .primary { align-self: flex-start; }
+.gateFoot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 18px; }
+.gateLink { align-self: flex-start; padding: 0; border: 0; background: none; font-size: 0.8125rem; color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; cursor: pointer; }
+.qr { display: block; width: 220px; height: 220px; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px var(--hairline); }
+.secretKey { font-size: 0.8125rem; word-break: break-all; color: var(--ink); }
+.codeList { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin: 0; padding: 14px 16px; border-radius: var(--radius-md); background: var(--porcelain); list-style: none; font-size: 0.875rem; color: var(--ink); }
+.passwordPanel { display: flex; flex-direction: column; gap: 14px; max-width: 520px; margin-bottom: 24px; padding: clamp(20px, 3vw, 28px); border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); }

@@ -26,6 +26,8 @@ import SiteChrome from "@/components/chrome/SiteChrome";
 import ContactDrawer from "@/components/chrome/ContactDrawer";
 import Footer from "@/components/sections/Footer";
 import { DEMO_DEALER, signIn, useDealer } from "@/lib/dealer";
+import { authApi, toDealerSession } from "@/lib/api/auth";
+import { API_AUTH, ApiRequestError } from "@/lib/api/client";
 import { verifyPassword } from "@/lib/auth";
 import { INVITE_HOURS, createSetupLink, customerByEmail, ensureTestPasswords, type Customer, type SetupLink } from "@/lib/customers";
 import { TEST_DEALERS, TEST_DEALER_PASSWORD } from "@/content/testAccounts";
@@ -40,6 +42,12 @@ function safeNext(raw: string | null) {
 }
 
 type Notice = { kind: "setup"; email: string; company: string } | { kind: "sent"; email: string; link: SetupLink | null };
+
+const NO_ACCOUNT = (
+  <>
+    We could not find a dealer account for that email. <Link href={account.apply}>Apply to become a dealer</Link>, or call {brand.office.phone}.
+  </>
+);
 
 function LoginForm() {
   const router = useRouter();
@@ -56,7 +64,7 @@ function LoginForm() {
 
   // The dummy accounts get their test password once (hashing is async).
   useEffect(() => {
-    void ensureTestPasswords();
+    if (!API_AUTH) void ensureTestPasswords();
   }, []);
 
   const back = () => {
@@ -72,6 +80,19 @@ function LoginForm() {
 
   const sendLink = async (address: string) => {
     setBusy(true);
+    if (API_AUTH) {
+      try {
+        await authApi.forgot(address);
+      } catch {
+        setBusy(false);
+        setErrors({ email: "We could not reach the server. Please try again." });
+        return;
+      }
+      setBusy(false);
+      setErrors({});
+      setNotice({ kind: "sent", email: address, link: null });
+      return;
+    }
     const c = customerByEmail(address);
     const link = c ? await createSetupLink(c.id) : null;
     setBusy(false);
@@ -89,6 +110,28 @@ function LoginForm() {
     if (Object.keys(found).length) return;
     if (mode === "forgot") return sendLink(address);
 
+    if (API_AUTH) {
+      setBusy(true);
+      try {
+        const me = await authApi.login(address, password);
+        const session = toDealerSession(me);
+        if (session) {
+          signIn(session);
+          router.push(next);
+        } else {
+          router.push("/admin");
+        }
+      } catch (error) {
+        if (!(error instanceof ApiRequestError)) setErrors({ password: "We could not reach the server. Please try again." });
+        else if (error.code === "no_account") setErrors({ email: NO_ACCOUNT });
+        else if (error.code === "setup_required") setNotice({ kind: "setup", email: address, company: "" });
+        else setErrors({ email: error.fields?.email, password: error.fields?.password ?? (error.fields?.email ? undefined : error.message) });
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
+
     if (address.toLowerCase() === DEMO_DEALER.email) {
       signIn(DEMO_DEALER);
       router.push(next);
@@ -96,13 +139,7 @@ function LoginForm() {
     }
     const c = customerByEmail(address);
     if (!c) {
-      setErrors({
-        email: (
-          <>
-            We could not find a dealer account for that email. <Link href={account.apply}>Apply to become a dealer</Link>, or call {brand.office.phone}.
-          </>
-        ),
-      });
+      setErrors({ email: NO_ACCOUNT });
       return;
     }
     if (c.status !== "active") {
@@ -148,7 +185,7 @@ function LoginForm() {
               Set up your <em>password</em>
             </h1>
             <p className={s.lead}>
-              {notice.company}&apos;s account has moved to the new Surreal site. Your orders, memo and account come with it. To sign in, set a password with a secure link sent to {notice.email}.
+              {notice.company ? `${notice.company}'s account` : "Your account"} has moved to the new Surreal site. Your orders, memo and account come with it. To sign in, set a password with a secure link sent to {notice.email}.
             </p>
             <div className={s.doors}>
               <button type="button" className={s.primary} disabled={busy} onClick={() => sendLink(notice.email)}>
@@ -166,7 +203,7 @@ function LoginForm() {
               A link is <em>on its way</em>
             </h1>
             <p className={s.lead}>
-              If {notice.email} has a dealer account, we have sent it a link to set a password. The link works once and expires in {INVITE_HOURS} hours.
+              If {notice.email} has a dealer account, we have sent it a link to set a password. {API_AUTH ? "The link works once: a new account has 72 hours to use it, a password reset 1 hour." : `The link works once and expires in ${INVITE_HOURS} hours.`}
             </p>
             {notice.link && (
               <div className={s.preview}>
@@ -248,7 +285,7 @@ function LoginForm() {
         )}
       </div>
 
-      <div className={s.preview}>
+      {!API_AUTH && <div className={s.preview}>
         <span className={s.previewTag}>Preview</span>
         <p>Test accounts for trying each role before live customers move over. Use fills in the email and password; then log in.</p>
         <ul className={s.testList}>
@@ -290,7 +327,7 @@ function LoginForm() {
         >
           Explore as the demo dealer
         </button>
-      </div>
+      </div>}
     </form>
   );
 }

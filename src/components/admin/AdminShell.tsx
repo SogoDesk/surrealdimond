@@ -14,11 +14,13 @@
  */
 
 import Link from "next/link";
-import { createContext, useContext, useSyncExternalStore, type ReactNode } from "react";
+import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
 import { ROLE_LABEL, ROLE_LINE, adminModule, adminModules, type Access } from "@/content/admin";
 import { TEST_STAFF } from "@/content/testAccounts";
+import { API_AUTH } from "@/lib/api/client";
 import { signInStaff, signOutStaff, useStaff } from "@/lib/staff";
 import AdminIcon from "./AdminIcon";
+import StaffGate, { StaffPassword } from "./StaffGate";
 import s from "./admin.module.css";
 
 const AccessContext = createContext<Access>("none");
@@ -36,9 +38,12 @@ const useHydrated = () =>
 export default function AdminShell({ moduleId, children }: { moduleId: string; children: ReactNode }) {
   const staff = useStaff();
   const hydrated = useHydrated();
+  const [changingPassword, setChangingPassword] = useState(false);
   const mod = adminModule(moduleId);
 
   if (!hydrated) return <div className={s.boot} aria-busy="true" aria-label="Loading the console" data-console />;
+
+  if (!staff && API_AUTH) return <StaffGate />;
 
   if (!staff) {
     return (
@@ -114,6 +119,11 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
             )}
           </p>
           <div className={s.topTools}>
+            {API_AUTH ? (
+              <span className={s.roleSwitch}>
+                Signed in as {staff.name ?? staff.email}, {ROLE_LABEL[staff.role]}
+              </span>
+            ) : (
             <label className={s.roleSwitch}>
               <span>Signed in as</span>
               <select
@@ -130,6 +140,12 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
                 ))}
               </select>
             </label>
+            )}
+            {API_AUTH && (
+              <button type="button" className={s.topLink} onClick={() => setChangingPassword((open) => !open)} aria-expanded={changingPassword}>
+                Change password
+              </button>
+            )}
             <Link href="/" className={s.topLink} target="_blank" rel="noreferrer">
               View the site
             </Link>
@@ -140,6 +156,7 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
         </header>
 
         <main id="main" className={s.main}>
+          {API_AUTH && changingPassword && <StaffPassword email={staff.email ?? ""} onClose={() => setChangingPassword(false)} />}
           {access === "none" ? (
             <div className={s.locked}>
               <span className={s.lockedIcon} aria-hidden>
@@ -149,7 +166,7 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
                 </svg>
               </span>
               <h1 className={s.pageTitle}>{mod?.label ?? "This page"} is not open to {ROLE_LABEL[staff.role]}</h1>
-              <p className={s.pageLine}>The access matrix decides which roles see each module. Switch role above, or see who has access under Staff and roles.</p>
+              <p className={s.pageLine}>The access matrix decides which roles see each module. {API_AUTH ? "See who has access under Staff and roles." : "Switch role above, or see who has access under Staff and roles."}</p>
             </div>
           ) : (
             <AccessContext.Provider value={access}>

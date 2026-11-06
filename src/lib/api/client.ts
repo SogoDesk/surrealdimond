@@ -11,6 +11,13 @@ import type { paths } from "./schema";
 
 export const API_BASE = "/api/v1";
 
+/**
+ * Sign in through the API instead of the preview's browser storage. Fixed at
+ * build time and on only where NEXT_PUBLIC_API_AUTH is set (a developer's
+ * .env.local today), so the live site keeps working until the API is deployed.
+ */
+export const API_AUTH = process.env.NEXT_PUBLIC_API_AUTH === "true";
+
 /** Every API error has this shape (`fields` maps a form field to its message). */
 export interface ApiErrorBody {
   error: { code: string; message: string; fields?: Record<string, string> };

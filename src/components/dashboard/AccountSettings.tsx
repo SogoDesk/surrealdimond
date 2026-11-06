@@ -9,11 +9,13 @@
  */
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { signOut, useDealer } from "@/lib/dealer";
 import { checkPassword, setPassword, verifyPassword } from "@/lib/auth";
 import { useCustomers, type Customer } from "@/lib/customers";
+import { authApi, type AccountView } from "@/lib/api/auth";
+import { API_AUTH, ApiRequestError } from "@/lib/api/client";
 import PasswordRules from "@/components/account/PasswordRules";
 import p from "./pages.module.css";
 import s from "./account.module.css";
@@ -23,6 +25,27 @@ const ROLE_LINE: Record<Customer["role"], string> = {
   associate: "Associate: orders and memo. Invoices and payments stay with the account owner.",
 };
 const STATUS: Record<Customer["status"], string> = { active: "Active", invited: "Setup link sent", "not-invited": "Not invited yet" };
+
+/** The API's people, in the shape these panels already show. */
+function peopleFrom(view: AccountView): Customer[] {
+  const address = view.store.addresses[0];
+  return view.people
+    .filter((person) => person.status !== "disabled")
+    .map((person) => ({
+      id: person.id,
+      account: view.store.account ?? "",
+      company: view.store.name,
+      contact: person.name,
+      email: person.email,
+      phone: person.phone ?? "",
+      city: address?.city ?? "",
+      state: address?.state ?? "",
+      role: person.role,
+      status: person.status === "active" ? "active" : person.status === "invited" ? "invited" : "not-invited",
+      source: "import",
+      importedAt: "",
+    }));
+}
 
 const date = (iso?: string) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "");
 
@@ -43,6 +66,22 @@ function ChangePassword({ c }: { c: Customer }) {
     if (next !== confirm) return setError("The two new passwords do not match.");
     if (next === current) return setError("Choose a password different from the current one.");
     setBusy(true);
+    if (API_AUTH) {
+      try {
+        await authApi.changePassword(current, next);
+      } catch (failure) {
+        setBusy(false);
+        const fields = failure instanceof ApiRequestError ? failure.fields : undefined;
+        return setError(fields?.current ?? fields?.next ?? (failure instanceof ApiRequestError ? failure.message : "We could not reach the server. Please try again."));
+      }
+      setBusy(false);
+      setError("");
+      setCurrent("");
+      setNext("");
+      setConfirm("");
+      setDone(true);
+      return;
+    }
     const result = await verifyPassword(c.email, current);
     if (!result.ok) {
       setBusy(false);
@@ -100,9 +139,26 @@ function ChangePassword({ c }: { c: Customer }) {
 export default function AccountSettings() {
   const router = useRouter();
   const dealer = useDealer();
-  const customers = useCustomers();
+  const stored = useCustomers();
+  const [view, setView] = useState<AccountView | null>(null);
+
+  useEffect(() => {
+    if (!API_AUTH) return;
+    let live = true;
+    authApi
+      .account()
+      .then((found) => {
+        if (live) setView(found);
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, []);
+
   if (!dealer) return null;
 
+  const customers = API_AUTH ? (view ? peopleFrom(view) : []) : stored;
   const c = customers.find((x) => x.email.toLowerCase() === dealer.email.toLowerCase());
   const team = c ? customers.filter((x) => x.account === c.account) : [];
   const role = dealer.role ?? "owner";
@@ -183,7 +239,7 @@ export default function AccountSettings() {
           {c && !dealer.demo ? (
             <ChangePassword c={c} />
           ) : (
-            <p className={s.empty}>{dealer.demo ? "The demo dealer signs in without a password." : "This account signs in through Surreal. Ask us to link it to your email."}</p>
+            <p className={s.empty}>{API_AUTH && !view ? "Loading your account." : dealer.demo ? "The demo dealer signs in without a password." : "This account signs in through Surreal. Ask us to link it to your email."}</p>
           )}
           <div className={s.otherDoors}>
             <button

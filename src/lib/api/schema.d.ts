@@ -4,6 +4,262 @@
  */
 
 export interface paths {
+    "/api/v1/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign in with email and password */
+        post: operations["AuthController_login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign out of this session */
+        post: operations["AuthController_logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The signed-in person, their store and their access */
+        get: operations["AuthController_me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Email a setup or reset link */
+        post: operations["AuthController_forgot"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/setup/lookup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Is this setup link valid, expired or used? */
+        post: operations["AuthController_lookup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/setup/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send a new link to the email on the account */
+        post: operations["AuthController_resend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set the password from a link, and sign in */
+        post: operations["AuthController_setup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Change the password; other sessions end */
+        post: operations["AuthController_changePassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/switch-store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** For a person who belongs to more than one store */
+        post: operations["AuthController_switchStore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start two-factor: the secret to scan */
+        post: operations["AuthController_mfaSetup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Enter a code. The first good code finishes setup and returns recovery codes, once. */
+        post: operations["AuthController_mfaVerify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/recover": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Use a recovery code instead of a code */
+        post: operations["AuthController_mfaRecover"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/account": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Store details and the people on the account */
+        get: operations["PeopleController_account"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/account/people": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invite someone to the store (owner only) */
+        post: operations["PeopleController_invite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/account/people/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Take someone off the store (owner only) */
+        delete: operations["PeopleController_remove"];
+        options?: never;
+        head?: never;
+        /** Change a role or permissions (owner only) */
+        patch: operations["PeopleController_update"];
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -50,6 +306,652 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    AuthController_login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    email: string;
+                    password: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: {
+                            id: string;
+                            /** @enum {string} */
+                            kind: "dealer" | "staff";
+                            email: string;
+                            name: string;
+                            phone: string | null;
+                        };
+                        dealer: {
+                            organizationId: string;
+                            store: string;
+                            account: string | null;
+                            /** @enum {string} */
+                            role: "owner" | "associate";
+                            permissions: {
+                                orders: boolean;
+                                memo: boolean;
+                                billing: boolean;
+                                paymentMethods: boolean;
+                            };
+                            stores: {
+                                organizationId: string;
+                                name: string;
+                            }[];
+                        } | null;
+                        staff: {
+                            /** @enum {string} */
+                            role: "administrator" | "finance" | "hr" | "sales" | "manager";
+                            /** @enum {string} */
+                            mfa: "ok" | "code_required" | "setup_required";
+                            access: {
+                                [key: string]: "edit" | "view" | "none";
+                            };
+                        } | null;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: {
+                            id: string;
+                            /** @enum {string} */
+                            kind: "dealer" | "staff";
+                            email: string;
+                            name: string;
+                            phone: string | null;
+                        };
+                        dealer: {
+                            organizationId: string;
+                            store: string;
+                            account: string | null;
+                            /** @enum {string} */
+                            role: "owner" | "associate";
+                            permissions: {
+                                orders: boolean;
+                                memo: boolean;
+                                billing: boolean;
+                                paymentMethods: boolean;
+                            };
+                            stores: {
+                                organizationId: string;
+                                name: string;
+                            }[];
+                        } | null;
+                        staff: {
+                            /** @enum {string} */
+                            role: "administrator" | "finance" | "hr" | "sales" | "manager";
+                            /** @enum {string} */
+                            mfa: "ok" | "code_required" | "setup_required";
+                            access: {
+                                [key: string]: "edit" | "view" | "none";
+                            };
+                        } | null;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_forgot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    email: string;
+                };
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message: string;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_lookup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    token: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        state: "valid";
+                        person: {
+                            name: string;
+                            email: string;
+                            company: string | null;
+                            account: string | null;
+                        };
+                        /** Format: date-time */
+                        expiresAt: string;
+                    } | {
+                        /** @enum {string} */
+                        state: "expired";
+                        person: {
+                            name: string;
+                            email: string;
+                            company: string | null;
+                            account: string | null;
+                        };
+                    } | {
+                        /** @enum {string} */
+                        state: "invalid";
+                    };
+                };
+            };
+        };
+    };
+    AuthController_resend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    token: string;
+                };
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        message: string;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_setup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    token: string;
+                    password: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: {
+                            id: string;
+                            /** @enum {string} */
+                            kind: "dealer" | "staff";
+                            email: string;
+                            name: string;
+                            phone: string | null;
+                        };
+                        dealer: {
+                            organizationId: string;
+                            store: string;
+                            account: string | null;
+                            /** @enum {string} */
+                            role: "owner" | "associate";
+                            permissions: {
+                                orders: boolean;
+                                memo: boolean;
+                                billing: boolean;
+                                paymentMethods: boolean;
+                            };
+                            stores: {
+                                organizationId: string;
+                                name: string;
+                            }[];
+                        } | null;
+                        staff: {
+                            /** @enum {string} */
+                            role: "administrator" | "finance" | "hr" | "sales" | "manager";
+                            /** @enum {string} */
+                            mfa: "ok" | "code_required" | "setup_required";
+                            access: {
+                                [key: string]: "edit" | "view" | "none";
+                            };
+                        } | null;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_changePassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    current: string;
+                    next: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: {
+                            id: string;
+                            /** @enum {string} */
+                            kind: "dealer" | "staff";
+                            email: string;
+                            name: string;
+                            phone: string | null;
+                        };
+                        dealer: {
+                            organizationId: string;
+                            store: string;
+                            account: string | null;
+                            /** @enum {string} */
+                            role: "owner" | "associate";
+                            permissions: {
+                                orders: boolean;
+                                memo: boolean;
+                                billing: boolean;
+                                paymentMethods: boolean;
+                            };
+                            stores: {
+                                organizationId: string;
+                                name: string;
+                            }[];
+                        } | null;
+                        staff: {
+                            /** @enum {string} */
+                            role: "administrator" | "finance" | "hr" | "sales" | "manager";
+                            /** @enum {string} */
+                            mfa: "ok" | "code_required" | "setup_required";
+                            access: {
+                                [key: string]: "edit" | "view" | "none";
+                            };
+                        } | null;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_switchStore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    organizationId: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: {
+                            id: string;
+                            /** @enum {string} */
+                            kind: "dealer" | "staff";
+                            email: string;
+                            name: string;
+                            phone: string | null;
+                        };
+                        dealer: {
+                            organizationId: string;
+                            store: string;
+                            account: string | null;
+                            /** @enum {string} */
+                            role: "owner" | "associate";
+                            permissions: {
+                                orders: boolean;
+                                memo: boolean;
+                                billing: boolean;
+                                paymentMethods: boolean;
+                            };
+                            stores: {
+                                organizationId: string;
+                                name: string;
+                            }[];
+                        } | null;
+                        staff: {
+                            /** @enum {string} */
+                            role: "administrator" | "finance" | "hr" | "sales" | "manager";
+                            /** @enum {string} */
+                            mfa: "ok" | "code_required" | "setup_required";
+                            access: {
+                                [key: string]: "edit" | "view" | "none";
+                            };
+                        } | null;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_mfaSetup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        secret: string;
+                        otpauthUrl: string;
+                        qrDataUrl: string;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_mfaVerify: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        recoveryCodes?: string[];
+                    };
+                };
+            };
+        };
+    };
+    AuthController_mfaRecover: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PeopleController_account: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        store: {
+                            name: string;
+                            account: string | null;
+                            website: string | null;
+                            phone: string | null;
+                            addresses: {
+                                /** @enum {string} */
+                                kind: "store" | "shipping" | "billing";
+                                label: string | null;
+                                line1: string;
+                                line2: string | null;
+                                city: string;
+                                state: string;
+                                postalCode: string;
+                                phone: string | null;
+                                email: string | null;
+                            }[];
+                        };
+                        you: {
+                            /** @enum {string} */
+                            role: "owner" | "associate";
+                            permissions: {
+                                orders: boolean;
+                                memo: boolean;
+                                billing: boolean;
+                                paymentMethods: boolean;
+                            };
+                        };
+                        people: {
+                            id: string;
+                            name: string;
+                            email: string;
+                            phone: string | null;
+                            /** @enum {string} */
+                            role: "owner" | "associate";
+                            /** @enum {string} */
+                            status: "not_invited" | "invited" | "active" | "disabled";
+                            permissions: {
+                                orders: boolean;
+                                memo: boolean;
+                                billing: boolean;
+                                paymentMethods: boolean;
+                            };
+                        }[];
+                    };
+                };
+            };
+        };
+    };
+    PeopleController_invite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    name: string;
+                    email: string;
+                    phone?: string;
+                    /**
+                     * @default associate
+                     * @enum {string}
+                     */
+                    role?: "owner" | "associate";
+                    permissions?: {
+                        orders: boolean;
+                        memo: boolean;
+                        billing: boolean;
+                        paymentMethods: boolean;
+                    };
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        id: string;
+                        linkSent: boolean;
+                    };
+                };
+            };
+        };
+    };
+    PeopleController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PeopleController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    role?: "owner" | "associate";
+                    permissions?: {
+                        orders: boolean;
+                        memo: boolean;
+                        billing: boolean;
+                        paymentMethods: boolean;
+                    };
+                };
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     HealthController_live: {
         parameters: {
             query?: never;

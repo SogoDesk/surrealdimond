@@ -8,6 +8,8 @@
  * session holds no password; passwords are checked in src/lib/auth.ts.
  */
 
+import { authApi } from "./api/auth";
+import { API_AUTH } from "./api/client";
 import { createLocalStore } from "./localStore";
 
 export interface DealerSession {
@@ -43,8 +45,14 @@ export function signIn(session: DealerSession) {
   store.set(session);
 }
 
+/** Forgets the screens' copy of the session, without calling the API. */
+export function clearDealer() {
+  store.set(null);
+}
+
 export function signOut() {
   store.set(null);
+  if (API_AUTH) void authApi.logout().catch(() => undefined);
 }
 
 export const DEMO_DEALER: DealerSession = { email: "buyer@demo-jewelers.com", store: "Demo Jewelers", contact: "Demo buyer", demo: true };

@@ -1,3 +1,4 @@
+import SessionSync from "@/lib/api/SessionSync";
 import type { Metadata, Viewport } from "next";
 import { Italiana, Urbanist } from "next/font/google";
 import "./globals.css";
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       {/* Browser extensions add attributes to body before hydration; those are not ours to reconcile. */}
       <body suppressHydrationWarning>
+        <SessionSync />
         {children}
       </body>
     </html>

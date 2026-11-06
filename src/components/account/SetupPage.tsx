@@ -21,28 +21,50 @@ import Footer from "@/components/sections/Footer";
 import { signIn } from "@/lib/dealer";
 import { checkPassword } from "@/lib/auth";
 import PasswordRules from "./PasswordRules";
-import { INVITE_HOURS, completeSetup, createSetupLink, lookupSetupLink, type SetupLink, type SetupLookup } from "@/lib/customers";
+import { INVITE_HOURS, completeSetup, createSetupLink, lookupSetupLink, type Customer, type SetupLink } from "@/lib/customers";
+import { authApi, toDealerSession } from "@/lib/api/auth";
+import { API_AUTH, ApiRequestError } from "@/lib/api/client";
 import { account, brand } from "@/content/site";
 import s from "./account.module.css";
 
 const COMING = ["Your orders and their tracking", "Stones on memo, and memo reports", "Open invoices, payments and statements", "Saved payment methods and addresses"];
 
+/** Who a link is for: the preview's customer, or the API's answer in the same shape. */
+type Who = Pick<Customer, "id" | "email" | "company" | "contact" | "account">;
+type SetupView = { state: "valid"; customer: Who; expires: number } | { state: "expired"; customer: Who } | { state: "invalid" };
+
+async function lookupThroughApi(token: string): Promise<SetupView> {
+  const found = await authApi.lookup(token);
+  if (found.state === "invalid") return { state: "invalid" };
+  const customer: Who = { id: "", email: found.person.email, company: found.person.company ?? "", contact: found.person.name, account: found.person.account ?? "" };
+  if (found.state === "expired") return { state: "expired", customer };
+  return { state: "valid", customer, expires: new Date(found.expiresAt).getTime() };
+}
+
+const lookup = (token: string): Promise<SetupView> => (API_AUTH ? lookupThroughApi(token) : lookupSetupLink(token));
+
 function SetupForm() {
   const router = useRouter();
   const token = useSearchParams().get("token") ?? "";
-  const [found, setFound] = useState<SetupLookup | null>(null);
+  const [found, setFound] = useState<SetupView | null>(null);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [tried, setTried] = useState(false);
   const [resent, setResent] = useState<SetupLink | null>(null);
+  const [sentAgain, setSentAgain] = useState(false);
+  const [serverError, setServerError] = useState("");
 
   useEffect(() => {
     let live = true;
-    lookupSetupLink(token).then((r) => {
-      if (live) setFound(r);
-    });
+    lookup(token)
+      .then((r) => {
+        if (live) setFound(r);
+      })
+      .catch(() => {
+        if (live) setServerError("We could not reach the server. Please reload this page to try again.");
+      });
     return () => {
       live = false;
     };
@@ -50,8 +72,13 @@ function SetupForm() {
 
   if (!found) {
     return (
-      <div className={s.card} aria-busy="true">
+      <div className={s.card} aria-busy={!serverError}>
         <p className={s.eyebrow}>Checking your link</p>
+        {serverError && (
+          <p className={s.error} role="alert">
+            {serverError}
+          </p>
+        )}
       </div>
     );
   }
@@ -85,9 +112,13 @@ function SetupForm() {
           This link has <em>expired</em>
         </h1>
         <p className={s.lead}>
-          Setup links last {INVITE_HOURS} hours. We can send a new one to {c.email}.
+          {API_AUTH ? "Links do not last forever." : `Setup links last ${INVITE_HOURS} hours.`} We can send a new one to {c.email}.
         </p>
-        {resent ? (
+        {sentAgain ? (
+          <p className={s.lead} role="status">
+            A new link is on its way to {c.email}.
+          </p>
+        ) : resent ? (
           <div className={s.preview}>
             <span className={s.previewTag}>Preview</span>
             <p>A new link is on its way. Emails are not sent from the preview, so here is the link the email would carry.</p>
@@ -103,7 +134,12 @@ function SetupForm() {
               disabled={busy}
               onClick={async () => {
                 setBusy(true);
-                setResent(await createSetupLink(c.id));
+                if (API_AUTH) {
+                  await authApi.resend(token).catch(() => undefined);
+                  setSentAgain(true);
+                } else {
+                  setResent(await createSetupLink(c.id));
+                }
                 setBusy(false);
               }}
             >
@@ -123,10 +159,27 @@ function SetupForm() {
     setTried(true);
     if (!check.valid || confirm !== password) return;
     setBusy(true);
+    if (API_AUTH) {
+      try {
+        const me = await authApi.setup(token, password);
+        const session = toDealerSession(me);
+        if (session) {
+          signIn(session);
+          router.push(`${account.dashboard}?welcome=1`);
+        } else {
+          router.push("/admin");
+        }
+      } catch (error) {
+        setBusy(false);
+        if (error instanceof ApiRequestError && error.status === 410) setFound(await lookup(token));
+        else setServerError(error instanceof ApiRequestError ? (error.fields?.password ?? error.message) : "We could not reach the server. Please try again.");
+      }
+      return;
+    }
     const done = await completeSetup(token, password);
     if (!done) {
       setBusy(false);
-      setFound(await lookupSetupLink(token));
+      setFound(await lookup(token));
       return;
     }
     signIn({ email: done.email, store: done.company, contact: done.contact, demo: false, role: done.role, account: done.account });
@@ -140,7 +193,7 @@ function SetupForm() {
         Set your <em>password</em>
       </h1>
       <p className={s.lead}>
-        Hello {c.contact.split(" ")[0]}. Choose a password for the {c.company} dealer account. You will use it with your email to log in from now on.
+        Hello {c.contact.split(" ")[0]}. Choose a password for {c.company ? `the ${c.company} dealer account` : "your Surreal account"}. You will use it with your email to log in from now on.
       </p>
 
       <dl className={s.who}>
@@ -148,12 +201,15 @@ function SetupForm() {
           <dt>Email</dt>
           <dd>{c.email}</dd>
         </div>
-        <div>
-          <dt>Account</dt>
-          <dd>
-            {c.company} · {c.account}
-          </dd>
-        </div>
+        {c.company && (
+          <div>
+            <dt>Account</dt>
+            <dd>
+              {c.company}
+              {c.account ? ` · ${c.account}` : ""}
+            </dd>
+          </div>
+        )}
       </dl>
 
       <label className={s.field}>
@@ -180,6 +236,11 @@ function SetupForm() {
       {tried && !check.valid && (
         <p className={s.error} role="alert">
           The password does not meet every rule above yet.
+        </p>
+      )}
+      {serverError && (
+        <p className={s.error} role="alert">
+          {serverError}
         </p>
       )}
 
