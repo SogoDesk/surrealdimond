@@ -13,10 +13,10 @@ export const API_BASE = "/api/v1";
 
 /**
  * Sign in through the API instead of the preview's browser storage. Fixed at
- * build time and on only where NEXT_PUBLIC_API_AUTH is set (a developer's
- * .env.local today), so the live site keeps working until the API is deployed.
+ * build time: on unless a build sets NEXT_PUBLIC_API_AUTH=false, which brings
+ * back the preview's test accounts.
  */
-export const API_AUTH = process.env.NEXT_PUBLIC_API_AUTH === "true";
+export const API_AUTH = process.env.NEXT_PUBLIC_API_AUTH !== "false";
 
 /** Every API error has this shape (`fields` maps a form field to its message). */
 export interface ApiErrorBody {
