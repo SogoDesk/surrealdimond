@@ -54,7 +54,7 @@ const GROUPS: Group[] = [
     label: "Collections",
     items: divisions.filter((d) => d.group === "collections"),
     extras: [],
-    promo: { title: "Five collections", line: "Constellation, Enamour Enamel, Laser Pierced, Vermeil and Sterling Silver.", href: "/jewelry", cta: "Browse" },
+    promo: { title: "The collections", line: "Constellation, Enamour Enamel, Laser Pierced, Vermeil and Sterling Silver.", href: "/jewelry", cta: "Browse" },
     editorial: { src: "/media/photos/sb-3636-sm.webp", caption: "Pendants and fine chains", href: "/jewelry/pendants" },
   },
   {
@@ -163,9 +163,6 @@ export default function MegaMenu({ open, onIntent, onClose }: MegaMenuProps) {
                 onClick={() => setGroupId(g.id)}
               >
                 {g.label}
-                <span aria-hidden className={styles.megaRailCount}>
-                  {g.items.length + g.extras.length}
-                </span>
               </button>
             </li>
           ))}

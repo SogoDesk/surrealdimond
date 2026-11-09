@@ -240,8 +240,8 @@ export default function Header({ menuOpen, onMenuToggle, headerRef, chapters = f
     >
       <div className={styles.bar}>
         <Link ref={logoRef} href="/" id="site-logo" className={styles.logo} aria-label="Surreal, home" onPointerEnter={redraw} onFocus={redraw}>
-          <LineMark navy="var(--mark-a)" sky="var(--mark-b)" alternating strokeCount={12} strokeScale={6} style={{ height: 36, width: 36 * LINE_MARK_ASPECT }} />
-          <Wordmark size={24} withTm className={styles.wordmark} />
+          <LineMark navy="var(--mark-a)" sky="var(--mark-b)" alternating strokeCount={12} strokeScale={6} style={{ height: 42, width: 42 * LINE_MARK_ASPECT }} />
+          <Wordmark size={28} withTm className={styles.wordmark} />
         </Link>
 
         <div className={styles.searchSlot}>

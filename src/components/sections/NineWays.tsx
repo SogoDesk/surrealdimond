@@ -25,7 +25,7 @@ import { useRevealIn } from "@/components/home/useRevealIn";
 import { registerGsap, gsap, useGSAP } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useMedia";
 import { calmChapters } from "@/lib/motion";
-import { divisions, divisionTypes } from "@/content/divisions";
+import { divisionTypes } from "@/content/divisions";
 import type { Category } from "@/content/catalog";
 import { groundStyle } from "@/content/grounds";
 import { AllDivisionsCard, CategoryCard, LooseDiamondsCard } from "./NineWaysPanels";
@@ -73,7 +73,7 @@ export default function NineWays() {
         ) : null,
       )}
       <LooseDiamondsCard number={divisionTypes.length + 1} label="Loose Diamonds" href="/diamonds" />
-      <AllDivisionsCard count={divisions.length} href={SHOP_ALL} />
+      <AllDivisionsCard href={SHOP_ALL} />
     </ul>
   );
 

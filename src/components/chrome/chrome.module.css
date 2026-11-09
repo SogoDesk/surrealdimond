@@ -55,13 +55,13 @@
   gap: 12px;
   color: var(--ink);
 }
-.logo svg { height: 36px; width: auto; display: block; overflow: visible; }
+.logo svg { height: 42px; width: auto; display: block; overflow: visible; }
 .logo [data-layer="ink"] { stroke: var(--ink); }
 .logo [data-layer="sky"] { stroke: var(--line); }
 .wordmark { color: inherit; }
-/* The trademark reads as an 8px superscript after the L of the 24px wordmark. */
+/* The trademark reads as a 9px superscript after the L of the 28px wordmark. */
 .wordmark [data-wordmark-text] { padding-right: 0.52em !important; }
-.wordmark [data-wordmark-text] > span { font-size: 8px !important; }
+.wordmark [data-wordmark-text] > span { font-size: 9px !important; }
 
 /* Search field with a rotating prompt */
 .searchSlot { min-width: 0; display: flex; justify-content: center; }
@@ -285,7 +285,7 @@
 .megaRail {
   list-style: none;
   margin: 0;
-  padding: 0 32px 0 0;
+  padding: 0 24px 0 0;
   border-right: 1px solid var(--hairline);
   display: flex;
   flex-direction: column;
@@ -295,9 +295,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 16px;
+  padding: 12px 14px;
   border-radius: 10px;
   font: 500 15px/1.2 var(--font-ui), "Urbanist", sans-serif;
   color: var(--graphite);
@@ -306,16 +304,29 @@
 }
 .megaRailItem:hover { background: var(--sky); color: var(--navy); }
 .megaRailItem[aria-selected="true"] { background: var(--mist); color: var(--ink); font-weight: 600; }
-.megaRailCount { font-size: 11px; color: var(--stone); font-variant-numeric: tabular-nums; }
 .megaCenter { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
 .megaGrid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Columns follow their labels, so a long one like Engagement Rings stays on one line. */
+  grid-template-columns: repeat(3, auto);
   gap: 8px 24px;
   align-content: start;
+}
+/* Laptops: the side columns give up room so the labels keep theirs. */
+@media (max-width: 1499px) {
+  .megaInner { grid-template-columns: 200px minmax(0, 1fr) 190px; column-gap: 24px; }
+  .megaRail { padding-right: 14px; }
+  .megaGrid { column-gap: 8px; }
+  .megaLink { gap: 10px; padding-right: 6px; }
+  .megaLink .thumb { width: 38px; height: 38px; }
+}
+/* The narrowest windows that show this menu: the photo goes, the labels stay whole. */
+@media (max-width: 1239px) {
+  .megaInner { grid-template-columns: 200px minmax(0, 1fr); }
+  .megaInner > .megaCard { display: none; }
 }
 .megaLink {
   display: flex;
@@ -749,4 +760,10 @@
   .right { gap: 6px; }
   .dashPill { flex-basis: 36px; width: 36px; height: 36px; }
   .searchIconLink { width: 36px; height: 36px; }
+}
+/* Phones and tablets keep the smaller logo: the bigger one pushes the icons off a 768px screen and squeezes the search box out. */
+@media (max-width: 1023px) {
+  .logo svg { height: 36px !important; width: auto !important; }
+  .wordmark { font-size: 24px !important; }
+  .wordmark [data-wordmark-text] > span { font-size: 8px !important; }
 }

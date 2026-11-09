@@ -291,7 +291,8 @@ body {
  * Dark theme (client feedback F-A5, for Surreal's review): the toggle in
  * the header sets data-mode="dark" on <html> (remembered in this browser,
  * applied before first paint by the script in layout.tsx). The page and
- * its panels go to deep ink, text and controls to light, and the agreed
+ * its panels go to a soft charcoal, lifted off near black because Surreal
+ * found it hard to read, text and controls to light, and the agreed
  * brand blue stays the secondary colour: accents, focus rings and the
  * hover on filled buttons. The chapters that are already their own
  * contrast panels (dark, navy, sky, and the navy footer) keep the brand
@@ -301,17 +302,17 @@ body {
 @media screen {
   html[data-mode="dark"]:not(:has([data-console])) {
     color-scheme: dark;
-    --porcelain: #0c1014;
-    --paper: #11161b;
-    --white: #161d23;
-    /* Box edges and keylines in Surreal blue, so cards read as blue boxes on the black (client change request, November 2026). */
+    --porcelain: #171e25;
+    --paper: #1d252d;
+    --white: #242d36;
+    /* Box edges and keylines in Surreal blue, so cards read as blue boxes on the dark ground (client change request, November 2026). */
     --hairline: rgba(134, 223, 255, 0.3);
-    --stone: #a9b5be;
-    --graphite: #d8dfe4;
-    --ink: #edf2f6;
+    --stone: #bcc7cf;
+    --graphite: #e3e9ed;
+    --ink: #f2f5f8;
     --carbon: rgba(226, 235, 242, 0.2);
-    --mist: #12303d;
-    --beam: #0f2530;
+    --mist: #1a3c4c;
+    --beam: #16303d;
     --sky-deep: var(--sky);
     --magenta: #ef7cbf;
     --well: #eef1f4;
