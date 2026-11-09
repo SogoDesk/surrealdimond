@@ -30,6 +30,7 @@ export const authApi = {
   mfaBegin: () => post<MfaBegin>("/auth/mfa/setup"),
   mfaVerify: (code: string) => post<MfaResult>("/auth/mfa/verify", { code }),
   mfaRecover: (code: string) => post<void>("/auth/mfa/recover", { code }),
+  mfaDisable: (password: string) => post<void>("/auth/mfa/disable", { password }),
   account: () => apiFetch<AccountView>("/me/account"),
 };
 
@@ -46,6 +47,6 @@ export const toDealerSession = (me: Me): DealerSession | null =>
       }
     : null;
 
-/** Staff count as signed in to the console only once two-factor is passed. */
+/** Two-factor is optional, but staff who have it on are in only once they pass a code. */
 export const toStaffSession = (me: Me): StaffSession | null =>
-  me.staff?.mfa === "ok" ? { role: me.staff.role, name: me.user.name, email: me.user.email } : null;
+  me.staff && me.staff.mfa !== "code_required" ? { role: me.staff.role, name: me.user.name, email: me.user.email } : null;

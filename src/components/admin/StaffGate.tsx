@@ -1,10 +1,9 @@
 "use client";
 
 /**
- * Staff sign in through the API, when API_AUTH is on: email and password, then
- * two-factor. The first time, a staff member scans a QR code with an
- * authenticator app and gets recovery codes to keep; after that, each sign in
- * asks for a code. The console opens only once this session has passed a code.
+ * Staff sign in through the API, when API_AUTH is on: email and password, then a
+ * code for anyone who has turned two-factor on. Two-factor is optional, and each
+ * person turns it on or off from the console's top bar (StaffTwoFactor below).
  */
 
 import Image from "next/image";
@@ -22,10 +21,8 @@ type Step =
   | { name: "loading" }
   | { name: "password" }
   | { name: "dealer" }
-  | { name: "setup"; begin: MfaBegin }
   | { name: "code" }
-  | { name: "recovery" }
-  | { name: "codes"; codes: string[] };
+  | { name: "recovery" };
 
 const NO_SERVER = "We could not reach the server. Please try again.";
 
@@ -34,12 +31,10 @@ function messageOf(error: unknown, field?: string): string {
   return (field && error.fields?.[field]) || error.message;
 }
 
-/** Where a session goes next, from what the API says about it. */
-async function nextStep(me: Me): Promise<Step | null> {
+/** Where a session goes next, from what the API says about it. Null opens the console. */
+function nextStep(me: Me): Step | null {
   if (me.dealer) return { name: "dealer" };
-  if (me.staff?.mfa === "ok") return null;
-  if (me.staff?.mfa === "setup_required") return { name: "setup", begin: await authApi.mfaBegin() };
-  return { name: "code" };
+  return me.staff?.mfa === "code_required" ? { name: "code" } : null;
 }
 
 export default function StaffGate() {
@@ -50,8 +45,8 @@ export default function StaffGate() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  const advance = async (me: Me) => {
-    const following = await nextStep(me);
+  const advance = (me: Me) => {
+    const following = nextStep(me);
     if (following) {
       setCode("");
       setStep(following);
@@ -64,8 +59,8 @@ export default function StaffGate() {
     let live = true;
     authApi
       .me()
-      .then(async (me) => {
-        const following = await nextStep(me);
+      .then((me) => {
+        const following = nextStep(me);
         if (!live) return;
         if (following) setStep(following);
         else setStaffSession(toStaffSession(me));
@@ -93,7 +88,7 @@ export default function StaffGate() {
     void run(async () => {
       try {
         clearDealer();
-        await advance(await authApi.login(email.trim(), password));
+        advance(await authApi.login(email.trim(), password));
         setPassword("");
       } catch (err) {
         if (err instanceof ApiRequestError && err.code === "no_account") setError("We could not find a staff login for that email.");
@@ -107,9 +102,8 @@ export default function StaffGate() {
     e.preventDefault();
     void run(async () => {
       try {
-        const result = await authApi.mfaVerify(code.trim());
-        if (result.recoveryCodes?.length) setStep({ name: "codes", codes: result.recoveryCodes });
-        else await advance(await authApi.me());
+        await authApi.mfaVerify(code.trim());
+        advance(await authApi.me());
       } catch (err) {
         setError(messageOf(err, "code"));
       }
@@ -121,7 +115,7 @@ export default function StaffGate() {
     void run(async () => {
       try {
         await authApi.mfaRecover(code.trim());
-        await advance(await authApi.me());
+        advance(await authApi.me());
       } catch (err) {
         setError(messageOf(err, "code"));
       }
@@ -187,22 +181,6 @@ export default function StaffGate() {
           </div>
         )}
 
-        {step.name === "setup" && (
-          <form className={s.gateForm} onSubmit={submitCode} noValidate>
-            <h1 className={s.signinTitle}>Set up two-factor</h1>
-            <p className={s.signinLine}>Scan this with an authenticator app, then enter the 6 digit code it shows. You will be asked for a code each time you sign in.</p>
-            <Image className={s.qr} src={step.begin.qrDataUrl} alt="QR code for your authenticator app" width={220} height={220} unoptimized />
-            <p className={s.signinNote}>
-              Cannot scan it? Enter this key in the app: <code className={s.secretKey}>{step.begin.secret}</code>
-            </p>
-            {codeField}
-            {errorLine}
-            <button type="submit" className={s.primary} disabled={busy || code.trim().length !== 6}>
-              {busy ? "Checking" : "Turn on two-factor"}
-            </button>
-          </form>
-        )}
-
         {step.name === "code" && (
           <form className={s.gateForm} onSubmit={submitCode} noValidate>
             <h1 className={s.signinTitle}>Enter your code</h1>
@@ -241,32 +219,6 @@ export default function StaffGate() {
           </form>
         )}
 
-        {step.name === "codes" && (
-          <div className={s.gateForm}>
-            <h1 className={s.signinTitle}>Save your recovery codes</h1>
-            <p className={s.signinLine}>If you lose your phone, each of these lets you in once. They will not be shown again, so keep them somewhere safe.</p>
-            <ul className={s.codeList}>
-              {step.codes.map((value) => (
-                <li key={value}>
-                  <code>{value}</code>
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              className={s.primary}
-              disabled={busy}
-              onClick={() => {
-                void run(async () => {
-                  await advance(await authApi.me());
-                });
-              }}
-            >
-              I have saved them
-            </button>
-          </div>
-        )}
-
         <div className={s.gateFoot}>
           {step.name !== "password" && step.name !== "loading" && step.name !== "dealer" && (
             <button type="button" className={s.gateLink} disabled={busy} onClick={useAnotherLogin}>
@@ -279,6 +231,179 @@ export default function StaffGate() {
         </div>
       </div>
     </main>
+  );
+}
+
+type TwoFactorStep =
+  | { name: "loading" }
+  | { name: "off" }
+  | { name: "setup"; begin: MfaBegin }
+  | { name: "codes"; codes: string[] }
+  | { name: "on" };
+
+/**
+ * Staff turn two-factor on or off for themselves, from the console's top bar.
+ * Setting it up shows a QR code to scan and recovery codes to keep; turning it
+ * off asks for the password.
+ */
+export function StaffTwoFactor({ onClose }: { onClose: () => void }) {
+  const [step, setStep] = useState<TwoFactorStep>({ name: "loading" });
+  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let live = true;
+    authApi
+      .me()
+      .then((me) => {
+        if (live) setStep(me.staff?.mfa === "ok" ? { name: "on" } : { name: "off" });
+      })
+      .catch((err: unknown) => {
+        if (live) {
+          setStep({ name: "off" });
+          setError(messageOf(err));
+        }
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const run = async (work: () => Promise<void>, field?: string) => {
+    setBusy(true);
+    setError("");
+    try {
+      await work();
+    } catch (err) {
+      setError(messageOf(err, field));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const begin = () =>
+    void run(async () => {
+      const started = await authApi.mfaBegin();
+      setCode("");
+      setStep({ name: "setup", begin: started });
+    });
+
+  const confirm = (e: FormEvent) => {
+    e.preventDefault();
+    void run(async () => {
+      const result = await authApi.mfaVerify(code.trim());
+      setCode("");
+      setStep(result.recoveryCodes?.length ? { name: "codes", codes: result.recoveryCodes } : { name: "on" });
+    }, "code");
+  };
+
+  const turnOff = (e: FormEvent) => {
+    e.preventDefault();
+    void run(async () => {
+      await authApi.mfaDisable(password);
+      setPassword("");
+      setStep({ name: "off" });
+    }, "password");
+  };
+
+  const errorLine = error ? (
+    <p className={s.error} role="alert">
+      {error}
+    </p>
+  ) : null;
+
+  const close = (
+    <button type="button" className={s.gateLink} onClick={onClose}>
+      Close
+    </button>
+  );
+
+  return (
+    <section className={s.passwordPanel} aria-labelledby="staff-two-factor">
+      <h2 id="staff-two-factor" className={s.pageTitle}>
+        Two-factor
+      </h2>
+
+      {step.name === "loading" && <p aria-busy="true">Checking your account</p>}
+
+      {step.name === "off" && (
+        <div className={s.gateForm}>
+          <p>Two-factor is off. It is optional: turn it on and each sign in also asks for a 6 digit code from an authenticator app on your phone.</p>
+          {errorLine}
+          <div className={s.gateFoot}>
+            <button type="button" className={s.primary} disabled={busy} onClick={begin}>
+              {busy ? "Starting" : "Set up two-factor"}
+            </button>
+            {close}
+          </div>
+        </div>
+      )}
+
+      {step.name === "setup" && (
+        <form className={s.gateForm} onSubmit={confirm} noValidate>
+          <p>Scan this with an authenticator app, then enter the 6 digit code it shows.</p>
+          <Image className={s.qr} src={step.begin.qrDataUrl} alt="QR code for your authenticator app" width={220} height={220} unoptimized />
+          <p className={s.signinNote}>
+            Cannot scan it? Enter this key in the app: <code className={s.secretKey}>{step.begin.secret}</code>
+          </p>
+          <label className={s.field}>
+            <span className={s.label}>6 digit code</span>
+            <input className={s.input} inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={(e) => setCode(e.target.value)} autoFocus />
+          </label>
+          {errorLine}
+          <div className={s.gateFoot}>
+            <button type="submit" className={s.primary} disabled={busy || code.trim().length !== 6}>
+              {busy ? "Checking" : "Turn on two-factor"}
+            </button>
+            <button
+              type="button"
+              className={s.gateLink}
+              onClick={() => {
+                setError("");
+                setStep({ name: "off" });
+              }}
+            >
+              Not now
+            </button>
+          </div>
+        </form>
+      )}
+
+      {step.name === "codes" && (
+        <div className={s.gateForm}>
+          <p>Two-factor is on. If you lose your phone, each of these codes lets you in once. They will not be shown again, so keep them somewhere safe.</p>
+          <ul className={s.codeList}>
+            {step.codes.map((value) => (
+              <li key={value}>
+                <code>{value}</code>
+              </li>
+            ))}
+          </ul>
+          <button type="button" className={s.primary} onClick={() => setStep({ name: "on" })}>
+            I have saved them
+          </button>
+        </div>
+      )}
+
+      {step.name === "on" && (
+        <form className={s.gateForm} onSubmit={turnOff} noValidate>
+          <p>Two-factor is on, so each sign in asks for a code from your authenticator app. To turn it off, enter your password.</p>
+          <label className={s.field}>
+            <span className={s.label}>Password</span>
+            <input className={s.input} type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </label>
+          {errorLine}
+          <div className={s.gateFoot}>
+            <button type="submit" className={s.primary} disabled={busy || !password}>
+              {busy ? "Checking" : "Turn off two-factor"}
+            </button>
+            {close}
+          </div>
+        </form>
+      )}
+    </section>
   );
 }
 

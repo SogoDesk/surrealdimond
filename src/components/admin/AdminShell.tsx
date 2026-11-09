@@ -20,7 +20,7 @@ import { TEST_STAFF } from "@/content/testAccounts";
 import { API_AUTH } from "@/lib/api/client";
 import { signInStaff, signOutStaff, useStaff } from "@/lib/staff";
 import AdminIcon from "./AdminIcon";
-import StaffGate, { StaffPassword } from "./StaffGate";
+import StaffGate, { StaffPassword, StaffTwoFactor } from "./StaffGate";
 import s from "./admin.module.css";
 
 const AccessContext = createContext<Access>("none");
@@ -38,7 +38,7 @@ const useHydrated = () =>
 export default function AdminShell({ moduleId, children }: { moduleId: string; children: ReactNode }) {
   const staff = useStaff();
   const hydrated = useHydrated();
-  const [changingPassword, setChangingPassword] = useState(false);
+  const [panel, setPanel] = useState<"password" | "twoFactor" | null>(null);
   const mod = adminModule(moduleId);
 
   if (!hydrated) return <div className={s.boot} aria-busy="true" aria-label="Loading the console" data-console />;
@@ -142,21 +142,27 @@ export default function AdminShell({ moduleId, children }: { moduleId: string; c
             </label>
             )}
             {API_AUTH && (
-              <button type="button" className={s.topLink} onClick={() => setChangingPassword((open) => !open)} aria-expanded={changingPassword}>
-                Change password
-              </button>
+              <>
+                <button type="button" className={s.topLink} onClick={() => setPanel((open) => (open === "twoFactor" ? null : "twoFactor"))} aria-expanded={panel === "twoFactor"}>
+                  Two-factor
+                </button>
+                <button type="button" className={s.topLink} onClick={() => setPanel((open) => (open === "password" ? null : "password"))} aria-expanded={panel === "password"}>
+                  Change password
+                </button>
+              </>
             )}
             <Link href="/" className={s.topLink} target="_blank" rel="noreferrer">
               View the site
             </Link>
-            <button type="button" className={s.topLink} onClick={signOutStaff}>
+            <button type="button" className={s.topLink} onClick={() => void signOutStaff()}>
               Sign out
             </button>
           </div>
         </header>
 
         <main id="main" className={s.main}>
-          {API_AUTH && changingPassword && <StaffPassword email={staff.email ?? ""} onClose={() => setChangingPassword(false)} />}
+          {API_AUTH && panel === "password" && <StaffPassword email={staff.email ?? ""} onClose={() => setPanel(null)} />}
+          {API_AUTH && panel === "twoFactor" && <StaffTwoFactor onClose={() => setPanel(null)} />}
           {access === "none" ? (
             <div className={s.locked}>
               <span className={s.lockedIcon} aria-hidden>

@@ -26,7 +26,11 @@ export const signInStaff = (role: Role, person?: { name: string; email: string }
 export const setStaffSession = (session: StaffSession | null) => store.set(session);
 /** Forgets the screens' copy of the session, without calling the API. */
 export const clearStaff = () => store.set(null);
-export const signOutStaff = () => {
+/**
+ * Waits for the API first: the sign-in screen asks who is signed in as soon as
+ * it shows, and would be told "still you" while the sign out was on its way.
+ */
+export const signOutStaff = async () => {
+  if (API_AUTH) await authApi.logout().catch(() => undefined);
   store.set(null);
-  if (API_AUTH) void authApi.logout().catch(() => undefined);
 };

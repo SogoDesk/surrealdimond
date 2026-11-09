@@ -208,6 +208,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/mfa/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Turn two-factor off, with the password */
+        post: operations["AuthController_mfaDisable"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/account": {
         parameters: {
             query?: never;
@@ -357,7 +374,7 @@ export interface operations {
                             /** @enum {string} */
                             role: "administrator" | "finance" | "hr" | "sales" | "manager";
                             /** @enum {string} */
-                            mfa: "ok" | "code_required" | "setup_required";
+                            mfa: "off" | "ok" | "code_required";
                             access: {
                                 [key: string]: "edit" | "view" | "none";
                             };
@@ -428,7 +445,7 @@ export interface operations {
                             /** @enum {string} */
                             role: "administrator" | "finance" | "hr" | "sales" | "manager";
                             /** @enum {string} */
-                            mfa: "ok" | "code_required" | "setup_required";
+                            mfa: "off" | "ok" | "code_required";
                             access: {
                                 [key: string]: "edit" | "view" | "none";
                             };
@@ -591,7 +608,7 @@ export interface operations {
                             /** @enum {string} */
                             role: "administrator" | "finance" | "hr" | "sales" | "manager";
                             /** @enum {string} */
-                            mfa: "ok" | "code_required" | "setup_required";
+                            mfa: "off" | "ok" | "code_required";
                             access: {
                                 [key: string]: "edit" | "view" | "none";
                             };
@@ -652,7 +669,7 @@ export interface operations {
                             /** @enum {string} */
                             role: "administrator" | "finance" | "hr" | "sales" | "manager";
                             /** @enum {string} */
-                            mfa: "ok" | "code_required" | "setup_required";
+                            mfa: "off" | "ok" | "code_required";
                             access: {
                                 [key: string]: "edit" | "view" | "none";
                             };
@@ -713,7 +730,7 @@ export interface operations {
                             /** @enum {string} */
                             role: "administrator" | "finance" | "hr" | "sales" | "manager";
                             /** @enum {string} */
-                            mfa: "ok" | "code_required" | "setup_required";
+                            mfa: "off" | "ok" | "code_required";
                             access: {
                                 [key: string]: "edit" | "view" | "none";
                             };
@@ -784,6 +801,29 @@ export interface operations {
             content: {
                 "application/json": {
                     code: string;
+                };
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_mfaDisable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    password: string;
                 };
             };
         };
