@@ -88,12 +88,12 @@ export const editorial: Record<Category, EditorialSet> = {
   rings: {
     single: [
       { src: P("3738"), alt: "Hand wearing sculptural gold and diamond rings", caption: "Stacked" },
-      { src: P("3748"), alt: "Model kissing a hand full of gold rings", caption: "Worn" },
+      { src: P("3748"), alt: "Model kissing a hand full of gold rings", caption: "Shop the look" },
       { src: P("4031"), alt: "Gold pave rings stacked on black sticks", caption: "In the studio" },
       { src: P("3641"), alt: "Model in white wearing diamond rings and a pendant", caption: "In white" },
     ],
     wide: [
-      { src: P("3750"), alt: "Hands in hair wearing gold rings", caption: "Worn" },
+      { src: P("3750"), alt: "Hands in hair wearing gold rings", caption: "Shop the look" },
       { src: P("3666"), alt: "Model covering her eyes with hands full of rings", caption: "Hands" },
       { src: P("3568-alt"), alt: "Seated model with stacked rings and bracelets", caption: "Stacked" },
     ],

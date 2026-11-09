@@ -484,7 +484,7 @@ export default function DiamondStory({ onApply }: { onApply: (patch: Partial<Dia
                 </button>
               ) : (
                 <Link href={account.apply} className={`${s.door} ${s.doorInk}`}>
-                  <span className={s.doorKicker}>For jewelry retailers</span>
+                  <span className={s.doorKicker}>For retail partners</span>
                   <strong>Become a dealer</strong>
                   <span>Direct pricing and an exclusive territory. {brand.claims.tradeOnly}.</span>
                 </Link>

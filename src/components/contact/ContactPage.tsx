@@ -120,9 +120,9 @@ function TypeIcon({ id }: { id: InquiryType }) {
 const QUICK: { q: string; a: ReactNode }[] = [
   { q: "When is the office open?", a: <>Monday to Friday, 9:30am to 6pm EST. We are closed on Saturday and Sunday.</> },
   { q: "When do orders ship?", a: <>Order before 4:00pm ET to receive next day delivery.</> },
-  { q: "Do you sell to consumers?", a: <>No. We will never sell directly to consumers; Surreal works with jewelry retailers.</> },
+  { q: "Do you sell to consumers?", a: <>No. We will never sell directly to consumers; Surreal works with retail partners.</> },
   { q: "How can dealers pay?", a: <>By credit or debit card, ACH or wire transfer at checkout. Check and Zelle are arranged with the office.</> },
-  { q: "Where can I see stones in person?", a: <>Book an appointment at our North American Office, {brand.office.address1}, {brand.office.address2}.</> },
+  { q: "Where can I see Surreal product in person?", a: <>Book an appointment at our North American Office, {brand.office.address1}, {brand.office.address2}.</> },
 ];
 
 const DEALER_POINTS = ["Globally competitive direct pricing", "Comprehensive brand strategy", "Digital marketing support", "Territory exclusivity"];
@@ -469,7 +469,7 @@ function Inquiries({ preset }: { preset: InquiryType | null }) {
                 </div>
               ) : (
                 <div className={`${s.card} ${s.cardInk}`}>
-                  <p className={s.cardKicker}>For jewelry retailers</p>
+                  <p className={s.cardKicker}>For retail partners</p>
                   <p className={s.cardTitle}>Become a Surreal dealer in your market</p>
                   <ul className={s.points}>
                     {DEALER_POINTS.map((p) => (
